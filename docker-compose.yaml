@@ -1,0 +1,14 @@
+version: "0.1"
+services:
+  app:
+    build: .
+    container_name: Inge_Soft_Container
+    ports:
+      - 19006:19006
+      - 19001:19001
+      - 19002:19002
+      - 8081:8081
+    volumes:
+      - ./src:/app/src
+      - ./App.js:/app/App.js
+    tty: true
