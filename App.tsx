@@ -1,28 +1,69 @@
 import 'react-native-url-polyfill/auto'
 import { useState, useEffect } from 'react'
 import { supabase } from './lib/supabase'
-import Auth from './components/Auth'
-import Account from './components/Account'
 import { View, Text } from 'react-native'
 import { Session } from '@supabase/supabase-js'
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import Auth from './components/Auth';
+import HomeScreen from './screens/HomeScreen';
+
+const Stack = createStackNavigator();
 
 export default function App() {
   const [session, setSession] = useState<Session | null>(null)
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session)
-    })
+    const getSession = async () => {
+      const {data: sessionData, error} = await supabase.auth.getSession();
+      if (error) {
+        console.error('Error fetching session:', error.message);
+      } else {
+        // Verificar si hay una sesión y asignarla
+        if (sessionData) {
+          setSession(sessionData.session);
+        } else {
+          setSession(null);
+        }
+      }
+  };
+    getSession();
 
-    supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session)
-    })
-  }, [])
+    const unsubscribe = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+    });
+
+    return () => {
+      unsubscribe;
+    };
+},[]);
 
   return (
-      <View>
-        <Auth />
-        {session && session.user && <Text>{session.user.id}</Text>}
-      </View>
-  )
+      <NavigationContainer>
+        <Stack.Navigator>
+          {!session ? (
+              <Stack.Screen name="LogIn" component={Auth} />
+          ) : (
+              <Stack.Screen name="Home" component={HomeScreen} />
+          )}
+        </Stack.Navigator>
+      </NavigationContainer>
+  );
 }
+  //   //--------------
+  //
+  //   supabase.auth.getSession().then(({ data: { session } }) => {
+  //     setSession(session)
+  //   })
+  //
+  //   supabase.auth.onAuthStateChange((_event, session) => {
+  //     setSession(session)
+  //   })
+  // }, [])
+  //
+  // return (
+  //     <View>
+  //       <Auth />
+  //       {session && session.user && <Text>{session.user.id}</Text>}
+  //     </View>
