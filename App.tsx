@@ -7,7 +7,9 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Auth from './components/Auth';
-import HomeScreen from './screens/HomeScreen';
+import Home from './screens/Home';
+import Account from "./components/Account";
+import Register from "./screens/Register";
 
 const Stack = createNativeStackNavigator();
 
@@ -43,27 +45,17 @@ export default function App() {
       <NavigationContainer>
         <Stack.Navigator>
           {!session ? (
-              <Stack.Screen name="LogIn" component={Auth} />
+              <>
+                  <Stack.Screen name="LogIn" component={Auth} />
+                  <Stack.Screen name="Register" component={Register} />
+              </>
           ) : (
-              <Stack.Screen name="Home" component={HomeScreen} />
+              <>
+              <Stack.Screen name="Home" component={Home} />
+                <Stack.Screen name="Account" component={Account} />
+              </>
           )}
         </Stack.Navigator>
       </NavigationContainer>
   );
 }
-  //   //--------------
-  //
-  //   supabase.auth.getSession().then(({ data: { session } }) => {
-  //     setSession(session)
-  //   })
-  //
-  //   supabase.auth.onAuthStateChange((_event, session) => {
-  //     setSession(session)
-  //   })
-  // }, [])
-  //
-  // return (
-  //     <View>
-  //       <Auth />
-  //       {session && session.user && <Text>{session.user.id}</Text>}
-  //     </View>

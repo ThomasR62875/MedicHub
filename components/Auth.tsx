@@ -2,11 +2,14 @@ import React, { useState } from 'react'
 import { Alert, StyleSheet, View } from 'react-native'
 import { supabase } from '../lib/supabase'
 import { Button, Input } from 'react-native-elements'
+import { useNavigation } from '@react-navigation/native'; // Importa useNavigation desde @react-navigation/native
 
 export default function Auth() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [loading, setLoading] = useState(false)
+
+    const navigation = useNavigation(); // Utiliza useNavigation para obtener el objeto de navegación
 
     async function signInWithEmail() {
         setLoading(true)
@@ -61,7 +64,7 @@ export default function Auth() {
                 <Button title="Sign in" disabled={loading} onPress={() => signInWithEmail()} />
             </View>
             <View style={styles.verticallySpaced}>
-                <Button title="Sign up" disabled={loading} onPress={() => signUpWithEmail()} />
+                <Button title="Register" disabled={loading} onPress={() => navigation.navigate('Register')} />
             </View>
         </View>
     )
