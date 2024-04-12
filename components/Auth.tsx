@@ -2,14 +2,16 @@ import React, { useState } from 'react'
 import { Alert, StyleSheet, View } from 'react-native'
 import { supabase } from '../lib/supabase'
 import { Button, Input } from 'react-native-elements'
-import { useNavigation } from '@react-navigation/native'; // Importa useNavigation desde @react-navigation/native
+import { useNavigation, ParamListBase } from '@react-navigation/native'; // Importa useNavigation desde @react-navigation/native
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+
 
 export default function Auth() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [loading, setLoading] = useState(false)
 
-    const navigation = useNavigation(); // Utiliza useNavigation para obtener el objeto de navegación
+    const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>(); // Utiliza useNavigation para obtener el objeto de navegación
 
     async function signInWithEmail() {
         setLoading(true)
@@ -22,52 +24,35 @@ export default function Auth() {
         setLoading(false)
     }
 
-    async function signUpWithEmail() {
-        setLoading(true)
-        const {
-            data: { session },
-            error,
-        } = await supabase.auth.signUp({
-            email: email,
-            password: password,
-        })
-
-        if (error) Alert.alert(error.message)
-        if (!session) Alert.alert('Please check your inbox for email verification!')
-        setLoading(false)
-    }
-
-    return (
-        <View style={styles.container}>
-            <View style={[styles.verticallySpaced, styles.mt20]}>
-                <Input
-                    label="Email"
-                    leftIcon={{ type: 'font-awesome', name: 'envelope' }}
-                    onChangeText={(text) => setEmail(text)}
-                    value={email}
-                    placeholder="email@address.com"
-                    autoCapitalize={'none'}
-                />
-            </View>
-            <View style={styles.verticallySpaced}>
-                <Input
-                    label="Password"
-                    leftIcon={{ type: 'font-awesome', name: 'lock' }}
-                    onChangeText={(text) => setPassword(text)}
-                    value={password}
-                    secureTextEntry={true}
-                    placeholder="Password"
-                    autoCapitalize={'none'}
-                />
-            </View>
-            <View style={[styles.verticallySpaced, styles.mt20]}>
-                <Button title="Sign in" disabled={loading} onPress={() => signInWithEmail()} />
-            </View>
-            <View style={styles.verticallySpaced}>
-                <Button title="Register" disabled={loading} onPress={() => navigation.navigate('Register')} />
-            </View>
+    return <View style={styles.container}>
+        <View style={[styles.verticallySpaced, styles.mt20]}>
+            <Input
+                label="Email"
+                leftIcon={{ type: 'font-awesome', name: 'envelope' }}
+                onChangeText={(text) => setEmail(text)}
+                value={email}
+                placeholder="email@address.com"
+                autoCapitalize={'none'}
+            />
         </View>
-    )
+        <View style={styles.verticallySpaced}>
+            <Input
+                label="Password"
+                leftIcon={{ type: 'font-awesome', name: 'lock' }}
+                onChangeText={(text) => setPassword(text)}
+                value={password}
+                secureTextEntry={true}
+                placeholder="Password"
+                autoCapitalize={'none'}
+            />
+        </View>
+        <View style={[styles.verticallySpaced, styles.mt20]}>
+            <Button title="Sign in" disabled={loading} onPress={() => signInWithEmail()} />
+        </View>
+        <View style={styles.verticallySpaced}>
+            <Button title="Register" disabled={loading} onPress={() => navigation.navigate('Register')} />
+        </View>
+    </View>
 }
 
 const styles = StyleSheet.create({
