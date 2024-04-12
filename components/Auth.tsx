@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
-import { Alert, StyleSheet, View } from 'react-native'
+import { Alert, StyleSheet, View, Dimensions } from 'react-native'
 import { supabase } from '../lib/supabase'
 import { Button, Input } from 'react-native-elements'
 import { useNavigation, ParamListBase } from '@react-navigation/native'; // Importa useNavigation desde @react-navigation/native
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
+const windowHeight = Dimensions.get('window').height;
 
 export default function Auth() {
     const [email, setEmail] = useState('')
@@ -24,48 +25,62 @@ export default function Auth() {
         setLoading(false)
     }
 
-    return <View style={styles.container}>
-        <View style={[styles.verticallySpaced, styles.mt20]}>
-            <Input
-                label="Email"
-                leftIcon={{ type: 'font-awesome', name: 'envelope' }}
-                onChangeText={(text) => setEmail(text)}
-                value={email}
-                placeholder="email@address.com"
-                autoCapitalize={'none'}
-            />
+    return (
+        <View style={styles.container}>
+            <View style={[styles.inputContainer, { height: windowHeight * 0.08 }]}>
+                <Input
+                    label="Email"
+                    leftIcon={{ type: 'font-awesome', name: 'envelope' }}
+                    onChangeText={(text) => setEmail(text)}
+                    value={email}
+                    placeholder="email@address.com"
+                    autoCapitalize={'none'}
+                    inputContainerStyle={[{paddingLeft: 10}, styles.input]}
+                />
+            </View>
+            <View style={[styles.inputContainer, { height: windowHeight * 0.08 }]}>
+                <Input
+                    label="Password"
+                    leftIcon={{ type: 'font-awesome', name: 'lock' }}
+                    onChangeText={(text) => setPassword(text)}
+                    value={password}
+                    secureTextEntry={true}
+                    placeholder="Password"
+                    autoCapitalize={'none'}
+                    inputContainerStyle={[{paddingLeft: 10}, styles.input]}
+                />
+            </View>
+            <View style={[styles.buttonContainer, { height: windowHeight * 0.08 }]}>
+                <Button title="Sign in" disabled={loading} onPress={() => signInWithEmail()} buttonStyle={[styles.button, { backgroundColor: '#3EB77F' }]} />
+            </View>
+            <View style={[styles.buttonContainer, { height: windowHeight * 0.08 }]}>
+                <Button title="Register" disabled={loading} onPress={() => navigation.navigate('Register')} buttonStyle={[styles.button, { backgroundColor: '#3EB77F' }]} />
+            </View>
         </View>
-        <View style={styles.verticallySpaced}>
-            <Input
-                label="Password"
-                leftIcon={{ type: 'font-awesome', name: 'lock' }}
-                onChangeText={(text) => setPassword(text)}
-                value={password}
-                secureTextEntry={true}
-                placeholder="Password"
-                autoCapitalize={'none'}
-            />
-        </View>
-        <View style={[styles.verticallySpaced, styles.mt20]}>
-            <Button title="Sign in" disabled={loading} onPress={() => signInWithEmail()} />
-        </View>
-        <View style={styles.verticallySpaced}>
-            <Button title="Register" disabled={loading} onPress={() => navigation.navigate('Register')} />
-        </View>
-    </View>
+    );
 }
 
 const styles = StyleSheet.create({
     container: {
-        marginTop: 200,
-        padding: 12,
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#FFFFFF',
+        paddingHorizontal: 20,
     },
-    verticallySpaced: {
-        paddingTop: 4,
-        paddingBottom: 4,
-        alignSelf: 'stretch',
+    inputContainer: {
+        width: '100%',
+        marginBottom: 20,
     },
-    mt20: {
-        marginTop: 20,
+    input: {
+        backgroundColor: '#B5DCCA',
+        borderRadius: 10,
     },
-})
+    buttonContainer: {
+        width: '100%',
+    },
+    button: {
+        backgroundColor: '#B5DCCA',
+        borderRadius: 10,
+    },
+});
