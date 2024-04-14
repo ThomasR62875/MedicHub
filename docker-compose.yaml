@@ -9,6 +9,9 @@ services:
       - 19002:19002
       - 8081:8081
     volumes:
-      - ./src:/app/src
-      - ./App.js:/app/App.js
+      - ./components:/app/components
+      - ./lib:/app/lib
+      - ./screens:/app/screens
+      - ./App.tsx:/app/App.tsx
+      - ./Navigation.tsx:/app/Navigation.tsx
     tty: true
