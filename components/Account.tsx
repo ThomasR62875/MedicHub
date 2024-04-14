@@ -45,10 +45,10 @@ export default function Account() {
     }
 
     async function updateProfile({
-                                     username,
-                                     website,
-                                     avatar_url,
-                                 }: {
+        username,
+        website,
+        avatar_url,
+        }: {
         username: string
         website: string
         avatar_url: string
