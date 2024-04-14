@@ -1,11 +1,19 @@
 import React, { useState } from 'react'
-import { Alert, StyleSheet, View, Dimensions } from 'react-native'
+import {Alert, StyleSheet, View, Dimensions, AppState} from 'react-native'
 import { supabase } from '../lib/supabase'
 import { Button, Input } from 'react-native-elements'
 import { useNavigation, ParamListBase } from '@react-navigation/native'; // Importa useNavigation desde @react-navigation/native
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
 const windowHeight = Dimensions.get('window').height;
+
+AppState.addEventListener('change', (state) => {
+    if (state === 'active') {
+        supabase.auth.startAutoRefresh()
+    } else {
+        supabase.auth.stopAutoRefresh()
+    }
+})
 
 export default function Auth() {
     const [email, setEmail] = useState('')
