@@ -17,20 +17,15 @@ export default function App() {
   const [session, setSession] = useState<Session | null>(null)
 
   useEffect(() => {
-    const getSession = async () => {
-      const {data: sessionData, error} = await supabase.auth.getSession();
-      if (error) {
-        console.error('Error fetching session:', error.message);
-      } else {
-        // Verificar si hay una sesión y asignarla
-        if (sessionData) {
-          setSession(sessionData.session);
-        } else {
-          setSession(null);
-        }
-      }
-  };
-    getSession();
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session)
+    })
+
+    supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session)
+    })
+
+    supabase.auth.getSession();
 
     const unsubscribe = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
@@ -39,7 +34,33 @@ export default function App() {
     return () => {
       unsubscribe;
     };
-},[]);
+  }, []);
+
+
+//   useEffect(() => {
+//     const getSession = async () => {
+//       const {data: sessionData, error} = await supabase.auth.getSession();
+//       if (error) {
+//         console.error('Error fetching session:', error.message);
+//       } else {
+//         // Verificar si hay una sesión y asignarla
+//         if (sessionData) {
+//           setSession(sessionData.session);
+//         } else {
+//           setSession(null);
+//         }
+//       }
+//   };
+//     getSession();
+//
+//     const unsubscribe = supabase.auth.onAuthStateChange((_event, session) => {
+//       setSession(session);
+//     });
+//
+//     return () => {
+//       unsubscribe;
+//     };
+// },[]);
 
   return (
       <NavigationContainer>
@@ -52,7 +73,9 @@ export default function App() {
           ) : (
               <>
               <Stack.Screen name="Home" component={Home} />
-                <Stack.Screen name="Account" component={Account} />
+                <Stack.Screen name="Account">
+                  {(props) =><Account {...props} session={session} />}
+                </Stack.Screen>
               </>
           )}
         </Stack.Navigator>
