@@ -5,11 +5,13 @@ import { Button, Input } from 'react-native-elements'
 import { Session } from '@supabase/supabase-js'
 
 export default function Account() {
-    const [session, setSession] = useState<Session | null>(null)
     const [loading, setLoading] = useState(true)
-    const [username, setUsername] = useState('')
-    const [website, setWebsite] = useState('')
-    const [avatarUrl, setAvatarUrl] = useState('')
+    const [session, setSession] = useState<Session | null>(null)
+    const [first_name, setFirstName] = useState('')
+    const [last_name, setLastName] = useState('')
+    const [dni, setDni] = useState(0)
+    const [email, setEmail] = useState('')
+    const [avatar_url, setAvatarUrl] = useState('')
 
     useEffect(() => {
         if (session)
@@ -22,18 +24,19 @@ export default function Account() {
             if (!session?.user) throw new Error('No user on the session!')
 
             const { data, error, status } = await supabase
-                .from('profiles')
-                .select(`username, website, avatar_url`)
+                .from('independent_user')
+                .select(`id, first_name, last_name, dni, email, avatar_url`)
                 .eq('id', session?.user.id)
-                .single()
             if (error && status !== 406) {
                 throw error
             }
 
             if (data) {
-                setUsername(data.username)
-                setWebsite(data.website)
-                setAvatarUrl(data.avatar_url)
+                setFirstName(first_name)
+                setLastName(last_name)
+                setDni(dni)
+                setEmail(email)
+                setAvatarUrl(avatar_url)
             }
         } catch (error) {
             if (error instanceof Error) {
@@ -45,12 +48,16 @@ export default function Account() {
     }
 
     async function updateProfile({
-                                     username,
-                                     website,
+                                     first_name,
+                                     last_name,
+                                     dni,
+                                     email,
                                      avatar_url,
                                  }: {
-        username: string
-        website: string
+        first_name: string
+        last_name: string
+        dni: number
+        email: string
         avatar_url: string
     }) {
         try {
@@ -59,13 +66,15 @@ export default function Account() {
 
             const updates = {
                 id: session?.user.id,
-                username,
-                website,
+                first_name,
+                last_name,
+                dni,
+                email,
                 avatar_url,
                 updated_at: new Date(),
             }
 
-            const { error } = await supabase.from('profiles').upsert(updates)
+            const { error } = await supabase.from('independent_users').upsert(updates)
 
             if (error) {
                 throw error
@@ -81,20 +90,36 @@ export default function Account() {
 
     return (
         <View style={styles.container}>
-            <View style={[styles.verticallySpaced, styles.mt20]}>
-                <Input label="Email" value={session?.user?.email} disabled />
+            <View style={styles.verticallySpaced}>
+                <Input label="Nombre" value = {first_name} onChangeText={(text) => setFirstName(text)} />
             </View>
             <View style={styles.verticallySpaced}>
-                <Input label="Username" value={username || ''} onChangeText={(text) => setUsername(text)} />
+                <Input label="Apellido" value={last_name} onChangeText={(text) => setLastName(text)} />
             </View>
+
             <View style={styles.verticallySpaced}>
-                <Input label="Website" value={website || ''} onChangeText={(text) => setWebsite(text)} />
+                <Input label="DNI" value={dni ? dni.toString() : ''}
+                       onChangeText={(text) => {
+                           const parsedDNI = parseInt(text, 10);
+                           if (!isNaN(parsedDNI)) {
+                               setDni(parsedDNI);
+                           }
+                       }}
+                       keyboardType="numeric" />
+            </View>
+
+            <View style={styles.verticallySpaced}>
+                <Input label="Email" value={email} onChangeText={(text) => setEmail(text)} />
+            </View>
+
+            <View style={styles.verticallySpaced}>
+                <Input label="Avatar" value={avatar_url} onChangeText={(text) => setAvatarUrl(text)} />
             </View>
 
             <View style={[styles.verticallySpaced, styles.mt20]}>
                 <Button
                     title={loading ? 'Loading ...' : 'Update'}
-                    onPress={() => updateProfile({ username, website, avatar_url: avatarUrl })}
+                    onPress={() => updateProfile({ first_name,   last_name,  dni,  email,  avatar_url })}
                     disabled={loading}
                 />
             </View>
