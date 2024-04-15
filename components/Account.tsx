@@ -25,7 +25,7 @@ export default function Account({ session }: { session: Session }) {
             if (!session?.user) throw new Error('No user on the session!')
 
             const { data, error, status } = await supabase
-                .from('independent_users')
+                .from('independent_user')
                 .select(`first_name, last_name, dni, email, avatar_url`)
                 .eq('id', session?.user.id)
                 .single()
