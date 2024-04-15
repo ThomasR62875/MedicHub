@@ -6,6 +6,8 @@ const Home: React.FC = ({navigation}: any) => {
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
             <Text>HomeScreen!</Text>
             <Button title="Account" onPress={() => navigation.navigate('Account')}/>
+            <Button title="Add Appointment" onPress= {()=> navigation.navigate('AddAppointment')}/>
+            <Button title="Appointments" onPress= {()=> navigation.navigate('Appointments')}/>
         </View>
     );
 };
