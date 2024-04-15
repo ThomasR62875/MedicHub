@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabase'
-import { SafeAreaView,StyleSheet,Alert ,TextInput, Text, TouchableOpacity } from 'react-native'
+import { SafeAreaView,StyleSheet,Alert , Text, TouchableOpacity } from 'react-native'
 import { Session } from '@supabase/supabase-js'
-import DateTimePicker, {DateType} from 'react-native-ui-datepicker';
+import {Input} from "react-native-elements";
+import DateTimePicker from 'react-native-ui-datepicker';
 import dayjs from 'dayjs';
 
 
@@ -41,8 +42,9 @@ export default function AddAppointment({ session}: { session: Session}) {
           {/* Description Input */}
           {/*multiline={true}
          numberOfLines={4}*/}
-          <TextInput
-            style={styles.descriptionInput}
+          <Input
+            leftIcon={{ type: 'font-awesome', name: 'paperclip' }}
+            style={styles.verticallySpaced}
             placeholder="Enter description"
             value={description}
             onChangeText={(text) => setDescription(text)}
@@ -66,18 +68,16 @@ const styles = StyleSheet.create({
     datePicker: {
       height: '20',
     },
-    descriptionInput: {
-      height: 100,
-      width: '100%',
-      borderColor: 'gray',
-      borderWidth: 1,
-      marginTop: 20,
-      padding: 10,
-      textAlignVertical: 'top',
-    },
+    verticallySpaced: {
+      paddingTop: 2,
+      paddingBottom: 2,
+      alignSelf: 'stretch',
+  },
     confirmButton: {
-        backgroundColor: '#B5DCCA',
-        borderRadius: 10,
+    backgroundColor: 'blue',
+    padding: 10,
+    borderRadius: 5,
+    marginTop: 20,
     },
     confirmButtonText: {
       color: 'white',

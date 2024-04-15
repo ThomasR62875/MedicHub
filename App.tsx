@@ -63,19 +63,13 @@ export default function App() {
                 </Stack.Screen>
                 <Stack.Screen name="AddAppointment">
                   {(props) =><AddAppointment {...props} session={session}/>}
-              </Stack.Screen>
+                </Stack.Screen>
                 <Stack.Screen name="AddDoctor">
                   {(props) =><AddDoctor {...props} session={session} />}
                 </Stack.Screen>
-
-                {/*esto no funciona para mostrar los doctores no se porque; a chequear mañana*/}
-
-                {/*<Stack.Screen*/}
-                {/*    name="Doctors"*/}
-                {/*    component={Doctors}*/}
-                {/*    initialParams={{ session: session }} // Aquí pasas la sesión como parámetro inicial*/}
-                {/*/>*/}
-
+                <Stack.Screen name="Doctors">
+                  {(props) =><Doctors {...props} session={session} />}
+                </Stack.Screen>
               </>
           )}
         </Stack.Navigator>
