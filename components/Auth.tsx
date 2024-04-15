@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
-import {Alert, StyleSheet, View, Dimensions, AppState} from 'react-native'
+import {Alert, StyleSheet, View, Dimensions, AppState, Text} from 'react-native'
 import { supabase } from '../lib/supabase'
 import { Button, Input } from 'react-native-elements'
 import { useNavigation, ParamListBase } from '@react-navigation/native'; // Importa useNavigation desde @react-navigation/native
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {BrowserRouter} from "react-router-dom";
 
 const windowHeight = Dimensions.get('window').height;
 
@@ -37,32 +38,39 @@ export default function Auth() {
         <View style={styles.container}>
             <View style={[styles.inputContainer, { height: windowHeight * 0.08 }]}>
                 <Input
-                    label="Email"
+                    label="Mail"
                     leftIcon={{ type: 'font-awesome', name: 'envelope' }}
                     onChangeText={(text) => setEmail(text)}
                     value={email}
-                    placeholder="email@address.com"
+                    placeholder=" email@address.com"
                     autoCapitalize={'none'}
                     inputContainerStyle={[{paddingLeft: 10}, styles.input]}
                 />
             </View>
-            <View style={[styles.inputContainer, { height: windowHeight * 0.08 }]}>
+            <View style={[styles.inputContainer, {height: windowHeight * 0.08 }]}>
                 <Input
-                    label="Password"
+                    label="Contraseña"
                     leftIcon={{ type: 'font-awesome', name: 'lock' }}
                     onChangeText={(text) => setPassword(text)}
                     value={password}
                     secureTextEntry={true}
-                    placeholder="Password"
+                    placeholder=" Contraseña"
                     autoCapitalize={'none'}
                     inputContainerStyle={[{paddingLeft: 10}, styles.input]}
                 />
             </View>
-            <View style={[styles.buttonContainer, { height: windowHeight * 0.08 }]}>
-                <Button title="Sign in" disabled={loading} onPress={() => signInWithEmail()} buttonStyle={[styles.button, { backgroundColor: '#3EB77F' }]} />
+            <View style={[styles.buttonSignInContainer, { height: windowHeight * 0.08 }]}>
+                <Button title="Ingresar" disabled={loading} onPress={() => signInWithEmail()} buttonStyle={[styles.buttonSignIn, { backgroundColor: '#3EB77F' }]} />
             </View>
-            <View style={[styles.buttonContainer, { height: windowHeight * 0.08 }]}>
-                <Button title="Register" disabled={loading} onPress={() => navigation.navigate('Register')} buttonStyle={[styles.button, { backgroundColor: '#3EB77F' }]} />
+            <View style={[styles.buttonRegisterContainer, { marginTop: 80, height: windowHeight * 0.08 }]}>
+                <Text style={{color: '#000000', textAlign: 'center', fontSize: 18}}> ¿No tenes una cuenta?
+                </Text>
+                <Button title="Registrate"
+                        disabled={loading}
+                        onPress={() => navigation.navigate('Register')}
+                        buttonStyle={[styles.buttonRegister]}
+                        titleStyle={{color: '#000000', textDecorationLine: 'underline'}}
+                />
             </View>
         </View>
     );
@@ -84,11 +92,17 @@ const styles = StyleSheet.create({
         backgroundColor: '#B5DCCA',
         borderRadius: 10,
     },
-    buttonContainer: {
-        width: '100%',
+    buttonSignInContainer: {
+        width: '50%',
     },
-    button: {
+    buttonSignIn: {
         backgroundColor: '#B5DCCA',
         borderRadius: 10,
     },
+    buttonRegisterContainer: {
+        width: '100%',
+    },
+    buttonRegister: {
+        backgroundColor: '#FFFFFF',
+    }
 });
