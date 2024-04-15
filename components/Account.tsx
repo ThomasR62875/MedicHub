@@ -4,9 +4,9 @@ import { StyleSheet, View, Alert } from 'react-native'
 import { Button, Input } from 'react-native-elements'
 import { Session } from '@supabase/supabase-js'
 
-export default function Account() {
+export default function Account({ session }: { session: Session }) {
     const [loading, setLoading] = useState(true)
-    const [session, setSession] = useState<Session | null>(null)
+    // const [session, setSession] = useState<Session | null>(null)
     const [first_name, setFirstName] = useState('')
     const [last_name, setLastName] = useState('')
     const [dni, setDni] = useState(0)
@@ -14,8 +14,9 @@ export default function Account() {
     const [avatar_url, setAvatarUrl] = useState('')
 
     useEffect(() => {
-        if (session)
-            getProfile()
+        if (session) getProfile()
+
+
     }, [session])
 
     async function getProfile() {
@@ -25,19 +26,22 @@ export default function Account() {
 
             const { data, error, status } = await supabase
                 .from('independent_user')
-                .select(`id, first_name, last_name, dni, email, avatar_url`)
+                .select(`first_name, last_name, dni, email, avatar_url`)
                 .eq('id', session?.user.id)
+                .single()
             if (error && status !== 406) {
                 throw error
             }
 
             if (data) {
-                setFirstName(first_name)
-                setLastName(last_name)
-                setDni(dni)
-                setEmail(email)
-                setAvatarUrl(avatar_url)
+                setFirstName(data.first_name)
+                setLastName(data.last_name)
+                setDni(data.dni)
+                setEmail(data.email)
+                setAvatarUrl(data.avatar_url)
             }
+
+
         } catch (error) {
             if (error instanceof Error) {
                 Alert.alert(error.message)
@@ -54,11 +58,11 @@ export default function Account() {
                                      email,
                                      avatar_url,
                                  }: {
-        first_name: string
-        last_name: string
-        dni: number
-        email: string
-        avatar_url: string
+                                    first_name: string
+                                    last_name: string
+                                    dni: number
+                                    email: string
+                                    avatar_url: string
     }) {
         try {
             setLoading(true)
