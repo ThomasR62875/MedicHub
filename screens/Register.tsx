@@ -21,7 +21,7 @@ const Register: React.FC = ({ navigation }: any) => {
             password: password,
             options: {
                 data: {
-                    firs_name: firstName,
+                    first_name: firstName,
                     last_name: lastName,
                     dni: dni,
                 },
