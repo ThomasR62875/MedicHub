@@ -10,6 +10,8 @@ import Auth from './components/Auth';
 import Home from './screens/Home';
 import Account from "./components/Account";
 import Register from "./screens/Register";
+import Appointments from "./components/Appointments"
+import AddAppointment from "./screens/AddAppointment"
 import Doctors from "./screens/Doctors";
 import AddDoctor from "./components/AddDoctor";
 import {Props} from "@react-navigation/stack/lib/typescript/src/views/Header/HeaderContainer";
@@ -42,31 +44,6 @@ export default function App() {
   }, []);
 
 
-//   useEffect(() => {
-//     const getSession = async () => {
-//       const {data: sessionData, error} = await supabase.auth.getSession();
-//       if (error) {
-//         console.error('Error fetching session:', error.message);
-//       } else {
-//         // Verificar si hay una sesión y asignarla
-//         if (sessionData) {
-//           setSession(sessionData.session);
-//         } else {
-//           setSession(null);
-//         }
-//       }
-//   };
-//     getSession();
-//
-//     const unsubscribe = supabase.auth.onAuthStateChange((_event, session) => {
-//       setSession(session);
-//     });
-//
-//     return () => {
-//       unsubscribe;
-//     };
-// },[]);
-
   return (
       <NavigationContainer>
         <Stack.Navigator>
@@ -81,6 +58,12 @@ export default function App() {
                 <Stack.Screen name="Account">
                   {(props) =><Account {...props} session={session} />}
                 </Stack.Screen>
+                <Stack.Screen name="Appointments">
+                  {(props) =><Appointments {...props} session={session}/>}
+                </Stack.Screen>
+                <Stack.Screen name="AddAppointment">
+                  {(props) =><AddAppointment {...props} session={session}/>}
+              </Stack.Screen>
                 <Stack.Screen name="AddDoctor">
                   {(props) =><AddDoctor {...props} session={session} />}
                 </Stack.Screen>

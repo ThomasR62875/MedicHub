@@ -6,7 +6,6 @@ import { Session } from '@supabase/supabase-js'
 
 export default function Account({ session }: { session: Session }) {
     const [loading, setLoading] = useState(true)
-    // const [session, setSession] = useState<Session | null>(null)
     const [first_name, setFirstName] = useState('')
     const [last_name, setLastName] = useState('')
     const [dni, setDni] = useState(0)
@@ -15,8 +14,6 @@ export default function Account({ session }: { session: Session }) {
 
     useEffect(() => {
         if (session) getProfile()
-
-
     }, [session])
 
     async function getProfile() {
@@ -52,17 +49,17 @@ export default function Account({ session }: { session: Session }) {
     }
 
     async function updateProfile({
-                                     first_name,
-                                     last_name,
-                                     dni,
-                                     email,
-                                     avatar_url,
-                                 }: {
-                                    first_name: string
-                                    last_name: string
-                                    dni: number
-                                    email: string
-                                    avatar_url: string
+        first_name,
+        last_name,
+        dni,
+        email,
+        avatar_url,
+    }: {
+    first_name: string
+    last_name: string
+    dni: number
+    email: string
+    avatar_url: string
     }) {
         try {
             setLoading(true)
