@@ -4,7 +4,7 @@ import { supabase } from './lib/supabase'
 import { View, Text } from 'react-native'
 import { Session } from '@supabase/supabase-js'
 import React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
+import {NavigationContainer, RouteProp} from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Auth from './components/Auth';
 import Home from './screens/Home';
@@ -12,8 +12,13 @@ import Account from "./components/Account";
 import Register from "./screens/Register";
 import Appointments from "./components/Appointments"
 import AddAppointment from "./screens/AddAppointment"
+import Doctors from "./screens/Doctors";
+import AddDoctor from "./components/AddDoctor";
+import {Props} from "@react-navigation/stack/lib/typescript/src/views/Header/HeaderContainer";
+import {StackNavigationProp} from "@react-navigation/stack";
 
 const Stack = createNativeStackNavigator();
+
 
 export default function App() {
   const [session, setSession] = useState<Session | null>(null)
@@ -59,6 +64,18 @@ export default function App() {
                 <Stack.Screen name="AddAppointment">
                   {(props) =><AddAppointment {...props} session={session}/>}
               </Stack.Screen>
+                <Stack.Screen name="AddDoctor">
+                  {(props) =><AddDoctor {...props} session={session} />}
+                </Stack.Screen>
+
+                {/*esto no funciona para mostrar los doctores no se porque; a chequear mañana*/}
+
+                {/*<Stack.Screen*/}
+                {/*    name="Doctors"*/}
+                {/*    component={Doctors}*/}
+                {/*    initialParams={{ session: session }} // Aquí pasas la sesión como parámetro inicial*/}
+                {/*/>*/}
+
               </>
           )}
         </Stack.Navigator>
