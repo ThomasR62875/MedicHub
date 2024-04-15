@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabase'
-import { StyleSheet, View, Alert } from 'react-native'
+import { StyleSheet, View, Alert, ScrollView,Text} from 'react-native'
 import { Button, Input } from 'react-native-elements'
 import { Session } from '@supabase/supabase-js'
 import {NavigationContainer} from "@react-navigation/native";
@@ -19,18 +19,16 @@ interface Doctor {
 interface Props {
     session: Session;
 }
-
-const Doctors: ({session}: { session: any }) => void = ({ session }) => {
+export default function Doctors({ session }: { session: Session }) {
     const [loading, setLoading] = useState(true)
-    let doctors: Doctor[] = [];
+    const [doctors,setDoctors]= useState([])
 
     useEffect(() => {
         if (session) getDoctors()
-
-
     }, [session])
 
-    async function getDoctors() {
+    async function getDoctors():Doctor[] {
+        let to_return: Doctor[]=[]
         try {
             setLoading(true)
             if (!session?.user) throw new Error('No user on the session!')
@@ -45,7 +43,7 @@ const Doctors: ({session}: { session: any }) => void = ({ session }) => {
 
             if (data) {
                 data.forEach(doctor => {
-                    doctors.push({
+                    to_return.push({
                         name: doctor.name,
                         profession: doctor.profession,
                         phone: doctor.phone,
@@ -53,88 +51,37 @@ const Doctors: ({session}: { session: any }) => void = ({ session }) => {
                     })
                 });
             }
-
+        
         } catch (error) {
             if (error instanceof Error) {
                 Alert.alert(error.message)
             }
-        } finally {
-            setLoading(false)
         }
-
-        const renderDoctors = () => {
-            const doctorInputs: React.JSX.Element[] = [];
-
-            doctors.forEach((doctor, index) => {
-                const doctorInput = (
-                    <View key={index} style={{ marginBottom: 10 }}>
-                        <Input
-                            label="Name"
-                            value={doctor.name}
-                            disabled={true}
-                        />
-                        <Input
-                            label="Profession"
-                            value={doctor.profession}
-                            disabled={true}
-                        />
-                        <Input
-                            label="Phone"
-                            value={doctor.phone}
-                            disabled={true}
-                        />
-                        <Input
-                            label="Email"
-                            value={doctor.email}
-                            disabled={true}
-                        />
-                    </View>
-                );
-                doctorInputs.push(doctorInput);
-            });
-
-            return doctorInputs;
-        };
-
-
-        return (
-            <View style={styles.container}>
+        setLoading(false)
+        setDoctors(to_return)
+        }
+    return(
+        <View style={styles.container}>
+            <ScrollView>
                 <View>
-                    {renderDoctors()}
+                    <Text>Medicos</Text>
                 </View>
-                <NavigationContainer>
-                    <Stack.Navigator>
-                        {!session ? (
-                            <>
+                <View>
+                    {
+                    doctors.map((doc)=> {
+                        return(
+                            <View style={styles.doctorView}>
+                                <Text>{doc.name}</Text>
+                                <Text>{doc.profession}</Text>
+                                <Text>{doc.email}</Text>
+                            </View>
+                        )
+                    })
+                    }
+                </View>
+            </ScrollView>
+        </View>
+    )
+    
 
-                            </>
-                        ) : (
-                            <>
-                                <Stack.Screen name="AddDoctor">
-                                    {(props) => <AddDoctor {...props} session={session}/>}
-                                </Stack.Screen>
-                            </>
-                        )}
-                    </Stack.Navigator>
-                </NavigationContainer>
-            </View>
-        );
-    }
-
-    const styles = StyleSheet.create({
-        container: {
-            marginTop: 40,
-            padding: 12,
-        },
-        verticallySpaced: {
-            paddingTop: 4,
-            paddingBottom: 4,
-            alignSelf: 'stretch',
-        },
-        mt20: {
-            marginTop: 20,
-        },
-    })
 }
-
-export default Doctors;

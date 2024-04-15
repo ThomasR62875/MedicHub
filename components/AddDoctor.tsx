@@ -13,11 +13,11 @@ export default function AddDoctor({ session }: { session: Session }) {
 
 
     async function addDoctor({
-                                     name,
-                                     profession,
-                                     phone,
-                                     email,
-                                 }: {
+        name,
+        profession,
+        phone,
+        email,
+    }: {
         name: string
         profession: string
         phone: string

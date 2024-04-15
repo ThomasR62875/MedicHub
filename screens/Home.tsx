@@ -9,6 +9,7 @@ const Home: React.FC = ({navigation}: any) => {
             <Button title="Add Appointment" onPress= {()=> navigation.navigate('AddAppointment')}/>
             <Button title="Appointments" onPress= {()=> navigation.navigate('Appointments')}/>
             <Button title="AddDoctor" onPress={() => navigation.navigate('AddDoctor')}/>
+            <Button title="Doctors" onPress={() => navigation.navigate('Doctors')}/>
         </View>
     );
 };
