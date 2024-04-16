@@ -9,6 +9,7 @@ const windowHeight = Dimensions.get('window').height;
 const Register: React.FC = ({ navigation }: any) => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [confirmed_password, setConfirmedPassword] = useState('')
     const [loading, setLoading] = useState(false)
     const [firstName, setFirstName] = useState('')
     const [lastName, setLastName] = useState('')
@@ -16,6 +17,11 @@ const Register: React.FC = ({ navigation }: any) => {
 
     async function signUpWithEmail() {
         setLoading(true)
+        if(confirmed_password != password) {
+            setLoading(false);
+            throw new Error('Passwords do not match!');
+        }
+
         const {
             data: { session },
             error,

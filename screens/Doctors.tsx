@@ -71,9 +71,9 @@ export default function Doctors({ session }: { session: Session }) {
                     doctors.map((doc)=> {
                         return(
                             <View style={styles.doctorView}>
-                                <Text>{doc.name}</Text>
-                                <Text>{doc.profession}</Text>
-                                <Text>{doc.email}</Text>
+                                <Text style={styles.doctorViewText}>{doc.name}</Text>
+                                <Text style={styles.doctorViewText}>{doc.profession}</Text>
+                                <Text style={styles.doctorViewText}>{doc.email}</Text>
                             </View>
                         )
                     })
@@ -82,6 +82,26 @@ export default function Doctors({ session }: { session: Session }) {
             </ScrollView>
         </View>
     )
-    
-
 }
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 20,
+      },
+    doctorView: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: '#f0f0f0',
+      padding: 10,
+      borderRadius: 5,
+    },
+    doctorViewText: {
+      fontSize: 16,
+      fontWeight: 'bold',
+      color: '#333',
+    }
+  });

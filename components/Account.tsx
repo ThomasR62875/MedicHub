@@ -75,7 +75,7 @@ export default function Account({ session }: { session: Session }) {
                 updated_at: new Date(),
             }
 
-            const { error } = await supabase.from('independent_users').upsert(updates)
+            const { error } = await supabase.from('independent_user').upsert(updates)
 
             if (error) {
                 throw error
