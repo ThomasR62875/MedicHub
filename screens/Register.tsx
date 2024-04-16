@@ -1,7 +1,10 @@
 import React, {useState} from 'react';
-import {View, Text, Button, Alert, StyleSheet, TouchableWithoutFeedback, Keyboard} from 'react-native';
+import {View, Text, Alert, StyleSheet, TouchableWithoutFeedback, Keyboard, Dimensions} from 'react-native';
+import { Button} from 'react-native-elements'
 import {supabase} from "../lib/supabase";
-import {Input} from "react-native-elements";
+import {Input, Icon} from "react-native-elements";
+
+const windowHeight = Dimensions.get('window').height;
 
 const Register: React.FC = ({ navigation }: any) => {
     const [email, setEmail] = useState('')
@@ -38,75 +41,85 @@ const Register: React.FC = ({ navigation }: any) => {
                 <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                     <Text>Register Screen</Text>
                 </View>
-                <View style={styles.horizontallySpaced}>
-                    <View style={styles.nameContainer}>
-                        <Input
-                            label="Nombre"
-                            leftIcon={{ type: 'font-awesome', name: 'user' }}
-                            onChangeText={(text) => setFirstName(text)}
-                            value={firstName}
-                            placeholder="Nombre"
-                            autoCapitalize={'none'}
-                            containerStyle={styles.inputContainer} // Add inputContainer style
-                        />
-                        <Input
-                            label="Apellido"
-                            leftIcon={{ type: 'font-awesome', name: 'user' }}
-                            onChangeText={(text) => setLastName(text)}
-                            value={lastName}
-                            placeholder="Apellido"
-                            autoCapitalize={'none'}
-                            containerStyle={styles.inputContainer} // Add inputContainer style
-                        />
-                    </View>
-                </View>
                 <View style={styles.verticallySpaced}>
                     <Input
+                        label="Nombre"
+                        labelStyle={styles.colorLable}
+                        leftIcon={<Icon name="user" type= "font-awesome" color={styles.colorPlaceholder.color}/>}
+                        onChangeText={(text) => setFirstName(text)}
+                        value={firstName}
+                        placeholder="Nombre"
+                        placeholderTextColor={styles.colorPlaceholder.color}
+                        autoCapitalize={'none'}
+                    />
+                    <Input
+                        label="Apellido"
+                        labelStyle={styles.colorLable}
+                        leftIcon={<Icon name="user" type= "font-awesome" color={styles.colorPlaceholder.color}/>}
+                        onChangeText={(text) => setLastName(text)}
+                        value={lastName}
+                        placeholder="Apellido"
+                        placeholderTextColor={styles.colorPlaceholder.color}
+                        autoCapitalize={'none'}
+                    />
+                    <Input
                         label="DNI"
-                        leftIcon={{ type: 'font-awesome', name: 'user' }}
+                        labelStyle={styles.colorLable}
+                        leftIcon={<Icon name="user" type= "font-awesome" color={styles.colorPlaceholder.color}/>}
                         onChangeText={(text) => setDni(text)}
                         value={dni}
                         placeholder="DNI"
+                        placeholderTextColor={styles.colorPlaceholder.color}
                         autoCapitalize={'none'}
                     />
                 </View>
-                <View style={[styles.verticallySpaced, styles.mt20]}>
+                <View style={[styles.verticallySpaced]}>
                     <Input
                         label="Mail"
-                        leftIcon={{ type: 'font-awesome', name: 'envelope' }}
+                        labelStyle={styles.colorLable}
+                        leftIcon={<Icon name="envelope" type= "font-awesome" color={styles.colorPlaceholder.color}/>}
                         onChangeText={(text) => setEmail(text)}
                         value={email}
                         placeholder="email@address.com"
+                        placeholderTextColor={styles.colorPlaceholder.color}
                         autoCapitalize={'none'}
                     />
                 </View>
                 <View style={styles.verticallySpaced}>
                     <Input
                         label="Contraseña"
-                        leftIcon={{ type: 'font-awesome', name: 'lock' }}
+                        labelStyle={styles.colorLable}
+                        leftIcon={<Icon name="lock" type="font-awesome" color={styles.colorPlaceholder.color} />}
                         onChangeText={(text) => setPassword(text)}
                         value={password}
                         secureTextEntry={true}
                         placeholder="Contraseña"
+                        placeholderTextColor={styles.colorPlaceholder.color}
                         autoCapitalize={'none'}
                     />
                 </View>
                 <View style={styles.verticallySpaced}>
                     <Input
                         label="Confirmar contraseña"
-                        leftIcon={{ type: 'font-awesome', name: 'lock' }}
+                        labelStyle={styles.colorLable}
+                        leftIcon={<Icon name="lock" type="font-awesome" color={styles.colorPlaceholder.color} />}
                         onChangeText={(text) => setPassword(text)}
                         value={password}
                         secureTextEntry={true}
                         placeholder="Contraseña"
+                        placeholderTextColor={styles.colorPlaceholder.color}
                         autoCapitalize={'none'}
                     />
                 </View>
-                <View style={[styles.buttonRegisterContainer]}>
-                    <Button title="Registrar"
-                            disabled={loading}
-                            onPress={() => signUpWithEmail()}
-                    />
+                <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }} >  
+                <View style={[styles.buttonSignInContainer, { height: windowHeight * 0.08, marginTop: 40}]}
+                // Nose porq, pero al modificar el 0.08 no cambia nada, y si lo borras se borra el button xd TODO
+                >
+                    <Button title="Ingresar"
+                    disabled={loading} 
+                    onPress={() => signUpWithEmail()} 
+                    buttonStyle={[styles.buttonSignIn, { backgroundColor: '#3EB77F' }]} />
+                </View>
                 </View>
             </View>
         </TouchableWithoutFeedback>
@@ -123,25 +136,24 @@ const styles = StyleSheet.create({
         paddingBottom: 2,
         alignSelf: 'stretch',
     },
-    mt20: {
-        marginTop: 5,
-    },
-    horizontallySpaced: {
-        paddingTop: 2,
-        paddingBottom: 2,
-    },
     nameContainer: {
         flexDirection: 'row', // Display first name and last name in a row
     },
-    inputContainer: {
-        width: '50%', // Make each input field take up 50% of the container width
-    },
-    buttonRegisterContainer: {
-        alignSelf: 'center',
+    buttonSignInContainer: {
         width: '50%',
-        backgroundColor: '#3EB77F',
-        borderRadius: 10,
+        justifyContent: 'center',
     },
+    buttonSignIn: {
+        backgroundColor: '#B5DCCA',
+        borderRadius: 10,
+        justifyContent: 'center',
+    },
+    colorPlaceholder: {
+        color: '#D1D1D1'
+    },
+    colorLable: {
+        color: '#000000'
+    }
 });
 
 export default Register;
