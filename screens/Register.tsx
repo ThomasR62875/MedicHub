@@ -109,8 +109,8 @@ const Register: React.FC = ({ navigation }: any) => {
                         label="Confirmar contraseña"
                         labelStyle={styles.colorLable}
                         leftIcon={<Icon name="lock" type="font-awesome" color={styles.colorPlaceholder.color} />}
-                        onChangeText={(text) => setPassword(text)}
-                        value={password}
+                        onChangeText={(text1) => setConfirmedPassword(text1)}
+                        value={confirmed_password}
                         secureTextEntry={true}
                         placeholder="Contraseña"
                         placeholderTextColor={styles.colorPlaceholder.color}
