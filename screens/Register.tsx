@@ -6,6 +6,7 @@ import {Input} from "react-native-elements";
 const Register: React.FC = ({ navigation }: any) => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [confirmed_password, setConfirmedPassword] = useState('')
     const [loading, setLoading] = useState(false)
     const [firstName, setFirstName] = useState('')
     const [lastName, setLastName] = useState('')
@@ -13,6 +14,11 @@ const Register: React.FC = ({ navigation }: any) => {
 
     async function signUpWithEmail() {
         setLoading(true)
+        if(confirmed_password != password) {
+            setLoading(false);
+            throw new Error('Passwords do not match!');
+        }
+
         const {
             data: { session },
             error,
@@ -95,8 +101,8 @@ const Register: React.FC = ({ navigation }: any) => {
                     <Input
                         label="Confirmar contraseña"
                         leftIcon={{ type: 'font-awesome', name: 'lock' }}
-                        onChangeText={(text) => setPassword(text)}
-                        value={password}
+                        onChangeText={(text1) => setConfirmedPassword(text1)}
+                        value={confirmed_password}
                         secureTextEntry={true}
                         placeholder="Contraseña"
                         autoCapitalize={'none'}
