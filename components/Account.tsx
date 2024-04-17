@@ -63,7 +63,7 @@ export default function Account({ session }: { session: Session }) {
     }) {
         try {
             setLoading(true)
-            if (!session?.user) throw new Error('No user on the session!')
+            if (!session?.user) throw new Error('No hay ningun usuario conectado!')
 
             const updates = {
                 id: session?.user.id,
@@ -110,7 +110,7 @@ export default function Account({ session }: { session: Session }) {
             </View>
 
             <View style={styles.verticallySpaced}>
-                <Input label="Email" value={email} onChangeText={(text) => setEmail(text)} />
+                <Input label="Mail" value={email} onChangeText={(text) => setEmail(text)} />
             </View>
 
             <View style={styles.verticallySpaced}>
@@ -119,14 +119,14 @@ export default function Account({ session }: { session: Session }) {
 
             <View style={[styles.verticallySpaced, styles.mt20]}>
                 <Button
-                    title={loading ? 'Loading ...' : 'Update'}
+                    title={loading ? 'Cargando ...' : 'Actualizar'}
                     onPress={() => updateProfile({ first_name,   last_name,  dni,  email,  avatar_url })}
                     disabled={loading}
                 />
             </View>
 
             <View style={styles.verticallySpaced}>
-                <Button title="Sign Out" onPress={() => supabase.auth.signOut()} />
+                <Button title="Cerrar sesión" onPress={() => supabase.auth.signOut()} />
             </View>
         </View>
     )
