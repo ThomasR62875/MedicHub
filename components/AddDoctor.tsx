@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
-import {View, Text, Button, Alert, StyleSheet} from 'react-native';
+import {View, Text, Alert, StyleSheet, TouchableWithoutFeedback, Keyboard} from 'react-native';
 import {supabase} from "../lib/supabase";
-import {Input} from "react-native-elements";
+import {Button, Input} from "react-native-elements";
 import {Session} from "@supabase/supabase-js";
 
 export default function AddDoctor({ session }: { session: Session }) {
@@ -41,54 +41,60 @@ export default function AddDoctor({ session }: { session: Session }) {
     }
 
     return (
-        <View style={styles.container}>
-            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                <Text>Add Doctor Screen</Text>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+            <View style={styles.container}>
+                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                    <Text>Add Doctor Screen</Text>
+                </View>
+                <View style={styles.verticallySpaced}>
+                    <Input
+                        label="Nombre"
+                        leftIcon={{ type: 'font-awesome', name: 'user' }}
+                        onChangeText={(text) => setName(text)}
+                        value={name}
+                        placeholder="Nombre"
+                        autoCapitalize={'none'}
+                    />
+                </View>
+                <View style={[styles.verticallySpaced, styles.mt20]}>
+                    <Input
+                        label="Especialidad"
+                        leftIcon={{ type: 'font-awesome', name: 'user' }}
+                        onChangeText={(text) => setProfession(text)}
+                        value={profession}
+                        placeholder="Especialidad"
+                        autoCapitalize={'none'}
+                    />
+                </View>
+                <View style={styles.verticallySpaced}>
+                    <Input
+                        label="Teléfono"
+                        leftIcon={{ type: 'font-awesome', name: 'phone' }}
+                        onChangeText={(text) => setPhone(text)}
+                        value={phone}
+                        placeholder="Teléfono"
+                        autoCapitalize={'none'}
+                    />
+                </View>
+                <View style={styles.verticallySpaced}>
+                    <Input
+                        label="Mail"
+                        leftIcon={{ type: 'font-awesome', name: 'envelope' }}
+                        onChangeText={(text) => setEmail(text)}
+                        value={email}
+                        placeholder="email@address.com"
+                        autoCapitalize={'none'}
+                    />
+                </View>
+                <View style={styles.verticallySpaced}>
+                    <Button title="Agregar"
+                            disabled={loading}
+                            onPress={() => addDoctor({name, profession, phone, email})}
+                            buttonStyle={[styles.buttonAdd, { backgroundColor: '#3EB77F' }]}
+                    />
+                </View>
             </View>
-            <View style={styles.verticallySpaced}>
-                <Input
-                    label="Name"
-                    leftIcon={{ type: 'font-awesome', name: 'user' }}
-                    onChangeText={(text) => setName(text)}
-                    value={name}
-                    placeholder="Name"
-                    autoCapitalize={'none'}
-                />
-            </View>
-            <View style={[styles.verticallySpaced, styles.mt20]}>
-                <Input
-                    label="Profession"
-                    leftIcon={{ type: 'font-awesome', name: 'user' }}
-                    onChangeText={(text) => setProfession(text)}
-                    value={profession}
-                    placeholder="Profession"
-                    autoCapitalize={'none'}
-                />
-            </View>
-            <View style={styles.verticallySpaced}>
-                <Input
-                    label="Phone"
-                    leftIcon={{ type: 'font-awesome', name: 'phone' }}
-                    onChangeText={(text) => setPhone(text)}
-                    value={phone}
-                    placeholder="Phone"
-                    autoCapitalize={'none'}
-                />
-            </View>
-            <View style={styles.verticallySpaced}>
-                <Input
-                    label="Email"
-                    leftIcon={{ type: 'font-awesome', name: 'envelope' }}
-                    onChangeText={(text) => setEmail(text)}
-                    value={email}
-                    placeholder="email@address.com"
-                    autoCapitalize={'none'}
-                />
-            </View>
-            <View style={styles.verticallySpaced}>
-                <Button title="Add" disabled={loading} onPress={() => addDoctor({name, profession, phone, email})} />
-            </View>
-        </View>
+        </TouchableWithoutFeedback>
     );
 };
 
@@ -98,8 +104,6 @@ const styles = StyleSheet.create({
         padding: 12,
     },
     verticallySpaced: {
-        paddingTop: 2,
-        paddingBottom: 2,
         alignSelf: 'stretch',
     },
     mt20: {
@@ -109,6 +113,12 @@ const styles = StyleSheet.create({
         paddingTop: 2,
         paddingBottom: 2,
     },
+    buttonAdd: {
+        width: '40%',
+        alignSelf: 'center',
+        backgroundColor: '#B5DCCA',
+        borderRadius: 10,
+    }
 
 });
 
