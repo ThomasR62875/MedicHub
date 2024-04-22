@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabase'
-import { StyleSheet, View, Alert } from 'react-native'
-import { Button, Input } from 'react-native-elements'
+import {StyleSheet, View, Alert, Text} from 'react-native'
+import {Button, Icon} from 'react-native-elements'
 import { Session } from '@supabase/supabase-js'
 
 export default function Account({ session }: { session: Session }) {
@@ -90,59 +90,97 @@ export default function Account({ session }: { session: Session }) {
     }
 
     return (
-        <View style={styles.container}>
-            <View style={styles.verticallySpaced}>
-                <Input label="Nombre" value = {first_name} onChangeText={(text) => setFirstName(text)} />
+        <View>
+            <View style={styles.iconContainer}>
+                <Icon name='build-outline' type='ionicon'/>
             </View>
-            <View style={styles.verticallySpaced}>
-                <Input label="Apellido" value={last_name} onChangeText={(text) => setLastName(text)} />
+            <View style={styles.grid}>
+                <View>
+                    <Text style={styles.text2}>Aca va la imagen</Text>
+                </View>
+                <View style={styles.col}>
+                    <Text style={styles.text1}>{first_name}</Text>
+                    <Text style={styles.text1}>{last_name}</Text>
+                </View>
             </View>
-
-            <View style={styles.verticallySpaced}>
-                <Input label="DNI" value={dni ? dni.toString() : ''}
-                       onChangeText={(text) => {
-                           const parsedDNI = parseInt(text, 10);
-                           if (!isNaN(parsedDNI)) {
-                               setDni(parsedDNI);
-                           }
-                       }}
-                       keyboardType="numeric" />
-            </View>
-
-            <View style={styles.verticallySpaced}>
-                <Input label="Mail" value={email} onChangeText={(text) => setEmail(text)} />
-            </View>
-
-            <View style={styles.verticallySpaced}>
-                <Input label="Avatar" value={avatar_url} onChangeText={(text) => setAvatarUrl(text)} />
-            </View>
-
-            <View style={[styles.verticallySpaced, styles.mt20]}>
-                <Button
-                    title={loading ? 'Cargando ...' : 'Actualizar'}
-                    onPress={() => updateProfile({ first_name,   last_name,  dni,  email,  avatar_url })}
-                    disabled={loading}
-                />
-            </View>
-
-            <View style={styles.verticallySpaced}>
-                <Button title="Cerrar sesión" onPress={() => supabase.auth.signOut()} />
+            <View style={styles.spaced}>
+                <Text style={styles.title}>Mail:</Text>
+                <Text style={styles.text2}>{email}</Text>
+                <Text style={styles.title}>DNI:</Text>
+                <Text style={styles.text2}>{dni}</Text>
+                <Button title={<Text style={styles.buttonText}>Mis grupos</Text>} buttonStyle={styles.misCosas}
+                        icon={<Icon name="" type="ionicon" size={20}/>} />
+                <Button title={<Text style={styles.buttonText}>Mis vacunas</Text>} buttonStyle={styles.misCosas}
+                        icon={<Icon name="" size={20}/>} />
+                <Button title={<Text style={styles.buttonText}>Usuarios dependientes</Text>} buttonStyle={styles.misCosas}
+                        icon={<Icon name="person" type="ionicon" size={25}/>} />
+                <Button title={<Text style={styles.buttonText}>Mis grupos</Text>} buttonStyle={styles.misCosas}
+                        icon={<Icon name="people-circle-outline" type="ionicon" size={30}/>} />
+                <View style={{marginTop: 20}}>
+                    <Button title="Cerrar sesión"
+                            onPress={() => supabase.auth.signOut()}
+                            icon={<Icon name="log-in-outline" type="ionicon" size={54} color="white" />}
+                            buttonStyle={styles.cerrarSesion}/>
+                </View>
             </View>
         </View>
+
     )
 }
 
 const styles = StyleSheet.create({
-    container: {
-        marginTop: 40,
-        padding: 12,
+    iconContainer: {
+        top: 10,
+        left: 305,
+        width: 50,
+        height: 50,
+        borderRadius: 25,
+        backgroundColor: '#B5DCCA',
+        justifyContent: 'center',
+        alignItems: 'center',
     },
-    verticallySpaced: {
-        paddingTop: 4,
-        paddingBottom: 4,
-        alignSelf: 'stretch',
+    cerrarSesion:{
+        width: '50%',
+        alignSelf: 'center',
+        backgroundColor: '#073A29',
+        borderRadius: 10,
     },
-    mt20: {
-        marginTop: 20,
+    spaced: {
+        marginTop: 5,
     },
+    col: {
+        flex: 1,
+        flexDirection: 'column',
+    },
+    grid: {
+        flexDirection: 'row',
+        alignItems: 'flex-start',
+        width: '90%',
+    },
+    misCosas: {
+        width: '80%',
+        backgroundColor: '#D6EFD4',
+        color: 'black',
+        borderRadius: 10,
+        margin: 5,
+    },
+    text1: {
+        fontSize: 25,
+    },
+    text2: {
+        fontSize: 25,
+        marginLeft: 10,
+    },
+    title: {
+        fontSize: 22,
+        textAlign: "left",
+        color: '#808080',
+        marginTop: 10,
+    },
+    buttonText: {
+        color: 'black',
+        fontSize: 20,
+    },
+
 })
+

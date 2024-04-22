@@ -90,7 +90,7 @@ export default function AddDoctor({ session }: { session: Session }) {
                     <Button title="Agregar"
                             disabled={loading}
                             onPress={() => addDoctor({name, profession, phone, email})}
-                            buttonStyle={[styles.buttonAdd, { backgroundColor: '#3EB77F' }]}
+                            buttonStyle={[styles.buttonAdd, { backgroundColor: '#D6EFD4' }]}
                     />
                 </View>
             </View>
@@ -116,7 +116,6 @@ const styles = StyleSheet.create({
     buttonAdd: {
         width: '40%',
         alignSelf: 'center',
-        backgroundColor: '#B5DCCA',
         borderRadius: 10,
     }
 

@@ -1,39 +1,43 @@
-import React, {ReactNode, useState} from 'react';
-import { TouchableOpacity, Text, ViewStyle, TouchableOpacityProps } from 'react-native';
+import React from 'react';
+import {
+    Text,
+    TouchableOpacityProps,
+    Image,
+    Pressable,
+    StyleSheet,
+    View
+} from 'react-native';
 
 interface CardProps extends TouchableOpacityProps {
-    onPress: () => ReactNode;
+    onPress:  any;
+    img : string;
+    title : String;
 }
 
-export const Card: React.FC<CardProps> = ({ onPress, ...props }) => {
+export const Card: React.FC<CardProps> = ({ onPress, img, title, ...props }) => {
     return (
-        <TouchableOpacity onPress={onPress} style={styles.card} {...props}>
-            <Text>Card Component</Text>
-        </TouchableOpacity>
+            <Pressable onPress={onPress}>
+                <Image style={styles.img} source={{ uri : "https://www.shutterstock.com/es/image-vector/medical-cross-round-button-neon-sign-2146940621"}} />
+                <View style={styles.card}>
+                    <Text style={styles.text}>{title}</Text>
+                </View>
+            </Pressable>
     );
 };
 
-const styles: { [key: string]: ViewStyle } = {
+const styles = StyleSheet.create({
+    text: {
+        fontSize: 20,
+    },
     card: {
-        backgroundColor: 'white',
-        padding: 20,
-        borderRadius: 10,
+        backgroundColor: "#B5DCCA", //no esta funcionando todo
+        padding: 15,
+        borderBottomLeftRadius: 10,
+        borderBottomRightRadius: 10,
         elevation: 3,
     },
-};
-    /*
-     <Image
-          style={[styles.icon3, styles.iconLayout]}
-          resizeMode="cover"
-          source={require("../assets/rectangle-105.png")}
-        />
-          <Pressable
-        style={[styles.homeChild3, styles.homeChildPosition]}
-        onPress={() => navigation.navigate("Vacunas")}
-      />
+    img: {
 
-      iconLayout: {
-    height: "100%",
-    width: "100%",
-  },
-     */
+    }
+});
+
