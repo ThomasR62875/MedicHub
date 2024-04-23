@@ -56,11 +56,11 @@ export default function Appointments({ session }: { session: Session }) {
                     </View>
                     <View>
                         {
-                        appointments.map((appoint)=> {
+                        appointments.map((appoint,i)=> {
                             return(
-                                <View style={styles.appointmentView}>
-                                    <Text style={styles.appointmentViewText}>{appoint.date}</Text>
-                                    <Text style={styles.appointmentViewText}>{appoint.description}</Text>
+                                <View key="{i}" style={styles.appointmentView}>
+                                    <Text key="{appoint.date}{i}" style={styles.appointmentViewText}>{appoint.date}</Text>
+                                    <Text key="{appoint.description}{i}" style={styles.appointmentViewText}>{appoint.description}</Text>
                                 </View>
                             )
                         })

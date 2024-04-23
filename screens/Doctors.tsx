@@ -14,6 +14,7 @@ interface Doctor {
     profession: string;
     phone: string;
     email: string;
+    address: [string];
 }
 
 interface Props {
@@ -35,8 +36,8 @@ export default function Doctors({ session }: { session: Session }) {
 
             const {data, error, status} = await supabase
                 .from('doctor')
-                .select(`id, email, name, profession, phone`)
-                .eq('user', session?.user.id)
+                .select()
+                .contains('users', [session?.user.id])
             if (error && status !== 406) {
                 throw error
             }
@@ -47,7 +48,8 @@ export default function Doctors({ session }: { session: Session }) {
                         name: doctor.name,
                         profession: doctor.profession,
                         phone: doctor.phone,
-                        email: doctor.email
+                        email: doctor.email,
+                        address: doctor.addresses
                     })
                 });
             }
@@ -68,12 +70,12 @@ export default function Doctors({ session }: { session: Session }) {
                 </View>
                 <View>
                     {
-                    doctors.map((doc)=> {
+                    doctors.map((doc,i)=> {
                         return(
-                            <View style={styles.doctorView}>
-                                <Text style={styles.doctorViewText}>{doc.name}</Text>
-                                <Text style={styles.doctorViewText}>{doc.profession}</Text>
-                                <Text style={styles.doctorViewText}>{doc.email}</Text>
+                            <View key="{i}" style={styles.doctorView}>
+                                <Text key="{doc.name}{i}" style={styles.doctorViewText}>{doc.name}</Text>
+                                <Text key="{doc.profession}{i}" style={styles.doctorViewText}>{doc.profession}</Text>
+                                <Text key="{doc.email}{i}" style={styles.doctorViewText}>{doc.email}</Text>
                             </View>
                         )
                     })

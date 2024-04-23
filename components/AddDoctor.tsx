@@ -26,7 +26,7 @@ export default function AddDoctor({ session }: { session: Session }) {
         try {
             const { error } = await supabase
                 .from('doctor')
-                .insert({email: email, name: name, profession: profession, phone: phone, user: session?.user.id});
+                .insert({email: email, name: name, profession: profession, phone: phone, users:[session?.user.id]});
 
             if (error) {
                 console.error('Error inserting data:', error.message);

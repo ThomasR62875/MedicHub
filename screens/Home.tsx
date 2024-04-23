@@ -6,7 +6,7 @@ import {Card} from '../components/Card';
 
 const Home: React.FC = ({navigation}: any) => {
 
-    const first_name= "Merentiel mi dios" //todo
+    const first_name= "" //todo
     return (
 
         <View>
