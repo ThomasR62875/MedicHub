@@ -17,7 +17,7 @@ interface CardProps extends TouchableOpacityProps {
 export const Card: React.FC<CardProps> = ({ onPress, img, title, ...props }) => {
     return (
             <Pressable onPress={onPress}>
-                <Image style={styles.img} source={{ uri : "https://www.shutterstock.com/es/image-vector/medical-cross-round-button-neon-sign-2146940621"}} />
+                <Image style={styles.img} source={require(img)} />
                 <View style={styles.card}>
                     <Text style={styles.text}>{title}</Text>
                 </View>

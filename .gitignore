@@ -1,0 +1,6 @@
+node_modules
+.expo
+.idea
+.vscode
+DS_Store
+# el .env tmb deberia ir acá, pero bueno
