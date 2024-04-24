@@ -3,6 +3,7 @@ import {View, Text, Alert, StyleSheet, TouchableWithoutFeedback, Keyboard, Dimen
 import { Button} from 'react-native-elements'
 import {supabase} from "../lib/supabase";
 import {Input, Icon} from "react-native-elements";
+import StandardGreenButton from "../components/StandardGreenButton";
 
 const windowHeight = Dimensions.get('window').height;
 
@@ -121,10 +122,10 @@ const Register: React.FC = ({ navigation }: any) => {
                 <View style={[styles.buttonSignInContainer, { height: windowHeight * 0.08, marginTop: 40}]}
                 // Nose porq, pero al modificar el 0.08 no cambia nada, y si lo borras se borra el button xd TODO
                 >
-                    <Button title="Ingresar"
+                    <StandardGreenButton title="Ingresar"
                     disabled={loading} 
                     onPress={() => signUpWithEmail()} 
-                    buttonStyle={[styles.buttonSignIn, { backgroundColor: '#3EB77F' }]} />
+                    />
                 </View>
                 </View>
             </View>

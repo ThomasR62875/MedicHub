@@ -3,6 +3,7 @@ import {View, Text, Alert, StyleSheet, TouchableWithoutFeedback, Keyboard} from 
 import {supabase} from "../lib/supabase";
 import {Button, Input} from "react-native-elements";
 import {Session} from "@supabase/supabase-js";
+import StandardGreenButton from "./StandardGreenButton";
 
 export default function AddDoctor({ session }: { session: Session }) {
     const [email, setEmail] = useState('')
@@ -87,11 +88,12 @@ export default function AddDoctor({ session }: { session: Session }) {
                     />
                 </View>
                 <View style={styles.verticallySpaced}>
-                    <Button title="Agregar"
-                            disabled={loading}
-                            onPress={() => addDoctor({name, profession, phone, email})}
-                            buttonStyle={[styles.buttonAdd, { backgroundColor: '#3EB77F' }]}
+                    <StandardGreenButton
+                        title="Agregar"
+                        onPress={() => addDoctor({name, profession, phone, email})}
+                        disabled={loading}
                     />
+
                 </View>
             </View>
         </TouchableWithoutFeedback>
@@ -112,11 +114,6 @@ const styles = StyleSheet.create({
     horizontallySpaced: {
         paddingTop: 2,
         paddingBottom: 2,
-    },
-    buttonAdd: {
-        width: '40%',
-        alignSelf: 'center',
-        borderRadius: 10,
     }
 
 });

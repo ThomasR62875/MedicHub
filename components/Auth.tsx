@@ -4,6 +4,7 @@ import { supabase } from '../lib/supabase'
 import { Button, Input } from 'react-native-elements'
 import { useNavigation, ParamListBase } from '@react-navigation/native'; // Importa useNavigation desde @react-navigation/native
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import StandardGreenButton from "./StandardGreenButton";
 //import {BrowserRouter} from "react-router-dom";
 
 const windowHeight = Dimensions.get('window').height;
@@ -61,7 +62,8 @@ export default function Auth() {
                     />
                 </View>
                 <View style={[styles.buttonSignInContainer, { height: windowHeight * 0.08 }]}>
-                    <Button title="Ingresar" disabled={loading} onPress={() => signInWithEmail()} buttonStyle={[styles.buttonSignIn, { backgroundColor: '#3EB77F' }]} />
+                    <StandardGreenButton
+                        title="Ingresar" disabled={loading} onPress={() => signInWithEmail()} />
                 </View>
                 <View style={[styles.buttonRegisterContainer, { marginTop: 80, height: windowHeight * 0.08 }]}>
                     <Text style={{color: '#000000', textAlign: 'center', fontSize: 18}}> ¿No tenes una cuenta?
@@ -96,10 +98,6 @@ const styles = StyleSheet.create({
     },
     buttonSignInContainer: {
         width: '50%',
-    },
-    buttonSignIn: {
-        backgroundColor: '#B5DCCA',
-        borderRadius: 10,
     },
     buttonRegisterContainer: {
         width: '100%',
