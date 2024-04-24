@@ -59,7 +59,7 @@ export default function AddDoctor({ session }: { session: Session }) {
                 <View style={[styles.verticallySpaced, styles.mt20]}>
                     <Input
                         label="Especialidad"
-                        leftIcon={{ type: 'font-awesome', name: 'user' }}
+                        leftIcon={{ type: 'font-awesome', name: 'user-md' }}
                         onChangeText={(text) => setProfession(text)}
                         value={profession}
                         placeholder="Especialidad"
@@ -90,7 +90,7 @@ export default function AddDoctor({ session }: { session: Session }) {
                     <Button title="Agregar"
                             disabled={loading}
                             onPress={() => addDoctor({name, profession, phone, email})}
-                            buttonStyle={[styles.buttonAdd, { backgroundColor: '#D6EFD4' }]}
+                            buttonStyle={[styles.buttonAdd, { backgroundColor: '#3EB77F' }]}
                     />
                 </View>
             </View>
