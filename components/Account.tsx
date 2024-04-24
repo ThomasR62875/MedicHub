@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabase'
 import {StyleSheet, View, Alert, Text} from 'react-native'
-import {Button, Icon} from 'react-native-elements'
+import {Button, Input, Icon} from 'react-native-elements'
 import { Session } from '@supabase/supabase-js'
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
@@ -67,14 +67,14 @@ const Account: React.FC<AccountScreenProps> = ({ navigation, route }) =>{
                 <Text style={styles.text2}>{session?.user.email}</Text>
                 <Text style={styles.title}>DNI:</Text>
                 <Text style={styles.text2}>{dni}</Text>
-                <Button title={<Text style={styles.buttonText}>Mis grupos</Text>} buttonStyle={styles.misCosas}
-                        icon={<Icon name="" type="ionicon" size={20}/>} />
-                <Button title={<Text style={styles.buttonText}>Mis vacunas</Text>} buttonStyle={styles.misCosas}
-                        icon={<Icon name="" size={20}/>} />
-                <Button title={<Text style={styles.buttonText}>Usuarios dependientes</Text>} buttonStyle={styles.misCosas}
-                        icon={<Icon name="person" type="ionicon" size={25}/>} />
-                <Button title={<Text style={styles.buttonText}>Mis grupos</Text>} buttonStyle={styles.misCosas}
-                        icon={<Icon name="people-circle-outline" type="ionicon" size={30}/>} />
+                <Button title={<Text style={styles.buttonText}>Mis vacunas</Text>}
+                        buttonStyle={styles.misCosas}
+                        icon={<Icon name="" size={20}/>}
+                />
+                <Button title={<Text style={styles.buttonText}>Usuarios dependientes</Text>}
+                        buttonStyle={styles.misCosas}
+                        icon={<Icon name="person" type="ionicon" size={25}/>}
+                />
                 <View style={{marginTop: 20}}>
                     <Button title="Cerrar sesión"
                             onPress={() => supabase.auth.signOut()}
@@ -123,7 +123,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#D6EFD4',
         color: 'black',
         borderRadius: 10,
-        margin: 5,
+        marginBottom: 5,
+        alignSelf: 'center',
     },
     text1: {
         fontSize: 25,
@@ -137,8 +138,10 @@ const styles = StyleSheet.create({
         textAlign: "left",
         color: '#808080',
         marginTop: 10,
+        marginLeft: 10,
     },
     buttonText: {
+        alignSelf: 'center',
         color: 'black',
         fontSize: 20,
     },
