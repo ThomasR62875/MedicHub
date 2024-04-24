@@ -4,13 +4,13 @@ import {StyleSheet, View, Alert, Text} from 'react-native'
 import {Button, Icon} from 'react-native-elements'
 import { Session } from '@supabase/supabase-js'
 
-export default function Account({ session }: { session: Session }) {
-    const [loading, setLoading] = useState(true)
+export default function Account({ session }: { session: Session }, {navigation}: any) {
     const [first_name, setFirstName] = useState('')
     const [last_name, setLastName] = useState('')
     const [dni, setDni] = useState(0)
     const [email, setEmail] = useState('')
     const [avatar_url, setAvatarUrl] = useState('')
+
 
     useEffect(() => {
         if (session) getProfile()
@@ -18,9 +18,7 @@ export default function Account({ session }: { session: Session }) {
 
     async function getProfile() {
         try {
-            setLoading(true)
             if (!session?.user) throw new Error('No user on the session!')
-
             const { data, error, status } = await supabase
                 .from('independent_user')
                 .select(`first_name, last_name, dni, email, avatar_url`)
@@ -29,7 +27,6 @@ export default function Account({ session }: { session: Session }) {
             if (error && status !== 406) {
                 throw error
             }
-
             if (data) {
                 setFirstName(data.first_name)
                 setLastName(data.last_name)
@@ -37,62 +34,17 @@ export default function Account({ session }: { session: Session }) {
                 setEmail(data.email)
                 setAvatarUrl(data.avatar_url)
             }
-
-
         } catch (error) {
             if (error instanceof Error) {
                 Alert.alert(error.message)
             }
-        } finally {
-            setLoading(false)
-        }
-    }
-
-    async function updateProfile({
-        first_name,
-        last_name,
-        dni,
-        email,
-        avatar_url,
-    }: {
-    first_name: string
-    last_name: string
-    dni: number
-    email: string
-    avatar_url: string
-    }) {
-        try {
-            setLoading(true)
-            if (!session?.user) throw new Error('No hay ningun usuario conectado!')
-
-            const updates = {
-                id: session?.user.id,
-                first_name,
-                last_name,
-                dni,
-                email,
-                avatar_url,
-                updated_at: new Date(),
-            }
-
-            const { error } = await supabase.from('independent_user').upsert(updates)
-
-            if (error) {
-                throw error
-            }
-        } catch (error) {
-            if (error instanceof Error) {
-                Alert.alert(error.message)
-            }
-        } finally {
-            setLoading(false)
         }
     }
 
     return (
         <View>
             <View style={styles.iconContainer}>
-                <Icon name='build-outline' type='ionicon'/>
+                <Icon name='build-outline' type='ionicon' size={35} onPress={() => navigation.navigate('EditAccount')}/>
             </View>
             <View style={styles.grid}>
                 <View>
@@ -181,6 +133,5 @@ const styles = StyleSheet.create({
         color: 'black',
         fontSize: 20,
     },
-
 })
 

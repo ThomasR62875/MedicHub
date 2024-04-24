@@ -1,7 +1,6 @@
 import 'react-native-url-polyfill/auto'
 import { useState, useEffect } from 'react'
 import { supabase } from './lib/supabase'
-import { View, Text } from 'react-native'
 import { Session } from '@supabase/supabase-js'
 import React from 'react';
 import {NavigationContainer, RouteProp} from '@react-navigation/native';
@@ -14,8 +13,9 @@ import Appointments from "./components/Appointments"
 import AddAppointment from "./screens/AddAppointment"
 import Doctors from "./screens/Doctors";
 import AddDoctor from "./components/AddDoctor";
-import {Props} from "@react-navigation/stack/lib/typescript/src/views/Header/HeaderContainer";
-import {StackNavigationProp} from "@react-navigation/stack";
+import EditAccount from "./screens/EditAccount";
+import {Tabs} from "expo-router";
+
 
 const Stack = createNativeStackNavigator();
 
@@ -55,21 +55,24 @@ export default function App() {
           ) : (
               <>
               <Stack.Screen name="Home" component={Home} />
-                <Stack.Screen name="Account">
-                  {(props) =><Account {...props} session={session} />}
-                </Stack.Screen>
-                <Stack.Screen name="Appointments">
-                  {(props) =><Appointments {...props} session={session}/>}
-                </Stack.Screen>
-                <Stack.Screen name="AddAppointment">
-                  {(props) =><AddAppointment {...props} session={session}/>}
-                </Stack.Screen>
-                <Stack.Screen name="AddDoctor">
-                  {(props) =><AddDoctor {...props} session={session} />}
-                </Stack.Screen>
-                <Stack.Screen name="Doctors">
-                  {(props) =><Doctors {...props} session={session} />}
-                </Stack.Screen>
+              <Stack.Screen name="Account">
+                {(props) =><Account {...props} session={session} />}
+              </Stack.Screen>
+              <Stack.Screen name="Appointments">
+                {(props) =><Appointments {...props} session={session}/>}
+              </Stack.Screen>
+              <Stack.Screen name="AddAppointment">
+                {(props) =><AddAppointment {...props} session={session}/>}
+              </Stack.Screen>
+              <Stack.Screen name="AddDoctor">
+                {(props) =><AddDoctor {...props} session={session} />}
+              </Stack.Screen>
+              <Stack.Screen name="Doctors">
+                {(props) =><Doctors {...props} session={session} />}
+              </Stack.Screen>
+              <Stack.Screen name="EditAccount">
+                {(props) =><EditAccount {...props} session={session} />}
+              </Stack.Screen>
               </>
           )}
         </Stack.Navigator>
