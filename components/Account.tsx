@@ -3,8 +3,15 @@ import { supabase } from '../lib/supabase'
 import {StyleSheet, View, Alert, Text} from 'react-native'
 import {Button, Icon} from 'react-native-elements'
 import { Session } from '@supabase/supabase-js'
+import {NativeStackScreenProps} from "@react-navigation/native-stack";
+import {RootStackParamList} from "../App";
 
-export default function Account({ session }: { session: Session }, {navigation}: any) {
+
+type AccountScreenProps = NativeStackScreenProps<RootStackParamList, 'Account'>;
+
+
+const Account: React.FC<AccountScreenProps> = ({ navigation, route }) =>{
+    const {session} = route.params;
     const [first_name, setFirstName] = useState('')
     const [last_name, setLastName] = useState('')
     const [dni, setDni] = useState(0)
@@ -44,7 +51,7 @@ export default function Account({ session }: { session: Session }, {navigation}:
     return (
         <View>
             <View style={styles.iconContainer}>
-                <Icon name='build-outline' type='ionicon' size={35} onPress={() => navigation.navigate('EditAccount')}/>
+                <Icon name='build-outline' type='ionicon' size={35} onPress={() => navigation.navigate('EditAccount', {session: session})} />
             </View>
             <View style={styles.grid}>
                 <View>
@@ -57,7 +64,7 @@ export default function Account({ session }: { session: Session }, {navigation}:
             </View>
             <View style={styles.spaced}>
                 <Text style={styles.title}>Mail:</Text>
-                <Text style={styles.text2}>{email}</Text>
+                <Text style={styles.text2}>{session?.user.email}</Text>
                 <Text style={styles.title}>DNI:</Text>
                 <Text style={styles.text2}>{dni}</Text>
                 <Button title={<Text style={styles.buttonText}>Mis grupos</Text>} buttonStyle={styles.misCosas}
@@ -79,6 +86,8 @@ export default function Account({ session }: { session: Session }, {navigation}:
 
     )
 }
+
+export default Account
 
 const styles = StyleSheet.create({
     iconContainer: {

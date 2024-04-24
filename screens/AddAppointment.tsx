@@ -6,23 +6,28 @@ import {Input} from "react-native-elements";
 import DateTimePicker from 'react-native-ui-datepicker';
 import dayjs from 'dayjs';
 import StandardGreenButton from "../components/StandardGreenButton";
+import {NativeStackScreenProps} from "@react-navigation/native-stack";
+import {RootStackParamList} from "../App";
+import {Appointment} from "../components/Appointments";
 
+type AddAppointmentProps = NativeStackScreenProps<RootStackParamList, 'AddAppointment'>
 
-export default function AddAppointment({ session}: { session: Session}) {
+const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) => {
+    const {session} = route.params;
     const [date, setDate] = useState(dayjs())
     const [loading, setLoading] = useState(false)
     const [description, setDescription] = useState('')
-
+    
     async function setAppointment() {
         setLoading(true)
         if (!session?.user) throw new Error('No user on the session!')
 
         const { data, error } = await supabase
-            .from('appointment')
-            .insert([
-                { date: date, description: description, user: session?.user.id},
-            ])
-            .select()
+        .from('appointment')
+        .insert([
+        { date: date, description: description, user: session?.user.id},
+        ])
+        .select()
 
         if (error) Alert.alert(error.message)
         else (Alert.alert("El turno ya está cargado"))
@@ -31,17 +36,17 @@ export default function AddAppointment({ session}: { session: Session}) {
 
     return (
         <SafeAreaView style={styles.container}>
-            {/* Date Picker */}
-            <DateTimePicker
-                mode="single"
-                date={date}
-                onChange={(params) => setDate(params.date)}
-                displayFullDays
-                style={styles.datePicker}
-            />
-
-            {/* Description Input */}
-            {/*multiline={true}
+          {/* Date Picker */}
+          <DateTimePicker
+            mode="single"
+            date={date}
+            onChange={(params) => setDate(params.date)}
+            displayFullDays
+            style={styles.datePicker}
+          />
+        
+          {/* Description Input */}
+          {/*multiline={true}
          numberOfLines={4}*/}
             <Input
                 leftIcon={{ type: 'font-awesome', name: 'paperclip' }}
@@ -58,8 +63,10 @@ export default function AddAppointment({ session}: { session: Session}) {
                 onPress={() => setAppointment()}
             />
         </SafeAreaView>
-    );
+      );
 }
+
+export default AddAppointment;
 
 const styles = StyleSheet.create({
     container: {

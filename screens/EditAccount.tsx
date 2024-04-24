@@ -3,8 +3,17 @@ import { supabase } from '../lib/supabase'
 import {StyleSheet, View, Alert, Text} from 'react-native'
 import {Button, Input} from 'react-native-elements'
 import { Session } from '@supabase/supabase-js'
+import {NativeStackScreenProps} from "@react-navigation/native-stack";
+import {RootStackParamList} from "../App";
 
-function EditAccount({ session }: { session: Session }) {
+
+
+type EditAccountProps = NativeStackScreenProps<RootStackParamList, 'EditAccount'>;
+
+
+const EditAccount:React.FC<EditAccountProps> = ({navigation, route }) =>{
+    const {session} = route.params;
+
     const [loading, setLoading] = useState(true)
     const [first_name, setFirstName] = useState('')
     const [last_name, setLastName] = useState('')
@@ -103,6 +112,8 @@ function EditAccount({ session }: { session: Session }) {
     )
 }
 
+export default EditAccount
+
 const styles = StyleSheet.create({
     col: {
     flex: 1,
@@ -111,7 +122,7 @@ const styles = StyleSheet.create({
 
 })
 
-export default EditAccount;
+// export default EditAccount;
 
 
 
