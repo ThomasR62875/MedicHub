@@ -66,17 +66,31 @@ const Doctors: React.FC<DoctorProps> = ({ navigation, route }) => {
     return(
         <View style={styles.container}>
             <ScrollView>
-                <View>
-                    <Text>Medicos</Text>
+                <View style={styles.titleContainer}>
+                    <Text style={styles.titleText}>Medicos</Text>
                 </View>
+
                 <View>
                     {
                     doctors.map((doc: Doctor,i)=> {
                         return(
-                            <View key="{i}" style={styles.doctorView}>
-                                <Text key="{doc.name}{i}" style={styles.doctorViewText}>{doc.name}</Text>
-                                <Text key="{doc.profession}{i}" style={styles.doctorViewText}>{doc.profession}</Text>
-                                <Text key="{doc.email}{i}" style={styles.doctorViewText}>{doc.email}</Text>
+                            <View key={i} style={styles.doctorContainer}>
+                                <View style={styles.infoRow}>
+                                    <Text style={styles.label}>Nombre:</Text>
+                                    <Text style={styles.value}>{doc.name}</Text>
+                                </View>
+                                <View style={styles.infoRow}>
+                                    <Text style={styles.label}>Especialidad:</Text>
+                                    <Text style={styles.value}>{doc.profession}</Text>
+                                </View>
+                                <View style={styles.infoRow}>
+                                    <Text style={styles.label}>Mail:</Text>
+                                    <Text style={styles.value}>{doc.email}</Text>
+                                </View>
+                                <View style={styles.infoRow}>
+                                    <Text style={styles.label}>Teléfono:</Text>
+                                    <Text style={styles.value}>{doc.phone}</Text>
+                                </View>
                             </View>
                         )
                     })
@@ -93,20 +107,33 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: 'center',
-        alignItems: 'center',
         padding: 20,
       },
-    doctorView: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'center',
-      backgroundColor: '#f0f0f0',
-      padding: 10,
-      borderRadius: 5,
+    doctorContainer: {
+        backgroundColor: '#C2E5D3',
+        marginBottom: 20,
+        borderRadius: 5,
     },
-    doctorViewText: {
-      fontSize: 16,
-      fontWeight: 'bold',
-      color: '#333',
-    }
-  });
+    infoRow: {
+        flexDirection: 'row',
+        marginBottom: 5,
+    },
+    label: {
+        fontWeight: 'bold',
+        marginRight: 5,
+    },
+    value: {
+        flex: 1,
+    },
+    titleContainer: {
+        alignSelf: 'center',
+        marginBottom: 20,
+    },
+    titleText: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        color: '#333',
+    },
+
+
+});
