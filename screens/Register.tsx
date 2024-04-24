@@ -1,5 +1,13 @@
 import React, {useState} from 'react';
-import {View, Text, Alert, StyleSheet, TouchableWithoutFeedback, Keyboard, Dimensions} from 'react-native';
+import {
+    View, ScrollView,
+    Text,
+    Alert,
+    StyleSheet,
+    TouchableWithoutFeedback,
+    Keyboard,
+    Dimensions, KeyboardAvoidingView
+} from 'react-native';
 import { Button} from 'react-native-elements'
 import {supabase} from "../lib/supabase";
 import {Input, Icon} from "react-native-elements";
@@ -44,11 +52,12 @@ const Register: React.FC = ({ navigation }: any) => {
     }
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-            <View style={styles.container}>
+                <KeyboardAvoidingView behavior="padding" style={styles.container}>
                 <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                     <Text>Register Screen</Text>
                 </View>
                 <View style={styles.verticallySpaced}>
+                    <ScrollView>
                     <Input
                         label="Nombre"
                         labelStyle={styles.colorLable}
@@ -79,8 +88,6 @@ const Register: React.FC = ({ navigation }: any) => {
                         placeholderTextColor={styles.colorPlaceholder.color}
                         autoCapitalize={'none'}
                     />
-                </View>
-                <View style={[styles.verticallySpaced]}>
                     <Input
                         label="Mail"
                         labelStyle={styles.colorLable}
@@ -91,8 +98,6 @@ const Register: React.FC = ({ navigation }: any) => {
                         placeholderTextColor={styles.colorPlaceholder.color}
                         autoCapitalize={'none'}
                     />
-                </View>
-                <View style={styles.verticallySpaced}>
                     <Input
                         label="Contraseña"
                         labelStyle={styles.colorLable}
@@ -103,9 +108,8 @@ const Register: React.FC = ({ navigation }: any) => {
                         placeholder="Contraseña"
                         placeholderTextColor={styles.colorPlaceholder.color}
                         autoCapitalize={'none'}
+
                     />
-                </View>
-                <View style={styles.verticallySpaced}>
                     <Input
                         label="Confirmar contraseña"
                         labelStyle={styles.colorLable}
@@ -117,18 +121,19 @@ const Register: React.FC = ({ navigation }: any) => {
                         placeholderTextColor={styles.colorPlaceholder.color}
                         autoCapitalize={'none'}
                     />
+                </ScrollView>
                 </View>
-                <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }} >  
-                <View style={[styles.buttonSignInContainer, { height: windowHeight * 0.08, marginTop: 40}]}
-                // Nose porq, pero al modificar el 0.08 no cambia nada, y si lo borras se borra el button xd TODO
-                >
-                    <StandardGreenButton title="Ingresar"
-                    disabled={loading} 
-                    onPress={() => signUpWithEmail()} 
-                    />
+                <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }} >
+                    <View style={[styles.buttonSignInContainer, { height: windowHeight * 0.08, marginTop: 40}]}
+                    // Nose porq, pero al modificar el 0.08 no cambia nada, y si lo borras se borra el button xd TODO
+                    >
+                        <StandardGreenButton title="Ingresar"
+                        disabled={loading}
+                        onPress={() => signUpWithEmail()}
+                        />
+                    </View>
                 </View>
-                </View>
-            </View>
+                </KeyboardAvoidingView>
         </TouchableWithoutFeedback>
     );
 };

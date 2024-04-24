@@ -11,7 +11,7 @@ const StandardGreenButton: React.FC<StandardGreenButtonProps> = ({ title, onPres
             title={title}
             disabled={disabled}
             onPress={onPress}
-            buttonStyle={{ width: '40%', alignSelf: 'center', borderRadius: 10, backgroundColor: '#3EB77F' }}
+            buttonStyle={{ width: '60%', alignSelf: 'center', borderRadius: 10, backgroundColor: '#3EB77F' }}
         />
     );
 }
