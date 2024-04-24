@@ -5,9 +5,14 @@ import { Session } from '@supabase/supabase-js'
 import {Input} from "react-native-elements";
 import DateTimePicker from 'react-native-ui-datepicker';
 import dayjs from 'dayjs';
+import {NativeStackScreenProps} from "@react-navigation/native-stack";
+import {RootStackParamList} from "../App";
+import {Appointment} from "../components/Appointments";
 
+type AddAppointmentProps = NativeStackScreenProps<RootStackParamList, 'AddAppointment'>
 
-export default function AddAppointment({ session}: { session: Session}) {
+const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) => {
+    const {session} = route.params;
     const [date, setDate] = useState(dayjs())
     const [loading, setLoading] = useState(false)
     const [description, setDescription] = useState('')
@@ -57,6 +62,8 @@ export default function AddAppointment({ session}: { session: Session}) {
         </SafeAreaView>
       );
 }
+
+export default AddAppointment;
 
 const styles = StyleSheet.create({
     container: {

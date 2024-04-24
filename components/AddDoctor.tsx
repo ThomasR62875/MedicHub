@@ -3,8 +3,14 @@ import {View, Text, Alert, StyleSheet, TouchableWithoutFeedback, Keyboard} from 
 import {supabase} from "../lib/supabase";
 import {Button, Input} from "react-native-elements";
 import {Session} from "@supabase/supabase-js";
+import {NativeStackScreenProps} from "@react-navigation/native-stack";
+import {RootStackParamList} from "../App";
+import Doctors from "../screens/Doctors";
 
-export default function AddDoctor({ session }: { session: Session }) {
+type AddDoctorProps = NativeStackScreenProps<RootStackParamList, 'AddDoctor'>
+
+const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}) => {
+    const {session} = route.params;
     const [email, setEmail] = useState('')
     const [name, setName] = useState('')
     const [loading, setLoading] = useState(false)
@@ -97,6 +103,9 @@ export default function AddDoctor({ session }: { session: Session }) {
         </TouchableWithoutFeedback>
     );
 };
+
+export default AddDoctor;
+
 
 const styles = StyleSheet.create({
     container: {

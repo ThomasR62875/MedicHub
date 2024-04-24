@@ -4,8 +4,8 @@ import { StyleSheet, View, Alert, ScrollView,Text} from 'react-native'
 import { Button, Input } from 'react-native-elements'
 import { Session } from '@supabase/supabase-js'
 import {NavigationContainer} from "@react-navigation/native";
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import AddDoctor from "../components/AddDoctor";
+import {createNativeStackNavigator, NativeStackScreenProps} from '@react-navigation/native-stack';
+import {RootStackParamList} from "../App";
 
 const Stack = createNativeStackNavigator();
 
@@ -17,19 +17,19 @@ interface Doctor {
     address: [string];
 }
 
-interface Props {
-    session: Session;
-}
-export default function Doctors({ session }: { session: Session }) {
+type DoctorProps = NativeStackScreenProps<RootStackParamList, 'Doctors'>;
+
+const Doctors: React.FC<DoctorProps> = ({ navigation, route }) => {
+    const {session} = route.params;
     const [loading, setLoading] = useState(true)
-    const [doctors,setDoctors]= useState([])
+    const [doctors,setDoctors]= useState<Doctor[]>([])
 
     useEffect(() => {
         if (session) getDoctors()
     }, [session])
 
-    async function getDoctors():Doctor[] {
-        let to_return: Doctor[]=[]
+    async function getDoctors(): Promise<Doctor[]> {
+        let to_return: Doctor[] = []
         try {
             setLoading(true)
             if (!session?.user) throw new Error('No user on the session!')
@@ -53,7 +53,7 @@ export default function Doctors({ session }: { session: Session }) {
                     })
                 });
             }
-        
+
         } catch (error) {
             if (error instanceof Error) {
                 Alert.alert(error.message)
@@ -61,7 +61,8 @@ export default function Doctors({ session }: { session: Session }) {
         }
         setLoading(false)
         setDoctors(to_return)
-        }
+        return to_return;
+    }
     return(
         <View style={styles.container}>
             <ScrollView>
@@ -70,7 +71,7 @@ export default function Doctors({ session }: { session: Session }) {
                 </View>
                 <View>
                     {
-                    doctors.map((doc,i)=> {
+                    doctors.map((doc: Doctor,i)=> {
                         return(
                             <View key="{i}" style={styles.doctorView}>
                                 <Text key="{doc.name}{i}" style={styles.doctorViewText}>{doc.name}</Text>
@@ -85,6 +86,8 @@ export default function Doctors({ session }: { session: Session }) {
         </View>
     )
 }
+
+export default Doctors;
 
 const styles = StyleSheet.create({
     container: {
