@@ -8,7 +8,7 @@ import dayjs from 'dayjs';
 import StandardGreenButton from "../components/StandardGreenButton";
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
-import {Appointment} from "../components/Appointments";
+import {Appointment} from "./Appointments";
 
 type AddAppointmentProps = NativeStackScreenProps<RootStackParamList, 'AddAppointment'>
 
@@ -40,9 +40,9 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
           <DateTimePicker
             mode="single"
             date={date}
-            onChange={(params) => setDate(params.date)}
+            onChange={(params: Appointment) => setDate(params.date)}
             displayFullDays
-            style={styles.datePicker}
+            // style={styles.datePicker}
           />
         
           {/* Description Input */}

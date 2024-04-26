@@ -9,7 +9,7 @@ import {RootStackParamList} from "../App";
 
 const Stack = createNativeStackNavigator();
 
-type Doctor = {
+export type Doctor = {
     name: string;
     profession: string;
     phone: string;

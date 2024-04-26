@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabase'
 import { StyleSheet, View, Alert, ScrollView,Text} from 'react-native'
-import { Session } from '@supabase/supabase-js'
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
+import {Doctor} from "./Doctors"
 
 type DependentUsersProps = NativeStackScreenProps<RootStackParamList, 'DependentUsers'>;
 
 
-interface Users {
+type Users = {
     first_name: string;
     last_name: string;
     dni: string;
@@ -23,7 +23,7 @@ const DependentUsers: React.FC<DependentUsersProps> = ({ navigation, route }) =>
     useEffect(() => {
         if (session) getUsers()
     }, [session])
-    async function getUsers():Doctor[] {
+    async function getUsers():Promise<Doctor[]> {
         let to_return: Doctor[]=[]
         try {
             setLoading(true)
@@ -56,6 +56,7 @@ const DependentUsers: React.FC<DependentUsersProps> = ({ navigation, route }) =>
         }
         setLoading(false)
         setDoctors(to_return)
+        return to_return;
     }
 }
 

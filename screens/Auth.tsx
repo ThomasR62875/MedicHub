@@ -3,8 +3,9 @@ import {Alert, StyleSheet, View, Dimensions, AppState, Text, TouchableWithoutFee
 import { supabase } from '../lib/supabase'
 import { Button, Input } from 'react-native-elements'
 import { useNavigation, ParamListBase } from '@react-navigation/native'; // Importa useNavigation desde @react-navigation/native
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import StandardGreenButton from "./StandardGreenButton";
+import {NativeStackNavigationProp, NativeStackScreenProps} from '@react-navigation/native-stack';
+import StandardGreenButton from "../components/StandardGreenButton";
+import {RootStackParamList} from "../App";
 //import {BrowserRouter} from "react-router-dom";
 
 const windowHeight = Dimensions.get('window').height;
@@ -17,12 +18,16 @@ AppState.addEventListener('change', (state) => {
     }
 })
 
-export default function Auth() {
+type LogInProps = NativeStackScreenProps<RootStackParamList, 'Login'>;
+
+
+const Auth: React.FC<LogInProps> = ({navigation}, {route})=> {
+    const {session} = route.params;
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [loading, setLoading] = useState(false)
 
-    const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>(); // Utiliza useNavigation para obtener el objeto de navegación
+    // const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>(); // Utiliza useNavigation para obtener el objeto de navegación
 
     async function signInWithEmail() {
         setLoading(true)
@@ -79,6 +84,8 @@ export default function Auth() {
         </TouchableWithoutFeedback>
     );
 }
+
+export default Auth;
 
 const styles = StyleSheet.create({
     container: {

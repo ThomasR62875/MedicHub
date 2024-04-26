@@ -1,7 +1,7 @@
 import Home from './Home';
 import Doctors from "./Doctors";
-import Appointments from "../components/Appointments";
-import Account from "../components/Account";
+import Appointments from "../screens/Appointments";
+import Account from "../screens/Account";
 import {NavigationContainer} from "@react-navigation/native";
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {Text, View} from "react-native";
@@ -9,8 +9,6 @@ import {Icon} from "react-native-elements";
 import {Session} from "@supabase/supabase-js";
 import React, {useEffect, useState} from "react";
 import {supabase} from "../lib/supabase";
-import Auth from "../components/Auth";
-import Register from "./Register";
 
 const Tab = createBottomTabNavigator()
 

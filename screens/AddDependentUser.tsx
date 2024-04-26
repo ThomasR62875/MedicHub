@@ -2,7 +2,6 @@ import React, {useState} from 'react';
 import {SafeAreaView,TouchableOpacity, Text, Alert, StyleSheet, } from 'react-native';
 import {supabase} from "../lib/supabase";
 import {Button, Input} from "react-native-elements";
-import {Session} from "@supabase/supabase-js";
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
 

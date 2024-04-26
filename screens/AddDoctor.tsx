@@ -3,7 +3,7 @@ import {View, Text, Alert, StyleSheet, TouchableWithoutFeedback, Keyboard} from 
 import {supabase} from "../lib/supabase";
 import {Button, Input} from "react-native-elements";
 import {Session} from "@supabase/supabase-js";
-import StandardGreenButton from "./StandardGreenButton";
+import StandardGreenButton from "../components/StandardGreenButton";
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
 import Doctors from "../screens/Doctors";

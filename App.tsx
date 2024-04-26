@@ -8,21 +8,21 @@ import {NavigationContainer} from '@react-navigation/native';
 import AddAppointment from "./screens/AddAppointment"
 import LoginScreen from "./screens/LogIn";
 import Doctors from "./screens/Doctors";
-import AddDoctor from "./components/AddDoctor";
-import AddDependentUser from './components/AddDependentUser'
+import AddDoctor from "./screens/AddDoctor";
+import AddDependentUser from './screens/AddDependentUser'
 import {Props} from "@react-navigation/stack/lib/typescript/src/views/Header/HeaderContainer";
 import {StackNavigationProp} from "@react-navigation/stack";
-import Account from "./components/Account";
+import Account from "./screens/Account";
 import {createNativeStackNavigator} from "@react-navigation/native-stack";
 import Register from "./screens/Register";
 import Home from "./screens/Home";
-import Appointments from "./components/Appointments";
+import Appointments from "./screens/Appointments";
 import EditAccount from "./screens/EditAccount";
-import DependentUsers from "./components/DependentUsers";
+import DependentUsers from "./screens/DependentUsers";
 
 export type RootStackParamList = {
   Home: undefined;
-  Login: undefined;
+  Login: {session: Session | null};
   Register: undefined;
   Account: { session: Session | null };
   Appointments: { session: Session | null };
@@ -88,7 +88,10 @@ const App: React.FC = () => {
         <Stack.Navigator>
           {!session ? (
               <>
-                <Stack.Screen name="Login" component={LoginScreen}/>
+                <Stack.Screen name="Login"
+                              component={LoginScreen}
+                              initialParams={{session: session}}
+                />
                 <Stack.Screen name="Register" component={Register} />
               </>
           ) : (
