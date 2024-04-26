@@ -31,6 +31,7 @@ export type RootStackParamList = {
   AddDoctor: {session: Session | null};
   Doctors: {session: Session | null};
   DependentUsers: {session: Session | null};
+  AddDependentUser: {session: Session | null};
 };
 
 
@@ -119,6 +120,10 @@ const App: React.FC = () => {
                 />
                 <Stack.Screen name="DependentUsers"
                               component={DependentUsers}
+                              initialParams={{session: session}}
+                />
+                <Stack.Screen name="AddDependentUser"
+                              component={AddDependentUser}
                               initialParams={{session: session}}
                 />
               </>

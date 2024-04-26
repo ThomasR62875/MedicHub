@@ -3,8 +3,13 @@ import {SafeAreaView,TouchableOpacity, Text, Alert, StyleSheet, } from 'react-na
 import {supabase} from "../lib/supabase";
 import {Button, Input} from "react-native-elements";
 import {Session} from "@supabase/supabase-js";
+import {NativeStackScreenProps} from "@react-navigation/native-stack";
+import {RootStackParamList} from "../App";
 
-export default function AddDependentUser({ session }: { session: Session }) {
+type AddDependentUser = NativeStackScreenProps<RootStackParamList, 'AddDependentUser'>;
+
+
+const AddDependentUser: React.FC<AddDependentUser> = ({ navigation, route }) => {
     const [firstName,setFirstName] = useState('')
     const [lastName,setLastName] = useState('')
     const [dni,setDni]  = useState('')
@@ -50,7 +55,7 @@ export default function AddDependentUser({ session }: { session: Session }) {
             placeholder="DNI"
             value={dni}
             onChangeText={(text) => setDni(text)}
-            type="number"
+            // type="number"
           />
         <TouchableOpacity style={styles.confirmButton} onPress={() => addUser()}>
             <Text style={styles.confirmButtonText}>Confirm</Text>
@@ -59,6 +64,8 @@ export default function AddDependentUser({ session }: { session: Session }) {
       );
 
 }
+
+export default AddDependentUser;
 
 const styles = StyleSheet.create({
     container: {
