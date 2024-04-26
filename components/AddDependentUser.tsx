@@ -14,9 +14,9 @@ export default function AddDependentUser({ session }: { session: Session }) {
     async function addUser() {
         setLoading(true)
             try{
-                const {data, error } = await supabase
-                    .rpc('add_dependent_user',{first_name_input: firstName,last_name_input :lastName, 
-                        dni_input:dni,auth_id_input:session?.user.id})
+                const { error } = await supabase
+                    .rpc("add_dependent_user",{first_name_input: firstName,last_name_input :lastName, 
+                        dni_input:dni})
                 Alert.alert("El Usuario ya está guardado") 
             }
             catch(error){
