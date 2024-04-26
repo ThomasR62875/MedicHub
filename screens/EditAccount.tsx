@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabase'
 import {StyleSheet, View, Alert, Text} from 'react-native'
-import {Button, Input} from 'react-native-elements'
+import {Button, Icon, Input} from 'react-native-elements'
 import { Session } from '@supabase/supabase-js'
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
@@ -17,8 +17,6 @@ const EditAccount:React.FC<EditAccountProps> = ({navigation, route }) =>{
     const [loading, setLoading] = useState(true)
     const [first_name, setFirstName] = useState('')
     const [last_name, setLastName] = useState('')
-    const [dni, setDni] = useState(0)
-    const [email, setEmail] = useState('')
     const [avatar_url, setAvatarUrl] = useState('')
 
     useEffect(() => {
@@ -42,8 +40,6 @@ const EditAccount:React.FC<EditAccountProps> = ({navigation, route }) =>{
             if (data) {
                 setFirstName(data.first_name)
                 setLastName(data.last_name)
-                setDni(data.dni)
-                setEmail(data.email)
                 setAvatarUrl(data.avatar_url)
             }
 
@@ -99,34 +95,24 @@ const EditAccount:React.FC<EditAccountProps> = ({navigation, route }) =>{
     }
 
     return(
-        <View>
-            <View style={styles.col}>
-                <View>
-                    <Input label="Nombre" value = {first_name} onChangeText={(text) => setFirstName(text)} />
-                </View>
-                <View>
-                    <Input label="Apellido" value={last_name} onChangeText={(text) => setLastName(text)} />
-                </View>
+
+        <View >
+            <Icon name='person-circle-outline' type='ionicon' size={90} onPress={() => navigation.navigate('EditAccount', {session: session})} />
+            {/* aca iria una carga de archivo/imagen q tdv no sabemos hacer todo*/}
+                <Input label="Nombre" value={first_name} onChangeText={(text) => setFirstName(text)}/>
+                <Input label="Apellido" value={last_name} onChangeText={(text) => setLastName(text)}/>
             </View>
-        </View>
     )
 }
 
 export default EditAccount
 
 const styles = StyleSheet.create({
-    col: {
-    flex: 1,
-        flexDirection: 'column',
+    container: {
+        marginTop:10
     },
 
 })
-
-// export default EditAccount;
-
-
-
-
 
 
 
