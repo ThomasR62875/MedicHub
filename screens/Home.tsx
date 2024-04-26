@@ -26,11 +26,10 @@ const Home: React.FC = ({navigation}: any) => {
                         <Card title="Agregar doctor" img={imgDoc} onPress={() => navigation.navigate('AddDoctor')}/>
                         <View style={{ marginBottom: 10 }} />
                         <Card title="Doctors" img={imgDoc}  onPress={() => navigation.navigate('Doctors')}/>
-                        <Card title="Doctors" img={"no me deja importar img"}  onPress={() => navigation.navigate('Doctors')}/>
                     </View>
-                    <View style={styles.col}>
-                        <Card title="Agregar usuario" onPress={()=> navigation.navigate('AddDependentUser')} img={}/>
-                    </View>
+                    {/*<View style={styles.col}>*/}
+                    {/*    <Card title="Agregar usuario" onPress={()=> navigation.navigate('AddDependentUser')}/>*/}
+                    {/*</View>*/}
                 </View>
             </View>
         </View>
