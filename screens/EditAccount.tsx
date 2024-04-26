@@ -28,14 +28,7 @@ const EditAccount:React.FC<EditAccountProps> = ({navigation, route }) =>{
             setLoading(true)
             if (!session?.user) throw new Error('No user on the session!')
 
-            const {data, error, status} = await supabase
-                .from('independent_user')
-                .select(`first_name, last_name, dni, email, avatar_url`)
-                .eq('id', session?.user.id)
-                .single()
-            if (error && status !== 406) {
-                throw error
-            }
+            const { data, error } = await supabase.rpc('get_independent_user', { auth_id_input: session?.user.id });
 
             if (data) {
                 setFirstName(data.first_name)

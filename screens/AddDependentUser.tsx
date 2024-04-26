@@ -18,9 +18,8 @@ const AddDependentUser: React.FC<AddDependentUser> = ({ navigation, route }) => 
     async function addUser() {
         setLoading(true)
             try{
-                const { error } = await supabase
-                    .rpc("add_dependent_user",{first_name_input: firstName,last_name_input :lastName, 
-                        dni_input:dni})
+                const { error } = await supabase.rpc("add_dependent_user",{first_name_input: firstName,
+                    last_name_input :lastName, dni_input:dni})
                 Alert.alert("El Usuario ya está guardado") 
             }
             catch(error){
