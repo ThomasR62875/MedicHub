@@ -5,6 +5,9 @@ import {Button, Input, Icon} from 'react-native-elements'
 import { Session } from '@supabase/supabase-js'
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
+import Icon2 from '@mdi/react';
+import { mdiNeedle } from '@mdi/js';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 
 type AccountScreenProps = NativeStackScreenProps<RootStackParamList, 'Account'>;
@@ -69,7 +72,7 @@ const Account: React.FC<AccountScreenProps> = ({ navigation, route }) =>{
                 <Text style={styles.text2}>{dni}</Text>
                 <Button title={<Text style={styles.buttonText}>Mis vacunas</Text>}
                         buttonStyle={styles.misCosas}
-                        icon={<Icon name="" size={20}/>}
+                        icon={{ type:'font-awesome', name:'syringe'}}
                 />
                 <Button title={<Text style={styles.buttonText}>Usuarios dependientes</Text>}
                         buttonStyle={styles.misCosas}
@@ -86,6 +89,13 @@ const Account: React.FC<AccountScreenProps> = ({ navigation, route }) =>{
 
     )
 }
+
+// Todos los tipos de iconos q intenten para la needle
+//
+//   icon={<Icon2 path={mdiNeedle} size={10}/>}
+//   {/* Literlamente asi es en la página oficial pero expo dice q no :( https://pictogrammers.com/library/mdi/icon/needle/ todo*/}
+// <MaterialCommunityIcons name="needle" size={24} color="black" />
+//  <FontAwesomeIcon icon="fa-solid fa-syringe" />
 
 export default Account
 
@@ -146,4 +156,3 @@ const styles = StyleSheet.create({
         fontSize: 20,
     },
 })
-
