@@ -9,7 +9,7 @@ import {RootStackParamList} from "../App";
 
 const Stack = createNativeStackNavigator();
 
-interface Doctor {
+type Doctor = {
     name: string;
     profession: string;
     phone: string;
@@ -43,7 +43,7 @@ const Doctors: React.FC<DoctorProps> = ({ navigation, route }) => {
             }
 
             if (data) {
-                data.forEach(doctor => {
+                data.forEach((doctor: Doctor) => {
                     to_return.push({
                         name: doctor.name,
                         profession: doctor.profession,
@@ -61,6 +61,7 @@ const Doctors: React.FC<DoctorProps> = ({ navigation, route }) => {
         }
         setLoading(false)
         setDoctors(to_return)
+        return to_return;
     }
     return(
         <View style={styles.container}>
