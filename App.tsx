@@ -6,11 +6,18 @@ import { Session } from '@supabase/supabase-js'
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import AddAppointment from "./screens/AddAppointment"
+import LoginScreen from "./screens/LogIn";
 import Doctors from "./screens/Doctors";
 import AddDoctor from "./components/AddDoctor";
 import AddDependentUser from './components/AddDependentUser'
 import {Props} from "@react-navigation/stack/lib/typescript/src/views/Header/HeaderContainer";
 import {StackNavigationProp} from "@react-navigation/stack";
+import Account from "./components/Account";
+import {createNativeStackNavigator} from "@react-navigation/native-stack";
+import Register from "./screens/Register";
+import Home from "./screens/Home";
+import Appointments from "./components/Appointments";
+import EditAccount from "./screens/EditAccount";
 
 export type RootStackParamList = {
   Home: undefined;
@@ -83,7 +90,7 @@ const App: React.FC = () => {
               </>
           ) : (
               <>
-                <Stack.Screen name="Home" component={HomeScreen} />
+                <Stack.Screen name="Home" component={Home} />
                 <Stack.Screen name="Account"
                               component={Account}
                               initialParams={{session: session}}

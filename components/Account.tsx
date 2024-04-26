@@ -5,8 +5,8 @@ import {Button, Input, Icon} from 'react-native-elements'
 import { Session } from '@supabase/supabase-js'
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
-import Icon2 from '@mdi/react';
-import { mdiNeedle } from '@mdi/js';
+// import Icon2 from '@mdi/react';
+// import { mdiNeedle } from '@mdi/js';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 
