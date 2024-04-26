@@ -38,7 +38,7 @@ const Register: React.FC = ({ navigation }: any) => {
         })
 
         if (error) Alert.alert(error.message)
-        if (!session) Alert.alert('Please check your inbox for email verification!')
+        else Alert.alert('Please check your inbox for email verification!')
         setLoading(false)
     }
     return (

@@ -35,9 +35,9 @@ export default function Doctors({ session }: { session: Session }) {
             if (!session?.user) throw new Error('No user on the session!')
 
             const {data, error, status} = await supabase
-                .from('doctor')
-                .select()
-                .contains('users', [session?.user.id])
+                .from('user_doctor')
+                .select("independent_user(name,profession,phone,email,address)")
+                .eq("user",session?.user.id)
             if (error && status !== 406) {
                 throw error
             }
@@ -61,7 +61,7 @@ export default function Doctors({ session }: { session: Session }) {
         }
         setLoading(false)
         setDoctors(to_return)
-        }
+    }
     return(
         <View style={styles.container}>
             <ScrollView>

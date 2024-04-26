@@ -36,6 +36,8 @@ export default function AddDoctor({ session }: { session: Session }) {
         } catch (error) {
             // @ts-ignore
             console.error('An error occurred:', error.message);
+        }finally{
+            Alert.alert("El Médico ya está agregado")
         }
 
     }

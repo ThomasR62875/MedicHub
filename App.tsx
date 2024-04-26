@@ -14,6 +14,7 @@ import Appointments from "./components/Appointments"
 import AddAppointment from "./screens/AddAppointment"
 import Doctors from "./screens/Doctors";
 import AddDoctor from "./components/AddDoctor";
+import AddDependentUser from './components/AddDependentUser'
 import {Props} from "@react-navigation/stack/lib/typescript/src/views/Header/HeaderContainer";
 import {StackNavigationProp} from "@react-navigation/stack";
 
@@ -69,6 +70,9 @@ export default function App() {
                 </Stack.Screen>
                 <Stack.Screen name="Doctors">
                   {(props) =><Doctors {...props} session={session} />}
+                </Stack.Screen>
+                <Stack.Screen name="AddDependentUser">
+                  {(props) =><AddDependentUser{...props} session={session}/>}
                 </Stack.Screen>
               </>
           )}

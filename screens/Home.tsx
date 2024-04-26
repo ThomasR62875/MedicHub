@@ -6,7 +6,7 @@ import {Card} from '../components/Card';
 
 const Home: React.FC = ({navigation}: any) => {
 
-    const first_name= "" //todo
+    const first_name= "Messi" //todo
     return (
 
         <View>
@@ -25,6 +25,9 @@ const Home: React.FC = ({navigation}: any) => {
                         <Card title="Agregar doctor" img={"no me deja importar img"}  onPress={() => navigation.navigate('AddDoctor')}/>
                         <View style={{ marginBottom: 10 }} />
                         <Card title="Doctors" img={"no me deja importar img"}  onPress={() => navigation.navigate('Doctors')}/>
+                    </View>
+                    <View style={StyleSheet.col}>
+                        <Card title="Agregar usuario" onPress={()=> navigation.navigate('AddDependentUser')}/>
                     </View>
                 </View>
             </View>

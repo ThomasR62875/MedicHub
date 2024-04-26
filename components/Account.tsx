@@ -23,8 +23,8 @@ export default function Account({ session }: { session: Session }) {
 
             const { data, error, status } = await supabase
                 .from('independent_user')
-                .select(`first_name, last_name, dni, email, avatar_url`)
-                .eq('id', session?.user.id)
+                .select('first_name, last_name, dni, email, avatar_url')
+                .eq('auth_id', session?.user.id)
                 .single()
             if (error && status !== 406) {
                 throw error
