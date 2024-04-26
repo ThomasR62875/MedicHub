@@ -4,8 +4,8 @@ import { StyleSheet, View, Alert, ScrollView,Text} from 'react-native'
 import { Button, Input } from 'react-native-elements'
 import { Session } from '@supabase/supabase-js'
 import {NavigationContainer} from "@react-navigation/native";
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import AddDoctor from "../components/AddDoctor";
+import {createNativeStackNavigator, NativeStackScreenProps} from '@react-navigation/native-stack';
+import {RootStackParamList} from "../App";
 
 const Stack = createNativeStackNavigator();
 
@@ -17,19 +17,19 @@ interface Doctor {
     address: [string];
 }
 
-interface Props {
-    session: Session;
-}
-export default function Doctors({ session }: { session: Session }) {
+type DoctorProps = NativeStackScreenProps<RootStackParamList, 'Doctors'>;
+
+const Doctors: React.FC<DoctorProps> = ({ navigation, route }) => {
+    const {session} = route.params;
     const [loading, setLoading] = useState(true)
-    const [doctors,setDoctors]= useState([])
+    const [doctors,setDoctors]= useState<Doctor[]>([])
 
     useEffect(() => {
         if (session) getDoctors()
     }, [session])
 
-    async function getDoctors():Doctor[] {
-        let to_return: Doctor[]=[]
+    async function getDoctors(): Promise<Doctor[]> {
+        let to_return: Doctor[] = []
         try {
             setLoading(true)
             if (!session?.user) throw new Error('No user on the session!')
@@ -65,17 +65,31 @@ export default function Doctors({ session }: { session: Session }) {
     return(
         <View style={styles.container}>
             <ScrollView>
-                <View>
-                    <Text>Medicos</Text>
+                <View style={styles.titleContainer}>
+                    <Text style={styles.titleText}>Medicos</Text>
                 </View>
+
                 <View>
                     {
-                    doctors.map((doc,i)=> {
+                    doctors.map((doc: Doctor,i)=> {
                         return(
-                            <View key="{i}" style={styles.doctorView}>
-                                <Text key="{doc.name}{i}" style={styles.doctorViewText}>{doc.name}</Text>
-                                <Text key="{doc.profession}{i}" style={styles.doctorViewText}>{doc.profession}</Text>
-                                <Text key="{doc.email}{i}" style={styles.doctorViewText}>{doc.email}</Text>
+                            <View key={i} style={styles.doctorContainer}>
+                                <View style={styles.infoRow}>
+                                    <Text style={styles.label}>Nombre:</Text>
+                                    <Text style={styles.value}>{doc.name}</Text>
+                                </View>
+                                <View style={styles.infoRow}>
+                                    <Text style={styles.label}>Especialidad:</Text>
+                                    <Text style={styles.value}>{doc.profession}</Text>
+                                </View>
+                                <View style={styles.infoRow}>
+                                    <Text style={styles.label}>Mail:</Text>
+                                    <Text style={styles.value}>{doc.email}</Text>
+                                </View>
+                                <View style={styles.infoRow}>
+                                    <Text style={styles.label}>Teléfono:</Text>
+                                    <Text style={styles.value}>{doc.phone}</Text>
+                                </View>
                             </View>
                         )
                     })
@@ -86,6 +100,8 @@ export default function Doctors({ session }: { session: Session }) {
     )
 }
 
+export default Doctors;
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -93,17 +109,31 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         padding: 20,
       },
-    doctorView: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'center',
-      backgroundColor: '#f0f0f0',
-      padding: 10,
-      borderRadius: 5,
+    doctorContainer: {
+        backgroundColor: '#C2E5D3',
+        marginBottom: 20,
+        borderRadius: 5,
     },
-    doctorViewText: {
-      fontSize: 16,
-      fontWeight: 'bold',
-      color: '#333',
-    }
-  });
+    infoRow: {
+        flexDirection: 'row',
+        marginBottom: 5,
+    },
+    label: {
+        fontWeight: 'bold',
+        marginRight: 5,
+    },
+    value: {
+        flex: 1,
+    },
+    titleContainer: {
+        alignSelf: 'center',
+        marginBottom: 20,
+    },
+    titleText: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        color: '#333',
+    },
+
+
+});

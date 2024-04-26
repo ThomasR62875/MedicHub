@@ -16,8 +16,10 @@ interface CardProps extends TouchableOpacityProps {
 
 export const Card: React.FC<CardProps> = ({ onPress, img, title, ...props }) => {
     return (
-            <Pressable onPress={onPress}>
-                <Image style={styles.img} source={{ uri : "https://www.shutterstock.com/es/image-vector/medical-cross-round-button-neon-sign-2146940621"}} />
+            <Pressable style={styles.conteinter} onPress={onPress}>
+                <Image style={[styles.img, styles.conteinter]} source={require('../assets/doc.png')}/>
+                {/*Deberia ir esta linea pero NO LE GUSTA
+                  <Image style={styles.img} source={require(img)}/> todo*/}
                 <View style={styles.card}>
                     <Text style={styles.text}>{title}</Text>
                 </View>
@@ -26,18 +28,26 @@ export const Card: React.FC<CardProps> = ({ onPress, img, title, ...props }) => 
 };
 
 const styles = StyleSheet.create({
+
     text: {
         fontSize: 20,
+        textAlign: 'center',
     },
     card: {
-        backgroundColor: "#B5DCCA", //no esta funcionando todo
-        padding: 15,
+        backgroundColor: '#B5DCCA',
+        padding: 10,
         borderBottomLeftRadius: 10,
         borderBottomRightRadius: 10,
         elevation: 3,
+        height: 45
     },
     img: {
-
+        height: 150,
+        borderTopRightRadius: 10,
+        borderTopLeftRadius: 10,
+    },
+    conteinter: {
+        justifyContent: 'center',
+        width: 170,
     }
 });
-

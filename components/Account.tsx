@@ -1,16 +1,26 @@
 import React, { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabase'
 import {StyleSheet, View, Alert, Text} from 'react-native'
-import {Button, Icon} from 'react-native-elements'
+import {Button, Input, Icon} from 'react-native-elements'
 import { Session } from '@supabase/supabase-js'
+import {NativeStackScreenProps} from "@react-navigation/native-stack";
+import {RootStackParamList} from "../App";
+import Icon2 from '@mdi/react';
+import { mdiNeedle } from '@mdi/js';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
-export default function Account({ session }: { session: Session }) {
-    const [loading, setLoading] = useState(true)
+
+type AccountScreenProps = NativeStackScreenProps<RootStackParamList, 'Account'>;
+
+
+const Account: React.FC<AccountScreenProps> = ({ navigation, route }) =>{
+    const {session} = route.params;
     const [first_name, setFirstName] = useState('')
     const [last_name, setLastName] = useState('')
     const [dni, setDni] = useState(0)
     const [email, setEmail] = useState('')
     const [avatar_url, setAvatarUrl] = useState('')
+
 
     useEffect(() => {
         if (session) getProfile()
@@ -18,9 +28,7 @@ export default function Account({ session }: { session: Session }) {
 
     async function getProfile() {
         try {
-            setLoading(true)
             if (!session?.user) throw new Error('No user on the session!')
-
             const { data, error, status } = await supabase
                 .from('independent_user')
                 .select('first_name, last_name, dni, email, avatar_url')
@@ -29,7 +37,6 @@ export default function Account({ session }: { session: Session }) {
             if (error && status !== 406) {
                 throw error
             }
-
             if (data) {
                 setFirstName(data.first_name)
                 setLastName(data.last_name)
@@ -37,62 +44,17 @@ export default function Account({ session }: { session: Session }) {
                 setEmail(data.email)
                 setAvatarUrl(data.avatar_url)
             }
-
-
         } catch (error) {
             if (error instanceof Error) {
                 Alert.alert(error.message)
             }
-        } finally {
-            setLoading(false)
-        }
-    }
-
-    async function updateProfile({
-        first_name,
-        last_name,
-        dni,
-        email,
-        avatar_url,
-    }: {
-    first_name: string
-    last_name: string
-    dni: number
-    email: string
-    avatar_url: string
-    }) {
-        try {
-            setLoading(true)
-            if (!session?.user) throw new Error('No hay ningun usuario conectado!')
-
-            const updates = {
-                id: session?.user.id,
-                first_name,
-                last_name,
-                dni,
-                email,
-                avatar_url,
-                updated_at: new Date(),
-            }
-
-            const { error } = await supabase.from('independent_user').upsert(updates)
-
-            if (error) {
-                throw error
-            }
-        } catch (error) {
-            if (error instanceof Error) {
-                Alert.alert(error.message)
-            }
-        } finally {
-            setLoading(false)
         }
     }
 
     return (
         <View>
             <View style={styles.iconContainer}>
-                <Icon name='build-outline' type='ionicon'/>
+                <Icon name='build-outline' type='ionicon' size={35} onPress={() => navigation.navigate('EditAccount', {session: session})} />
             </View>
             <View style={styles.grid}>
                 <View>
@@ -105,17 +67,17 @@ export default function Account({ session }: { session: Session }) {
             </View>
             <View style={styles.spaced}>
                 <Text style={styles.title}>Mail:</Text>
-                <Text style={styles.text2}>{email}</Text>
+                <Text style={styles.text2}>{session?.user.email}</Text>
                 <Text style={styles.title}>DNI:</Text>
                 <Text style={styles.text2}>{dni}</Text>
-                <Button title={<Text style={styles.buttonText}>Mis grupos</Text>} buttonStyle={styles.misCosas}
-                        icon={<Icon name="" type="ionicon" size={20}/>} />
-                <Button title={<Text style={styles.buttonText}>Mis vacunas</Text>} buttonStyle={styles.misCosas}
-                        icon={<Icon name="" size={20}/>} />
-                <Button title={<Text style={styles.buttonText}>Usuarios dependientes</Text>} buttonStyle={styles.misCosas}
-                        icon={<Icon name="person" type="ionicon" size={25}/>} />
-                <Button title={<Text style={styles.buttonText}>Mis grupos</Text>} buttonStyle={styles.misCosas}
-                        icon={<Icon name="people-circle-outline" type="ionicon" size={30}/>} />
+                <Button title={<Text style={styles.buttonText}>Mis vacunas</Text>}
+                        buttonStyle={styles.misCosas}
+                        icon={{ type:'font-awesome', name:'syringe'}}
+                />
+                <Button title={<Text style={styles.buttonText}>Usuarios dependientes</Text>}
+                        buttonStyle={styles.misCosas}
+                        icon={<Icon name="person" type="ionicon" size={25}/>}
+                />
                 <View style={{marginTop: 20}}>
                     <Button title="Cerrar sesión"
                             onPress={() => supabase.auth.signOut()}
@@ -127,6 +89,15 @@ export default function Account({ session }: { session: Session }) {
 
     )
 }
+
+// Todos los tipos de iconos q intenten para la needle
+//
+//   icon={<Icon2 path={mdiNeedle} size={10}/>}
+//   {/* Literlamente asi es en la página oficial pero expo dice q no :( https://pictogrammers.com/library/mdi/icon/needle/ todo*/}
+// <MaterialCommunityIcons name="needle" size={24} color="black" />
+//  <FontAwesomeIcon icon="fa-solid fa-syringe" />
+
+export default Account
 
 const styles = StyleSheet.create({
     iconContainer: {
@@ -162,7 +133,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#D6EFD4',
         color: 'black',
         borderRadius: 10,
-        margin: 5,
+        marginBottom: 5,
+        alignSelf: 'center',
     },
     text1: {
         fontSize: 25,
@@ -176,11 +148,11 @@ const styles = StyleSheet.create({
         textAlign: "left",
         color: '#808080',
         marginTop: 10,
+        marginLeft: 10,
     },
     buttonText: {
+        alignSelf: 'center',
         color: 'black',
         fontSize: 20,
     },
-
 })
-

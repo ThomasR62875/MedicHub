@@ -5,9 +5,15 @@ import { Session } from '@supabase/supabase-js'
 import {Input} from "react-native-elements";
 import DateTimePicker from 'react-native-ui-datepicker';
 import dayjs from 'dayjs';
+import StandardGreenButton from "../components/StandardGreenButton";
+import {NativeStackScreenProps} from "@react-navigation/native-stack";
+import {RootStackParamList} from "../App";
+import {Appointment} from "../components/Appointments";
 
+type AddAppointmentProps = NativeStackScreenProps<RootStackParamList, 'AddAppointment'>
 
-export default function AddAppointment({ session}: { session: Session}) {
+const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) => {
+    const {session} = route.params;
     const [date, setDate] = useState(dayjs())
     const [loading, setLoading] = useState(false)
     const [description, setDescription] = useState('')
@@ -42,46 +48,39 @@ export default function AddAppointment({ session}: { session: Session}) {
           {/* Description Input */}
           {/*multiline={true}
          numberOfLines={4}*/}
-          <Input
-            leftIcon={{ type: 'font-awesome', name: 'paperclip' }}
-            style={styles.verticallySpaced}
-            placeholder="Enter description"
-            value={description}
-            onChangeText={(text) => setDescription(text)}
-          />
-      
-          {/* Confirm Button */}
-          <TouchableOpacity style={styles.confirmButton} onPress={() => setAppointment()}>
-            <Text style={styles.confirmButtonText}>Confirm</Text>
-          </TouchableOpacity>
+            <Input
+                leftIcon={{ type: 'font-awesome', name: 'paperclip' }}
+                style={styles.verticallySpaced}
+                placeholder="Enter description"
+                value={description}
+                onChangeText={(text) => setDescription(text)}
+            />
+
+            {/* Confirm Button */}
+            <StandardGreenButton
+                title="Confirmar"
+                disabled={loading}
+                onPress={() => setAppointment()}
+            />
         </SafeAreaView>
       );
 }
 
+export default AddAppointment;
+
 const styles = StyleSheet.create({
     container: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-      padding: 20,
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 20,
     },
     datePicker: {
-      height: '20',
+        height: '20',
     },
     verticallySpaced: {
-      paddingTop: 2,
-      paddingBottom: 2,
-      alignSelf: 'stretch',
-  },
-    confirmButton: {
-    backgroundColor: 'blue',
-    padding: 10,
-    borderRadius: 5,
-    marginTop: 20,
-    },
-    confirmButtonText: {
-      color: 'white',
-      textAlign: 'center',
-      fontWeight: 'bold',
-    },
-  });
+        paddingTop: 2,
+        paddingBottom: 2,
+        alignSelf: 'stretch',
+    }
+});
