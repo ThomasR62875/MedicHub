@@ -2,7 +2,10 @@ import React, { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabase'
 import { StyleSheet, View, Alert, ScrollView,Text} from 'react-native'
 import { Session } from '@supabase/supabase-js'
+import {NativeStackScreenProps} from "@react-navigation/native-stack";
+import {RootStackParamList} from "../App";
 
+type DependentUsersProps = NativeStackScreenProps<RootStackParamList, 'DependentUsers'>;
 
 
 interface Users {
@@ -11,7 +14,9 @@ interface Users {
     dni: string;
 }
 
-export default function DependentUsers({ session }: { session: Session }) {
+const DependentUsers: React.FC<DependentUsersProps> = ({ navigation, route }) => {
+    const {session} = route.params;
+
     const [loading, setLoading] = useState(true)
     const [users,setUsers]= useState([])
 
@@ -53,3 +58,5 @@ export default function DependentUsers({ session }: { session: Session }) {
         setDoctors(to_return)
     }
 }
+
+export default DependentUsers;
