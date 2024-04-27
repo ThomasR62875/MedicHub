@@ -100,6 +100,8 @@ const Doctors: React.FC<DoctorProps> = ({ navigation, route }) => {
                                     <Text style={styles.value}>{doc.phone}</Text>
                                 </View>
                             </View>
+
+                            // AGREGAR PARA VER EL ARRAY DE ADDRESSES
                         )
                     })
                     }
