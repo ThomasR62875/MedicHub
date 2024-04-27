@@ -19,6 +19,7 @@ import Home from "./screens/Home";
 import Appointments from "./screens/Appointments";
 import EditAccount from "./screens/EditAccount";
 import DependentUsers from "./screens/DependentUsers";
+import Medication from "./screens/Medication";
 
 export type RootStackParamList = {
   Home: undefined;
@@ -32,6 +33,7 @@ export type RootStackParamList = {
   Doctors: {session: Session | null};
   DependentUsers: {session: Session | null};
   AddDependentUser: {session: Session | null};
+  Medication: {session: Session | null};
 };
 
 
@@ -127,6 +129,10 @@ const App: React.FC = () => {
                 />
                 <Stack.Screen name="AddDependentUser"
                               component={AddDependentUser}
+                              initialParams={{session: session}}
+                />
+                <Stack.Screen name="Medication"
+                              component={Medication}
                               initialParams={{session: session}}
                 />
               </>
