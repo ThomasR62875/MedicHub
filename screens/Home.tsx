@@ -23,8 +23,6 @@ const Home: React.FC = ({navigation}: any) => {
                         <Card title="Turnos" img={imgDoc} onPress={() => navigation.navigate('Appointments')}/>
                     </View>
                     <View style={styles.col}>
-                        <Card title="Agregar doctor" img={imgDoc} onPress={() => navigation.navigate('AddDoctor')}/>
-                        <View style={{ marginBottom: 10 }} />
                         <Card title="Doctors" img={imgDoc}  onPress={() => navigation.navigate('Doctors')}/>
                     </View>
                     {/*<View style={styles.col}>*/}
