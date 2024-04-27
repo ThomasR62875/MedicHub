@@ -5,6 +5,8 @@ import {Button, Icon, Input} from 'react-native-elements'
 import { Session } from '@supabase/supabase-js'
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
+import {setDisabled} from "@expo/metro-runtime/build/error-overlay/Data/LogBoxData";
+import StandardGreenButton from "../components/StandardGreenButton";
 
 
 
@@ -18,6 +20,7 @@ const EditAccount:React.FC<EditAccountProps> = ({navigation, route }) =>{
     const [first_name, setFirstName] = useState('')
     const [last_name, setLastName] = useState('')
     const [avatar_url, setAvatarUrl] = useState('')
+    const [dni, setDni] = useState(0)
 
     useEffect(() => {
         if (session) getProfile()
@@ -33,6 +36,7 @@ const EditAccount:React.FC<EditAccountProps> = ({navigation, route }) =>{
             if (data) {
                 setFirstName(data.first_name)
                 setLastName(data.last_name)
+                setDni(data.dni)
                 setAvatarUrl(data.avatar_url)
             }
 
@@ -50,30 +54,21 @@ const EditAccount:React.FC<EditAccountProps> = ({navigation, route }) =>{
                                      first_name,
                                      last_name,
                                      dni,
-                                     email,
                                      avatar_url,
                                  }: {
         first_name: string
         last_name: string
         dni: number
-        email: string
         avatar_url: string
     }) {
         try {
             setLoading(true)
             if (!session?.user) throw new Error('No hay ningun usuario conectado!')
 
-            const updates = {
-                id: session?.user.id,
-                first_name,
-                last_name,
-                dni,
-                email,
-                avatar_url,
-                updated_at: new Date(),
-            }
-
-            const {error} = await supabase.from('independent_user').upsert(updates)
+            const {error} = await supabase.rpc("update_independent_user", {first_name_input: first_name,
+                last_name_input: last_name,
+                dni_input: dni,
+                avatar_url_input: avatar_url})
 
             if (error) {
                 throw error
@@ -94,6 +89,16 @@ const EditAccount:React.FC<EditAccountProps> = ({navigation, route }) =>{
             {/* aca iria una carga de archivo/imagen q tdv no sabemos hacer todo*/}
                 <Input label="Nombre" value={first_name} onChangeText={(text) => setFirstName(text)}/>
                 <Input label="Apellido" value={last_name} onChangeText={(text) => setLastName(text)}/>
+
+            {/*AGREGAR TAMBIEN LOS CAMPOS QUE SE CONSIDEREN NECESARIOS (EN LA FUNCION DE MOMENTO ESTA AVATAR URL Y DNI TMABN)*/}
+
+
+
+                <StandardGreenButton
+                    title="Guardar Cambios"
+                    onPress={() => updateProfile({first_name, last_name, dni, avatar_url})}
+                    disabled={loading}
+                />
             </View>
     )
 }
