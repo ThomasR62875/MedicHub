@@ -96,11 +96,11 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}) => {
                 </View>
                 <View style={styles.verticallySpaced}>
                     <Input
-                        label="Address"
-                        leftIcon={{ type: 'font-awesome', name: 'envelope' }}
+                        label="Dirección"
+                        leftIcon={{ type: 'font-awesome', name: 'map-marker' }}
                         onChangeText={(text) => setAddresses([text])}
                         value={addresses[0] || ''} // Access the first element of addresses
-                        placeholder="Address"
+                        placeholder="Dirección"
                         autoCapitalize={'none'}
                     />
                 </View>
