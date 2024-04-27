@@ -6,6 +6,8 @@ import { Session } from '@supabase/supabase-js'
 import {NavigationContainer} from "@react-navigation/native";
 import {createNativeStackNavigator, NativeStackScreenProps} from '@react-navigation/native-stack';
 import {RootStackParamList} from "../App";
+import AddButton from "../components/AddButton";
+import addDoctor from "./AddDoctor";
 
 const Stack = createNativeStackNavigator();
 
@@ -77,11 +79,14 @@ const Doctors: React.FC<DoctorProps> = ({ navigation, route }) => {
                 <View style={styles.titleContainer}>
                     <Text style={styles.titleText}>Medicos</Text>
                 </View>
+                <View style={styles.addContainer}>
+                    <AddButton onPress={() => navigation.navigate('AddDoctor')}/>
+                </View>
 
                 <View>
                     {
                     doctors.map((doc: Doctor,i)=> {
-                        return(
+                        return (
                             <View key={i} style={styles.doctorContainer}>
                                 <View style={styles.infoRow}>
                                     <Text style={styles.label}>Nombre:</Text>
@@ -100,8 +105,6 @@ const Doctors: React.FC<DoctorProps> = ({ navigation, route }) => {
                                     <Text style={styles.value}>{doc.phone}</Text>
                                 </View>
                             </View>
-
-                            // AGREGAR PARA VER EL ARRAY DE ADDRESSES
                         )
                     })
                     }
@@ -117,12 +120,11 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: 'center',
-        alignItems: 'center',
         padding: 20,
       },
     doctorContainer: {
+        marginTop: 20,
         backgroundColor: '#C2E5D3',
-        marginBottom: 20,
         borderRadius: 5,
     },
     infoRow: {
@@ -137,6 +139,7 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     titleContainer: {
+        marginTop: 15,
         alignSelf: 'center',
         marginBottom: 20,
     },
@@ -145,6 +148,10 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: '#333',
     },
-
+    addContainer: {
+        left: 290,
+        bottom: 60,
+        alignSelf: 'flex-start',
+    }
 
 });
