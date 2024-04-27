@@ -15,26 +15,25 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}) => {
     const [email, setEmail] = useState('')
     const [name, setName] = useState('')
     const [loading, setLoading] = useState(false)
-    const [profession, setProfession] = useState('')
+    const [specialty, setSpecialty] = useState('')
     const [phone, setPhone] = useState('')
-
+    const [addresses, setAddresses] = useState<[string]>([''])
 
     async function addDoctor({
         name,
-        profession,
+        specialty,
         phone,
         email,
+        addresses,
     }: {
         name: string
-        profession: string
+        specialty: string
         phone: string
         email: string
+        addresses: [string]
     }) {
         try {
-            const { error } = await supabase
-                .from('doctor')
-                .insert({email: email, name: name, profession: profession, phone: phone, users:[session?.user.id]});
-
+            const { error } = await supabase.rpc("add_doctor", {name_input: name, specialty_input: specialty,phone_input: phone, email_input: email, addresses_input: addresses})
             if (error) {
                 console.error('Error inserting data:', error.message);
             } else {
@@ -69,8 +68,8 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}) => {
                     <Input
                         label="Especialidad"
                         leftIcon={{ type: 'font-awesome', name: 'user-md' }}
-                        onChangeText={(text) => setProfession(text)}
-                        value={profession}
+                        onChangeText={(text) => setSpecialty(text)}
+                        value={specialty}
                         placeholder="Especialidad"
                         autoCapitalize={'none'}
                     />
@@ -96,9 +95,19 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}) => {
                     />
                 </View>
                 <View style={styles.verticallySpaced}>
+                    <Input
+                        label="Address"
+                        leftIcon={{ type: 'font-awesome', name: 'envelope' }}
+                        onChangeText={(text) => setAddresses([text])}
+                        value={addresses[0] || ''} // Access the first element of addresses
+                        placeholder="Address"
+                        autoCapitalize={'none'}
+                    />
+                </View>
+                <View style={styles.verticallySpaced}>
                     <StandardGreenButton
                         title="Agregar"
-                        onPress={() => addDoctor({name, profession, phone, email})}
+                        onPress={() => addDoctor({name, specialty, phone, email, addresses})}
                         disabled={loading}
                     />
 

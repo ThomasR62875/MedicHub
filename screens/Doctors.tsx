@@ -25,16 +25,18 @@ const Doctors: React.FC<DoctorProps> = ({ navigation, route }) => {
     const [doctors,setDoctors]= useState<Doctor[]>([])
 
     useEffect(() => {
-        if (session) getDoctors()
+        if (session) getDoctor()
     }, [session])
 
-    async function getDoctors(): Promise<Doctor[]> {
-        const {data, error} = await supabase.rpc("get_doctors", {id: supabase.rpc("get_independent_user_id")})
-
+    async function getDoctor(): Promise<Doctor[]> {
+        let to_return: Doctor[] = []
+        try {
+        const {data, error} = await supabase.rpc("get_doctors", {user_id: '5f0e5595-a943-40d4-af75-20fb4de59ba6'})
+        console.log(data)
         if(error){
             throw new Error(error.message);
         }
-        return data as Doctor[];
+        // return data as Doctor[];
         // let to_return: Doctor[] = []
         // try {
         //     setLoading(true)
@@ -48,26 +50,26 @@ const Doctors: React.FC<DoctorProps> = ({ navigation, route }) => {
         //         throw error
         //     }
         //
-        //     if (data) {
-        //         data.forEach((doctor: Doctor) => {
-        //             to_return.push({
-        //                 name: doctor.name,
-        //                 profession: doctor.profession,
-        //                 phone: doctor.phone,
-        //                 email: doctor.email,
-        //                 address: doctor.addresses
-        //             })
-        //         });
-        //     }
-        //
-        // } catch (error) {
-        //     if (error instanceof Error) {
-        //         Alert.alert(error.message)
-        //     }
-        // }
-        // setLoading(false)
-        // setDoctors(to_return)
-        // return to_return;
+            if (data) {
+                data.forEach((doctor: Doctor) => {
+                    to_return.push({
+                        name: doctor.name,
+                        profession: doctor.profession,
+                        phone: doctor.phone,
+                        email: doctor.email,
+                        address: doctor.address
+                    })
+                });
+            }
+
+        } catch (error) {
+            if (error instanceof Error) {
+                Alert.alert(error.message)
+            }
+        }
+        setLoading(false)
+        setDoctors(to_return)
+        return to_return;
     }
     return(
         <View style={styles.container}>
