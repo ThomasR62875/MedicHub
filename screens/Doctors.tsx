@@ -29,39 +29,45 @@ const Doctors: React.FC<DoctorProps> = ({ navigation, route }) => {
     }, [session])
 
     async function getDoctors(): Promise<Doctor[]> {
-        let to_return: Doctor[] = []
-        try {
-            setLoading(true)
-            if (!session?.user) throw new Error('No user on the session!')
+        const {data, error} = await supabase.rpc("get_doctors", {id: supabase.rpc("get_independent_user_id")})
 
-            const {data, error, status} = await supabase
-                .from('user_doctor')
-                .select("independent_user(name,profession,phone,email,address)")
-                .eq("user",session?.user.id)
-            if (error && status !== 406) {
-                throw error
-            }
-
-            if (data) {
-                data.forEach((doctor: Doctor) => {
-                    to_return.push({
-                        name: doctor.name,
-                        profession: doctor.profession,
-                        phone: doctor.phone,
-                        email: doctor.email,
-                        address: doctor.addresses
-                    })
-                });
-            }
-        
-        } catch (error) {
-            if (error instanceof Error) {
-                Alert.alert(error.message)
-            }
+        if(error){
+            throw new Error(error.message);
         }
-        setLoading(false)
-        setDoctors(to_return)
-        return to_return;
+        return data as Doctor[];
+        // let to_return: Doctor[] = []
+        // try {
+        //     setLoading(true)
+        //     if (!session?.user) throw new Error('No user on the session!')
+        //
+        //     const {data, error, status} = await supabase
+        //         .from('user_doctor')
+        //         .select("independent_user(name,profession,phone,email,address)")
+        //         .eq("user",session?.user.id)
+        //     if (error && status !== 406) {
+        //         throw error
+        //     }
+        //
+        //     if (data) {
+        //         data.forEach((doctor: Doctor) => {
+        //             to_return.push({
+        //                 name: doctor.name,
+        //                 profession: doctor.profession,
+        //                 phone: doctor.phone,
+        //                 email: doctor.email,
+        //                 address: doctor.addresses
+        //             })
+        //         });
+        //     }
+        //
+        // } catch (error) {
+        //     if (error instanceof Error) {
+        //         Alert.alert(error.message)
+        //     }
+        // }
+        // setLoading(false)
+        // setDoctors(to_return)
+        // return to_return;
     }
     return(
         <View style={styles.container}>
