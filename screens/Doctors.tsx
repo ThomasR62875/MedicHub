@@ -24,53 +24,46 @@ type DoctorProps = NativeStackScreenProps<RootStackParamList, 'Doctors'>;
 const Doctors: React.FC<DoctorProps> = ({ navigation, route }) => {
     const {session} = route.params;
     const [loading, setLoading] = useState(true)
-    const [doctors,setDoctors]= useState<Doctor[]>([])
+    const [doctors,setDoctors]= useState<Doctor[] | undefined>(undefined)
 
     useEffect(() => {
-        if (session) getDoctor()
-    }, [session])
+        if(session){
+            getDoctors().then(data => {
+                setDoctors(data);
+            }).catch(error => {
+                console.error("Error al obtener los doctores: ", error);
+            });
+        }
+    }, []);
+    async function getDoctors(): Promise<Doctor[] | undefined> {
+        let to_return: Doctor[] | undefined = undefined
 
-    async function getDoctor(): Promise<Doctor[]> {
-        let to_return: Doctor[] = []
-        try {
-        const {data, error} = await supabase.rpc("get_doctors", {user_id: '5f0e5595-a943-40d4-af75-20fb4de59ba6'})
+        const {data: user_id,error: user_data_error} = await supabase.rpc('get_independent_user_id')
+        if(user_data_error)
+            throw new Error(user_data_error.message);
+
+        const {data, error} = await supabase.rpc("get_doctors", {user_id: user_id});
         console.log(data)
         if(error){
             throw new Error(error.message);
         }
-        // return data as Doctor[];
-        // let to_return: Doctor[] = []
-        // try {
-        //     setLoading(true)
-        //     if (!session?.user) throw new Error('No user on the session!')
-        //
-        //     const {data, error, status} = await supabase
-        //         .from('user_doctor')
-        //         .select("independent_user(name,profession,phone,email,address)")
-        //         .eq("user",session?.user.id)
-        //     if (error && status !== 406) {
-        //         throw error
-        //     }
-        //
-            if (data) {
-                data.forEach((doctor: Doctor) => {
-                    to_return.push({
-                        name: doctor.name,
-                        profession: doctor.profession,
-                        phone: doctor.phone,
-                        email: doctor.email,
-                        address: doctor.address
-                    })
-                });
-            }
 
-        } catch (error) {
-            if (error instanceof Error) {
-                Alert.alert(error.message)
-            }
+        if (data.length == 0) {
+            setLoading(false)
+            return to_return;
         }
+
+        to_return = [];
+        data.forEach((doctor: Doctor) => {
+            to_return.push({
+                name: doctor.name,
+                profession: doctor.profession,
+                phone: doctor.phone,
+                email: doctor.email,
+                address: doctor.address
+            });
+        });
         setLoading(false)
-        setDoctors(to_return)
         return to_return;
     }
     return(
@@ -80,33 +73,40 @@ const Doctors: React.FC<DoctorProps> = ({ navigation, route }) => {
                     <Text style={styles.titleText}>Medicos</Text>
                 </View>
                 <View style={styles.addContainer}>
-                    <AddButton onPress={() => navigation.navigate('AddDoctor')}/>
+                    <AddButton onPress={() => navigation.navigate({name: 'AddDoctor', params: {session: session}})}/>
                 </View>
 
                 <View>
                     {
-                    doctors.map((doc: Doctor,i)=> {
-                        return (
-                            <View key={i} style={styles.doctorContainer}>
-                                <View style={styles.infoRow}>
-                                    <Text style={styles.label}>Nombre:</Text>
-                                    <Text style={styles.value}>{doc.name}</Text>
-                                </View>
-                                <View style={styles.infoRow}>
-                                    <Text style={styles.label}>Especialidad:</Text>
-                                    <Text style={styles.value}>{doc.profession}</Text>
-                                </View>
-                                <View style={styles.infoRow}>
-                                    <Text style={styles.label}>Mail:</Text>
-                                    <Text style={styles.value}>{doc.email}</Text>
-                                </View>
-                                <View style={styles.infoRow}>
-                                    <Text style={styles.label}>Teléfono:</Text>
-                                    <Text style={styles.value}>{doc.phone}</Text>
-                                </View>
+                        doctors ? (
+                            doctors.map((doc: Doctor, i) => {
+                                return (
+                                    <View key={i} style={styles.doctorContainer}>
+                                        <View style={styles.infoRow}>
+                                            <Text style={styles.label}>Nombre:</Text>
+                                            <Text style={styles.value}>{doc.name}</Text>
+                                        </View>
+                                        <View style={styles.infoRow}>
+                                            <Text style={styles.label}>Especialidad:</Text>
+                                            <Text style={styles.value}>{doc.profession}</Text>
+                                        </View>
+                                        <View style={styles.infoRow}>
+                                            <Text style={styles.label}>Mail:</Text>
+                                            <Text style={styles.value}>{doc.email}</Text>
+                                        </View>
+                                        <View style={styles.infoRow}>
+                                            <Text style={styles.label}>Teléfono:</Text>
+                                            <Text style={styles.value}>{doc.phone}</Text>
+                                        </View>
+                                    </View>
+                                    // AGREGAR PARA VER EL ARRAY DE ADDRESSES
+                                )
+                            })
+                        ) : (
+                            <View style={styles.titleContainer}>
+                                <Text style={styles.titleText}>no hay doctores</Text>
                             </View>
                         )
-                    })
                     }
                 </View>
             </ScrollView>
@@ -120,11 +120,13 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: 'center',
+        alignItems: 'center',
         padding: 20,
       },
     doctorContainer: {
         marginTop: 20,
         backgroundColor: '#C2E5D3',
+        marginBottom: 20,
         borderRadius: 5,
     },
     infoRow: {
@@ -139,7 +141,6 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     titleContainer: {
-        marginTop: 15,
         alignSelf: 'center',
         marginBottom: 20,
     },
