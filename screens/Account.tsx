@@ -69,7 +69,8 @@ const Account: React.FC<AccountScreenProps> = ({ navigation, route }) =>{
                 />
                 <Button title={<Text style={styles.buttonText}>Usuarios dependientes</Text>}
                         buttonStyle={styles.misCosas}
-                        icon={<Icon name="person" type="ionicon" size={25}/>}
+                        icon={<Icon name="person" type="ionicon" size={25} />}
+                        onPress={() => navigation.navigate('DependentUsers', {session: session})}
                 />
                 <View style={{marginTop: 20}}>
                     <Button title="Cerrar sesión"

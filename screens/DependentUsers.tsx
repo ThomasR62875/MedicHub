@@ -14,7 +14,7 @@ type DependentUser = {
     dni: string;
 }
 
-const DependentUsers: ({navigation, route}: { navigation: any; route: any }) => void = ({ navigation, route }) => {
+const DependentUsers: React.FC<DependentUsersProps> = ({navigation, route}) => {
     const {session} = route.params;
     const [loading, setLoading] = useState(true)
     const [users,setUsers]= useState([])
