@@ -1,23 +1,57 @@
-import React, {useState} from 'react';
-import {View, Text, Alert, StyleSheet, TouchableWithoutFeedback, Keyboard} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {
+    View,
+    Text,
+    Alert,
+    StyleSheet,
+    TouchableWithoutFeedback,
+    Keyboard,
+    KeyboardAvoidingView,
+    TextInput,
+    ScrollView
+} from 'react-native';
 import {supabase} from "../lib/supabase";
-import {Button, Input} from "react-native-elements";
-import {Session} from "@supabase/supabase-js";
+import {Input} from "react-native-elements";
 import StandardGreenButton from "../components/StandardGreenButton";
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
-import Doctors from "../screens/Doctors";
+import {Picker} from '@react-native-picker/picker'
+import RNPickerSelect from 'react-native-picker-select';
 
 type AddDoctorProps = NativeStackScreenProps<RootStackParamList, 'AddDoctor'>
+
+type Specialty = {
+    name: string;
+};
 
 const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}) => {
     const {session} = route.params;
     const [email, setEmail] = useState('')
     const [name, setName] = useState('')
     const [loading, setLoading] = useState(false)
-    const [specialty, setSpecialty] = useState('')
+    const [specialties, setSpecialties] = useState<Specialty[] | null>(null);
+    const [specialty,setSpecialty]= useState('')
     const [phone, setPhone] = useState('')
     const [addresses, setAddresses] = useState<[string]>([''])
+
+    useEffect(() => {
+        if (session) getSpecialties()
+    }, [session])
+    async function getSpecialties(){
+        try {
+            const {data, error} = await supabase.rpc('get_specialties');
+            console.log(data)
+            setSpecialties(data);
+            if (error) {
+                console.error('Error inserting specialty data:', error.message);
+            } else {
+                console.log('Specialty data inserted successfully');
+            }
+        } catch (error) {
+            console.error('Error fetching specialities:');
+        }
+
+    }
 
     async function addDoctor({
         name,
@@ -49,71 +83,68 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}) => {
     }
 
     return (
+        <KeyboardAvoidingView style={styles.container}>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-            <View style={styles.container}>
-                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                    <Text>Add Doctor Screen</Text>
-                </View>
-                <View style={styles.verticallySpaced}>
-                    <Input
-                        label="Nombre"
-                        leftIcon={{ type: 'font-awesome', name: 'user' }}
-                        onChangeText={(text) => setName(text)}
-                        value={name}
-                        placeholder="Nombre"
-                        autoCapitalize={'none'}
-                    />
-                </View>
-                <View style={[styles.verticallySpaced, styles.mt20]}>
-                    <Input
-                        label="Especialidad"
-                        leftIcon={{ type: 'font-awesome', name: 'user-md' }}
-                        onChangeText={(text) => setSpecialty(text)}
-                        value={specialty}
-                        placeholder="Especialidad"
-                        autoCapitalize={'none'}
-                    />
-                </View>
-                <View style={styles.verticallySpaced}>
-                    <Input
-                        label="Teléfono"
-                        leftIcon={{ type: 'font-awesome', name: 'phone' }}
-                        onChangeText={(text) => setPhone(text)}
-                        value={phone}
-                        placeholder="Teléfono"
-                        autoCapitalize={'none'}
-                    />
-                </View>
-                <View style={styles.verticallySpaced}>
-                    <Input
-                        label="Mail"
-                        leftIcon={{ type: 'font-awesome', name: 'envelope' }}
-                        onChangeText={(text) => setEmail(text)}
-                        value={email}
-                        placeholder="email@address.com"
-                        autoCapitalize={'none'}
-                    />
-                </View>
-                <View style={styles.verticallySpaced}>
-                    <Input
-                        label="Dirección"
-                        leftIcon={{ type: 'font-awesome', name: 'map-marker' }}
-                        onChangeText={(text) => setAddresses([text])}
-                        value={addresses[0] || ''} // Access the first element of addresses
-                        placeholder="Dirección"
-                        autoCapitalize={'none'}
-                    />
-                </View>
-                <View style={styles.verticallySpaced}>
-                    <StandardGreenButton
-                        title="Agregar"
-                        onPress={() => addDoctor({name, specialty, phone, email, addresses})}
-                        disabled={loading}
-                    />
+            <ScrollView>
+                <View>
+                    <View style={styles.verticallySpaced}>
+                        <Input
+                            leftIcon={{ type: 'font-awesome', name: 'user' }}
+                            onChangeText={(text) => setName(text)}
+                            value={name}
+                            placeholder="Nombre"
+                            autoCapitalize={'none'}
+                        />
+                    </View>
+                    <View style={styles.pickerStyle}>
+                        <RNPickerSelect
+                            placeholder={{ label: 'Especialidad', value: null }}
+                            items={specialties ? specialties.map(s => ({ label: s.name, value: s.name })) : []}
+                            onValueChange={(value) => setSpecialty(value)}
+                            style={{ ...pickerSelectStyles }}
+                            value={specialty}
+                        />
+                    </View>
 
+                    <View style={styles.verticallySpaced}>
+                        <Input
+                            leftIcon={{ type: 'font-awesome', name: 'phone' }}
+                            onChangeText={(text) => setPhone(text)}
+                            value={phone}
+                            placeholder="Teléfono"
+                            autoCapitalize={'none'}
+                        />
+                    </View>
+                    <View style={styles.verticallySpaced}>
+                        <Input
+                            leftIcon={{ type: 'font-awesome', name: 'envelope' }}
+                            onChangeText={(text) => setEmail(text)}
+                            value={email}
+                            placeholder="email@address.com"
+                            autoCapitalize={'none'}
+                        />
+                    </View>
+                    <View style={styles.verticallySpaced}>
+                        <Input
+                            leftIcon={{ type: 'font-awesome', name: 'map-marker' }}
+                            onChangeText={(text) => setAddresses([text])}
+                            value={addresses[0] || ''} // Access the first element of addresses
+                            placeholder="Dirección"
+                            autoCapitalize={'none'}
+                        />
+                    </View>
+                    <View style={styles.verticallySpaced}>
+                        <StandardGreenButton
+                            title="Agregar"
+                            onPress={() => addDoctor({name, specialty, phone, email, addresses})}
+                            disabled={loading}
+                        />
+
+                    </View>
                 </View>
-            </View>
+            </ScrollView>
         </TouchableWithoutFeedback>
+        </KeyboardAvoidingView>
     );
 };
 
@@ -134,8 +165,43 @@ const styles = StyleSheet.create({
     horizontallySpaced: {
         paddingTop: 2,
         paddingBottom: 2,
+    },
+    textInput: {
+        height: 40,
+        borderColor: '#000000',
+        borderBottomWidth: 1,
+        marginBottom: 36,
+        fontSize: 20,
+    },
+    pickerStyle: {
+        marginBottom: 20,
     }
 
 });
+
+// Define pickerSelectStyles at the bottom
+const pickerSelectStyles = StyleSheet.create({
+    inputIOS: {
+        fontSize: 16,
+        paddingVertical: 12,
+        paddingHorizontal: 10,
+        borderWidth: 1,
+        borderColor: 'gray',
+        borderRadius: 4,
+        color: 'black',
+        paddingRight: 30,
+    },
+    inputAndroid: {
+        fontSize: 16,
+        paddingHorizontal: 10,
+        paddingVertical: 8,
+        borderWidth: 0.5,
+        borderColor: 'purple',
+        borderRadius: 8,
+        color: 'black',
+        paddingRight: 30, // to ensure the text is never behind the icon
+    },
+});
+
 
 
