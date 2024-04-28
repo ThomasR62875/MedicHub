@@ -5,6 +5,7 @@ import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
 import {Doctor} from "./Doctors";
 import {Button} from "react-native-elements";
+import AddButton from "../components/AddButton";
 
 // UNA IDEA DE DEPENDENT USERS SERIA PODER VER CADA USUARIO Y EDITARLO DESDE AHI (por ej eliminarlo, lo de migrar info etc)
 // TAMBIEN QUE CUANDO ABRIMOS UN USUARIO DEPENDEDIENTE, NOS DESPIEGLUE SU INFO (doctores, appointments, etc)
@@ -60,28 +61,31 @@ const DependentUsers: React.FC<DependentUsersProps> = ({navigation, route}) => {
         return to_return;
     }
 return(
-    <View>
-        <View>
-            <Button title="Agregar usuario dependiente"
-                    onPress={() => navigation.navigate('AddDependentUser', {session: session})}
-            />
+    <View style={styles.container}>
+        <View style={styles.titleContainer}>
+            <Text style={styles.titleText}>     Usuarios Dependientes</Text>
         </View>
-        {dependent_users && dependent_users.map((d_user: DependentUser, i) => (
-            <View key={i} style={styles.doctorContainer}>
-                <View style={styles.infoRow}>
-                    <Text style={styles.label}>Nombre:</Text>
-                    <Text style={styles.value}>{d_user.first_name}</Text>
+        <View style={styles.addContainer}>
+            <AddButton onPress={() => navigation.navigate('AddDependentUser', {session: session})} />
+        </View>
+        <ScrollView>
+            {dependent_users && dependent_users.map((d_user: DependentUser, i) => (
+                <View key={i} style={styles.userContainer}>
+                    <View style={styles.infoRow}>
+                        <Text style={styles.label}>Nombre:</Text>
+                        <Text style={styles.value}>{d_user.first_name}</Text>
+                    </View>
+                    <View style={styles.infoRow}>
+                        <Text style={styles.label}>Apellido:</Text>
+                        <Text style={styles.value}>{d_user.last_name}</Text>
+                    </View>
+                    <View style={styles.infoRow}>
+                        <Text style={styles.label}>Mail:</Text>
+                        <Text style={styles.value}>{d_user.dni}</Text>
+                    </View>
                 </View>
-                <View style={styles.infoRow}>
-                    <Text style={styles.label}>Especialidad:</Text>
-                    <Text style={styles.value}>{d_user.last_name}</Text>
-                </View>
-                <View style={styles.infoRow}>
-                    <Text style={styles.label}>Mail:</Text>
-                    <Text style={styles.value}>{d_user.dni}</Text>
-                </View>
-            </View>
-        ))}
+            ))}
+        </ScrollView>
     </View>
 )
 }
@@ -92,13 +96,12 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: 'center',
-        alignItems: 'center',
         padding: 20,
     },
-    doctorContainer: {
-        marginTop: 20,
+    userContainer: {
+        marginTop: 10,
         backgroundColor: '#C2E5D3',
-        marginBottom: 20,
+        marginBottom: 10,
         borderRadius: 5,
     },
     infoRow: {
@@ -113,6 +116,8 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     titleContainer: {
+        marginLeft: 45,
+        marginRight: 45,
         alignSelf: 'center',
         marginBottom: 20,
     },
@@ -123,7 +128,7 @@ const styles = StyleSheet.create({
     },
     addContainer: {
         left: 290,
-        bottom: 60,
+        bottom: 80,
         alignSelf: 'flex-start',
     }
 
