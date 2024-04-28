@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import {useEffect, useState} from 'react'
 import { supabase } from '../lib/supabase'
 import { SafeAreaView,StyleSheet,Alert } from 'react-native'
 import {Input} from "react-native-elements";
@@ -25,7 +25,31 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
     const [date, setDate] = useState(dayjs())
     const [loading, setLoading] = useState(false)
     const [description, setDescription] = useState('')
-    
+    const [doctor, setDoctor] = useState(null)
+    const [user_id, setUserId] = useState('')
+
+    // FUNCION PRECARIA PARA QUE DE MOMENTO FUNCIONE CON EL ID DEL PADRE; DEPUES CON EL PICKER ELEGIR QUE USUARIO SE VE
+
+    useEffect(() => {
+        if (session) {
+            const fetchUserId = async () => {
+                try {
+                    const { data, error } = await supabase.rpc("get_independent_user_id", {})
+                    if (error) {
+                        throw error;
+                    }
+                    if (data) {
+                        setUserId(data);
+                    }
+                } catch (error) {
+                    console.error('Error fetching user id:', error);
+                }
+            };
+            fetchUserId();
+        }
+    }, [session]);
+
+
     async function addAppointment({
         date,
         description,
@@ -86,7 +110,7 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
             <StandardGreenButton
                 title="Confirmar"
                 disabled={loading}
-                onPress={() => addAppointment({date, })}
+                onPress={() => addAppointment({date, description, doctor, user_id})}
             />
         </SafeAreaView>
       );
