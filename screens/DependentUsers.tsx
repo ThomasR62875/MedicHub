@@ -4,6 +4,11 @@ import { StyleSheet, View, Alert, ScrollView,Text} from 'react-native'
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
 import {Doctor} from "./Doctors";
+import {Button} from "react-native-elements";
+
+// UNA IDEA DE DEPENDENT USERS SERIA PODER VER CADA USUARIO Y EDITARLO DESDE AHI (por ej eliminarlo, lo de migrar info etc)
+// TAMBIEN QUE CUANDO ABRIMOS UN USUARIO DEPENDEDIENTE, NOS DESPIEGLUE SU INFO (doctores, appointments, etc)
+
 
 type DependentUsersProps = NativeStackScreenProps<RootStackParamList, 'DependentUsers'>;
 
@@ -30,11 +35,11 @@ const DependentUsers: React.FC<DependentUsersProps> = ({navigation, route}) => {
             setLoading(true)
             if (!session?.user) throw new Error('No user on the session!')
 
-            const {data, error, status} = await supabase.rpc("get_dependent_users")
-            if (error && status !== 406) {
+            const {data, error} = await supabase.rpc("get_dependent_users")
+            console.log(data)
+            if (error) {
                 throw error
             }
-
             if (data) {
                 data.forEach( (dependent_user: DependentUser) => {
                     to_return.push({
@@ -56,6 +61,11 @@ const DependentUsers: React.FC<DependentUsersProps> = ({navigation, route}) => {
     }
 return(
     <View>
+        <View>
+            <Button title="Agregar usuario dependiente"
+                    onPress={() => navigation.navigate('AddDependentUser', {session: session})}
+            />
+        </View>
         {dependent_users && dependent_users.map((d_user: DependentUser, i) => (
             <View key={i} style={styles.doctorContainer}>
                 <View style={styles.infoRow}>
