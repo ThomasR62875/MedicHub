@@ -72,6 +72,12 @@ const Doctors: React.FC<DoctorProps> = ({ navigation, route }) => {
                 <View style={styles.titleContainer}>
                     <Text style={styles.titleText}>Medicos</Text>
                 </View>
+                {/*<View>*/}
+                {/*    <Button title="Add Appointment"*/}
+                {/*            onPress={() => navigation.navigate('AddAppointment', {session: session})}*/}
+                {/*    />*/}
+                {/*</View>*/}
+
                 <View>
                     <Button title="Agregar medicos"
                             onPress={() => navigation.navigate('AddDoctor', {session: session})}
