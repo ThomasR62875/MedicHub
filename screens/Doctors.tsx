@@ -146,6 +146,7 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     titleContainer: {
+        marginTop: 10,
         alignSelf: 'center',
         marginBottom: 20,
     },
@@ -156,7 +157,7 @@ const styles = StyleSheet.create({
     },
     addContainer: {
         left: 290,
-        bottom: 60,
+        bottom: 63,
         alignSelf: 'flex-start',
     }
 
