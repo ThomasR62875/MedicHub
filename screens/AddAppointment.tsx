@@ -8,6 +8,8 @@ import StandardGreenButton from "../components/StandardGreenButton";
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
 import {Appointment} from "./Appointments";
+import {DependentUser} from "./DependentUsers"
+import {Doctor} from "./Doctors";
 
 type AddAppointmentProps = NativeStackScreenProps<RootStackParamList, 'AddAppointment'>
 
@@ -18,8 +20,6 @@ interface Appointment {
     user_id: string;
 }
 
-
-
 const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) => {
     const {session} = route.params;
     const [date, setDate] = useState(dayjs())
@@ -27,6 +27,8 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
     const [description, setDescription] = useState('')
     const [doctor, setDoctor] = useState(null)
     const [user_id, setUserId] = useState('')
+    const [all_users, setAllUsers] = useState<DependentUser[] | undefined>(undefined)
+    const [doctors,setDoctors]= useState<Doctor[] | undefined>(undefined)
 
     // FUNCION PRECARIA PARA QUE DE MOMENTO FUNCIONE CON EL ID DEL PADRE; DEPUES CON EL PICKER ELEGIR QUE USUARIO SE VE
 
@@ -48,6 +50,48 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
             fetchUserId();
         }
     }, [session]);
+
+
+    // ACA ARRAY DE DOCTORES PARA ELEGIR EN EL PICKER
+    useEffect(() => {
+        if (session) {
+            const getAllDoctorsByUser = async () => {
+                try {
+                    const { data, error } = await supabase.rpc('get_all_doctors_by_user', { user_id: user_id });
+                    if (error) {
+                        throw error;
+                    }
+                    if (data) {
+                        setDoctors(data);
+                    }
+                } catch (error) {
+                    console.error('Error fetching user id:', error);
+                }
+            };
+            getAllDoctorsByUser();
+        }
+    }, [session, user_id]); // Agregar user_id como dependencia para que useEffect se ejecute cuando user_id cambie
+
+    // ACA ARRAY DE USERS PARA ELEGIR EN EL PICKER
+    useEffect(() => {
+        if (session) {
+            const getAllUsers = async () => {
+                try {
+                    const { data, error } = await supabase.rpc('get_all_users', { user_id: user_id });
+                    if (error) {
+                        throw error;
+                    }
+                    if (data) {
+                        setAllUsers(data);
+                    }
+                } catch (error) {
+                    console.error('Error fetching user id:', error);
+                }
+            };
+            getAllUsers();
+        }
+    }, [session, user_id]); // Agregar user_id como dependencia para que useEffect se ejecute cuando user_id cambie
+
 
 
     async function addAppointment({
