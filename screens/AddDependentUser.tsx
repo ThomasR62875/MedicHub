@@ -1,9 +1,10 @@
 import React, {useState} from 'react';
 import {SafeAreaView,TouchableOpacity, Text, Alert, StyleSheet, } from 'react-native';
 import {supabase} from "../lib/supabase";
-import {Button, Input} from "react-native-elements";
+import {Input} from "react-native-elements";
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
+import { Image } from 'react-native';
 
 type AddDependentUser = NativeStackScreenProps<RootStackParamList, 'AddDependentUser'>;
 
@@ -24,7 +25,7 @@ const AddDependentUser: React.FC<AddDependentUser> = ({ navigation, route }) => 
             }
             catch(error){
                 if (error!= null){
-                    Alert.alert(error.message) 
+                    Alert.alert(error.message)
                 }
             }
         setLoading(false)
@@ -34,21 +35,21 @@ const AddDependentUser: React.FC<AddDependentUser> = ({ navigation, route }) => 
         <SafeAreaView style={styles.container}>
           
           <Input
-            leftIcon={{ type: 'font-awesome', name: 'paperclip' }}
+            leftIcon={{ type: 'font-awesome', name: 'user' }}
             style={styles.verticallySpaced}
             placeholder="Nombre"
             value={firstName}
             onChangeText={(text) => setFirstName(text)}
           />
         <Input
-            leftIcon={{ type: 'font-awesome', name: 'paperclip' }}
+            leftIcon={{ type: 'font-awesome', name: 'user' }}
             style={styles.verticallySpaced}
             placeholder="Apellido"
             value={lastName}
             onChangeText={(text) => setLastName(text)}
           />
           <Input
-            leftIcon={{ type: 'font-awesome', name: 'paperclip' }}
+            leftIcon={<Image source={require('../assets/fingerprint.png')} style={styles.icon} />}
             style={styles.verticallySpaced}
             placeholder="DNI"
             value={dni}
@@ -72,9 +73,6 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       padding: 20,
     },
-    datePicker: {
-      height: '20',
-    },
     verticallySpaced: {
       paddingTop: 2,
       paddingBottom: 2,
@@ -90,5 +88,9 @@ const styles = StyleSheet.create({
       color: 'white',
       textAlign: 'center',
       fontWeight: 'bold',
+    },
+    icon: {
+        width: 24,
+        height: 24,
     },
   });
