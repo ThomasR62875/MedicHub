@@ -5,6 +5,7 @@ import {Input} from "react-native-elements";
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
 import { Image } from 'react-native';
+import StandardGreenButton from "../components/StandardGreenButton";
 
 type AddDependentUser = NativeStackScreenProps<RootStackParamList, 'AddDependentUser'>;
 
@@ -48,17 +49,18 @@ const AddDependentUser: React.FC<AddDependentUser> = ({ navigation, route }) => 
             value={lastName}
             onChangeText={(text) => setLastName(text)}
           />
-          <Input
+            <Input
             leftIcon={<Image source={require('../assets/fingerprint.png')} style={styles.icon} />}
             style={styles.verticallySpaced}
             placeholder="DNI"
             value={dni}
             onChangeText={(text) => setDni(text)}
             // type="number"
-          />
-        <TouchableOpacity style={styles.confirmButton} onPress={() => addUser()}>
-            <Text style={styles.confirmButtonText}>Confirm</Text>
-          </TouchableOpacity>
+            />
+            <StandardGreenButton title="Confirmar"
+                                 disabled={loading}
+                                 onPress={() => addUser()}
+            />
         </SafeAreaView>
       );
 
