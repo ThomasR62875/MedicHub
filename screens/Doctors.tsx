@@ -17,6 +17,7 @@ export type Doctor = {
     phone: string;
     email: string;
     addresses: string[];
+    id:string;
 }
 
 type DoctorProps = NativeStackScreenProps<RootStackParamList, 'Doctors'>;
@@ -60,7 +61,8 @@ const Doctors: React.FC<DoctorProps> = ({ navigation, route }) => {
                 specialty: doctor.specialty,
                 phone: doctor.phone,
                 email: doctor.email,
-                addresses: doctor.addresses
+                addresses: doctor.addresses,
+                id:doctor.id
             });
         });
         setLoading(false)
