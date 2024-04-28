@@ -13,10 +13,10 @@ const Stack = createNativeStackNavigator();
 
 export type Doctor = {
     name: string;
-    profession: string;
+    specialty: string;
     phone: string;
     email: string;
-    address: [string];
+    addresses: string[];
 }
 
 type DoctorProps = NativeStackScreenProps<RootStackParamList, 'Doctors'>;
@@ -57,10 +57,10 @@ const Doctors: React.FC<DoctorProps> = ({ navigation, route }) => {
         data.forEach((doctor: Doctor) => {
             to_return.push({
                 name: doctor.name,
-                profession: doctor.profession,
+                specialty: doctor.specialty,
                 phone: doctor.phone,
                 email: doctor.email,
-                address: doctor.address
+                addresses: doctor.addresses
             });
         });
         setLoading(false)
@@ -68,20 +68,14 @@ const Doctors: React.FC<DoctorProps> = ({ navigation, route }) => {
     }
     return(
         <View style={styles.container}>
+            <View style={styles.titleContainer}>
+                <Text style={styles.titleText}>Medicos</Text>
+            </View>
+            <View style={styles.addContainer}>
+                <AddButton onPress={() => navigation.navigate({name: 'AddDoctor', params: {session: session}})}/>
+            </View>
+
             <ScrollView>
-                <View style={styles.titleContainer}>
-                    <Text style={styles.titleText}>Medicos</Text>
-                </View>
-                {/*<View style={styles.addContainer}>*/}
-                {/*    <AddButton onPress={() => navigation.navigate({name: 'AddDoctor', params: {session: session}})}/>*/}
-                {/*</View>*/}
-
-                <View>
-                    <Button title="Agregar medicos"
-                            onPress={() => navigation.navigate('AddDoctor', {session: session})}
-                    />
-                </View>
-
                 <View>
                     {
                         doctors ? (
@@ -94,7 +88,7 @@ const Doctors: React.FC<DoctorProps> = ({ navigation, route }) => {
                                         </View>
                                         <View style={styles.infoRow}>
                                             <Text style={styles.label}>Especialidad:</Text>
-                                            <Text style={styles.value}>{doc.profession}</Text>
+                                            <Text style={styles.value}>{doc.specialty}</Text>
                                         </View>
                                         <View style={styles.infoRow}>
                                             <Text style={styles.label}>Mail:</Text>
@@ -103,6 +97,10 @@ const Doctors: React.FC<DoctorProps> = ({ navigation, route }) => {
                                         <View style={styles.infoRow}>
                                             <Text style={styles.label}>Teléfono:</Text>
                                             <Text style={styles.value}>{doc.phone}</Text>
+                                        </View>
+                                        <View style={styles.infoRow}>
+                                            <Text style={styles.label}>Dirección:</Text>
+                                            <Text style={styles.value}>{doc.addresses}</Text>
                                         </View>
                                     </View>
                                     // AGREGAR PARA VER EL ARRAY DE ADDRESSES
@@ -126,13 +124,12 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: 'center',
-        alignItems: 'center',
         padding: 20,
       },
     doctorContainer: {
-        marginTop: 20,
+        marginTop: 10,
         backgroundColor: '#C2E5D3',
-        marginBottom: 20,
+        marginBottom: 10,
         borderRadius: 5,
     },
     infoRow: {
