@@ -72,8 +72,10 @@ const Doctors: React.FC<DoctorProps> = ({ navigation, route }) => {
                 <View style={styles.titleContainer}>
                     <Text style={styles.titleText}>Medicos</Text>
                 </View>
-                <View style={styles.addContainer}>
-                    <AddButton onPress={() => navigation.navigate({name: 'AddDoctor', params: {session: session}})}/>
+                <View>
+                    <Button title="Agregar medicos"
+                            onPress={() => navigation.navigate('AddDoctor', {session: session})}
+                    />
                 </View>
 
                 <View>
