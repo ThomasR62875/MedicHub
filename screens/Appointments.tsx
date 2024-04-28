@@ -28,7 +28,7 @@ const Appointments: React.FC<AppointmentsProps> = ({ navigation, route }) => {
     useEffect(() => {
         if (session) getAppointments()
     }, [session])
-    
+
     async function getAppointments() {
         const to_return: Appointment[] = [];
         try {
@@ -73,47 +73,47 @@ const Appointments: React.FC<AppointmentsProps> = ({ navigation, route }) => {
         }
         setLoading(false)
         setAppointments(to_return)
-        }
+    }
     return(
-            <View style={styles.container}>
-                <View style={styles.titleContainer}>
-                    <Text style={styles.titleText}>Turnos</Text>
-                </View>
-                <ScrollView>
-                    <View>
-                        {
-                            appointments ? (
-                                appointments.map((appointment: Appointment, i) => {
-                                    return (
-                                        <View key={i} style={styles.doctorContainer}>
-                                            <View style={styles.infoRow}>
-                                                <Text style={styles.label}>Fecha:</Text>
-                                                <Text style={styles.value}>{appointment.date}</Text>
-                                            </View>
-                                            <View style={styles.infoRow}>
-                                                <Text style={styles.label}>Usuario:</Text>
-                                                <Text style={styles.value}>{appointment.user_name}</Text>
-                                            </View>
-                                            <View style={styles.infoRow}>
-                                                <Text style={styles.label}>Doctor:</Text>
-                                                <Text style={styles.value}>{appointment.doctor}</Text>
-                                            </View>
-                                            <View style={styles.infoRow}>
-                                                <Text style={styles.label}>Descripcion:</Text>
-                                                <Text style={styles.value}>{appointment.description}</Text>
-                                            </View>
-                                        </View>
-                                    )
-                                })
-                            ) : (
-                                <View style={styles.titleContainer}>
-                                    <Text style={styles.titleText}>No hay turnos</Text>
-                                </View>
-                            )
-                        }
-                    </View>
-                </ScrollView>
+        <View style={styles.container}>
+            <View style={styles.titleContainer}>
+                <Text style={styles.titleText}>Turnos</Text>
             </View>
+            <ScrollView>
+                <View>
+                    {
+                        appointments ? (
+                            appointments.map((appointment: Appointment, i) => {
+                                return (
+                                    <View key={i} style={styles.doctorContainer}>
+                                        <View style={styles.infoRow}>
+                                            <Text style={styles.label}>Fecha:</Text>
+                                            <Text style={styles.value}>{appointment.date}</Text>
+                                        </View>
+                                        <View style={styles.infoRow}>
+                                            <Text style={styles.label}>Usuario:</Text>
+                                            <Text style={styles.value}>{appointment.user_name}</Text>
+                                        </View>
+                                        <View style={styles.infoRow}>
+                                            <Text style={styles.label}>Doctor:</Text>
+                                            <Text style={styles.value}>{appointment.doctor}</Text>
+                                        </View>
+                                        <View style={styles.infoRow}>
+                                            <Text style={styles.label}>Descripcion:</Text>
+                                            <Text style={styles.value}>{appointment.description}</Text>
+                                        </View>
+                                    </View>
+                                )
+                            })
+                        ) : (
+                            <View style={styles.titleContainer}>
+                                <Text style={styles.titleText}>No hay turnos</Text>
+                            </View>
+                        )
+                    }
+                </View>
+            </ScrollView>
+        </View>
     )
 }
 
@@ -157,4 +157,4 @@ const styles = StyleSheet.create({
         alignSelf: 'flex-start',
     }
 
-  });
+});
