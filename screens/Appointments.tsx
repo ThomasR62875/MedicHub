@@ -5,6 +5,7 @@ import { Button, Input } from 'react-native-elements'
 import { Session } from '@supabase/supabase-js'
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
+import {Doctor} from "./Doctors";
 
 
 
@@ -15,6 +16,8 @@ export type Appointment = {
     date: Date;
     description:string;
     user_name:string;
+    doctor: string;
+    user_id: string;
 }
 
 const Appointments: React.FC<AppointmentsProps> = ({ navigation, route }) => {
@@ -45,17 +48,18 @@ const Appointments: React.FC<AppointmentsProps> = ({ navigation, route }) => {
                 for (const appoint of data) {
                     try {
                         const { data: user_data, error: user_error } = await supabase.rpc('get_user', {user_id: appoint.user})
-
+                        const { data: doctor_data, error: doctor_error } = await supabase.rpc('get_doctor', {doctor_id: appoint.doctor})
                         if (user_error) {
                             throw user_error;
                         }
-
                         // Aquí puedes hacer lo que necesites con user_data
                         // Por ejemplo, agregarlo a to_return
                         to_return.push({
                             description: appoint.description,
                             date: appoint.date,
-                            user_name: user_data.first_name // Suponiendo que name es el campo que quieres agregar
+                            user_name: user_data.first_name, // Suponiendo que name es el campo que quieres agregar
+                            doctor: doctor_data && doctor_data.name ? doctor_data.name.concat(" (especialidad: ").concat(doctor_data.specialty).concat(")") : 'Sin datos de doctor',
+                            user_id: appoint.user,
                         });
                     } catch (error) {
                         console.error('Error al obtener el usuario:', error);
@@ -72,27 +76,41 @@ const Appointments: React.FC<AppointmentsProps> = ({ navigation, route }) => {
         }
     return(
             <View style={styles.container}>
+                <View style={styles.titleContainer}>
+                    <Text style={styles.titleText}>Turnos</Text>
+                </View>
                 <ScrollView>
                     <View>
-                        <Text>Appointments</Text>
-                    </View>
-                    <View>
                         {
-                            appointments.map((appoint:Appointment,i)=> {
-                                return(
-                                    <View key={i} style={styles.appointmentView}>
-                                        <Text style={styles.appointmentViewText}>{appoint.description}</Text>
-                                        <Text style={styles.appointmentViewText}>{appoint.user_name}</Text>
-                                    </View>
-                                )
-                            })
+                            appointments ? (
+                                appointments.map((appointment: Appointment, i) => {
+                                    return (
+                                        <View key={i} style={styles.doctorContainer}>
+                                            <View style={styles.infoRow}>
+                                                <Text style={styles.label}>Fecha:</Text>
+                                                <Text style={styles.value}>{appointment.date}</Text>
+                                            </View>
+                                            <View style={styles.infoRow}>
+                                                <Text style={styles.label}>Usuario:</Text>
+                                                <Text style={styles.value}>{appointment.user_name}</Text>
+                                            </View>
+                                            <View style={styles.infoRow}>
+                                                <Text style={styles.label}>Doctor:</Text>
+                                                <Text style={styles.value}>{appointment.doctor}</Text>
+                                            </View>
+                                            <View style={styles.infoRow}>
+                                                <Text style={styles.label}>Descripcion:</Text>
+                                                <Text style={styles.value}>{appointment.description}</Text>
+                                            </View>
+                                        </View>
+                                    )
+                                })
+                            ) : (
+                                <View style={styles.titleContainer}>
+                                    <Text style={styles.titleText}>No hay turnos</Text>
+                                </View>
+                            )
                         }
-                    </View>
-
-                    <View>
-                        <Button title="Add Appointment"
-                                onPress={() => navigation.navigate('AddAppointment', {session: session})}
-                        />
                     </View>
                 </ScrollView>
             </View>
@@ -105,20 +123,38 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: 'center',
-        alignItems: 'center',
         padding: 20,
-      },
-    appointmentView: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'center',
-      backgroundColor: '#f0f0f0',
-      padding: 10,
-      borderRadius: 5,
     },
-    appointmentViewText: {
-      fontSize: 16,
-      fontWeight: 'bold',
-      color: '#333',
+    doctorContainer: {
+        marginTop: 10,
+        backgroundColor: '#C2E5D3',
+        marginBottom: 10,
+        borderRadius: 5,
+    },
+    infoRow: {
+        flexDirection: 'row',
+        marginBottom: 5,
+    },
+    label: {
+        fontWeight: 'bold',
+        marginRight: 5,
+    },
+    value: {
+        flex: 1,
+    },
+    titleContainer: {
+        alignSelf: 'center',
+        marginBottom: 20,
+    },
+    titleText: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        color: '#333',
+    },
+    addContainer: {
+        left: 290,
+        bottom: 60,
+        alignSelf: 'flex-start',
     }
+
   });
