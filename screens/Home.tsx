@@ -19,8 +19,6 @@ const Home: React.FC = ({navigation}: any) => {
                 <Text style={styles.text}>Bienvenido {first_name} test!!</Text>
                 <View style={styles.grid}>
                     <View style={styles.col}>
-                        <Card title="Agregar turno" img={imgDoc}  onPress={() => navigation.navigate('AddAppointment')} />
-                        <View style={{ marginBottom: 10 }} />
                         <Card title="Turnos" img={imgTurno} onPress={() => navigation.navigate('Appointments')}/>
                     </View>
                     <View style={styles.col}>
