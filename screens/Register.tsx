@@ -6,7 +6,7 @@ import {
     StyleSheet,
     TouchableWithoutFeedback,
     Keyboard,
-    Dimensions, KeyboardAvoidingView
+    Dimensions, KeyboardAvoidingView, Image
 } from 'react-native';
 import { Button} from 'react-native-elements'
 import {supabase} from "../lib/supabase";
@@ -61,64 +61,58 @@ const Register: React.FC = ({ navigation }: any) => {
                     <Input
                         label="Nombre"
                         labelStyle={styles.colorLable}
-                        leftIcon={<Icon name="user" type= "font-awesome" color={styles.colorPlaceholder.color}/>}
+                        leftIcon={<Icon type= "font-awesome" name="user" color={styles.colorIcon.color}/>}
                         onChangeText={(text) => setFirstName(text)}
                         value={firstName}
                         placeholder="Nombre"
-                        placeholderTextColor={styles.colorPlaceholder.color}
                         autoCapitalize={'none'}
                     />
                     <Input
                         label="Apellido"
                         labelStyle={styles.colorLable}
-                        leftIcon={<Icon name="user" type= "font-awesome" color={styles.colorPlaceholder.color}/>}
+                        leftIcon={<Icon type= "font-awesome" name="user" color={styles.colorIcon.color}/>}
                         onChangeText={(text) => setLastName(text)}
                         value={lastName}
                         placeholder="Apellido"
-                        placeholderTextColor={styles.colorPlaceholder.color}
                         autoCapitalize={'none'}
                     />
                     <Input
                         label="DNI"
                         labelStyle={styles.colorLable}
-                        leftIcon={<Icon name="user" type= "font-awesome" color={styles.colorPlaceholder.color}/>}
+                        leftIcon={<Image source={require('../assets/fingerprint.png')} style={styles.icon} />}
                         onChangeText={(text) => setDni(text)}
                         value={dni}
                         placeholder="DNI"
-                        placeholderTextColor={styles.colorPlaceholder.color}
                         autoCapitalize={'none'}
                     />
                     <Input
                         label="Mail"
                         labelStyle={styles.colorLable}
-                        leftIcon={<Icon name="envelope" type= "font-awesome" color={styles.colorPlaceholder.color}/>}
+                        leftIcon={<Icon type= "font-awesome" name="envelope" color={styles.colorIcon.color}/>}
                         onChangeText={(text) => setEmail(text)}
                         value={email}
                         placeholder="email@address.com"
-                        placeholderTextColor={styles.colorPlaceholder.color}
                         autoCapitalize={'none'}
                     />
                     <Input
                         label="Contraseña"
                         labelStyle={styles.colorLable}
-                        leftIcon={<Icon name="lock" type="font-awesome" color={styles.colorPlaceholder.color} />}
+                        leftIcon={<Icon type="font-awesome" name="lock" color={styles.colorIcon.color}/>}
                         onChangeText={(text) => setPassword(text)}
                         value={password}
                         secureTextEntry={true}
                         placeholder="Contraseña"
-                        placeholderTextColor={styles.colorPlaceholder.color}
                         autoCapitalize={'none'}
 
                     />
                     <Input
                         label="Confirmar contraseña"
                         labelStyle={styles.colorLable}
-                        leftIcon={<Icon name="lock" type="font-awesome" color={styles.colorPlaceholder.color} />}
+                        leftIcon={<Icon type="font-awesome"  name="lock" color={styles.colorIcon.color}/>}
                         onChangeText={(text1) => setConfirmedPassword(text1)}
                         value={confirmed_password}
                         secureTextEntry={true}
                         placeholder="Contraseña"
-                        placeholderTextColor={styles.colorPlaceholder.color}
                         autoCapitalize={'none'}
                     />
                 </ScrollView>
@@ -160,12 +154,16 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         justifyContent: 'center',
     },
-    colorPlaceholder: {
-        color: '#D1D1D1'
+    colorIcon: {
+        color: '#454546'
     },
     colorLable: {
         color: '#000000'
-    }
+    },
+    icon: {
+        width: 24,
+        height: 24,
+    },
 });
 
 export default Register;
