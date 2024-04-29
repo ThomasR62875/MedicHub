@@ -22,10 +22,13 @@ const AddDependentUser: React.FC<AddDependentUser> = ({ navigation, route }) => 
             try{
                 const { error } = await supabase.rpc("add_dependent_user",{first_name_input: firstName,
                     last_name_input :lastName, dni_input:dni})
-                Alert.alert("El Usuario ya está guardado") 
+                Alert.alert("El Usuario ya está guardado")
+                if (error!= null){
+                    throw error
+                }
             }
             catch(error){
-                if (error!= null){
+                if (error instanceof Error) {
                     Alert.alert(error.message)
                 }
             }
