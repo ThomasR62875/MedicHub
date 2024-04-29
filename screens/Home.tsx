@@ -6,7 +6,9 @@ import {Card} from '../components/Card';
 
 const Home: React.FC = ({navigation}: any) => {
     const [first_name, setFirstName] = useState('')
-    const imgDoc = '../assets/doc.png';
+    const imgDoc = require('../assets/doc.png');
+    const imgTurno = require('../assets/calendario.png');
+    const imgMed = require('../assets/meds.png');
     return (
 
         <View>
@@ -14,18 +16,17 @@ const Home: React.FC = ({navigation}: any) => {
                 <Icon name='person-circle-outline' type='ionicon' onPress={() => navigation.navigate('Account')} size={35} />
             </View>
             <View style={styles.container}>
-                {/* NOSE DONDE MIERDA MÁS PONERLE CENTER PARA Q LAS CARDS APAREZCAN BIEN miren los styles van a entender todo*/}
                 <Text style={styles.text}>Bienvenido {first_name} test!!</Text>
                 <View style={styles.grid}>
                     <View style={styles.col}>
                         <Card title="Agregar turno" img={imgDoc}  onPress={() => navigation.navigate('AddAppointment')} />
                         <View style={{ marginBottom: 10 }} />
-                        <Card title="Turnos" img={imgDoc} onPress={() => navigation.navigate('Appointments')}/>
+                        <Card title="Turnos" img={imgTurno} onPress={() => navigation.navigate('Appointments')}/>
                     </View>
                     <View style={styles.col}>
                         <Card title="Doctores" img={imgDoc}  onPress={() => navigation.navigate('Doctors')}/>
                         <View style={{ marginBottom: 10 }} />
-                        <Card title="Medicamentos" img={imgDoc}  onPress={() => navigation.navigate('Medication')}/>
+                        <Card title="Medicamentos" img={imgMed}  onPress={() => navigation.navigate('Medication')}/>
                     </View>
                     {/*<View style={styles.col}>*/}
                     {/*    <Card title="Agregar usuario" onPress={()=> navigation.navigate('AddDependentUser')}/>*/}
