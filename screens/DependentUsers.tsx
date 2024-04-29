@@ -14,7 +14,7 @@ import AddButton from "../components/AddButton";
 type DependentUsersProps = NativeStackScreenProps<RootStackParamList, 'DependentUsers'>;
 
 
-type DependentUser = {
+export type DependentUser = {
     first_name: string;
     last_name: string;
     dni: string;
