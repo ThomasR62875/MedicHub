@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import { supabase } from '../lib/supabase'
-import {SafeAreaView, StyleSheet, Alert, View} from 'react-native'
+import {SafeAreaView, StyleSheet, Alert, View, Keyboard, TouchableWithoutFeedback} from 'react-native'
 import {Input} from "react-native-elements";
 import DateTimePicker from 'react-native-ui-datepicker';
 import dayjs from 'dayjs';
@@ -12,6 +12,7 @@ import {DependentUser} from "./DependentUsers"
 import Doctors, {Doctor} from "./Doctors";
 import {Picker} from '@react-native-picker/picker'
 import RNPickerSelect from 'react-native-picker-select';
+import DatePicker, { getFormatedDate } from 'react-native-modern-datepicker';
 
 type AddAppointmentProps = NativeStackScreenProps<RootStackParamList, 'AddAppointment'>
 
@@ -125,52 +126,56 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
     }
 
     return (
-        <SafeAreaView style={styles.container}>
-          {/* Date Picker */}
-          <DateTimePicker
-            mode="single"
-            date={date}
-            onChange={(params: Appointment) => setDate(params.date)}
-            displayFullDays
-            // style={styles.datePicker}
-          />
-
-          {/* Description Input */}
-          {/*multiline={true}
-         numberOfLines={4}*/}
-            <Input
-                leftIcon={{ type: 'font-awesome', name: 'paperclip' }}
-                style={styles.verticallySpaced}
-                placeholder="Enter description"
-                value={description}
-                onChangeText={(text) => setDescription(text)}
-            />
-            <View style={styles.pickerStyle}>
-                <RNPickerSelect
-                    placeholder={{ label: 'Doctor', value: null }}
-                    items={doctors ? doctors.map(d => ({ label: d.name, value: d.id})) : []}
-                    onValueChange={(value) => setDoctor(value)}
-                    style={{ ...pickerSelectStyles }}
-                    value={doctor}
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+            <SafeAreaView style={styles.container}>
+                <DatePicker
+                    locale={'ES'}
+                    options={{
+                        textHeaderColor: '#073A29',
+                        textDefaultColor: '#000000',
+                        selectedTextColor: '#fff',
+                        mainColor: '#073A29',
+                        textSecondaryColor: '#B5DCCA',
+                        borderColor: 'rgba(122, 146, 165, 0.1)',
+                    }}
+                    date={date}
+                    onSelectedChange={(date: React.SetStateAction<dayjs.Dayjs>) => setDate(date)}
                 />
-            </View>
-            <View style={styles.pickerStyle}>
-                <RNPickerSelect
-                    placeholder={{ label: 'Usuario', value: null }}
-                    items={all_users ? all_users.map(u => ({ label: u.first_name, value: u.id})) : []}
-                    onValueChange={(value) => setUserId(value)}
-                    style={{ ...pickerSelectStyles }}
-                    value={user_id}
-                />
-            </View>
 
-            {/* Confirm Button */}
-            <StandardGreenButton
-                title="Confirmar"
-                disabled={loading}
-                onPress={() => addAppointment({date, description, doctor, user_id})}
-            />
-        </SafeAreaView>
+                <Input
+                    leftIcon={{ type: 'font-awesome', name: 'book' }}
+                    style={styles.verticallySpaced}
+                    placeholder="Título"
+                    value={description}
+                    onChangeText={(text) => setDescription(text)}
+                />
+                <View style={styles.pickerStyle}>
+                    <RNPickerSelect
+                        placeholder={{ label: 'Médico', value: null }}
+                        items={doctors ? doctors.map(d => ({ label: d.name, value: d.id})) : []}
+                        onValueChange={(value) => setDoctor(value)}
+                        style={{ ...pickerSelectStyles }}
+                        value={doctor}
+                    />
+                </View>
+                <View style={styles.pickerStyle}>
+                    <RNPickerSelect
+                        placeholder={{ label: 'Usuario', value: null }}
+                        items={all_users ? all_users.map(u => ({ label: u.first_name, value: u.id})) : []}
+                        onValueChange={(value) => setUserId(value)}
+                        style={{ ...pickerSelectStyles }}
+                        value={user_id}
+                    />
+                </View>
+
+                {/* Confirm Button */}
+                <StandardGreenButton
+                    title="Confirmar"
+                    disabled={loading}
+                    onPress={() => addAppointment({date, description, doctor, user_id})}
+                />
+            </SafeAreaView>
+        </TouchableWithoutFeedback>
       );
 }
 
@@ -182,9 +187,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         padding: 20,
-    },
-    datePicker: {
-        height: '20',
     },
     verticallySpaced: {
         paddingTop: 2,
