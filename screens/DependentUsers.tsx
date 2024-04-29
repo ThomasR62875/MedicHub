@@ -18,6 +18,7 @@ export type DependentUser = {
     first_name: string;
     last_name: string;
     dni: string;
+    id: string;
 }
 
 const DependentUsers: React.FC<DependentUsersProps> = ({navigation, route}) => {
@@ -46,7 +47,8 @@ const DependentUsers: React.FC<DependentUsersProps> = ({navigation, route}) => {
                     to_return.push({
                         first_name: dependent_user.first_name,
                         last_name: dependent_user.last_name,
-                        dni: dependent_user.dni
+                        dni: dependent_user.dni,
+                        id: dependent_user.id
                     })
                 });
             }
