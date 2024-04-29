@@ -6,6 +6,7 @@ import { Session } from '@supabase/supabase-js'
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
 import {Doctor} from "./Doctors";
+import AddButton from "../components/AddButton";
 
 
 
@@ -78,6 +79,9 @@ const Appointments: React.FC<AppointmentsProps> = ({ navigation, route }) => {
         <View style={styles.container}>
             <View style={styles.titleContainer}>
                 <Text style={styles.titleText}>Turnos</Text>
+            </View>
+            <View style={styles.addContainer}>
+                <AddButton onPress={() => navigation.navigate({name: 'AddAppointment', params: {session: session}})}/>
             </View>
             <ScrollView>
                 <View>
