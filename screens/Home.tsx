@@ -24,7 +24,7 @@ const Home: React.FC = ({navigation}: any) => {
                         <Card title="Turnos" img={imgTurno} onPress={() => navigation.navigate('Appointments')}/>
                     </View>
                     <View style={styles.col}>
-                        <Card title="Doctores" img={imgDoc}  onPress={() => navigation.navigate('Doctors')}/>
+                        <Card title="Médicos" img={imgDoc}  onPress={() => navigation.navigate('Doctors')}/>
                         <View style={{ marginBottom: 10 }} />
                         <Card title="Medicamentos" img={imgMed}  onPress={() => navigation.navigate('Medication')}/>
                     </View>
