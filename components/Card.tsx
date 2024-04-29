@@ -10,16 +10,14 @@ import {
 
 interface CardProps extends TouchableOpacityProps {
     onPress:  any;
-    img : string;
+    img : any;
     title : String;
 }
 
 export const Card: React.FC<CardProps> = ({ onPress, img, title, ...props }) => {
     return (
             <Pressable style={styles.conteinter} onPress={onPress}>
-                <Image style={[styles.img, styles.conteinter]} source={require('../assets/doc.png')}/>
-                {/*Deberia ir esta linea pero NO LE GUSTA
-                  <Image style={styles.img} source={require(img)}/> todo*/}
+                <Image style={[styles.img, styles.conteinter]} source={img}/>
                 <View style={styles.card}>
                     <Text style={styles.text}>{title}</Text>
                 </View>
