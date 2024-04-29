@@ -23,7 +23,7 @@ const Home: React.FC = ({navigation}: any) => {
                     </View>
                     <View style={styles.col}>
                         <Card title="Médicos" img={imgDoc}  onPress={() => navigation.navigate('Doctors')}/>
-                        <View style={{ marginBottom: 10 }} />
+                        <View style={{ marginBottom: 30 }} />
                         <Card title="Medicamentos" img={imgMed}  onPress={() => navigation.navigate('Medication')}/>
                     </View>
                     {/*<View style={styles.col}>*/}
