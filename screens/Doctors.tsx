@@ -1,13 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabase'
 import { StyleSheet, View, Alert, ScrollView,Text} from 'react-native'
-import { Button, Input } from 'react-native-elements'
-import { Session } from '@supabase/supabase-js'
-import {NavigationContainer} from "@react-navigation/native";
 import {createNativeStackNavigator, NativeStackScreenProps} from '@react-navigation/native-stack';
 import {RootStackParamList} from "../App";
 import AddButton from "../components/AddButton";
-import addDoctor from "./AddDoctor";
 
 const Stack = createNativeStackNavigator();
 
