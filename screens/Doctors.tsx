@@ -110,7 +110,8 @@ const Doctors: React.FC<DoctorProps> = ({ navigation, route }) => {
                             })
                         ) : (
                             <View style={styles.titleContainer}>
-                                <Text style={styles.titleText}>no hay doctores</Text>
+                                <Text style={styles.titleText}>No has cargado doctores aún</Text>
+                                <Text style={[styles.titleText, {fontSize: 17}]}> Usa el simbolo + de la esquina superiro derecha para agregar tu primer doc</Text>
                             </View>
                         )
                     }
@@ -154,6 +155,9 @@ const styles = StyleSheet.create({
         fontSize: 24,
         fontWeight: 'bold',
         color: '#333',
+        alignSelf: 'center',
+        justifyContent: 'center',
+
     },
     addContainer: {
         left: 290,
