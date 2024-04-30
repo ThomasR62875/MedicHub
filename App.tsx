@@ -20,6 +20,7 @@ import Appointments from "./screens/Appointments";
 import EditAccount from "./screens/EditAccount";
 import DependentUsers from "./screens/DependentUsers";
 import Medication from "./screens/Medication";
+import AddMedication from './screens/AddMedication'
 
 export type RootStackParamList = {
   Home: { session: Session | null };
@@ -136,6 +137,10 @@ const App: React.FC = () => {
                 />
                 <Stack.Screen name="Medication"
                               component={Medication}
+                              initialParams={{session: session}}
+                />
+                <Stack.Screen name="AddMedication"
+                              component={AddMedication}
                               initialParams={{session: session}}
                 />
               </>
