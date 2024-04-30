@@ -117,6 +117,7 @@ const Appointments: React.FC<AppointmentsProps> = ({ navigation, route }) => {
                         ) : (
                             <View style={styles.titleContainer}>
                                 <Text style={styles.titleText}>No hay turnos</Text>
+                                <Text style={[styles.titleText, {fontSize: 16, fontStyle: 'italic'}]}>Usa el simbolo + de la esquina superior derecha para agregar tu primer doctor</Text>
                             </View>
                         )}
                 </View>
