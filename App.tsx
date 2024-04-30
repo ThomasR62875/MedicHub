@@ -22,7 +22,7 @@ import DependentUsers from "./screens/DependentUsers";
 import Medication from "./screens/Medication";
 
 export type RootStackParamList = {
-  Home: undefined;
+  Home: { session: Session | null };
   Login: {session: Session | null};
   Register: undefined;
   Account: { session: Session | null };
@@ -98,7 +98,10 @@ const App: React.FC = () => {
               </>
           ) : (
               <>
-                <Stack.Screen name="Home" component={Home} />
+                <Stack.Screen name="Home"
+                              component={Home}
+                              initialParams={{session: session}}
+                />
                 <Stack.Screen name="Account"
                               component={Account}
                               initialParams={{session: session}}

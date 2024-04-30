@@ -1,26 +1,23 @@
 import React, { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabase'
-import {StyleSheet, View, Alert, Text} from 'react-native'
-import {Button, Input, Icon} from 'react-native-elements'
-import { Session } from '@supabase/supabase-js'
+import {StyleSheet, View, Alert, Text, Modal} from 'react-native'
+import {Button, Icon} from 'react-native-elements'
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
-// import Icon2 from '@mdi/react';
-// import { mdiNeedle } from '@mdi/js';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import {useFocusEffect} from "expo-router";
+
 
 
 type AccountScreenProps = NativeStackScreenProps<RootStackParamList, 'Account'>;
 
 
-const Account: React.FC<AccountScreenProps> = ({ navigation, route }) =>{
+const Account: React.FC<AccountScreenProps> = ({ navigation, route }) => {
     const {session} = route.params;
     const [first_name, setFirstName] = useState('')
     const [last_name, setLastName] = useState('')
     const [dni, setDni] = useState(0)
-    const [email, setEmail] = useState('')
     const [avatar_url, setAvatarUrl] = useState('')
-
+    const [showModal, setShowModal] = useState<boolean>(false)
 
     useEffect(() => {
         if (session) getProfile()
@@ -29,13 +26,12 @@ const Account: React.FC<AccountScreenProps> = ({ navigation, route }) =>{
     async function getProfile() {
         try {
             if (!session?.user) throw new Error('No user on the session!')
-            const { data, error } = await supabase.rpc('get_independent_user', { auth_id_input: session?.user.id });
+            const {data, error} = await supabase.rpc('get_independent_user', {auth_id_input: session?.user.id});
 
             if (data) {
                 setFirstName(data.first_name)
                 setLastName(data.last_name)
                 setDni(data.dni)
-                setEmail(data.email)
                 setAvatarUrl(data.avatar_url)
             }
         } catch (error) {
@@ -45,6 +41,13 @@ const Account: React.FC<AccountScreenProps> = ({ navigation, route }) =>{
         }
     }
 
+
+   /* useFocusEffect(
+        React.useCallback(() => {
+            getProfile();
+        }, [])
+    );*/
+
     return (
         <View>
             <View style={styles.iconContainer}>
@@ -52,7 +55,7 @@ const Account: React.FC<AccountScreenProps> = ({ navigation, route }) =>{
             </View>
             <View style={styles.grid}>
                 <View>
-                    <Text style={styles.text2}>Aca va la imagen</Text>
+                    <Icon name='person-circle-outline' type='ionicon' size={150} />
                 </View>
                 <View style={styles.col}>
                     <Text style={styles.text1}>{first_name}</Text>
@@ -74,22 +77,27 @@ const Account: React.FC<AccountScreenProps> = ({ navigation, route }) =>{
                 />
                 <View style={{marginTop: 20}}>
                     <Button title="Cerrar sesión"
-                            onPress={() => supabase.auth.signOut()}
+                            onPress={()=>setShowModal(true)}
                             icon={<Icon name="log-in-outline" type="ionicon" size={54} color="white" />}
                             buttonStyle={styles.cerrarSesion}/>
+                    <Modal
+                        transparent={true}
+                        visible={showModal}
+                        >
+                        <View style={styles.modalContainer}>
+                            <View style={styles.modalInfoContainer}>
+                                <Button title="Cancelar" onPress={()=>setShowModal(false)} />
+                                <View style={{ width: 30 }} />
+                                <Button title="Cerrar" onPress={() => supabase.auth.signOut()}/>
+                            </View>
+                        </View>
+                    </Modal>
                 </View>
             </View>
         </View>
 
     )
 }
-
-// Todos los tipos de iconos q intenten para la needle
-//
-//   icon={<Icon2 path={mdiNeedle} size={10}/>}
-//   {/* Literlamente asi es en la página oficial pero expo dice q no :( https://pictogrammers.com/library/mdi/icon/needle/ todo*/}
-// <MaterialCommunityIcons name="needle" size={24} color="black" />
-//  <FontAwesomeIcon icon="fa-solid fa-syringe" />
 
 export default Account
 
@@ -148,5 +156,17 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         color: 'black',
         fontSize: 20,
+    },
+    modalContainer: {
+        flex: 1,
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    modalInfoContainer: {
+        marginTop: 470,
+        flexDirection: 'row', // Arrange buttons horizontally
+        justifyContent: 'center', // Center buttons horizontally
+        alignItems: 'center', // Center buttons vertically
     },
 })

@@ -24,7 +24,7 @@ export type Appointment = {
 const Appointments: React.FC<AppointmentsProps> = ({ navigation, route }) => {
     const {session} = route.params
     const [loading, setLoading] = useState(true)
-    const [appointments,setAppointments]= useState<Appointment[]>([])
+    const [appointments,setAppointments]= useState<Appointment[] | undefined>(undefined)
 
     useEffect(() => {
         if (session) getAppointments()
@@ -86,7 +86,7 @@ const Appointments: React.FC<AppointmentsProps> = ({ navigation, route }) => {
             <ScrollView>
                 <View>
                     {
-                        appointments ? (
+                        (appointments?.length ?? 0) > 0 ? (
                             appointments.map((appointment: Appointment, i) => {
                                 const originalDate = new Date(appointment.date);
                                 const formattedDate = `${originalDate.getDate()}/${originalDate.getMonth() + 1}/${originalDate.getFullYear()}`;
@@ -118,8 +118,7 @@ const Appointments: React.FC<AppointmentsProps> = ({ navigation, route }) => {
                             <View style={styles.titleContainer}>
                                 <Text style={styles.titleText}>No hay turnos</Text>
                             </View>
-                        )
-                    }
+                        )}
                 </View>
             </ScrollView>
         </View>
@@ -159,6 +158,8 @@ const styles = StyleSheet.create({
         fontSize: 24,
         fontWeight: 'bold',
         color: '#333',
+        alignSelf: 'center',
+        justifyContent: 'center',
     },
     addContainer: {
         left: 290,

@@ -110,8 +110,8 @@ const Doctors: React.FC<DoctorProps> = ({ navigation, route }) => {
                             })
                         ) : (
                             <View style={styles.titleContainer}>
-                                <Text style={styles.titleText}>No has cargado doctores aún</Text>
-                                <Text style={[styles.titleText, {fontSize: 17}]}> Usa el simbolo + de la esquina superiro derecha para agregar tu primer doc</Text>
+                                <Text style={styles.titleText}>No has cargado doctores aún.</Text>
+                                <Text style={[styles.titleText, {fontSize: 16, fontStyle: 'italic'}]}>Usa el simbolo + de la esquina superior derecha para agregar tu primer doctor</Text>
                             </View>
                         )
                     }

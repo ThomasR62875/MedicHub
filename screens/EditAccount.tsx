@@ -15,7 +15,6 @@ type EditAccountProps = NativeStackScreenProps<RootStackParamList, 'EditAccount'
 
 const EditAccount:React.FC<EditAccountProps> = ({navigation, route }) =>{
     const {session} = route.params;
-
     const [loading, setLoading] = useState(true)
     const [first_name, setFirstName] = useState('')
     const [last_name, setLastName] = useState('')
@@ -39,7 +38,6 @@ const EditAccount:React.FC<EditAccountProps> = ({navigation, route }) =>{
                 setDni(data.dni)
                 setAvatarUrl(data.avatar_url)
             }
-
 
         } catch (error) {
             if (error instanceof Error) {
@@ -92,14 +90,12 @@ const EditAccount:React.FC<EditAccountProps> = ({navigation, route }) =>{
 
             {/*AGREGAR TAMBIEN LOS CAMPOS QUE SE CONSIDEREN NECESARIOS (EN LA FUNCION DE MOMENTO ESTA AVATAR URL Y DNI TMABN)*/}
 
-
-
                 <StandardGreenButton
                     title="Guardar Cambios"
                     onPress={() => updateProfile({first_name, last_name, dni, avatar_url})}
                     disabled={loading}
                 />
-            </View>
+        </View>
     )
 }
 
@@ -109,45 +105,4 @@ const styles = StyleSheet.create({
     container: {
         marginTop:10
     },
-
 })
-
-
-
-/*
-<View style={styles.verticallySpaced}>
-                <Button
-                    title={loading ? 'Cargando ...' : 'Actualizar'}
-                    onPress={() => updateProfile({ first_name,   last_name,  dni,  email,  avatar_url })}
-                    disabled={loading}
-                />
-            </View>
-
-            <Input label="Avatar" value={avatar_url} onChangeText={(text) => setAvatarUrl(text)} />
-                </View>
-                <View style={styles.col}>
-                    <View>
-                        <Input label="Nombre" value = {first_name} onChangeText={(text) => setFirstName(text)} />
-                    </View>
-                    <View>
-                        <Input label="Apellido" value={last_name} onChangeText={(text) => setLastName(text)} />
-                    </View>
-                </View>
-            </View>
-            <View>
-                <Input label="DNI" value={dni ? dni.toString() : ''}
-                       onChangeText={(text) => {
-                           const parsedDNI = parseInt(text, 10);
-                           if (!isNaN(parsedDNI)) {
-                               setDni(parsedDNI);
-                           }
-                       }}
-                       keyboardType="numeric"/>
-                <Input label="Mail" value={email} onChangeText={(text) => setEmail(text)} />
-
-                <View >
-                    <Button title="Cancelar" onPress={() => flag=false}/>
-                    <Button title="Guardar" onPress={() => updateProfile({ first_name,   last_name,  dni,  email,  avatar_url })}/>
-                </View>
-
- */
