@@ -88,15 +88,20 @@ const Appointments: React.FC<AppointmentsProps> = ({ navigation, route }) => {
                     {
                         appointments ? (
                             appointments.map((appointment: Appointment, i) => {
+                                const originalDate = new Date(appointment.date);
+                                const formattedDate = `${originalDate.getDate()}/${originalDate.getMonth() + 1}/${originalDate.getFullYear()}`;
+                                const formattedTime = `${originalDate.getHours()}:${originalDate.getMinutes().toString().padStart(2, '0')}`;
                                 return (
                                     <View key={i} style={styles.doctorContainer}>
                                         <View style={styles.infoRow}>
-                                            <Text style={styles.label}>Fecha:</Text>
-                                            <Text style={styles.value}>{appointment.date}</Text>
-                                        </View>
-                                        <View style={styles.infoRow}>
                                             <Text style={styles.label}>Usuario:</Text>
                                             <Text style={styles.value}>{appointment.user_name}</Text>
+                                        </View>
+                                        <View style={styles.infoRow}>
+                                            <Text style={styles.label}>Fecha:</Text>
+                                            <Text style={styles.value}>{formattedDate}</Text>
+                                            <Text style={styles.label}>Hora:</Text>
+                                            <Text style={styles.value}>{formattedTime}</Text>
                                         </View>
                                         <View style={styles.infoRow}>
                                             <Text style={styles.label}>Doctor:</Text>
