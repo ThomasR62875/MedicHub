@@ -4,12 +4,9 @@ import {StyleSheet, View, Alert, Text, Modal} from 'react-native'
 import {Button, Icon} from 'react-native-elements'
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
-import {useFocusEffect} from "expo-router";
-
 
 
 type AccountScreenProps = NativeStackScreenProps<RootStackParamList, 'Account'>;
-
 
 const Account: React.FC<AccountScreenProps> = ({ navigation, route }) => {
     const {session} = route.params;
@@ -41,13 +38,6 @@ const Account: React.FC<AccountScreenProps> = ({ navigation, route }) => {
         }
     }
 
-
-   /* useFocusEffect(
-        React.useCallback(() => {
-            getProfile();
-        }, [])
-    );*/
-
     return (
         <View>
             <View style={styles.iconContainer}>
@@ -65,11 +55,14 @@ const Account: React.FC<AccountScreenProps> = ({ navigation, route }) => {
             <View style={styles.spaced}>
                 <Text style={styles.title}>Mail:</Text>
                 <Text style={styles.text2}>{session?.user.email}</Text>
+                <View style={{ marginTop: 5 }} />
                 <Text style={styles.title}>DNI:</Text>
                 <Text style={styles.text2}>{dni}</Text>
+                <View style={{ marginTop: 15 }} />
                 <Button title={<Text style={styles.buttonText}>Mis vacunas</Text>}
                         buttonStyle={styles.misCosas}
                 />
+                <View style={{ marginTop: 10 }} />
                 <Button title={<Text style={styles.buttonText}>Usuarios dependientes</Text>}
                         buttonStyle={styles.misCosas}
                         icon={<Icon name="person" type="ionicon" size={25} />}
@@ -83,12 +76,19 @@ const Account: React.FC<AccountScreenProps> = ({ navigation, route }) => {
                     <Modal
                         transparent={true}
                         visible={showModal}
-                        >
+                    >
                         <View style={styles.modalContainer}>
-                            <View style={styles.modalInfoContainer}>
-                                <Button title="Cancelar" onPress={()=>setShowModal(false)} />
+                            <View style={[styles.modalInfoContainer, {marginTop: 555}]}>
+                                <Text style={styles.modalText}>¿ Seguro queres cerrar sesion ?</Text>
+                            </View>
+                            <View style={[styles.modalInfoContainer, {marginTop: 15}]}>
+                                <Button title="Cancelar"
+                                        onPress={()=>setShowModal(false)}
+                                        buttonStyle={{backgroundColor: '#073A29'}}/>
                                 <View style={{ width: 30 }} />
-                                <Button title="Cerrar" onPress={() => supabase.auth.signOut()}/>
+                                <Button title="Cerrar"
+                                        onPress={() => supabase.auth.signOut()}
+                                        buttonStyle={{backgroundColor: '#073A29'}}/>
                             </View>
                         </View>
                     </Modal>
@@ -124,6 +124,8 @@ const styles = StyleSheet.create({
     col: {
         flex: 1,
         flexDirection: 'column',
+        alignSelf: 'center',
+        marginLeft: 10,
     },
     grid: {
         flexDirection: 'row',
@@ -164,9 +166,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     modalInfoContainer: {
-        marginTop: 470,
-        flexDirection: 'row', // Arrange buttons horizontally
-        justifyContent: 'center', // Center buttons horizontally
-        alignItems: 'center', // Center buttons vertically
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
     },
+    modalText: {
+        fontSize: 20,
+        color: 'white',
+    }
 })
