@@ -74,7 +74,9 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}) => {
             // @ts-ignore
             console.error('An error occurred:', error.message);
         }finally{
-            Alert.alert("El Médico ya está agregado")
+            Alert.alert('El doctor fue agregado', '',
+                [{text: 'OK', onPress: () => navigation.navigate({name: 'Home', params: {session: session}})},]
+            );
         }
     }
 
