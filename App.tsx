@@ -1,7 +1,6 @@
 import 'react-native-url-polyfill/auto'
 import { useState, useEffect } from 'react'
 import { supabase } from './lib/supabase'
-import { View, Text } from 'react-native'
 import { Session } from '@supabase/supabase-js'
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
@@ -10,8 +9,6 @@ import LoginScreen from "./screens/LogIn";
 import Doctors from "./screens/Doctors";
 import AddDoctor from "./screens/AddDoctor";
 import AddDependentUser from './screens/AddDependentUser'
-import {Props} from "@react-navigation/stack/lib/typescript/src/views/Header/HeaderContainer";
-import {StackNavigationProp} from "@react-navigation/stack";
 import Account from "./screens/Account";
 import {createNativeStackNavigator} from "@react-navigation/native-stack";
 import Register from "./screens/Register";
@@ -35,6 +32,7 @@ export type RootStackParamList = {
   DependentUsers: {session: Session | null};
   AddDependentUser: {session: Session | null};
   Medication: {session: Session | null};
+  AddMedication: {session : Session | null};
 };
 
 

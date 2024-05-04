@@ -1,13 +1,11 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {
     View,
-    Text,
     Alert,
     StyleSheet,
     TouchableWithoutFeedback,
     Keyboard,
     KeyboardAvoidingView,
-    TextInput,
     ScrollView
 } from 'react-native';
 import {supabase} from "../lib/supabase";
@@ -15,8 +13,7 @@ import {Input} from "react-native-elements";
 import StandardGreenButton from "../components/StandardGreenButton";
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
-import {Picker} from '@react-native-picker/picker'
-import RNPickerSelect from 'react-native-picker-select';
+
 
 type AddMedicationProps = NativeStackScreenProps<RootStackParamList, 'AddMedication'>
 
@@ -46,7 +43,9 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
             // @ts-ignore
             console.error('An error occurred:', error.message);
         }finally{
-            Alert.alert("El medicamento ya está agregado")
+            Alert.alert('El medicamento fue agregado', '',
+                [{text: 'Ok', onPress: () => navigation.navigate({name: 'Home', params: {session: session}})},]
+            );
         }
 
     }
@@ -119,7 +118,6 @@ const styles = StyleSheet.create({
 
 });
 
-// Define pickerSelectStyles at the bottom
 const pickerSelectStyles = StyleSheet.create({
     inputIOS: {
         fontSize: 16,
@@ -139,6 +137,6 @@ const pickerSelectStyles = StyleSheet.create({
         borderColor: 'purple',
         borderRadius: 8,
         color: 'black',
-        paddingRight: 30, // to ensure the text is never behind the icon
+        paddingRight: 30,
     },
 });

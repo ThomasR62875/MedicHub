@@ -9,7 +9,7 @@ import {
     ScrollView
 } from 'react-native';
 import {supabase} from "../lib/supabase";
-import {Button, Input} from "react-native-elements";
+import {Input} from "react-native-elements";
 import StandardGreenButton from "../components/StandardGreenButton";
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
@@ -75,7 +75,7 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}) => {
             console.error('An error occurred:', error.message);
         }finally{
             Alert.alert('El doctor fue agregado', '',
-                [{text: 'OK', onPress: () => navigation.navigate({name: 'Home', params: {session: session}})},]
+                [{text: 'Ok', onPress: () => navigation.navigate({name: 'Home', params: {session: session}})},]
             );
         }
     }

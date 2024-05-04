@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabase'
-import {StyleSheet, View, Alert, Text} from 'react-native'
-import {Button, Icon, Input} from 'react-native-elements'
-import { Session } from '@supabase/supabase-js'
+import {View, Alert} from 'react-native'
+import {Icon, Input} from 'react-native-elements'
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
-import {setDisabled} from "@expo/metro-runtime/build/error-overlay/Data/LogBoxData";
 import StandardGreenButton from "../components/StandardGreenButton";
 
 
@@ -77,6 +75,9 @@ const EditAccount:React.FC<EditAccountProps> = ({navigation, route }) =>{
             }
         } finally {
             setLoading(false)
+            Alert.alert('Los datos fueron actualizados', '',
+                [{text: 'Ok', onPress: () => navigation.navigate({name: 'Home', params: {session: session}})},]
+            );
         }
     }
 
@@ -87,9 +88,7 @@ const EditAccount:React.FC<EditAccountProps> = ({navigation, route }) =>{
             {/* aca iria una carga de archivo/imagen q tdv no sabemos hacer todo*/}
                 <Input label="Nombre" value={first_name} onChangeText={(text) => setFirstName(text)}/>
                 <Input label="Apellido" value={last_name} onChangeText={(text) => setLastName(text)}/>
-
             {/*AGREGAR TAMBIEN LOS CAMPOS QUE SE CONSIDEREN NECESARIOS (EN LA FUNCION DE MOMENTO ESTA AVATAR URL Y DNI TMABN)*/}
-
                 <StandardGreenButton
                     title="Guardar Cambios"
                     onPress={() => updateProfile({first_name, last_name, dni, avatar_url})}
@@ -100,9 +99,3 @@ const EditAccount:React.FC<EditAccountProps> = ({navigation, route }) =>{
 }
 
 export default EditAccount
-
-const styles = StyleSheet.create({
-    container: {
-        marginTop:10
-    },
-})
