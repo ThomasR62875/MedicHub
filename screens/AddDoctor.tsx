@@ -1,21 +1,18 @@
 import React, {useEffect, useState} from 'react';
 import {
     View,
-    Text,
     Alert,
     StyleSheet,
     TouchableWithoutFeedback,
     Keyboard,
     KeyboardAvoidingView,
-    TextInput,
     ScrollView
 } from 'react-native';
 import {supabase} from "../lib/supabase";
-import {Input} from "react-native-elements";
+import {Button, Input} from "react-native-elements";
 import StandardGreenButton from "../components/StandardGreenButton";
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
-import {Picker} from '@react-native-picker/picker'
 import RNPickerSelect from 'react-native-picker-select';
 
 type AddDoctorProps = NativeStackScreenProps<RootStackParamList, 'AddDoctor'>
@@ -79,7 +76,6 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}) => {
         }finally{
             Alert.alert("El Médico ya está agregado")
         }
-
     }
 
     return (
@@ -128,7 +124,7 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}) => {
                         <Input
                             leftIcon={{ type: 'font-awesome', name: 'map-marker' }}
                             onChangeText={(text) => setAddresses([text])}
-                            value={addresses[0] || ''} // Access the first element of addresses
+                            value={addresses[0] || ''}
                             placeholder="Dirección"
                             autoCapitalize={'none'}
                         />
@@ -139,7 +135,6 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}) => {
                             onPress={() => addDoctor({name, specialty, phone, email, addresses})}
                             disabled={loading}
                         />
-
                     </View>
                 </View>
             </ScrollView>
@@ -179,7 +174,6 @@ const styles = StyleSheet.create({
 
 });
 
-// Define pickerSelectStyles at the bottom
 const pickerSelectStyles = StyleSheet.create({
     inputIOS: {
         fontSize: 16,
@@ -199,7 +193,7 @@ const pickerSelectStyles = StyleSheet.create({
         borderColor: 'purple',
         borderRadius: 8,
         color: 'black',
-        paddingRight: 30, // to ensure the text is never behind the icon
+        paddingRight: 30,
     },
 });
 

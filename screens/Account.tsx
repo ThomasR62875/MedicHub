@@ -48,11 +48,11 @@ const Account: React.FC<AccountScreenProps> = ({ navigation, route }) => {
                     <Icon name='person-circle-outline' type='ionicon' size={150} />
                 </View>
                 <View style={styles.col}>
-                    <Text style={styles.text1}>{first_name}</Text>
-                    <Text style={styles.text1}>{last_name}</Text>
+                    <Text style={{fontSize: 25}}>{first_name}</Text>
+                    <Text style={{fontSize: 25}}>{last_name}</Text>
                 </View>
             </View>
-            <View style={styles.spaced}>
+            <View style={{marginTop: 5}}>
                 <Text style={styles.title}>Mail:</Text>
                 <Text style={styles.text2}>{session?.user.email}</Text>
                 <View style={{ marginTop: 5 }} />
@@ -118,9 +118,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#073A29',
         borderRadius: 10,
     },
-    spaced: {
-        marginTop: 5,
-    },
     col: {
         flex: 1,
         flexDirection: 'column',
@@ -139,9 +136,6 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         marginBottom: 5,
         alignSelf: 'center',
-    },
-    text1: {
-        fontSize: 25,
     },
     text2: {
         fontSize: 25,
