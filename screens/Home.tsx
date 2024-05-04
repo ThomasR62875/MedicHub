@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, StyleSheet, Alert, Image, Pressable} from 'react-native';
+import {StyleSheet, View, Text, Alert, Pressable} from 'react-native';
 import {Icon} from "react-native-elements";
 import {Card} from '../components/Card';
 import {supabase} from "../lib/supabase";
@@ -20,7 +20,7 @@ const Home: React.FC<HomeProps> = ({navigation, route}) => {
     const imgMed = require('../assets/meds.png');
     const width = '90%';
     let turno1, turno2 : Appointment | null = null;
-    let date1, date2 : Date | null = null;;
+    let date1, date2 : Date | null = null;
 
     //se tiene q orderna por fecha appointments todo
 
@@ -40,7 +40,7 @@ const Home: React.FC<HomeProps> = ({navigation, route}) => {
     async function getProfile() {
         try {
             if (!session?.user) throw new Error('No user on the session!')
-            const {data, error} = await supabase.rpc('get_independent_user', {auth_id_input: session?.user.id});
+            const {data} = await supabase.rpc('get_independent_user', {auth_id_input: session?.user.id});
 
             if (data) {
                 setFirstName(data.first_name)
@@ -75,7 +75,7 @@ const Home: React.FC<HomeProps> = ({navigation, route}) => {
                 for (const appoint of data) {
                     try {
                         const { data: user_data, error: user_error } = await supabase.rpc('get_user', {user_id: appoint.user})
-                        const { data: doctor_data, error: doctor_error } = await supabase.rpc('get_doctor', {doctor_id: appoint.doctor})
+                        const { data: doctor_data} = await supabase.rpc('get_doctor', {doctor_id: appoint.doctor})
                         if (user_error) {
                             throw user_error;
                         }
@@ -119,42 +119,41 @@ const Home: React.FC<HomeProps> = ({navigation, route}) => {
                     </View>
                 </View>
                 <Pressable style={{ width: width}} >
-                    {/*
-                        turno1 && date1 &&(
+                    {turno1 && date1 ? (
                             <View>
+                                <View style={styles.turnoContainer}>
+                                    <View style={styles.infoRow}>
+                                        <Text>{turno1.description}</Text>
+                                    </View>
+                                    <View style={styles.infoRow}>
+                                        <Text style={styles.label}>Usuario:</Text>
+                                        <Text>{turno1.user_name}</Text>
+                                        <View style={{ width: 30 }} />
+                                        <Text style={styles.label}>Fecha:</Text>
+                                        <Text>{`${date1.getDate()}/${date1.getMonth()}/${date1.getFullYear()}`}</Text>
+                                    </View>
+                                </View>
+                                {turno2 && date2 ? (
+                                    <View style={styles.turnoContainer2}>
+                                        <View style={styles.infoRow}>
+                                            <Text>{turno2.description}</Text>
+                                        </View>
+                                        <View style={styles.infoRow}>
+                                            <Text style={styles.label}>Usuario:</Text>
+                                            <Text>{turno2.user_name}</Text>
+                                            <View style={{ width: 30 }} />
+                                            <Text style={styles.label}>Fecha:</Text>
+                                            <Text>{`${date2.getDate()}/${date2.getMonth()}/${date2.getFullYear()}`}</Text>
+                                        </View>
+                                    </View>
+                                ) : (<View/>) }
+                            </View>
+                        ) : (
                             <View style={styles.turnoContainer}>
-                                <View style={styles.infoRow}>
-                                    <Text style={styles.label}>Usuario:</Text>
-                                    <Text>{turno1.user_name}</Text>
-                                    <View style={{ width: 30 }} />
-                                    <Text style={styles.label}>Fecha:</Text>
-                                    <Text>{`${date1.getDate()}/${date1.getMonth()}/${date1.getFullYear()}`}</Text>
-                                </View>
-                                <View style={styles.infoRow}>
-                                    <Text style={styles.label}>Descripcion:</Text>
-                                    <Text>{turno1.description}</Text>
-                                </View>
-                            </View>
-                            <View style={styles.turnoContainer2}>
-                                <View style={styles.infoRow}>
-                                    <Text style={styles.label}>Usuario:</Text>
-                                    <Text>{turno2?.user_name}</Text>
-                                    <View style={{ width: 30 }} />
-                                    <Text style={styles.label}>Fecha:</Text>
-                                    <Text>{`${date2?.getDate()}/${date2?.getMonth()}/${date2?.getFullYear()}`}</Text>
-                                </View>
-                                <View style={styles.infoRow}>
-                                    <Text style={styles.label}>Descripcion:</Text>
-                                    <Text>{turno2?.description}</Text>
-                                </View>
-                            </View>
-                            </View>
-                        ) } : {(
-                            <View style={styles.titleContainer}>
                                 <Text style={styles.titleText}>No hay turnos</Text>
                                 <Text style={[styles.titleText, {fontSize: 16, fontStyle: 'italic'}]}>Usa el simbolo + de la esquina superior derecha para agregar tu primer doctor</Text>
                             </View>
-                        ) */}
+                        )}
                     <View style={styles.card}>
                         <Text style={styles.text}>Proximos turnos</Text>
                     </View>
@@ -217,11 +216,12 @@ const styles = StyleSheet.create({
         borderWidth: 1,
     },
     turnoContainer2: {
-        backgroundColor: '#C2E5D3',
+        backgroundColor: '#D6EFD4',
         borderColor: 'black',
         borderWidth: 1,
         borderTopWidth: 0,
     },
+    //al aplicar el component turnContainer eliminar infoRow y label, todo
     infoRow: {
         flexDirection: 'row',
         marginBottom: 5,
