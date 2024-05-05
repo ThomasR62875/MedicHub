@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {SafeAreaView,TouchableOpacity, Text, Alert, StyleSheet, } from 'react-native';
+import {SafeAreaView, Alert, StyleSheet, } from 'react-native';
 import {supabase} from "../lib/supabase";
 import {Input} from "react-native-elements";
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
@@ -58,7 +58,6 @@ const AddDependentUser: React.FC<AddDependentUser> = ({ navigation, route }) => 
             placeholder="DNI"
             value={dni}
             onChangeText={(text) => setDni(text)}
-            // type="number"
             />
             <StandardGreenButton title="Confirmar"
                                  disabled={loading}

@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabase'
-import { StyleSheet, View, Alert, ScrollView,Text} from 'react-native'
-import {NavigationContainer} from "@react-navigation/native";
-import {createNativeStackNavigator, NativeStackScreenProps} from '@react-navigation/native-stack';
+import { StyleSheet, View, ScrollView,Text} from 'react-native'
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {RootStackParamList} from "../App";
 import AddButton from "../components/AddButton";
 
@@ -62,7 +61,6 @@ const Medication: React.FC<MedicationProps> = ({ navigation, route }) => {
             <View style={styles.addContainer}>
                 <AddButton onPress={() => navigation.navigate({name: 'AddMedication', params: {session: session}})}/>
             </View>
-
             <ScrollView>
                 <View>
                     {
@@ -129,11 +127,11 @@ const styles = StyleSheet.create({
         fontSize: 24,
         fontWeight: 'bold',
         color: '#333',
+        textAlign: 'center'
     },
     addContainer: {
         left: 290,
         bottom: 63,
         alignSelf: 'flex-start',
     }
-
 });

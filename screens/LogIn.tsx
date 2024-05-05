@@ -3,10 +3,9 @@ import {Alert, StyleSheet, View, Dimensions, AppState, Text, TouchableWithoutFee
 import { supabase } from '../lib/supabase'
 import { Button, Input } from 'react-native-elements'
 import { useNavigation, ParamListBase } from '@react-navigation/native'; // Importa useNavigation desde @react-navigation/native
-import {NativeStackNavigationProp, NativeStackScreenProps} from '@react-navigation/native-stack';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import StandardGreenButton from "../components/StandardGreenButton";
 import {RootStackParamList} from "../App";
-//import {BrowserRouter} from "react-router-dom";
 
 const windowHeight = Dimensions.get('window').height;
 
@@ -26,8 +25,6 @@ const LogIn: React.FC<LogInProps> = ({navigation, route})=> {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [loading, setLoading] = useState(false)
-
-    // const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>(); // Utiliza useNavigation para obtener el objeto de navegación
 
     async function signInWithEmail() {
         setLoading(true)

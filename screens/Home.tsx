@@ -6,7 +6,7 @@ import {supabase} from "../lib/supabase";
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
 import {Appointment} from "./Appointments";
-
+import turnoContainer from "../components/turnContainer";
 
 type HomeProps = NativeStackScreenProps<RootStackParamList, 'Home'>;
 
@@ -24,7 +24,7 @@ const Home: React.FC<HomeProps> = ({navigation, route}) => {
 
     //se tiene q orderna por fecha appointments todo
 
-    if (appointments) {
+    if (appointments && appointments.length==1) {
         turno1 = appointments[0];
         date1 = new Date(turno1.date);
     }
@@ -120,7 +120,13 @@ const Home: React.FC<HomeProps> = ({navigation, route}) => {
                 </View>
                 <Pressable style={{ width: width}} >
                     {turno1 && date1 ? (
+
                             <View>
+                                {/* <turnoContainer>
+
+                                </turnoContainer>
+                                No tiene sentido q no permita el importa todo
+                                */}
                                 <View style={styles.turnoContainer}>
                                     <View style={styles.infoRow}>
                                         <Text>{turno1.description}</Text>
@@ -149,9 +155,9 @@ const Home: React.FC<HomeProps> = ({navigation, route}) => {
                                 ) : (<View/>) }
                             </View>
                         ) : (
-                            <View style={styles.turnoContainer}>
+                            <View style={[styles.turnoContainer, {padding: 10}]}>
                                 <Text style={styles.titleText}>No hay turnos</Text>
-                                <Text style={[styles.titleText, {fontSize: 16, fontStyle: 'italic'}]}>Usa el simbolo + de la esquina superior derecha para agregar tu primer doctor</Text>
+                                <Text style={[styles.titleText, {fontSize: 18, fontStyle: 'italic'}]}>Anda al calendario para crear tu primer turno</Text>
                             </View>
                         )}
                     <View style={styles.card}>
@@ -239,8 +245,7 @@ const styles = StyleSheet.create({
         fontSize: 24,
         fontWeight: 'bold',
         color: '#333',
-        alignSelf: 'center',
-        justifyContent: 'center',
+        textAlign: 'center'
     }
 });
 

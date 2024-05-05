@@ -8,7 +8,6 @@ import {
     Keyboard,
     Dimensions, KeyboardAvoidingView, Image
 } from 'react-native';
-import { Button} from 'react-native-elements'
 import {supabase} from "../lib/supabase";
 import {Input, Icon} from "react-native-elements";
 import StandardGreenButton from "../components/StandardGreenButton";
@@ -50,6 +49,7 @@ const Register: React.FC = ({ navigation }: any) => {
         else Alert.alert('Please check your inbox for email verification!')
         setLoading(false)
     }
+
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
                 <KeyboardAvoidingView behavior="padding" style={styles.container}>
@@ -118,9 +118,7 @@ const Register: React.FC = ({ navigation }: any) => {
                 </ScrollView>
                 </View>
                 <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }} >
-                    <View style={[styles.buttonSignInContainer, { height: windowHeight * 0.08, marginTop: 40}]}
-                    // Nose porq, pero al modificar el 0.08 no cambia nada, y si lo borras se borra el button xd TODO
-                    >
+                    <View style={[styles.buttonSignInContainer, { height: windowHeight * 0.08, marginTop: 40}]}>
                         <StandardGreenButton title="Ingresar"
                         disabled={loading}
                         onPress={() => signUpWithEmail()}
@@ -141,9 +139,6 @@ const styles = StyleSheet.create({
         paddingTop: 2,
         paddingBottom: 2,
         alignSelf: 'stretch',
-    },
-    nameContainer: {
-        flexDirection: 'row', // Display first name and last name in a row
     },
     buttonSignInContainer: {
         width: '50%',
