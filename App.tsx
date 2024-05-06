@@ -142,7 +142,7 @@ const App: React.FC = () => {
                 {/*<Stack.Screen name="AddMedication"*/}
                 {/*              component={AddMedication}*/}
                 {/*              initialParams={{session: session}}*/}
-                {/*/>*/}s
+                {/*/>*/}
               </>
           )}
         </Stack.Navigator>
