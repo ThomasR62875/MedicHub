@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "TP Inge Soft",
-    "slug": "TP Inge Soft",
+    "slug": "medichub",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -15,13 +15,15 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "y"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.valentinamarti.medichub"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -29,6 +31,21 @@
     "plugins": [
       "expo-font",
       "expo-router"
-    ]
+    ],
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "9b785321-be8d-4b22-98cb-d73e24a5701d"
+      }
+    },
+    "owner": "valentinamarti",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/9b785321-be8d-4b22-98cb-d73e24a5701d"
+    }
   }
 }
