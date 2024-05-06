@@ -1,96 +1,38 @@
-import Home from './Home';
-import Doctors from "./Doctors";
-import Appointments from "../screens/Appointments";
-import Account from "../screens/Account";
-import {NavigationContainer} from "@react-navigation/native";
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {Text, View} from "react-native";
-import {Icon} from "react-native-elements";
-import {Session} from "@supabase/supabase-js";
-import React, {useEffect, useState} from "react";
-import {supabase} from "../lib/supabase";
+import React from 'react';
+import { NativeBaseProvider, Text, Icon, HStack, Center, Pressable } from 'native-base';
+import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
+import {View} from "react-native";
 
-const Tab = createBottomTabNavigator()
-
-export default function BottomBar() {
-    const [session, setSession] = useState<Session | null>(null)
-    useEffect(() => {
-        supabase.auth.getSession().then(({ data: { session } }) => {
-            setSession(session)
-        })
-
-        supabase.auth.onAuthStateChange((_event, session) => {
-            setSession(session)
-        })
-
-        supabase.auth.getSession();
-
-        const unsubscribe = supabase.auth.onAuthStateChange((_event, session) => {
-            setSession(session);
-        });
-
-        return () => {
-            unsubscribe;
-        };
-    }, []);
-
-    return (
-        <NavigationContainer>
-            <Tab.Navigator screenOptions={{
-                tabBarStyle: {
-                    position: 'absolute',
-                    bottom: 0,
-                    right: 0,
-                    left: 0,
-                    elevation: 0,
-                    height: 60,
-                },
-            }}>
-                <Tab.Screen name="Home" component={Home}
-                options={{
-                    tabBarIcon: ({focused}) =>{
-                        return (
-                            <View style={{ alignItems: "center", justifyContent: "center"}}>
-                                <Icon name="home-outline" type="ionicon" />
-                            </View>
-                            )
-                }}}/>
-                {!session ? (
-                    <>
-                        <Text>Hola probando, no iniciaste sesion</Text>
-                    </>
-                ) : (
-                    <>
-                        <Tab.Screen name="Docs" component={() => <Doctors session={session} />}
-                                    options={{
-                                        tabBarIcon: ({focused}) =>{
-                                            return (
-                                                <View style={{ alignItems: "center", justifyContent: "center"}}>
-                                                    <Icon name="home-outline" type="ionicon" />
-                                                </View>
-                                            )
-                                        }}}/>
-                        <Tab.Screen name="Turnos" component={ () => <Appointments session={session}/>}
-                                    options={{
-                                        tabBarIcon: ({focused}) =>{
-                                            return (
-                                                <View style={{ alignItems: "center", justifyContent: "center"}}>
-                                                    <Icon name="home-outline" type="ionicon" />
-                                                </View>
-                                            )
-                                        }}}/>
-                        <Tab.Screen name="Ajustes" component={() => <Account session={session}/>}
-                                    options={{
-                                        tabBarIcon: ({focused}) =>{
-                                            return (
-                                                <View style={{ alignItems: "center", justifyContent: "center"}}>
-                                                    <Icon name="home-outline" type="ionicon" />
-                                                </View>
-                                            )
-                                        }}}/>
-                    </>
-                )}
-            </Tab.Navigator>
-        </NavigationContainer>
-    )
+function BottomBar() {
+    const [selected, setSelected] = React.useState(0);
+    return <NativeBaseProvider>
+    <View style={{backgroundColor: '#3EB77F'}}>
+        <HStack alignItems="center" safeAreaBottom shadow={6}>
+                <Pressable opacity={selected === 0 ? 1 : 0.5} py="3" flex={1}
+                           onPress={() => { setSelected(0)}}>
+                    <Center>
+                        <Icon as={<MaterialCommunityIcons name={selected === 0 ? 'home' : 'home-outline'} />} color="white" size={10} />
+                    </Center>
+                </Pressable>
+                <Pressable opacity={selected === 1 ? 1 : 0.5} py="2" flex={1}
+                           onPress={() => setSelected(1)}>
+                    <Center>
+                        <Icon as={<MaterialIcons name="date-range" />} color="white" size={10} />
+                    </Center>
+                </Pressable>
+                <Pressable opacity={selected === 2 ? 1 : 0.6} py="2" flex={1} onPress={() => setSelected(2)}>
+                    <Center>
+                        <Icon as={<MaterialCommunityIcons name="doctor" />} color="white" size={10} />
+                    </Center>
+                </Pressable>
+                <Pressable opacity={selected === 3 ? 1 : 0.5} py="2" flex={1} onPress={() => setSelected(3)}>
+                    <Center>
+                        <Icon mb="1" as={<MaterialCommunityIcons name={selected === 3 ? 'account' : 'account-outline'} />} color="white" size={10} />
+                    </Center>
+                </Pressable>
+            </HStack>
+        </View>
+    </NativeBaseProvider>;
 }
+
+export default BottomBar;

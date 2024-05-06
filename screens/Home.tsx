@@ -7,6 +7,7 @@ import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
 import {Appointment} from "./Appointments";
 import turnoContainer from "../components/turnContainer";
+import BottomBar from "./BottomBar";
 
 type HomeProps = NativeStackScreenProps<RootStackParamList, 'Home'>;
 
@@ -101,7 +102,7 @@ const Home: React.FC<HomeProps> = ({navigation, route}) => {
     }
 
     return (
-        <View>
+        <View style={{height: "99%"}}>
             <View style={styles.profileIconContainer} >
                 <Icon name='person-circle-outline' type='ionicon' onPress={() => navigation.navigate({name: 'Account', params: {session: session}})} size={35} />
             </View>
@@ -165,6 +166,9 @@ const Home: React.FC<HomeProps> = ({navigation, route}) => {
                     </View>
                 </Pressable>
             </View>
+            <View style={styles.bottomBar}>
+                <BottomBar/>
+            </View>
         </View>
     );
 }
@@ -179,6 +183,12 @@ const styles = StyleSheet.create({
         backgroundColor: '#B5DCCA',
         justifyContent: 'center',
         alignItems: 'center',
+    },
+    bottomBar:{
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        right: 0,
     },
     container: {
         marginLeft: 15,
