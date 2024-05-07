@@ -14,8 +14,7 @@ type CalenderScreenProps = NativeStackScreenProps<RootStackParamList, 'Calender'
 const Calender: React.FC<CalenderScreenProps> = ({ navigation, route }) => {
     const {session} = route.params;
     const [appointments,setAppointments]= useState<Appointment[] | undefined>(undefined)
-    const targetDate = new Date('2024-05-10'); // = new Date(); Obtener la fecha actual del dispositivo
-
+    const targetDate = new Date('2024-05-10'); // esta seria el default = new Date(); Obtener la fecha actual del dispositivo todo
     let filteredData : Appointment[] | undefined = undefined;
     let markedDatesArray : string[] = [];
     if(appointments){
@@ -23,8 +22,7 @@ const Calender: React.FC<CalenderScreenProps> = ({ navigation, route }) => {
             return item.date === targetDate;
         });
         markedDatesArray = appointments.map(item => item.date.toString());
-        //markedDates tiene q tener el mes q este mostrando el calender, bha nose q pasaria si tiene días q ni esta mostrando, pero calculo q estria mal
-        //todo
+        //markedDates tiene q tener el mes q este mostrando el calender, bha nose q pasaria si tiene días q ni esta mostrando, pero calculo q estria mal todo
     }
 
 
@@ -58,8 +56,8 @@ const Calender: React.FC<CalenderScreenProps> = ({ navigation, route }) => {
             markedDates={markedDates}
             />
             {/*TODO
-             se tiene q trackear q fecha esta siendo seleccionada, (la q este seleccionada debe verse con un circulito marcada)
-             al saber q fecha esta siendo seleccionada se recorre appointments y solo se muestras los q coincidan con la fecha seleccionada
+             se tiene q trackear q fecha esta siendo seleccionada osea diferente a q fecha es hoy, (la q este seleccionada debe verse con un circulito marcada)
+             al saber q fecha esta siendo seleccionada se recorre appointments y solo se muestra los q coincidan con la fecha seleccionada
              */}
             <ScrollView>
                 {filteredData? (
