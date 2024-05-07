@@ -8,6 +8,8 @@ import {Appointment} from "./Appointments";
 import BottomBar from "../components/BottomBar";
 import {Card} from '../components/Card';
 import TurnoContainer from "../components/TurnContainer";
+import turnoContainer from "../components/TurnContainer";
+import turnContainer from "../components/TurnContainer";
 
 type HomeProps = NativeStackScreenProps<RootStackParamList, 'Home'>;
 
@@ -103,7 +105,7 @@ const Home: React.FC<HomeProps> = ({navigation, route}) => {
     }
 
     return (
-        <View style={{height: "99%"}}>
+        <View>
             <View style={styles.profileIconContainer} >
                 <Icon name='person-circle-outline' type='ionicon' onPress={() => navigation.navigate({name: 'Account', params: {session: session}})} size={35} />
             </View>
@@ -114,36 +116,17 @@ const Home: React.FC<HomeProps> = ({navigation, route}) => {
                                onPress={() => navigation.navigate({name: 'Appointments', params: {session: session}})}>
                         {turno1 && date1 ? (
                                 <View>
-                                    {/* <turnoContainer>
-
-                                    </turnoContainer>
-                                    No tiene sentido q no permita el importa todo
-                                    */}
-                                    <View style={styles.turnoContainer}>
-                                        <View style={styles.infoRow}>
-                                            <Text>{turno1.description}</Text>
-                                        </View>
-                                        <View style={styles.infoRow}>
-                                            <Text style={styles.label}>Usuario:</Text>
-                                            <Text>{turno1.user_name}</Text>
-                                            <View style={{ width: 30 }} />
-                                            <Text style={styles.label}>Fecha:</Text>
-                                            <Text>{`${date1.getDate()}/${date1.getMonth()}/${date1.getFullYear()}`}</Text>
-                                        </View>
-                                    </View>
+                                    <TurnoContainer
+                                        turno={turno1}
+                                        date={date1}
+                                        styleExterior={styles.turnoContainer}
+                                    />
                                     {turno2 && date2 ? (
-                                        <View style={styles.turnoContainer2}>
-                                            <View style={styles.infoRow}>
-                                                <Text>{turno2.description}</Text>
-                                            </View>
-                                            <View style={styles.infoRow}>
-                                                <Text style={styles.label}>Usuario:</Text>
-                                                <Text>{turno2.user_name}</Text>
-                                                <View style={{ width: 30 }} />
-                                                <Text style={styles.label}>Fecha:</Text>
-                                                <Text>{`${date2.getDate()}/${date2.getMonth()}/${date2.getFullYear()}`}</Text>
-                                            </View>
-                                        </View>
+                                        <TurnoContainer
+                                            styleExterior={styles.turnoContainer2}
+                                            date={date2}
+                                            turno={turno2}
+                                        />
                                     ) : (<View/>) }
                                 </View>
                             ) : (

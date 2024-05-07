@@ -4,34 +4,32 @@ import React, {useEffect, useState} from "react";
 import {Alert, ScrollView, StyleSheet, Text, View} from "react-native";
 import {supabase} from "../lib/supabase";
 import BottomBar from "../components/BottomBar";
-import AddButton from "../components/AddButton";
-import {Appointment} from "./Appointments";
+import Appointments, {Appointment} from "./Appointments";
 import {Calendar} from "react-native-calendars";
+import AddButton from "../components/AddButton";
 import TurnoContainer from "../components/TurnContainer";
 
 type CalenderScreenProps = NativeStackScreenProps<RootStackParamList, 'Calender'>;
 
 const Calender: React.FC<CalenderScreenProps> = ({ navigation, route }) => {
     const {session} = route.params;
-    //esto es copy paste de Home, deberia seleccionar los turnos q coincidan con la fecha seleccionada en el calendariio todo
-    //tal fecha tiene q tener el automatico en "HOY"
     const [appointments,setAppointments]= useState<Appointment[] | undefined>(undefined)
-    let turno1: { date: any; description: any; user_name: any; doctor?: string; user_id?: string; }, turno2 : Appointment | null = null;
-    let date1: Date, date2 : Date | null = null;
+    const targetDate = new Date('2024-05-10'); // = new Date(); Obtener la fecha actual del dispositivo
 
-    //se tiene q orderna por fecha appointments todo
-
-    if (appointments && appointments.length==1) {
-        turno1 = appointments[0];
-        date1 = new Date(turno1.date);
+    let filteredData : Appointment[] | undefined = undefined;
+    let markedDatesArray : string[] = [];
+    if(appointments){
+        filteredData = appointments.filter(item => {
+            return item.date === targetDate;
+        });
+        markedDatesArray = appointments.map(item => item.date.toString());
+        //markedDates tiene q tener el mes q este mostrando el calender, bha nose q pasaria si tiene días q ni esta mostrando, pero calculo q estria mal
+        //todo
     }
-    if (appointments && appointments?.length > 1) {
-        turno2 = appointments[1];
-        date2 = new Date(turno2.date);
-    }
 
-    const markedDatesArray = ['2024-05-10', '2024-05-15'];
-    const markedDates = markedDatesArray.reduce<{ [key: string]: { marked: boolean, dotColor: string } }>((acc, date) => {
+
+    const markedDates = markedDatesArray.reduce<{ [key: string]:
+            { marked: boolean, dotColor: string } }>((acc, date) => {
         acc[date] = { marked: true, dotColor: '#038839' };
         return acc;
     }, {});
@@ -54,53 +52,59 @@ const Calender: React.FC<CalenderScreenProps> = ({ navigation, route }) => {
     }
 
     return (
-        <View>
+        <View style={{height: '100%'}}>
             <Calendar
             markingType={'custom'}
             markedDates={markedDates}
             />
+            {/*TODO
+             se tiene q trackear q fecha esta siendo seleccionada, (la q este seleccionada debe verse con un circulito marcada)
+             al saber q fecha esta siendo seleccionada se recorre appointments y solo se muestras los q coincidan con la fecha seleccionada
+             */}
             <ScrollView>
-
-                {/*
-                <TurnoContainer>
-                </TurnoContainer>
-                turno1 && date1 ? (
-                    <View>
-
-                        <View style={styles.turnoContainer}>
-                            <View style={styles.infoRow}>
-                                <Text>{turno1.description}</Text>
+                {filteredData? (
+                    filteredData.map((turno: Appointment, i: number) => {
+                        return(
+                            <View key={i}>
+                                <TurnoContainer
+                                    date={turno.date}
+                                    turno={turno}
+                                    styleExterior={styles.turnoContainer}
+                                />
                             </View>
-                            <View style={styles.infoRow}>
-                                <Text style={styles.label}>Usuario:</Text>
-                                <Text>{turno1.user_name}</Text>
-                                <View style={{ width: 30 }} />
-                                <Text style={styles.label}>Fecha:</Text>
-                                <Text>{`${date1.getDate()}/${date1.getMonth()}/${date1.getFullYear()}`}</Text>
-                            </View>
-                        </View>
-                        {turno2 && date2 ? (
-                            <View style={styles.turnoContainer2}>
-                                <View style={styles.infoRow}>
-                                    <Text>{turno2.description}</Text>
-                                </View>
-                                <View style={styles.infoRow}>
-                                    <Text style={styles.label}>Usuario:</Text>
-                                    <Text>{turno2.user_name}</Text>
-                                    <View style={{ width: 30 }} />
-                                    <Text style={styles.label}>Fecha:</Text>
-                                    <Text>{`${date2.getDate()}/${date2.getMonth()}/${date2.getFullYear()}`}</Text>
-                                </View>
-                            </View>
-                        ) : (<View/>) }
-                    </View>
-                ) : (
+                        )
+                })) :  (
                     <View style={[styles.turnoContainer, {padding: 10}]}>
-                        <Text style={styles.text}>No hay turnos</Text>
+                        <Text style={styles.text}>No hay turnos este día</Text>
                         <Text style={[styles.text, {fontStyle: 'italic'}]}> Presiona el + para crear tu primer turno</Text>
-                        <AddButton onPress={() => navigation.navigate('AddAppointment', {session})} />
                     </View>
-                )} */}
+                )
+                }
+                <View style={{alignItems: 'center', marginTop: 10}}>
+                    <AddButton onPress={() => navigation.navigate('AddAppointment', {session})} />
+                    <View style={{marginTop:60}}>
+                        {!filteredData && <Text>filteredData is undefined</Text>}
+                        {!markedDatesArray && <Text>markedDatesArray is undefined</Text>}
+
+                        {filteredData && (
+                            <>
+                                <Text>Contenido de filteredData:</Text>
+                                {filteredData.map((item, index) => (
+                                    <Text key={index}>{item.date.toString()}</Text>
+                                ))}
+                            </>
+                        )}
+
+                        {markedDatesArray && (
+                            <>
+                                <Text>Contenido de markedDatesArray:</Text>
+                                {markedDatesArray.map((date, index) => (
+                                    <Text>{index}</Text>
+                                ))}
+                            </>
+                        )}
+                    </View>
+                </View>
             </ScrollView>
             <View style={styles.bottomBar}>
                 <BottomBar navigation={navigation} route={route} />
@@ -132,12 +136,9 @@ const styles = StyleSheet.create({
         borderTopLeftRadius: 5,
         borderColor: 'black',
         borderWidth: 1,
-    },
-    turnoContainer2: {
-        backgroundColor: '#D6EFD4',
-        borderColor: 'black',
-        borderWidth: 1,
-        borderTopWidth: 0,
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: '90%',
     },
     //al aplicar el component turnContainer eliminar infoRow y label, todo
     infoRow: {
