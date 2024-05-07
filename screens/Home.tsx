@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, View, Text, Alert, Pressable} from 'react-native';
+import {StyleSheet, View, Text, Alert, Pressable, Dimensions, ScrollView} from 'react-native';
 import {Icon} from "react-native-elements";
 import {Card} from '../components/Card';
 import {supabase} from "../lib/supabase";
@@ -7,7 +7,7 @@ import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
 import {Appointment} from "./Appointments";
 import turnoContainer from "../components/turnContainer";
-import BottomBar from "./BottomBar";
+import BottomBar from "../components/BottomBar";
 
 type HomeProps = NativeStackScreenProps<RootStackParamList, 'Home'>;
 
@@ -19,7 +19,8 @@ const Home: React.FC<HomeProps> = ({navigation, route}) => {
     const imgDoc = require('../assets/doc.png');
     const imgTurno = require('../assets/calendario.png');
     const imgMed = require('../assets/meds.png');
-    const width = '90%';
+    const screenHeight = Dimensions.get('window').height;
+    const percentageMargin = screenHeight * 0.05;
     let turno1, turno2 : Appointment | null = null;
     let date1, date2 : Date | null = null;
 
@@ -107,67 +108,72 @@ const Home: React.FC<HomeProps> = ({navigation, route}) => {
                 <Icon name='person-circle-outline' type='ionicon' onPress={() => navigation.navigate({name: 'Account', params: {session: session}})} size={35} />
             </View>
             <View style={styles.container}>
-                <Text style={styles.text}>Bienvenido {first_name}</Text>
-                <View style={styles.grid}>
-                    <View style={styles.col}>
-                        <Card title="Turnos" img={imgTurno} onPress={() => navigation.navigate({name: 'Appointments', params: {session: session}})}/>
-                        <View style={{ marginBottom: 30 }} />
-                    </View>
-                    <View style={styles.col}>
-                        <Card title="Médicos" img={imgDoc}  onPress={() => navigation.navigate({name: 'Doctors', params: {session: session}})}/>
-                        <View style={{ marginBottom: 30 }} />
-                        <Card title="Medicamentos" img={imgMed}  onPress={() => navigation.navigate({name: 'Medication', params: {session: session}})}/>
-                    </View>
-                </View>
-                <Pressable style={{ width: width}} >
-                    {turno1 && date1 ? (
+                <Text style={styles.titleText}>Bienvenido {first_name}</Text>
+                <ScrollView style={{width:'90%'}}>
+                    <Pressable style={{marginTop: percentageMargin}} >
+                        {turno1 && date1 ? (
+                                <View>
+                                    {/* <turnoContainer>
 
-                            <View>
-                                {/* <turnoContainer>
-
-                                </turnoContainer>
-                                No tiene sentido q no permita el importa todo
-                                */}
-                                <View style={styles.turnoContainer}>
-                                    <View style={styles.infoRow}>
-                                        <Text>{turno1.description}</Text>
-                                    </View>
-                                    <View style={styles.infoRow}>
-                                        <Text style={styles.label}>Usuario:</Text>
-                                        <Text>{turno1.user_name}</Text>
-                                        <View style={{ width: 30 }} />
-                                        <Text style={styles.label}>Fecha:</Text>
-                                        <Text>{`${date1.getDate()}/${date1.getMonth()}/${date1.getFullYear()}`}</Text>
-                                    </View>
-                                </View>
-                                {turno2 && date2 ? (
-                                    <View style={styles.turnoContainer2}>
+                                    </turnoContainer>
+                                    No tiene sentido q no permita el importa todo
+                                    */}
+                                    <View style={styles.turnoContainer}>
                                         <View style={styles.infoRow}>
-                                            <Text>{turno2.description}</Text>
+                                            <Text>{turno1.description}</Text>
                                         </View>
                                         <View style={styles.infoRow}>
                                             <Text style={styles.label}>Usuario:</Text>
-                                            <Text>{turno2.user_name}</Text>
+                                            <Text>{turno1.user_name}</Text>
                                             <View style={{ width: 30 }} />
                                             <Text style={styles.label}>Fecha:</Text>
-                                            <Text>{`${date2.getDate()}/${date2.getMonth()}/${date2.getFullYear()}`}</Text>
+                                            <Text>{`${date1.getDate()}/${date1.getMonth()}/${date1.getFullYear()}`}</Text>
                                         </View>
                                     </View>
-                                ) : (<View/>) }
+                                    {turno2 && date2 ? (
+                                        <View style={styles.turnoContainer2}>
+                                            <View style={styles.infoRow}>
+                                                <Text>{turno2.description}</Text>
+                                            </View>
+                                            <View style={styles.infoRow}>
+                                                <Text style={styles.label}>Usuario:</Text>
+                                                <Text>{turno2.user_name}</Text>
+                                                <View style={{ width: 30 }} />
+                                                <Text style={styles.label}>Fecha:</Text>
+                                                <Text>{`${date2.getDate()}/${date2.getMonth()}/${date2.getFullYear()}`}</Text>
+                                            </View>
+                                        </View>
+                                    ) : (<View/>) }
+                                </View>
+                            ) : (
+                                <View style={[styles.turnoContainer, {padding: 10}]}>
+                                    <Text style={styles.text}>No hay turnos</Text>
+                                    <Text style={[styles.text, {fontStyle: 'italic'}]}>Anda al calendario para crear tu primer turno</Text>
+                                </View>
+                            )}
+                        <View style={styles.card}>
+                            <Text style={[styles.titleText, {justifyContent:'center'}]}>Proximos turnos</Text>
+                        </View>
+                    </Pressable>
+                    <Pressable style={{marginTop: percentageMargin}} >
+                        <View style={[styles.turnoContainer, {padding: 10}]}>
+                            <Text style={[styles.text, {fontStyle: 'italic'}]}>Esperar la aplicación de la IA porfavor :)</Text>
+                        </View>
+                        <View style={styles.card}>
+                            <Text style={[styles.titleText, {justifyContent:'center'}]}>Turnos recomendados</Text>
+                        </View>
+                    </Pressable>
+                    {/* <View style={styles.grid}>
+                            <View style={styles.col}>
+                                <Card title="Archivos" img={imgTurno} onPress={() => navigation.navigate({name: 'Appointments', params: {session: session}})}/>
+                                <View style={{ marginBottom: 30 }} />
+                                <Card title="Medicamentos" img={imgMed}  onPress={() => navigation.navigate({name: 'Medication', params: {session: session}})}/>
                             </View>
-                        ) : (
-                            <View style={[styles.turnoContainer, {padding: 10}]}>
-                                <Text style={styles.titleText}>No hay turnos</Text>
-                                <Text style={[styles.titleText, {fontSize: 18, fontStyle: 'italic'}]}>Anda al calendario para crear tu primer turno</Text>
-                            </View>
-                        )}
-                    <View style={styles.card}>
-                        <Text style={styles.text}>Proximos turnos</Text>
-                    </View>
-                </Pressable>
+                        </View> esto vuela o queda todo*/}
+                </ScrollView>
             </View>
             <View style={styles.bottomBar}>
-                <BottomBar/>
+                <BottomBar navigation={navigation} route={route} />
             </View>
         </View>
     );
@@ -191,7 +197,6 @@ const styles = StyleSheet.create({
         right: 0,
     },
     container: {
-        marginLeft: 15,
         alignItems: 'center',
         justifyContent: 'center',
     },
@@ -199,16 +204,20 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: 10,
     },
     col: {
         flex: 1,
         flexDirection: 'column',
         justifyContent: 'center',
-        marginRight: 10,
+    },
+    titleText: {
+        fontSize: 25,
+        textAlign: 'center',
+        justifyContent: 'center',
+        fontWeight: 'bold',
     },
     text: {
-        fontSize: 20,
+        fontSize: 18,
         textAlign: 'center',
     },
     card: {
@@ -247,16 +256,6 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         marginRight: 5,
     },
-    titleContainer: {
-        alignSelf: 'center',
-        marginBottom: 20,
-    },
-    titleText: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        color: '#333',
-        textAlign: 'center'
-    }
 });
 
 export default Home;

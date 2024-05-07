@@ -4,6 +4,7 @@ import { StyleSheet, View, ScrollView,Text} from 'react-native'
 import {createNativeStackNavigator, NativeStackScreenProps} from '@react-navigation/native-stack';
 import {RootStackParamList} from "../App";
 import AddButton from "../components/AddButton";
+import BottomBar from "../components/BottomBar";
 
 const Stack = createNativeStackNavigator();
 
@@ -74,8 +75,7 @@ const Doctors: React.FC<DoctorProps> = ({ navigation, route }) => {
             </View>
             <ScrollView>
                 <View>
-                    {
-                        doctors ? (
+                    {doctors ? (
                             doctors.map((doc: Doctor, i) => {
                                 return (
                                     <View key={i} style={styles.doctorContainer}>
@@ -111,6 +111,9 @@ const Doctors: React.FC<DoctorProps> = ({ navigation, route }) => {
                     }
                 </View>
             </ScrollView>
+            <View style={styles.bottomBar}>
+                <BottomBar navigation={navigation} route={route} />
+            </View>
         </View>
     )
 }
@@ -123,6 +126,23 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         padding: 20,
       },
+    bottomBar:{
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        right: 0,
+    },
+    titleContainer: {
+        marginTop: 10,
+        alignSelf: 'center',
+        marginBottom: 20,
+    },
+    titleText: {
+        fontSize: 25,
+        textAlign: 'center',
+        justifyContent: 'center',
+        fontWeight: 'bold',
+    },
     doctorContainer: {
         marginTop: 10,
         backgroundColor: '#C2E5D3',
@@ -140,20 +160,9 @@ const styles = StyleSheet.create({
     value: {
         flex: 1,
     },
-    titleContainer: {
-        marginTop: 10,
-        alignSelf: 'center',
-        marginBottom: 20,
-    },
-    titleText: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        color: '#333',
-        textAlign: 'center'
-    },
     addContainer: {
         left: 290,
-        bottom: 63,
+        bottom: 60,
         alignSelf: 'flex-start',
     }
 });

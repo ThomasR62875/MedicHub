@@ -4,8 +4,7 @@ import { StyleSheet,ScrollView ,View, Text ,Alert } from 'react-native'
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
 import AddButton from "../components/AddButton";
-
-
+import BottomBar from "../components/BottomBar";
 
 
 type AppointmentsProps = NativeStackScreenProps<RootStackParamList, 'Appointments'>;
@@ -81,8 +80,7 @@ const Appointments: React.FC<AppointmentsProps> = ({ navigation, route }) => {
             </View>
             <ScrollView>
                 <View>
-                    {
-                        appointments && appointments?.length > 0 ? (
+                    {appointments && appointments?.length > 0 ? (
                             appointments.map((appointment: Appointment, i) => {
                                 const originalDate = new Date(appointment.date);
                                 const formattedDate = `${originalDate.getDate()}/${originalDate.getMonth()+1}/${originalDate.getFullYear()}`;
@@ -111,13 +109,16 @@ const Appointments: React.FC<AppointmentsProps> = ({ navigation, route }) => {
                                 )
                             })
                         ) : (
-                            <View style={styles.titleContainer}>
+                            <View style={[styles.titleContainer, {}]}>
                                 <Text style={styles.titleText}>No hay turnos</Text>
                                 <Text style={[styles.titleText, {fontSize: 16, fontStyle: 'italic'}]}>Usa el simbolo + de la esquina superior derecha para agregar tu primer doctor</Text>
                             </View>
                         )}
                 </View>
             </ScrollView>
+            <View style={styles.bottomBar}>
+                <BottomBar navigation={navigation} route={route} />
+            </View>
         </View>
     )
 }
@@ -129,6 +130,23 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         padding: 20,
+    },
+    bottomBar:{
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        right: 0,
+    },
+    titleContainer: {
+        marginTop: 10,
+        alignSelf: 'center',
+        marginBottom: 20,
+    },
+    titleText: {
+        fontSize: 25,
+        textAlign: 'center',
+        justifyContent: 'center',
+        fontWeight: 'bold',
     },
     doctorContainer: {
         marginTop: 10,
@@ -147,20 +165,9 @@ const styles = StyleSheet.create({
     value: {
         flex: 1,
     },
-    titleContainer: {
-        alignSelf: 'center',
-        marginBottom: 20,
-    },
-    titleText: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        color: '#333',
-        textAlign: 'center'
-    },
     addContainer: {
         left: 290,
         bottom: 60,
         alignSelf: 'flex-start',
     }
-
 });

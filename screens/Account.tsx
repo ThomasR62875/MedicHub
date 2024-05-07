@@ -60,9 +60,11 @@ const Account: React.FC<AccountScreenProps> = ({ navigation, route }) => {
                 <Text style={styles.text2}>{dni}</Text>
                 <View style={{ marginTop: 15 }} />
                 <Button title={<Text style={styles.buttonText}>Mis vacunas</Text>}
-                        buttonStyle={styles.misCosas}
-                />
-                <View style={{ marginTop: 10 }} />
+                        buttonStyle={styles.misCosas}/>
+                <Button title={<Text style={styles.buttonText}>Mis archivos</Text>}
+                        buttonStyle={styles.misCosas}/>
+                <Button title={<Text style={styles.buttonText}>Mis medicamentos</Text>}
+                buttonStyle={styles.misCosas} onPress={() => navigation.navigate({name: 'Medication', params: {session: session}})}/>
                 <Button title={<Text style={styles.buttonText}>Usuarios dependientes</Text>}
                         buttonStyle={styles.misCosas}
                         icon={<Icon name="person" type="ionicon" size={25} />}
@@ -75,20 +77,23 @@ const Account: React.FC<AccountScreenProps> = ({ navigation, route }) => {
                             buttonStyle={styles.cerrarSesion}/>
                     <Modal
                         transparent={true}
-                        visible={showModal}
-                    >
-                        <View style={styles.modalContainer}>
-                            <View style={[styles.modalInfoContainer, {marginTop: 555}]}>
-                                <Text style={styles.modalText}>¿ Seguro queres cerrar sesion ?</Text>
-                            </View>
-                            <View style={[styles.modalInfoContainer, {marginTop: 15}]}>
-                                <Button title="Cancelar"
-                                        onPress={()=>setShowModal(false)}
-                                        buttonStyle={{backgroundColor: '#073A29'}}/>
-                                <View style={{ width: 30 }} />
-                                <Button title="Cerrar"
-                                        onPress={() => supabase.auth.signOut()}
-                                        buttonStyle={{backgroundColor: '#073A29'}}/>
+                        visible={showModal}>
+                        <View style={styles.modalBackground}>
+                            <View style={styles.modalContainer}>
+                                <View style={[styles.modalInfoContainer, {marginTop: 555}]}>
+                                    <Text style={styles.modalText}>¿ Seguro queres cerrar sesion ?</Text>
+                                </View>
+                                <View style={[styles.modalInfoContainer, {marginTop: 15}]}>
+                                    <Button title="Cancelar"
+                                            onPress={()=>setShowModal(false)}
+                                            buttonStyle={{backgroundColor: '#073A29'}}/>
+                                    <View style={{ width: 30 }} />
+                                    <Button title="Cerrar"
+                                            onPress={() => {
+                                                supabase.auth.signOut().then(r => {
+                                                    navigation.navigate({name: 'Login', params: {session: session}})} )}}
+                                            buttonStyle={{backgroundColor: '#073A29'}}/>
+                                </View>
                             </View>
                         </View>
                     </Modal>
@@ -153,11 +158,17 @@ const styles = StyleSheet.create({
         color: 'black',
         fontSize: 20,
     },
-    modalContainer: {
+    modalBackground: {
         flex: 1,
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
-        justifyContent: 'center',
-        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.7)',
+        justifyContent: 'flex-end',
+    },
+    modalContainer: {
+        backgroundColor: 'black',
+        padding: 20,
+        borderRadius: 15,
+        alignSelf: 'center',
+        marginBottom: 20,
     },
     modalInfoContainer: {
         flexDirection: 'row',
