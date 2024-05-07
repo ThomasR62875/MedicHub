@@ -1,13 +1,13 @@
 import React, {useEffect, useState} from 'react';
 import {StyleSheet, View, Text, Alert, Pressable, Dimensions, ScrollView} from 'react-native';
 import {Icon} from "react-native-elements";
-import {Card} from '../components/Card';
 import {supabase} from "../lib/supabase";
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
 import {Appointment} from "./Appointments";
-import turnoContainer from "../components/turnContainer";
 import BottomBar from "../components/BottomBar";
+import {Card} from '../components/Card';
+import TurnoContainer from "../components/TurnContainer";
 
 type HomeProps = NativeStackScreenProps<RootStackParamList, 'Home'>;
 
@@ -110,7 +110,8 @@ const Home: React.FC<HomeProps> = ({navigation, route}) => {
             <View style={styles.container}>
                 <Text style={styles.titleText}>Bienvenido {first_name}</Text>
                 <ScrollView style={{width:'90%'}}>
-                    <Pressable style={{marginTop: percentageMargin}} >
+                    <Pressable style={{marginTop: percentageMargin}}
+                               onPress={() => navigation.navigate({name: 'Appointments', params: {session: session}})}>
                         {turno1 && date1 ? (
                                 <View>
                                     {/* <turnoContainer>

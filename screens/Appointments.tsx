@@ -116,9 +116,6 @@ const Appointments: React.FC<AppointmentsProps> = ({ navigation, route }) => {
                         )}
                 </View>
             </ScrollView>
-            <View style={styles.bottomBar}>
-                <BottomBar navigation={navigation} route={route} />
-            </View>
         </View>
     )
 }
@@ -130,12 +127,6 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         padding: 20,
-    },
-    bottomBar:{
-        position: 'absolute',
-        bottom: 0,
-        left: 0,
-        right: 0,
     },
     titleContainer: {
         marginTop: 10,

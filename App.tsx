@@ -18,6 +18,7 @@ import EditAccount from "./screens/EditAccount";
 import DependentUsers from "./screens/DependentUsers";
 import Medication from "./screens/Medication";
 import AddMedication from './screens/AddMedication'
+import Calender from './screens/Calender'
 
 export type RootStackParamList = {
   Home: { session: Session | null };
@@ -33,6 +34,7 @@ export type RootStackParamList = {
   AddDependentUser: {session: Session | null};
   Medication: {session: Session | null};
   AddMedication: {session : Session | null};
+  Calender: {session: Session | null};
 };
 
 
@@ -139,6 +141,10 @@ const App: React.FC = () => {
                 />
                 <Stack.Screen name="AddMedication"
                               component={AddMedication}
+                              initialParams={{session: session}}
+                />
+                <Stack.Screen name="Calender"
+                              component={Calender}
                               initialParams={{session: session}}
                 />
               </>

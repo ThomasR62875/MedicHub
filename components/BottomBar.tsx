@@ -17,7 +17,7 @@ const BottomBar : React.FC<BarProps> = ({navigation, route}) => {
             case 'Home':
                 setSelected(0);
                 break;
-            case 'Appointments':
+            case 'Calender':
                 setSelected(1);
                 break;
             case 'Doctors':
@@ -43,7 +43,7 @@ const BottomBar : React.FC<BarProps> = ({navigation, route}) => {
                 <Pressable opacity={selected === 1 ? 3 : 0.5} flex={1}
                            onPress={() => {
                                setSelected(1);
-                               navigation.navigate({name: 'Appointments', params: {session: session}});}}>
+                               navigation.navigate({name: 'Calender', params: {session: session}});}}>
                     <Center>
                         <Icon as={<MaterialIcons name="date-range" />} color="white" size={10} />
                     </Center>
