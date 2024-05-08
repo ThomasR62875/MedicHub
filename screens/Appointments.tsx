@@ -11,7 +11,6 @@ import AddButton from "../components/AddButton";
 
 
 
-type AppointmentsProps = NativeStackScreenProps<RootStackParamList, 'Appointments'>;
 
 export type Appointment = {
     date: Date;
@@ -20,9 +19,8 @@ export type Appointment = {
     doctor: string;
     user_id: string;
 }
-
-const Appointments: React.FC<AppointmentsProps> = ({ navigation, route }) => {
-    const {session} = route.params
+const Appointments: React.FC =  ({navigation, route}: any) =>{
+    const session = route.session;
     const [loading, setLoading] = useState(true)
     const [appointments,setAppointments]= useState<Appointment[] | undefined>(undefined)
 

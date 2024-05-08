@@ -1,25 +1,13 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, StyleSheet, Alert, Image, Pressable} from 'react-native';
+import {View, Text, StyleSheet, Alert, Pressable} from 'react-native';
 import {Icon} from "react-native-elements";
 import {Card} from '../components/Card';
 import {supabase} from "../lib/supabase";
-import {NativeStackScreenProps} from "@react-navigation/native-stack";
-import {RootStackParamList} from "../App";
 import {Appointment} from "./Appointments";
-import {RouteProp} from "@react-navigation/native";
-import {StackNavigationProp} from "@react-navigation/stack";
 
 
-
-type HomeScreenRouteProp = RouteProp<RootStackParamList, 'Home'>;
-type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Home'>;
-type Props = {
-    route: HomeScreenRouteProp;
-    navigation: HomeScreenNavigationProp;
-};
-
-const Home: React.FC<Props> = ({route, navigation}: Props) => {
-    const {session} = route.params;
+const Home: React.FC = ({navigation, route}: any) => {
+    const session = route.session;
     const [first_name, setFirstName] = useState('')
     const [loading, setLoading] = useState(true)
     const [appointments,setAppointments]= useState<Appointment[] | undefined>(undefined)
