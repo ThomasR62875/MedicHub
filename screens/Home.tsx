@@ -6,11 +6,19 @@ import {supabase} from "../lib/supabase";
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
 import {Appointment} from "./Appointments";
+import {RouteProp} from "@react-navigation/native";
+import {StackNavigationProp} from "@react-navigation/stack";
 
 
-type HomeProps = NativeStackScreenProps<RootStackParamList, 'Home'>;
 
-const Home: React.FC<HomeProps> = ({navigation, route}) => {
+type HomeScreenRouteProp = RouteProp<RootStackParamList, 'Home'>;
+type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Home'>;
+type Props = {
+    route: HomeScreenRouteProp;
+    navigation: HomeScreenNavigationProp;
+};
+
+const Home: React.FC<Props> = ({route, navigation}: Props) => {
     const {session} = route.params;
     const [first_name, setFirstName] = useState('')
     const [loading, setLoading] = useState(true)
@@ -26,11 +34,11 @@ const Home: React.FC<HomeProps> = ({navigation, route}) => {
 
     if (appointments) {
         turno1 = appointments[0];
-        date1 = new Date(turno1.date);
+        // date1 = new Date(turno1.date);
     }
     if (appointments && appointments?.length > 1) {
         turno2 = appointments[1];
-        date2 = new Date(turno2.date);
+        // date2 = new Date(turno2.date);
     }
 
     useEffect(() => {
