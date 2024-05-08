@@ -14,19 +14,19 @@ type CalenderScreenProps = NativeStackScreenProps<RootStackParamList, 'Calender'
 const Calender: React.FC<CalenderScreenProps> = ({ navigation, route }) => {
     const {session} = route.params;
     const [appointments,setAppointments]= useState<Appointment[] | undefined>(undefined)
-    const targetDate = new Date('2024-05-10'); // esta seria el default = new Date(); Obtener la fecha actual del dispositivo todo
-    let filteredData : Appointment[] | undefined = undefined;
-    let markedDatesArray : string[] = [];
+    const [loading, setLoading] = useState(true)
+    let targetDate = new Date('2024-05-10'); //el default = new Date(); todo
+    let filteredData : Appointment[] | undefined = undefined; //es un array donde se guardan todos los appointments los cuales su date coinciden con el día seleccionado en el calendario
+    let markedDates : string[] = []; //Es un array donde se guardan todos los dates de appointments, en formato string YYYY-MM-DD porq es lo q usa el calendar
     if(appointments){
         filteredData = appointments.filter(item => {
-            return item.date === targetDate;
+            return item.date instanceof Date && item.date.toISOString().slice(0, 10) === targetDate.toISOString().slice(0, 10);
         });
-        markedDatesArray = appointments.map(item => item.date.toString());
-        //markedDates tiene q tener el mes q este mostrando el calender, bha nose q pasaria si tiene días q ni esta mostrando, pero calculo q estria mal todo
+        markedDates = appointments.map(item => item.date.toString().slice(0,10));
     }
 
 
-    const markedDates = markedDatesArray.reduce<{ [key: string]:
+    const markedDatesString = markedDates.reduce<{ [key: string]:
             { marked: boolean, dotColor: string } }>((acc, date) => {
         acc[date] = { marked: true, dotColor: '#038839' };
         return acc;
@@ -34,9 +34,55 @@ const Calender: React.FC<CalenderScreenProps> = ({ navigation, route }) => {
 
 
     useEffect(() => {
-        if (session) getProfile()
+        if (session) {
+            getProfile()
+            getAppointments()
+        }
     }, [session])
 
+    async function getAppointments() {
+        const to_return: Appointment[] = [];
+        try {
+            setLoading(true)
+            if (!session?.user) throw new Error('No user on the session!')
+
+            const {data: user_id,error: user_data_error} = await supabase.rpc('get_independent_user_id')
+            if(user_data_error)
+                throw new Error(user_data_error.message);
+
+            const {data, error, status} = await supabase.rpc('get_appointments', {user_id: user_id})
+            if (error && status !== 406) {
+                throw error
+            }
+
+            if (data) {
+                for (const appoint of data) {
+                    try {
+                        const { data: user_data, error: user_error } = await supabase.rpc('get_user', {user_id: appoint.user})
+                        const { data: doctor_data} = await supabase.rpc('get_doctor', {doctor_id: appoint.doctor})
+                        if (user_error) {
+                            throw user_error;
+                        }
+                        to_return.push({
+                            description: appoint.description,
+                            date: appoint.date,
+                            user_name: user_data.first_name, // Suponiendo que name es el campo que quieres agregar
+                            doctor: doctor_data && doctor_data.name ? doctor_data.name.concat(" (especialidad: ").concat(doctor_data.specialty).concat(")") : 'Sin datos de doctor',
+                            user_id: appoint.user,
+                        });
+                    } catch (error) {
+                        console.error('Error al obtener el usuario:', error);
+                    }
+                }
+            }
+        } catch (error) {
+            if (error instanceof Error) {
+                Alert.alert(error.message)
+            }
+        }
+        setLoading(false)
+        setAppointments(to_return)
+    }
     async function getProfile() {
         try {
             if (!session?.user) throw new Error('No user on the session!')
@@ -53,11 +99,12 @@ const Calender: React.FC<CalenderScreenProps> = ({ navigation, route }) => {
         <View style={{height: '100%'}}>
             <Calendar
             markingType={'custom'}
-            markedDates={markedDates}
+            markedDates={markedDatesString}
             />
             {/*TODO
-             se tiene q trackear q fecha esta siendo seleccionada osea diferente a q fecha es hoy, (la q este seleccionada debe verse con un circulito marcada)
-             al saber q fecha esta siendo seleccionada se recorre appointments y solo se muestra los q coincidan con la fecha seleccionada
+             -cambiar el color con el q se marca q fecha es hoy
+             -trackear q fecha esta siendo seleccionada, osea diferente a q fecha es hoy, (la q este seleccionada debe verse con un circulito marcada)
+             -igualar targetDate a esa fecha seleccionada, y q siempre se actualice al momento
              */}
             <ScrollView>
                 {filteredData? (
@@ -82,22 +129,26 @@ const Calender: React.FC<CalenderScreenProps> = ({ navigation, route }) => {
                     <AddButton onPress={() => navigation.navigate('AddAppointment', {session})} />
                     <View style={{marginTop:60}}>
                         {!filteredData && <Text>filteredData is undefined</Text>}
-                        {!markedDatesArray && <Text>markedDatesArray is undefined</Text>}
+                        {!markedDates && <Text>markedDatesArray is undefined</Text>}
 
                         {filteredData && (
                             <>
                                 <Text>Contenido de filteredData:</Text>
+                                <Text>{filteredData.length}</Text>
                                 {filteredData.map((item, index) => (
                                     <Text key={index}>{item.date.toString()}</Text>
                                 ))}
                             </>
                         )}
 
-                        {markedDatesArray && (
+                        {markedDates && (
                             <>
-                                <Text>Contenido de markedDatesArray:</Text>
-                                {markedDatesArray.map((date, index) => (
-                                    <Text>{index}</Text>
+                                <Text>Contenido de markedDates:</Text>
+                                <Text>{markedDates.length}</Text>
+                                {markedDates.map((date, index) => (
+                                    <View>
+                                        <Text key={index}>{date}</Text>
+                                    </View>
                                 ))}
                             </>
                         )}
@@ -137,16 +188,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         width: '90%',
-    },
-    //al aplicar el component turnContainer eliminar infoRow y label, todo
-    infoRow: {
-        flexDirection: 'row',
-        marginBottom: 5,
-        padding: 5,
-    },
-    label: {
-        fontWeight: 'bold',
-        marginRight: 5,
     },
 });
 

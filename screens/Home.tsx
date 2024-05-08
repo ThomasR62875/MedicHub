@@ -230,16 +230,6 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderTopWidth: 0,
     },
-    //al aplicar el component turnContainer eliminar infoRow y label, todo
-    infoRow: {
-        flexDirection: 'row',
-        marginBottom: 5,
-        padding: 5,
-    },
-    label: {
-        fontWeight: 'bold',
-        marginRight: 5,
-    },
 });
 
 export default Home;
