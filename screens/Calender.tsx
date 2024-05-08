@@ -2,12 +2,12 @@ import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
 import React, {useEffect, useState} from "react";
 import {Alert, ScrollView, StyleSheet, Text, View} from "react-native";
-import {supabase} from "../lib/supabase";
 import BottomBar from "../components/BottomBar";
-import Appointments, {Appointment} from "./Appointments";
+import {Appointment} from "./Appointments";
 import {Calendar} from "react-native-calendars";
 import AddButton from "../components/AddButton";
 import TurnoContainer from "../components/TurnContainer";
+import {supabase} from "../lib/supabase";
 
 type CalenderScreenProps = NativeStackScreenProps<RootStackParamList, 'Calender'>;
 
@@ -15,24 +15,6 @@ const Calender: React.FC<CalenderScreenProps> = ({ navigation, route }) => {
     const {session} = route.params;
     const [appointments,setAppointments]= useState<Appointment[] | undefined>(undefined)
     const [loading, setLoading] = useState(true)
-    let targetDate = new Date('2024-05-10'); //el default = new Date(); todo
-    let filteredData : Appointment[] | undefined = undefined; //es un array donde se guardan todos los appointments los cuales su date coinciden con el día seleccionado en el calendario
-    let markedDates : string[] = []; //Es un array donde se guardan todos los dates de appointments, en formato string YYYY-MM-DD porq es lo q usa el calendar
-    if(appointments){
-        filteredData = appointments.filter(item => {
-            return item.date instanceof Date && item.date.toISOString().slice(0, 10) === targetDate.toISOString().slice(0, 10);
-        });
-        markedDates = appointments.map(item => item.date.toString().slice(0,10));
-    }
-
-
-    const markedDatesString = markedDates.reduce<{ [key: string]:
-            { marked: boolean, dotColor: string } }>((acc, date) => {
-        acc[date] = { marked: true, dotColor: '#038839' };
-        return acc;
-    }, {});
-
-
     useEffect(() => {
         if (session) {
             getProfile()
@@ -94,20 +76,55 @@ const Calender: React.FC<CalenderScreenProps> = ({ navigation, route }) => {
             }
         }
     }
+    const getCurrentDate = () => {
+        const date = new Date();
+        const year = date.getFullYear();
+        const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Month is zero-indexed
+        const day = date.getDate().toString().padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    };
+    const currentDate = getCurrentDate(); //es necesario porq no le gusta a AllMarkedDays q currentDate sea una funcion
+    const [selectedDate, setSelectedDate] = useState(currentDate);
+    const handleDayPress = ({ dateString }: { dateString: string }) => {
+        setSelectedDate(dateString);
+    };
+
+    let targetDate = selectedDate;
+    let filteredData : Appointment[] | undefined = undefined; //es un array donde se guardan todos los appointments los cuales su date coinciden con el día seleccionado en el calendario (targeDate)
+    let markedDates : string[] = []; //Es un array donde se guardan todos los dates de appointments, en formato string YYYY-MM-DD porq es lo q usa el calendar
+    if(appointments){
+        filteredData = appointments.filter(item => {
+            //no se si anda porq cuando vas a un seleccionar (osea targetDate se convierte) un día q tiene turnos, crashea diciendo q date.getDate is not a fucntion (it is undefined) todo
+            return item.date.toString().slice(0,10) === targetDate;
+        });
+        markedDates = appointments.map(item => item.date.toString().slice(0,10));
+    }
+    const markedDatesString = markedDates.reduce<{ [key: string]:
+            { marked: boolean, dotColor: string } }>((acc, date) => {
+        acc[date] = { marked: true, dotColor: '#80FF80' };
+        return acc;
+    }, {});
+
+    const AllMarkedDays ={
+        ...markedDatesString,
+        [currentDate]: {
+        },
+        [selectedDate]: {
+            selected: true,
+            selectedColor: '#038839',
+            ...(markedDatesString[selectedDate] || {})
+        }
+    }
 
     return (
         <View style={{height: '100%'}}>
             <Calendar
             markingType={'custom'}
-            markedDates={markedDatesString}
+            markedDates={AllMarkedDays}
+            onDayPress={handleDayPress}
             />
-            {/*TODO
-             -cambiar el color con el q se marca q fecha es hoy
-             -trackear q fecha esta siendo seleccionada, osea diferente a q fecha es hoy, (la q este seleccionada debe verse con un circulito marcada)
-             -igualar targetDate a esa fecha seleccionada, y q siempre se actualice al momento
-             */}
             <ScrollView>
-                {filteredData? (
+                {filteredData && filteredData.length > 0 ? (
                     filteredData.map((turno: Appointment, i: number) => {
                         return(
                             <View key={i}>
@@ -118,13 +135,13 @@ const Calender: React.FC<CalenderScreenProps> = ({ navigation, route }) => {
                                 />
                             </View>
                         )
-                })) :  (
-                    <View style={[styles.turnoContainer, {padding: 10}]}>
-                        <Text style={styles.text}>No hay turnos este día</Text>
-                        <Text style={[styles.text, {fontStyle: 'italic'}]}> Presiona el + para crear tu primer turno</Text>
-                    </View>
-                )
-                }
+                        })) :  (
+                            <View style={[styles.turnoContainer, {padding: 10}]}>
+                                <Text style={styles.text}>No hay turnos este día</Text>
+                                <Text style={[styles.text, {fontStyle: 'italic'}]}> Presiona el + para crear un turno el {targetDate}</Text>
+                            </View>
+                        )
+                        }
                 <View style={{alignItems: 'center', marginTop: 10}}>
                     <AddButton onPress={() => navigation.navigate('AddAppointment', {session})} />
                     <View style={{marginTop:60}}>
@@ -140,17 +157,19 @@ const Calender: React.FC<CalenderScreenProps> = ({ navigation, route }) => {
                                 ))}
                             </>
                         )}
-
-                        {markedDates && (
+                        {appointments && appointments.length > 0 ? (
                             <>
-                                <Text>Contenido de markedDates:</Text>
-                                <Text>{markedDates.length}</Text>
-                                {markedDates.map((date, index) => (
-                                    <View>
-                                        <Text key={index}>{date}</Text>
+                                <Text> el targetDate {targetDate}</Text>
+                                <Text>Contenido de appointments:</Text>
+                                {appointments.map((item, index) => (
+                                    <View key={index}>
+                                        <Text>{item.date.toString().slice(0,10)} === {targetDate}</Text>
                                     </View>
+
                                 ))}
                             </>
+                        ) : (
+                            <Text>No hay citas disponibles</Text>
                         )}
                     </View>
                 </View>
