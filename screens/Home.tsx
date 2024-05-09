@@ -7,7 +7,8 @@ import {Appointment} from "./Appointments";
 
 
 const Home: React.FC = ({navigation, route}: any) => {
-    const session = route.session;
+    const session = route.params.session;
+    console.log(session);
     const [first_name, setFirstName] = useState('')
     const [loading, setLoading] = useState(true)
     const [appointments,setAppointments]= useState<Appointment[] | undefined>(undefined)
