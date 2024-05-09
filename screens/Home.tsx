@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, View, Text, Alert, Pressable, Dimensions, ScrollView} from 'react-native';
+import {View, Text, StyleSheet, Alert, Image, Pressable} from 'react-native';
 import {Icon} from "react-native-elements";
+import {Card} from '../components/Card';
 import {supabase} from "../lib/supabase";
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
@@ -11,10 +12,8 @@ import TurnoContainer from "../components/TurnContainer";
 import turnoContainer from "../components/TurnContainer";
 import turnContainer from "../components/TurnContainer";
 
-type HomeProps = NativeStackScreenProps<RootStackParamList, 'Home'>;
-
-const Home: React.FC<HomeProps> = ({navigation, route}) => {
-    const {session} = route.params;
+const Home: React.FC = ({navigation, route}: any) => {
+    const session = route.session;
     const [first_name, setFirstName] = useState('')
     const [loading, setLoading] = useState(true)
     const [appointments,setAppointments]= useState<Appointment[] | undefined>(undefined)

@@ -138,8 +138,8 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
                         textSecondaryColor: '#B5DCCA',
                         borderColor: 'rgba(122, 146, 165, 0.1)',
                     }}
-                    date={date}
-                    onSelectedChange={(date: React.SetStateAction<dayjs.Dayjs>) => setDate(date)}
+                    // date={date}
+                    // onSelectedChange={(date: React.SetStateAction<dayjs.Dayjs>) => setDate(date)}
                 />
                 <Input
                     leftIcon={{ type: 'font-awesome', name: 'book' }}
@@ -169,7 +169,7 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
                 <StandardGreenButton
                     title="Confirmar"
                     disabled={loading}
-                    onPress={() => addAppointment({date, description, doctor, user_id})}
+                    // onPress={() => addAppointment({date, description, doctor, user_id})}
                 />
             </SafeAreaView>
             </ScrollView>
