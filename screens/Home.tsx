@@ -1,16 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, StyleSheet, Alert, Image, Pressable} from 'react-native';
+import {View, Text, StyleSheet, Alert, Image, Pressable, Dimensions, ScrollView} from 'react-native';
 import {Icon} from "react-native-elements";
 import {Card} from '../components/Card';
 import {supabase} from "../lib/supabase";
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
 import {Appointment} from "./Appointments";
-import BottomBar from "../components/BottomBar";
-import {Card} from '../components/Card';
 import TurnoContainer from "../components/TurnContainer";
-import turnoContainer from "../components/TurnContainer";
-import turnContainer from "../components/TurnContainer";
 
 const Home: React.FC = ({navigation, route}: any) => {
     const session = route.session;
@@ -156,7 +152,7 @@ const Home: React.FC = ({navigation, route}: any) => {
                 </ScrollView>
             </View>
             <View style={styles.bottomBar}>
-                <BottomBar navigation={navigation} route={route} />
+                {/*<BottomBar navigation={navigation} route={route} />*/}
             </View>
         </View>
     );

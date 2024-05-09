@@ -1,9 +1,8 @@
-import 'react-native-url-polyfill/auto'
 import { useState, useEffect } from 'react'
 import { supabase } from './lib/supabase'
 import { Session } from '@supabase/supabase-js'
 import React from 'react';
-import {NavigationContainer, RouteProp} from '@react-navigation/native';
+import {NavigationContainer, RouteProp} from './node_modules/@react-navigation/native';
 import AddAppointment from "./screens/AddAppointment"
 import LoginScreen from "./screens/LogIn";
 import Doctors from "./screens/Doctors";
@@ -20,6 +19,7 @@ import Medication from "./screens/Medication";
 import AddMedication from './screens/AddMedication'
 import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
 import {StackNavigationProp} from "@react-navigation/stack";
+import 'react-native-reanimated'
 
 export type RootStackParamList = {
   HomeTabs: { session: Session | null };
@@ -38,10 +38,6 @@ export type RootStackParamList = {
     AddMedication: {session: Session | null};
 };
 
-
-
-const App: React.FC = () => {
-  const [session, setSession] = useState<Session | null>(null)
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const Tab = createBottomTabNavigator();
@@ -116,6 +112,6 @@ const App = () => {
         </Stack.Navigator>
       </NavigationContainer>
   );
-};
+}
 
 export default App;

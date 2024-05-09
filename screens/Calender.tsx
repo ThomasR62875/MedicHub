@@ -2,7 +2,6 @@ import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
 import React, {useEffect, useState} from "react";
 import {Alert, ScrollView, StyleSheet, Text, View} from "react-native";
-import BottomBar from "../components/BottomBar";
 import {Appointment} from "./Appointments";
 import {Calendar} from "react-native-calendars";
 import AddButton from "../components/AddButton";
@@ -175,7 +174,7 @@ const Calender: React.FC<CalenderScreenProps> = ({ navigation, route }) => {
                 </View>
             </ScrollView>
             <View style={styles.bottomBar}>
-                <BottomBar navigation={navigation} route={route} />
+                {/*<BottomBar navigation={navigation} route={route} />*/}
             </View>
         </View>
     )

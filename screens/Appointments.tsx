@@ -4,7 +4,6 @@ import { StyleSheet,ScrollView ,View, Text ,Alert } from 'react-native'
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
 import AddButton from "../components/AddButton";
-import BottomBar from "../components/BottomBar";
 
 
 

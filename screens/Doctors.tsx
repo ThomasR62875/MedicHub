@@ -4,7 +4,6 @@ import { StyleSheet, View, ScrollView,Text} from 'react-native'
 import {createNativeStackNavigator, NativeStackScreenProps} from '@react-navigation/native-stack';
 import {RootStackParamList} from "../App";
 import AddButton from "../components/AddButton";
-import BottomBar from "../components/BottomBar";
 
 const Stack = createNativeStackNavigator();
 
@@ -112,7 +111,7 @@ const Doctors: React.FC= ({ navigation, route }: any) => {
                 </View>
             </ScrollView>
             <View style={styles.bottomBar}>
-                <BottomBar navigation={navigation} route={route} />
+                {/*<BottomBar navigation={navigation} route={route} />*/}
             </View>
         </View>
     )
