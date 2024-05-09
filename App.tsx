@@ -19,6 +19,7 @@ import DependentUsers from "./screens/DependentUsers";
 import Medication from "./screens/Medication";
 import AddMedication from './screens/AddMedication'
 import Calender from './screens/Calender'
+import 'react-native-reanimated';
 
 export type RootStackParamList = {
   Home: { session: Session | null };
