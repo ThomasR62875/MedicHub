@@ -12,7 +12,6 @@ import {DependentUser} from "./DependentUsers"
 import Doctors, {Doctor} from "./Doctors";
 import {Picker} from '@react-native-picker/picker'
 import RNPickerSelect from 'react-native-picker-select';
-import DatePicker, { getFormatedDate } from 'react-native-modern-datepicker';
 
 type AddAppointmentProps = NativeStackScreenProps<RootStackParamList, 'AddAppointment'>
 
@@ -128,19 +127,19 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
             <SafeAreaView style={styles.container}>
-                <DatePicker
-                    locale={'ES'}
-                    options={{
-                        textHeaderColor: '#073A29',
-                        textDefaultColor: '#000000',
-                        selectedTextColor: '#fff',
-                        mainColor: '#073A29',
-                        textSecondaryColor: '#B5DCCA',
-                        borderColor: 'rgba(122, 146, 165, 0.1)',
-                    }}
-                    // date={date}
-                    // onSelectedChange={(date: React.SetStateAction<dayjs.Dayjs>) => setDate(date)}
-                />
+                {/*<DatePicker*/}
+                {/*    locale={'ES'}*/}
+                {/*    options={{*/}
+                {/*        textHeaderColor: '#073A29',*/}
+                {/*        textDefaultColor: '#000000',*/}
+                {/*        selectedTextColor: '#fff',*/}
+                {/*        mainColor: '#073A29',*/}
+                {/*        textSecondaryColor: '#B5DCCA',*/}
+                {/*        borderColor: 'rgba(122, 146, 165, 0.1)',*/}
+                {/*    }}*/}
+                {/*    // date={date}*/}
+                {/*    // onSelectedChange={(date: React.SetStateAction<dayjs.Dayjs>) => setDate(date)}*/}
+                {/*/>*/}
 
                 <Input
                     leftIcon={{ type: 'font-awesome', name: 'book' }}

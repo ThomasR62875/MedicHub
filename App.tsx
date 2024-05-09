@@ -20,6 +20,8 @@ import Medication from "./screens/Medication";
 import AddMedication from './screens/AddMedication'
 import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
 import {StackNavigationProp} from "@react-navigation/stack";
+import 'react-native-reanimated'
+
 
 export type RootStackParamList = {
   HomeTabs: { session: Session | null };
