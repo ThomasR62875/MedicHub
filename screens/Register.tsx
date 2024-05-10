@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
     View, ScrollView,
     Text,
@@ -27,12 +27,72 @@ const Register: React.FC = ({ navigation }: any) => {
     const [lastName, setLastName] = useState('')
     const [dni, setDni] = useState('')
 
+    const [nameErrorMessage, setNameErrorMessage] = useState<string>('');
+    const [lastNameErrorMessage, setLastNameErrorMessage] = useState<string>('');
+    const [DNIErrorMessage, setDNIErrorMessage] = useState<string>('');
+    const [mailErrorMessage, setMailErrorMessage] = useState<string>('');
+    const [passwordErrorMessage, setPasswordErrorMessage] = useState<string>('');
+
+    useEffect(() => {
+        if (
+            firstName.trim() !== '' &&
+            lastName.trim() !== '' &&
+            dni.trim() !== '' &&
+            email.trim() !== '' &&
+            password.trim() !== '' &&
+            confirmed_password.trim() !== '' &&
+            nameErrorMessage === '' &&
+            lastNameErrorMessage === '' &&
+            DNIErrorMessage === '' &&
+            mailErrorMessage === '' &&
+            passwordErrorMessage === ''
+        ) {
+            setIsButtonDisabled(false);
+        } else {
+            setIsButtonDisabled(true);
+        }
+    }, [firstName, lastName, dni, email, password, confirmed_password]);
+
+    const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(true);
+    const validateName = (value: string) => {
+        if (value.trim() === '') {
+            setNameErrorMessage('Debe ingresar su nombre.');
+        } else {
+            setNameErrorMessage('');
+        }
+    };
+    const validateLastName = (value: string) => {
+        if (value.trim() === '') {
+            setLastNameErrorMessage('Debe ingresar su apellido.');
+        } else {
+            setLastNameErrorMessage('');
+        }
+    };
+    const validateDNI = (value: string) => {
+        const containsLetterOrSymbol = /[a-zA-Z!@#$%^&*()_+{}\[\]:;<>,.?\/\\|'"`~-]/.test(value);
+        if (containsLetterOrSymbol) {
+            setDNIErrorMessage('Debe ingresar su DNI. Ej: 12345678');
+        } else {
+            setDNIErrorMessage('');
+        }
+    };
+    const validateEmail = (value: string) => {
+        if (value.trim() === '' || !value.includes("@") || !(value.includes(".edu") || value.includes(".com") || value.includes(".ar"))) {
+            setMailErrorMessage('Dirección de mail inválida. Ej: email@address.com');
+        } else {
+            setMailErrorMessage('');
+        }
+    };
+    const validatePassword = (value: string) => {
+        if (password !== value) {
+            setPasswordErrorMessage('La contraseña ingresada es distinta.');
+        } else {
+            setPasswordErrorMessage('');
+        }
+    };
+
     async function signUpWithEmail() {
         setLoading(true)
-        if(confirmed_password != password) {
-            setLoading(false);
-            throw new Error('Passwords do not match!');
-        }
 
         const {
             data: { session },
@@ -49,8 +109,7 @@ const Register: React.FC = ({ navigation }: any) => {
             },
         })
 
-        if (error) Alert.alert(error.message)
-        else Alert.alert('Please check your inbox for email verification!')
+        if (!error) Alert.alert('¡Revise su bandeja de entrada para verificar el mail!')
         setLoading(false)
     }
 
@@ -67,47 +126,62 @@ const Register: React.FC = ({ navigation }: any) => {
                         label="Nombre"
                         labelStyle={styles.colorLable}
                         leftIcon={<Icon type= "font-awesome" name="user" color={styles.colorIcon.color}/>}
-                        onChangeText={(text) => setFirstName(text)}
+                        onChangeText={(text) => {
+                            setFirstName(text);
+                            validateName(text)
+                        }}
                         value={firstName}
                         placeholder="Nombre"
                         placeholderTextColor={"#407738"}
                         autoCapitalize={'none'}
                         inputStyle={{color: '#407738', marginLeft: 10}}
+                        errorStyle={{ color: 'red' }}
+                        errorMessage={nameErrorMessage}
                     />
                     <Input
                         label="Apellido"
                         labelStyle={styles.colorLable}
                         leftIcon={<Icon type= "font-awesome" name="user" color={styles.colorIcon.color}/>}
-                        onChangeText={(text) => setLastName(text)}
+                        onChangeText={(text) => {
+                            setLastName(text);
+                            validateLastName(text)
+                        }}
                         value={lastName}
                         placeholder="Apellido"
                         autoCapitalize={'none'}
                         placeholderTextColor={"#407738"}
                         inputStyle={{color: '#407738', marginLeft: 10}}
-
+                        errorStyle={{ color: 'red' }}
+                        errorMessage={lastNameErrorMessage}
                     />
                     <Input
                         label="DNI"
                         labelStyle={styles.colorLable}
                         leftIcon={<Image source={require('../assets/fingerprint.png')} style={styles.icon} />}
-                        onChangeText={(text) => setDni(text)}
+                        onChangeText={(text) => {
+                            setDni(text);
+                            validateDNI(text);
+                        }}
                         value={dni}
                         placeholder="DNI"
                         autoCapitalize={'none'}
                         placeholderTextColor={"#407738"}
                         inputStyle={{color: '#407738', marginLeft: 10}}
-
+                        errorStyle={{ color: 'red' }}
+                        errorMessage={DNIErrorMessage}
                     />
                     <Input
                         label="Mail"
                         labelStyle={styles.colorLable}
                         leftIcon={<Icon type= "font-awesome" name="envelope" color={styles.colorIcon.color}/>}
-                        onChangeText={(text) => setEmail(text)}
+                        onChangeText={(text) => {setEmail(text); validateEmail(text)}}
                         value={email}
-                        placeholder="Email@address.com"
+                        placeholder="email@address.com"
                         autoCapitalize={'none'}
                         placeholderTextColor={"#407738"}
                         inputStyle={{color: '#407738', marginLeft: 10}}
+                        errorStyle={{ color: 'red' }}
+                        errorMessage={mailErrorMessage}
                     />
                     <Input
                         label="Contraseña"
@@ -125,17 +199,23 @@ const Register: React.FC = ({ navigation }: any) => {
                         label="Confirmar contraseña"
                         labelStyle={styles.colorLable}
                         leftIcon={<Icon type="font-awesome"  name="lock" color={styles.colorIcon.color}/>}
-                        onChangeText={(text1) => setConfirmedPassword(text1)}
+                        onChangeText={(text1) => {
+                            setConfirmedPassword(text1);
+                            validatePassword(text1);
+                        }}
                         value={confirmed_password}
                         secureTextEntry={true}
                         placeholder="Contraseña"
                         autoCapitalize={'none'}
                         inputStyle={{color: '#407738', marginLeft: 10}}
                         placeholderTextColor={"#407738"}
+                        errorStyle={{ color: 'red' }}
+                        errorMessage={passwordErrorMessage}
                     />
                     <View style={{alignItems: 'center'}}>
                         <Button
                             title="Registrarse"
+                            disabled={isButtonDisabled}
                             loading={loading}
                             buttonStyle={{
                                 backgroundColor: '#2E5829',
