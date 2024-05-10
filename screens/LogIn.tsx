@@ -53,7 +53,7 @@ const LogIn: React.FC<LogInProps> = ({navigation, route})=> {
             <View style={styles.container}>
                 <View style={styles.window}>
                     <Image source={Logo} style={styles.logo} />
-                    <Text style={{textAlign: 'center', color: '#2E5829', fontWeight: 'bold', fontSize: 20}}>HomeDome</Text>
+                    <Text style={{textAlign: 'center', color: '#2E5829', fontWeight: 'bold', fontSize: 20}}>MedicHub</Text>
                 </View>
                 <View style={[styles.inputContainer, { height: windowHeight * 0.08 }]}>
                     <Input
