@@ -110,9 +110,6 @@ const Doctors: React.FC= ({ navigation, route }: any) => {
                     }
                 </View>
             </ScrollView>
-            <View style={styles.bottomBar}>
-                {/*<BottomBar navigation={navigation} route={route} />*/}
-            </View>
         </View>
     )
 }

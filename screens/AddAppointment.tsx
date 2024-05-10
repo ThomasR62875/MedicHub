@@ -126,7 +126,6 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
 
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-            <ScrollView>
                 <SafeAreaView style={styles.container}>
                 <DatePicker
                     locale={'ES'}
@@ -172,7 +171,6 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
                     //onPress={() => addAppointment({date, description, doctor, user_id})}
                 />
             </SafeAreaView>
-            </ScrollView>
         </TouchableWithoutFeedback>
       );
 }

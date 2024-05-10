@@ -10,6 +10,7 @@ interface turnoContainerProps {
 }
 const turnoContainer : React.FC<turnoContainerProps>= ({ styleExterior, turno, date, ...props }) => {
 
+        const otraDate = new Date(date);
         return (
             <View style={styleExterior}>
                 <View style={styles.infoRow}>
@@ -20,7 +21,7 @@ const turnoContainer : React.FC<turnoContainerProps>= ({ styleExterior, turno, d
                     <Text>{turno.user_name}</Text>
                     <View style={{ width: 30 }} />
                     <Text style={styles.label}>Fecha:</Text>
-                    <Text>jeje juju {/*}${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()}*/}</Text>
+                    <Text>{otraDate.getDate()}/{otraDate.getMonth()+1}/{otraDate.getFullYear()}</Text>
                 </View>
             </View>
         );

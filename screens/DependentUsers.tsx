@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabase'
-import { StyleSheet, View, Alert, ScrollView,Text} from 'react-native'
+import {StyleSheet, View, Alert, ScrollView, Text, Dimensions} from 'react-native'
 import AddButton from "../components/AddButton";
 
 // UNA IDEA DE DEPENDENT USERS SERIA PODER VER CADA USUARIO Y EDITARLO DESDE AHI (por ej eliminarlo, lo de migrar info etc)
@@ -94,11 +94,12 @@ return(
 
 export default DependentUsers;
 
+const screenHeight = Dimensions.get('window').height;
 const styles = StyleSheet.create({
     container: {
         justifyContent: 'center',
         alignItems: 'center',
-        padding: 20,
+        marginTop: screenHeight * 0.15,
     },
     userContainer: {
         marginTop: 10,
@@ -130,8 +131,8 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     addContainer: {
-        left: 290,
-        bottom: 80,
+        left: 310,
+        bottom: 95,
         alignSelf: 'flex-start',
     },
     text: {

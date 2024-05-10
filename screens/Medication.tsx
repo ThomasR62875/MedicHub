@@ -78,7 +78,6 @@ const Medication: React.FC = ({ navigation, route }: any) => {
                                             <Text style={styles.value}>{medic.prescription}</Text>
                                         </View>
                                     </View>
-                                    // AGREGAR PARA VER EL ARRAY DE ADDRESSES
                                 )
                             })
                         ) : (
