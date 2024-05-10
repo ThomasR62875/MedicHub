@@ -1,17 +1,14 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, StyleSheet, Alert, Image, Pressable} from 'react-native';
+import {View, Text, StyleSheet, Alert, Pressable} from 'react-native';
 import {Icon} from "react-native-elements";
 import {Card} from '../components/Card';
 import {supabase} from "../lib/supabase";
-import {NativeStackScreenProps} from "@react-navigation/native-stack";
-import {RootStackParamList} from "../App";
 import {Appointment} from "./Appointments";
 
 
-type HomeProps = NativeStackScreenProps<RootStackParamList, 'Home'>;
-
-const Home: React.FC<HomeProps> = ({navigation, route}) => {
-    const {session} = route.params;
+const Home: React.FC = ({navigation, route}: any) => {
+    const session = route.params.session;
+    console.log(session);
     const [first_name, setFirstName] = useState('')
     const [loading, setLoading] = useState(true)
     const [appointments,setAppointments]= useState<Appointment[] | undefined>(undefined)
@@ -26,11 +23,11 @@ const Home: React.FC<HomeProps> = ({navigation, route}) => {
 
     if (appointments) {
         turno1 = appointments[0];
-        date1 = new Date(turno1.date);
+        // date1 = new Date(turno1.date);
     }
     if (appointments && appointments?.length > 1) {
         turno2 = appointments[1];
-        date2 = new Date(turno2.date);
+        // date2 = new Date(turno2.date);
     }
 
     useEffect(() => {

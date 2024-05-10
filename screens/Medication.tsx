@@ -6,14 +6,15 @@ import {createNativeStackNavigator, NativeStackScreenProps} from '@react-navigat
 import {RootStackParamList} from "../App";
 import AddButton from "../components/AddButton";
 
-type MedicationProps = NativeStackScreenProps<RootStackParamList, 'Medication'>;
 
 export type Medication = {
     name: string;
     prescription: string;
 }
-const Medication: React.FC<MedicationProps> = ({ navigation, route }) => {
-    const {session} = route.params;
+
+
+const Medication: React.FC = ({ navigation, route }: any) => {
+    const session = route.params.session;
     const [loading, setLoading] = useState(true)
     const [medications,setMedications]= useState<Medication[] | undefined>(undefined)
 
