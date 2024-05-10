@@ -1,7 +1,6 @@
 import 'react-native-url-polyfill/auto'
 import { useState, useEffect } from 'react'
-import { supabase } from './lib/supabase'
-import { View, Text } from 'react-native'
+import { supabase} from './lib/supabase'
 import { Session } from '@supabase/supabase-js'
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
@@ -10,8 +9,6 @@ import LoginScreen from "./screens/LogIn";
 import Doctors from "./screens/Doctors";
 import AddDoctor from "./screens/AddDoctor";
 import AddDependentUser from './screens/AddDependentUser'
-import {Props} from "@react-navigation/stack/lib/typescript/src/views/Header/HeaderContainer";
-import {StackNavigationProp} from "@react-navigation/stack";
 import Account from "./screens/Account";
 import {createNativeStackNavigator} from "@react-navigation/native-stack";
 import Register from "./screens/Register";
@@ -53,36 +50,6 @@ const App: React.FC = () => {
       setSession(session)
     })
 
-    supabase.auth.getSession();
-
-    const unsubscribe = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-    });
-
-    return () => {
-      unsubscribe;
-    };
-  }, []);
-
-
-  useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session)
-    })
-
-    supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session)
-    })
-
-    supabase.auth.getSession();
-
-    const unsubscribe = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-    });
-
-    return () => {
-      unsubscribe;
-    };
   }, []);
 
 

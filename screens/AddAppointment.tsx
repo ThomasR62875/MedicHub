@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import { supabase } from '../lib/supabase'
+import { addAppointment, getAllDoctorsByUser, getAllUsers, getUserId } from '../lib/supabase'
 import {SafeAreaView, StyleSheet, Alert, View, Keyboard, TouchableWithoutFeedback} from 'react-native'
 import {Input} from "react-native-elements";
 import DateTimePicker from 'react-native-ui-datepicker';
@@ -7,7 +7,6 @@ import dayjs from 'dayjs';
 import StandardGreenButton from "../components/StandardGreenButton";
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
-import {Appointment} from "./Appointments";
 import {DependentUser} from "./DependentUsers"
 import Doctors, {Doctor} from "./Doctors";
 import {Picker} from '@react-native-picker/picker'
@@ -25,28 +24,15 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
     const [doctor, setDoctor] = useState('')
     const [user_id, setUserId] = useState('')
     const [session_user_id, setSessionUserId] = useState('')
-    const [all_users, setAllUsers] = useState<DependentUser[] | undefined>(undefined)
-    const [doctors, setDoctors] = useState<Doctor[] | undefined>(undefined)
+    const [all_users, setAllUsers] = useState<DependentUser[]>([])
+    const [doctors, setDoctors] = useState<Doctor[]>([])
 
     // FUNCION PRECARIA PARA QUE DE MOMENTO FUNCIONE CON EL ID DEL PADRE; DEPUES CON EL PICKER ELEGIR QUE USUARIO SE VE
 
     useEffect(() => {
         if (session) {
-            const fetchUserId = async () => {
-                try {
-                    const {data, error} = await supabase.rpc("get_independent_user_id", {})
-                    if (data) {
-                        setSessionUserId(data);
-                    }
-                    if (error) {
-                        console.error('Error inserting UserId data:', error.message);
-                    } else {
-                        console.log('UserId data inserted successfully');
-                    }
-
-                } catch (error) {
-                    console.error('Error fetching UserId data:');
-                }
+            async function fetchUserId() {
+                setSessionUserId(await getUserId());                 
             };
             fetchUserId();
 
@@ -55,76 +41,23 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
 
     useEffect(() => {
         if (session_user_id) {
-            getAllDoctorsByUser();
-            getAllUsers();
+            async function getInfo() {
+                setDoctors(await getAllDoctorsByUser(session_user_id));
+                setAllUsers(await getAllUsers(session_user_id));            
+            }
+            getInfo()
         }
     }, [session_user_id]);
 
-    async function getAllDoctorsByUser() {
-        try {
+    const doctorsList = doctors ? (doctors as Doctor[]).map((doctor: Doctor) => ({
+        label: doctor.name,
+        value: doctor.id,
+    })): [];
 
-            const {data, error} = await supabase.rpc('get_all_doctors_by_user', {user_id: session_user_id});
-            setDoctors(data);
-            if (error) {
-                console.error('Error inserting doctors data:', error.message);
-            } else {
-                console.log('Doctors data inserted successfully');
-            }
-        } catch (error) {
-            console.error('Error fetching doctors data:');
-        }
-
-    }
-
-    async function getAllUsers(){
-        try {
-            const { data, error } = await supabase.rpc('get_all_users', { user_id: session_user_id });
-            setAllUsers(data);
-            if (error) {
-                console.error('Error inserting users data:', error.message);
-            } else {
-                console.log('Users data inserted successfully');
-            }
-        } catch (error) {
-            console.error('Error fetching users data:');
-        }
-
-    }
-
-    async function addAppointment({
-        date,
-        description,
-        doctor,
-        user_id,
-    }:Appointment) {
-        try {
-            const { error } = await supabase.rpc("add_appointment", {date_input: date, description_input: description,doctor_input: doctor, user_id: user_id})
-            if (error) {
-                console.error('Error inserting data:', error.message);
-            } else {
-                console.log('Data inserted successfully');
-            }
-        } catch (error) {
-            // @ts-ignore
-            console.error('An error occurred:', error.message);
-        }finally{
-            Alert.alert("El Turno ya está agregado")
-        }
-        // setLoading(true)
-        // if (!session?.user) throw new Error('No user on the session!')
-        //
-        // const { data, error } = await supabase
-        // .from('appointment')
-        // .insert([
-        // { date: date, description: description, user: session?.user.id},
-        // ])
-        // .select()
-        //
-        // if (error) Alert.alert(error.message)
-        // else (Alert.alert("El turno ya está cargado"))
-        // setLoading(false)
-    }
-
+    const userList = all_users ? (all_users as DependentUser[]).map((user: DependentUser) => ({
+        label: user.first_name,
+        value: user.id,
+    })): [];
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
             <SafeAreaView style={styles.container}>
@@ -152,7 +85,7 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
                 <View style={styles.pickerStyle}>
                     <RNPickerSelect
                         placeholder={{ label: 'Médico', value: null }}
-                        items={doctors ? doctors.map(d => ({ label: d.name, value: d.id})) : []}
+                        items={doctorsList}
                         onValueChange={(value) => setDoctor(value)}
                         style={{ ...pickerSelectStyles }}
                         value={doctor}
@@ -161,7 +94,7 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
                 <View style={styles.pickerStyle}>
                     <RNPickerSelect
                         placeholder={{ label: 'Usuario', value: null }}
-                        items={all_users ? all_users.map(u => ({ label: u.first_name, value: u.id})) : []}
+                        items={userList}
                         onValueChange={(value) => setUserId(value)}
                         style={{ ...pickerSelectStyles }}
                         value={user_id}
@@ -172,7 +105,7 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
                 <StandardGreenButton
                     title="Confirmar"
                     disabled={loading}
-                    onPress={() => addAppointment({date, description, doctor, user_id})}
+                    onPress={() => addAppointment({date, description,doctor, user_id})}
                 />
             </SafeAreaView>
         </TouchableWithoutFeedback>
