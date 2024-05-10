@@ -17,6 +17,7 @@ import { useNavigation, ParamListBase } from '@react-navigation/native'; // Impo
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import StandardGreenButton from "../components/StandardGreenButton";
 import {RootStackParamList} from "../App";
+// @ts-ignore
 import Logo from '../assets/icon.png'
 
 const windowHeight = Dimensions.get('window').height;
