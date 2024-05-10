@@ -28,6 +28,8 @@ const Home: React.FC = ({navigation, route}: any) => {
         date1 = new Date(turno1.date);
     }
     if (appointments && appointments?.length > 1) {
+        turno1 = appointments[0];
+        date1 = new Date(turno1.date);
         turno2 = appointments[1];
         date2 = new Date(turno2.date);
     }
@@ -128,7 +130,7 @@ const Home: React.FC = ({navigation, route}: any) => {
                             <Text style={[styles.titleText, {justifyContent:'center'}]}>Proximos turnos</Text>
                         </View>
                     </Pressable>
-                    <Pressable style={{marginTop: percentageMargin}} >
+                    <Pressable style={{marginTop: percentageMargin}}>
                         <View style={[styles.turnoContainer, {padding: 10}]}>
                             <Text style={[styles.text, {fontStyle: 'italic'}]}>Esperar la aplicación de la IA porfavor :)</Text>
                         </View>
@@ -136,6 +138,9 @@ const Home: React.FC = ({navigation, route}: any) => {
                             <Text style={[styles.titleText, {justifyContent:'center'}]}>Turnos recomendados</Text>
                         </View>
                     </Pressable>
+                    <View>
+
+                    </View>
                     {/* <View style={styles.grid}>
                             <View style={styles.col}>
                                 <Card title="Archivos" img={imgTurno} onPress={() => navigation.navigate({name: 'Appointments', params: {session: session}})}/>
