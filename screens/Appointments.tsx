@@ -15,7 +15,7 @@ export type Appointment = {
     user_id: string;
 }
 const Appointments: React.FC =  ({navigation, route}: any) =>{
-    const {session} = route.params;
+    const session = route.params.session;
     const [loading, setLoading] = useState(true)
     const [appointments,setAppointments]= useState<Appointment[] | undefined>(undefined)
 

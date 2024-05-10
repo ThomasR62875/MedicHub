@@ -13,7 +13,7 @@ export type Medication = {
 
 
 const Medication: React.FC = ({ navigation, route }: any) => {
-    const session = route.session;
+    const session = route.params.session;
     const [loading, setLoading] = useState(true)
     const [medications,setMedications]= useState<Medication[] | undefined>(undefined)
 

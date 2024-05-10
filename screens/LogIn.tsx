@@ -1,11 +1,22 @@
 import React, {useState} from "react";
-import {Alert, StyleSheet, View, Dimensions, AppState, Text, TouchableWithoutFeedback, Keyboard} from 'react-native'
+import {
+    Alert,
+    Image,
+    StyleSheet,
+    View,
+    Dimensions,
+    AppState,
+    Text,
+    TouchableWithoutFeedback,
+    Keyboard
+} from 'react-native'
 import { supabase } from '../lib/supabase'
 import { Button, Input } from 'react-native-elements'
-import { useNavigation, ParamListBase } from '@react-navigation/native'; // Importa useNavigation desde @react-navigation/native
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import StandardGreenButton from "../components/StandardGreenButton";
+// import StandardGreenButton from "../components/StandardGreenButton";
 import {RootStackParamList} from "../App";
+// @ts-ignore
+import Logo from '../assets/icon.png'
 
 const windowHeight = Dimensions.get('window').height;
 
@@ -40,13 +51,20 @@ const LogIn: React.FC<LogInProps> = ({navigation, route})=> {
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
             <View style={styles.container}>
+                <View style={styles.window}>
+                    <Image source={Logo} style={styles.logo} />
+                    <Text style={{textAlign: 'center', color: '#2E5829', fontWeight: 'bold', fontSize: 20}}>HomeDome</Text>
+                </View>
                 <View style={[styles.inputContainer, { height: windowHeight * 0.08 }]}>
                     <Input
                         label="Mail"
-                        leftIcon={{ type: 'font-awesome', name: 'envelope' }}
+                        labelStyle={{color: '#2E5829'}}
+                        leftIcon={{ type: 'font-awesome', name: 'envelope', color: '#2E5829FF'}}
                         onChangeText={(text) => setEmail(text)}
                         value={email}
-                        placeholder=" email@address.com"
+                        inputStyle={{marginLeft: 10, color:'#407738'}}
+                        placeholder="Email@address.com"
+                        placeholderTextColor={'#407738'}
                         autoCapitalize={'none'}
                         inputContainerStyle={[{paddingLeft: 10}, styles.input]}
                     />
@@ -54,27 +72,49 @@ const LogIn: React.FC<LogInProps> = ({navigation, route})=> {
                 <View style={[styles.inputContainer, {height: windowHeight * 0.08 }]}>
                     <Input
                         label="Contraseña"
-                        leftIcon={{ type: 'font-awesome', name: 'lock' }}
+                        labelStyle={ {color: '#2E5829FF'}}
+                        leftIcon={{ type: 'font-awesome', name: 'lock', color: '#2E5829FF' }}
                         onChangeText={(text) => setPassword(text)}
                         value={password}
                         secureTextEntry={true}
                         placeholder=" Contraseña"
+                        placeholderTextColor={'#407738'}
                         autoCapitalize={'none'}
                         inputContainerStyle={[{paddingLeft: 10}, styles.input]}
+                        inputStyle={{marginLeft: 10, color:'#407738'}}
                     />
                 </View>
-                <View style={[styles.buttonSignInContainer, { height: windowHeight * 0.08 }]}>
-                    <StandardGreenButton
-                        title="Ingresar" disabled={loading} onPress={() => signInWithEmail()} />
-                </View>
+                <Button
+                    title="Ingresar"
+                    loading={loading}
+                    buttonStyle={{
+                        backgroundColor: '#2E5829',
+                        borderWidth: 2,
+                        borderColor: 'white',
+                        borderRadius: 30,
+                        minHeight: 50
+                    }}
+                    containerStyle={{
+                        width: 150,
+                        marginHorizontal: 50,
+                        marginVertical: 10,
+                        marginTop: 40,
+                    }}
+                    titleStyle={{ color: '#eef9ed' }}
+                    onPress={() => signInWithEmail()}
+                />
+
+                {/*<View style={[styles.buttonSignInContainer, { height: windowHeight * 0.08 }]}>*/}
+                {/*    <StandardGreenButton*/}
+                {/*        title="Ingresar" disabled={loading} onPress={() => signInWithEmail()} />*/}
+                {/*</View>*/}
                 <View style={[styles.buttonRegisterContainer, { marginTop: 80, height: windowHeight * 0.08 }]}>
-                    <Text style={{color: '#000000', textAlign: 'center', fontSize: 18}}> ¿No tenes una cuenta?
+                    <Text style={{color:'#2E5829', textAlign: 'center', fontSize: 18}}> ¿No tenes una cuenta?
                     </Text>
                     <Button title="Registrate"
-                            disabled={loading}
                             onPress={() => navigation.navigate('Register')}
                             buttonStyle={[styles.buttonRegister]}
-                            titleStyle={{color: '#000000', textDecorationLine: 'underline'}}
+                            titleStyle={{color: '#2E5829', textDecorationLine: 'underline'}}
                     />
                 </View>
             </View>
@@ -89,15 +129,16 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#FFFFFF',
+        backgroundColor: '#e9f4e9',
         paddingHorizontal: 20,
+        height: '100%'
     },
     inputContainer: {
         width: '100%',
         marginBottom: 20,
     },
     input: {
-        backgroundColor: '#B5DCCA',
+        backgroundColor: '#e9f4e9',
         borderRadius: 10,
     },
     buttonSignInContainer: {
@@ -107,6 +148,25 @@ const styles = StyleSheet.create({
         width: '100%',
     },
     buttonRegister: {
-        backgroundColor: '#FFFFFF',
+        backgroundColor: '#e9f4e9',
+        width: 'auto',
+    },
+    logo:{
+        color: '#407738',
+        width: 100,
+        height: 100
+
+    },
+    iconContainer: {
+        textAlign: "center",
+    }, activityIndicator: {
+        position: 'absolute',
+        right: 16,},
+    window: {
+        marginBottom: 50,
+        alignItems: 'center',
+        marginTop: 90,
     }
+
+
 });

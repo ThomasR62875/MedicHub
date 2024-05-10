@@ -9,7 +9,7 @@ import {Appointment} from "./Appointments";
 import TurnoContainer from "../components/TurnContainer";
 
 const Home: React.FC = ({navigation, route}: any) => {
-    const session = route.session;
+    const session = route.params.session;
     const [first_name, setFirstName] = useState('')
     const [loading, setLoading] = useState(true)
     const [appointments,setAppointments]= useState<Appointment[] | undefined>(undefined)
