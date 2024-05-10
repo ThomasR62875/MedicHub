@@ -14,6 +14,7 @@ import StandardGreenButton from "../components/StandardGreenButton";
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
 import RNPickerSelect from 'react-native-picker-select';
+import {DependentUser} from "./DependentUsers";
 
 type AddDoctorProps = NativeStackScreenProps<RootStackParamList, 'AddDoctor'>
 
@@ -30,6 +31,39 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}) => {
     const [specialty,setSpecialty]= useState('')
     const [phone, setPhone] = useState('')
     const [addresses, setAddresses] = useState<[string]>([''])
+    const [all_users, setAllUsers] = useState<DependentUser[] | undefined>(undefined)
+    const [session_user_id, setSessionUserId] = useState('')
+    const [user_id, setUserId] = useState('')
+
+
+    useEffect(() => {
+        if (session) {
+            const fetchUserId = async () => {
+                try {
+                    const {data, error} = await supabase.rpc("get_independent_user_id", {})
+                    if (data) {
+                        setSessionUserId(data);
+                    }
+                    if (error) {
+                        console.error('Error inserting UserId data:', error.message);
+                    } else {
+                        console.log('UserId data inserted successfully');
+                    }
+
+                } catch (error) {
+                    console.error('Error fetching UserId data:');
+                }
+            };
+            fetchUserId();
+
+        }
+    }, [session]); // Dependencia de sesión para ejecutar solo cuando la sesión cambie
+
+    useEffect(() => {
+        if (session_user_id) {
+            getAllUsers();
+        }
+    }, [session_user_id]);
 
     useEffect(() => {
         if (session) getSpecialties()
@@ -37,7 +71,6 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}) => {
     async function getSpecialties(){
         try {
             const {data, error} = await supabase.rpc('get_specialties');
-            console.log(data)
             setSpecialties(data);
             if (error) {
                 console.error('Error inserting specialty data:', error.message);
@@ -50,21 +83,38 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}) => {
 
     }
 
+    async function getAllUsers(){
+        try {
+            const { data, error } = await supabase.rpc('get_all_users', { user_id: session_user_id });
+            setAllUsers(data);
+            if (error) {
+                console.error('Error inserting users data:', error.message);
+            } else {
+                console.log('Users data inserted successfully');
+            }
+        } catch (error) {
+            console.error('Error fetching users data:');
+        }
+
+    }
+
     async function addDoctor({
         name,
         specialty,
         phone,
         email,
         addresses,
+        user_id
     }: {
         name: string
         specialty: string
         phone: string
         email: string
         addresses: [string]
+        user_id: string
     }) {
         try {
-            const { error } = await supabase.rpc("add_doctor", {name_input: name, specialty_input: specialty,phone_input: phone, email_input: email, addresses_input: addresses})
+            const { error } = await supabase.rpc("add_doctor", {name_input: name, specialty_input: specialty,phone_input: phone, email_input: email, addresses_input: addresses, user_id_input:user_id})
             if (error) {
                 console.error('Error inserting data:', error.message);
             } else {
@@ -129,10 +179,19 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}) => {
                             autoCapitalize={'none'}
                         />
                     </View>
+                    <View style={styles.pickerStyle}>
+                        <RNPickerSelect
+                            placeholder={{ label: 'Usuario', value: null }}
+                            items={all_users ? all_users.map(u => ({ label: u.first_name, value: u.id})) : []}
+                            onValueChange={(value) => setUserId(value)}
+                            style={{ ...pickerSelectStyles }}
+                            value={user_id}
+                        />
+                    </View>
                     <View style={styles.verticallySpaced}>
                         <StandardGreenButton
                             title="Agregar"
-                            onPress={() => addDoctor({name, specialty, phone, email, addresses})}
+                            onPress={() => addDoctor({name, specialty, phone, email, addresses, user_id})}
                             disabled={loading}
                         />
                     </View>
