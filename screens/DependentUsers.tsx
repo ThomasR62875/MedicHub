@@ -18,6 +18,9 @@ const DependentUsers: React.FC = ({navigation, route} : any) => {
     const [loading, setLoading] = useState(true)
     const [users,setUsers]= useState([])
     const [dependent_users,setDependentUsers]= useState<DependentUser[] | undefined>(undefined)
+    const screenHeight = Dimensions.get('window').height;
+    const percentageMargin = screenHeight * 0.05;
+
 
     useEffect(() => {
         if (session) getUsers()
@@ -62,7 +65,7 @@ return(
         <View style={styles.addContainer}>
             <AddButton onPress={() => navigation.navigate('AddDependentUser', {session: session})} />
         </View>
-        <ScrollView>
+        <ScrollView style={{width:'90%', marginTop: percentageMargin }}>
             {dependent_users && dependent_users.length >0 ? (
                 dependent_users.map((d_user: DependentUser, i) => {
                 return (
