@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {
     Alert,
     Image,
@@ -11,8 +11,7 @@ import {
     Keyboard
 } from 'react-native'
 import { supabase } from '../lib/supabase'
-import { Button } from 'react-native-elements'
-import { Input } from '@rneui/themed';
+import { Button, Input } from 'react-native-elements'
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 // import StandardGreenButton from "../components/StandardGreenButton";
 import {RootStackParamList} from "../App";
@@ -39,6 +38,22 @@ const LogIn: React.FC<LogInProps> = ({navigation, route})=> {
     const [loading, setLoading] = useState(false)
 
     const [errorMessage, setErrorMessage] = useState<string>('');
+
+    useEffect(() => {
+        if (
+            email.trim() !== '' &&
+            password.trim() !== '' &&
+            errorMessage === ''
+
+        ) {
+            setIsButtonDisabled(false);
+        } else {
+            setIsButtonDisabled(true);
+        }
+    }, [email, password]);
+
+    const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(true);
+
     const validateInput = (value: string) => {
         if (value.trim() === '' || !value.includes("@") || !(value.includes(".edu") || value.includes(".com") || value.includes(".ar"))) {
             setErrorMessage('Dirección de mail inválida. Ej: email@address.com');
@@ -54,7 +69,7 @@ const LogIn: React.FC<LogInProps> = ({navigation, route})=> {
             password: password,
         })
 
-        if (error) Alert.alert(error.message)
+        if (error) Alert.alert('Mail o contraseña incorrecto.')
         setLoading(false)
     }
 
@@ -69,7 +84,7 @@ const LogIn: React.FC<LogInProps> = ({navigation, route})=> {
                     <Input
                         label="Mail"
                         labelStyle={{color: '#2E5829'}}
-                        leftIcon={{ type: 'font-awesome', name: 'envelope', color: '#2E5829FF'}}
+                        leftIcon={{ type: 'font-awesome', name: 'envelope', color: '#2E5829'}}
                         onChangeText={(text) => {setEmail(text); validateInput(text)}}
                         value={email}
                         inputStyle={{marginLeft: 10, color:'#407738'}}
@@ -98,6 +113,7 @@ const LogIn: React.FC<LogInProps> = ({navigation, route})=> {
                 </View>
                 <Button
                     title="Ingresar"
+                    disabled={isButtonDisabled}
                     loading={loading}
                     buttonStyle={{
                         backgroundColor: '#2E5829',
