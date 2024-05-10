@@ -11,7 +11,8 @@ import {
     Keyboard
 } from 'react-native'
 import { supabase } from '../lib/supabase'
-import { Button, Input } from 'react-native-elements'
+import { Button } from 'react-native-elements'
+import { Input } from '@rneui/themed';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 // import StandardGreenButton from "../components/StandardGreenButton";
 import {RootStackParamList} from "../App";
@@ -37,6 +38,15 @@ const LogIn: React.FC<LogInProps> = ({navigation, route})=> {
     const [password, setPassword] = useState('')
     const [loading, setLoading] = useState(false)
 
+    const [errorMessage, setErrorMessage] = useState<string>('');
+    const validateInput = (value: string) => {
+        if (value.trim() === '' || !value.includes("@") || !(value.includes(".edu") || value.includes(".com") || value.includes(".ar"))) {
+            setErrorMessage('Dirección de mail inválida. Ej: email@address.com');
+        } else {
+            setErrorMessage('');
+        }
+    };
+
     async function signInWithEmail() {
         setLoading(true)
         const { error } = await supabase.auth.signInWithPassword({
@@ -60,13 +70,15 @@ const LogIn: React.FC<LogInProps> = ({navigation, route})=> {
                         label="Mail"
                         labelStyle={{color: '#2E5829'}}
                         leftIcon={{ type: 'font-awesome', name: 'envelope', color: '#2E5829FF'}}
-                        onChangeText={(text) => setEmail(text)}
+                        onChangeText={(text) => {setEmail(text); validateInput(text)}}
                         value={email}
                         inputStyle={{marginLeft: 10, color:'#407738'}}
-                        placeholder="Email@address.com"
+                        placeholder='email@address.com'
                         placeholderTextColor={'#407738'}
                         autoCapitalize={'none'}
                         inputContainerStyle={[{paddingLeft: 10}, styles.input]}
+                        errorStyle={{ color: 'red' }}
+                        errorMessage={errorMessage}
                     />
                 </View>
                 <View style={[styles.inputContainer, {height: windowHeight * 0.08 }]}>
@@ -135,7 +147,7 @@ const styles = StyleSheet.create({
     },
     inputContainer: {
         width: '100%',
-        marginBottom: 20,
+        marginBottom: 40,
     },
     input: {
         backgroundColor: '#e9f4e9',

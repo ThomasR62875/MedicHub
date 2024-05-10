@@ -10,6 +10,7 @@ import {Appointment} from "./Appointments";
 import {DependentUser} from "./DependentUsers"
 import {Doctor} from "./Doctors";
 import RNPickerSelect from 'react-native-picker-select';
+import DatePicker from 'react-native-modern-datepicker';
 
 type AddAppointmentProps = NativeStackScreenProps<RootStackParamList, 'AddAppointment'>
 
@@ -125,53 +126,51 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
 
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-            <ScrollView>
                 <SafeAreaView style={styles.container}>
-            {/*    <DatePicker*/}
-            {/*        locale={'ES'}*/}
-            {/*        options={{*/}
-            {/*            textHeaderColor: '#073A29',*/}
-            {/*            textDefaultColor: '#000000',*/}
-            {/*            selectedTextColor: '#fff',*/}
-            {/*            mainColor: '#073A29',*/}
-            {/*            textSecondaryColor: '#B5DCCA',*/}
-            {/*            borderColor: 'rgba(122, 146, 165, 0.1)',*/}
-            {/*        }}*/}
-            {/*        // date={date}*/}
-            {/*        // onSelectedChange={(date: React.SetStateAction<dayjs.Dayjs>) => setDate(date)}*/}
-            {/*    />*/}
-            {/*    <Input*/}
-            {/*        leftIcon={{ type: 'font-awesome', name: 'book' }}*/}
-            {/*        style={styles.verticallySpaced}*/}
-            {/*        placeholder="Título"*/}
-            {/*        value={description}*/}
-            {/*        onChangeText={(text) => setDescription(text)}*/}
-            {/*    />*/}
-            {/*    <View style={styles.pickerStyle}>*/}
-            {/*        <RNPickerSelect*/}
-            {/*            placeholder={{ label: 'Médico', value: null }}*/}
-            {/*            items={doctors ? doctors.map(d => ({ label: d.name, value: d.id})) : []}*/}
-            {/*            onValueChange={(value) => setDoctor(value)}*/}
-            {/*            style={{ ...pickerSelectStyles }}*/}
-            {/*            value={doctor}*/}
-            {/*        />*/}
-            {/*    </View>*/}
-            {/*    <View style={styles.pickerStyle}>*/}
-            {/*        <RNPickerSelect*/}
-            {/*            placeholder={{ label: 'Usuario', value: null }}*/}
-            {/*            items={all_users ? all_users.map(u => ({ label: u.first_name, value: u.id})) : []}*/}
-            {/*            onValueChange={(value) => setUserId(value)}*/}
-            {/*            style={{ ...pickerSelectStyles }}*/}
-            {/*            value={user_id}*/}
-            {/*        />*/}
-            {/*    </View>*/}
-            {/*    <StandardGreenButton*/}
-            {/*        title="Confirmar"*/}
-            {/*        disabled={loading}*/}
-            {/*        // onPress={() => addAppointment({date, description, doctor, user_id})}*/}
-            {/*    />*/}
+                <DatePicker
+                    locale={'ES'}
+                    options={{
+                        textHeaderColor: '#073A29',
+                        textDefaultColor: '#000000',
+                        selectedTextColor: '#fff',
+                        mainColor: '#073A29',
+                        textSecondaryColor: '#B5DCCA',
+                        borderColor: 'rgba(122, 146, 165, 0.1)',
+                    }}
+                    // date={date}
+                    // onSelectedChange={(date: React.SetStateAction<dayjs.Dayjs>) => setDate(date)}
+                />
+                <Input
+                    leftIcon={{ type: 'font-awesome', name: 'book' }}
+                    style={styles.verticallySpaced}
+                    placeholder="Título"
+                    value={description}
+                    onChangeText={(text) => setDescription(text)}
+                />
+                <View style={styles.pickerStyle}>
+                    <RNPickerSelect
+                        placeholder={{ label: 'Médico', value: null }}
+                        items={doctors ? doctors.map(d => ({ label: d.name, value: d.id})) : []}
+                        onValueChange={(value) => setDoctor(value)}
+                        style={{ ...pickerSelectStyles }}
+                        value={doctor}
+                    />
+                </View>
+                <View style={styles.pickerStyle}>
+                    <RNPickerSelect
+                        placeholder={{ label: 'Usuario', value: null }}
+                        items={all_users ? all_users.map(u => ({ label: u.first_name, value: u.id})) : []}
+                        onValueChange={(value) => setUserId(value)}
+                        style={{ ...pickerSelectStyles }}
+                        value={user_id}
+                    />
+                </View>
+                <StandardGreenButton
+                    title="Confirmar"
+                    disabled={loading}
+                    //onPress={() => addAppointment({date, description, doctor, user_id})}
+                />
             </SafeAreaView>
-            </ScrollView>
         </TouchableWithoutFeedback>
       );
 }
