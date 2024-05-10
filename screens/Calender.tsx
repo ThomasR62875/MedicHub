@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {Alert, ScrollView, StyleSheet, Text, View} from "react-native";
+import {Alert, Dimensions, ScrollView, StyleSheet, Text, View} from "react-native";
 import {Appointment} from "./Appointments";
 import {Calendar} from "react-native-calendars";
 import AddButton from "../components/AddButton";
@@ -121,7 +121,7 @@ const Calender: React.FC = ({ navigation, route } : any) => {
     }
 
     return (
-        <View style={{height: '100%'}}>
+        <View style={styles.container}>
             <Calendar
             markingType={'custom'}
             markedDates={AllMarkedDays}
@@ -157,6 +157,7 @@ const Calender: React.FC = ({ navigation, route } : any) => {
     )
 }
 
+const screenHeight = Dimensions.get('window').height;
 const styles = StyleSheet.create({
     bottomBar:{
         position: 'absolute',
@@ -182,6 +183,10 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         width: '90%',
     },
+    container: {
+        height: '100%',
+        marginTop: screenHeight * 0.1,
+    }
 });
 
 export default Calender;

@@ -34,6 +34,7 @@ const Home: React.FC = ({navigation, route}: any) => {
 
     useEffect(() => {
         if (session) getProfile()
+        if (session) getAppointments()
     }, [session])
 
     async function getProfile() {
@@ -50,10 +51,6 @@ const Home: React.FC = ({navigation, route}: any) => {
             }
         }
     }
-
-    useEffect(() => {
-        if (session) getAppointments()
-    }, [session])
 
     async function getAppointments() {
         const to_return: Appointment[] = [];
@@ -156,6 +153,7 @@ const Home: React.FC = ({navigation, route}: any) => {
     );
 }
 
+const screenHeight = Dimensions.get('window').height;
 const styles = StyleSheet.create({
     profileIconContainer: {
         top: 10,
@@ -176,6 +174,7 @@ const styles = StyleSheet.create({
     container: {
         alignItems: 'center',
         justifyContent: 'center',
+        marginTop: screenHeight * 0.15,
     },
     grid: {
         flexDirection: 'row',

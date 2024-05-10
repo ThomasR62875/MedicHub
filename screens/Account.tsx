@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabase'
-import {StyleSheet, View, Alert, Text, Modal, ScrollView} from 'react-native'
+import {StyleSheet, View, Alert, Text, Modal, ScrollView, Dimensions} from 'react-native'
 import {Button, Icon} from 'react-native-elements'
 
 const Account: React.FC = ({ navigation, route } : any) => {
@@ -10,6 +10,7 @@ const Account: React.FC = ({ navigation, route } : any) => {
     const [dni, setDni] = useState(0)
     const [avatar_url, setAvatarUrl] = useState('')
     const [showModal, setShowModal] = useState<boolean>(false)
+    const screenHeight = Dimensions.get('window').height;
 
     useEffect(() => {
         if (session) getProfile()
@@ -35,7 +36,7 @@ const Account: React.FC = ({ navigation, route } : any) => {
 
     // @ts-ignore
     return (
-        <View>
+        <View style={{marginTop: screenHeight*0.1}}>
             <ScrollView>
             <View style={styles.iconContainer}>
                 <Icon name='build-outline' type='ionicon' size={35} onPress={() => navigation.navigate('EditAccount', {session: session})} />

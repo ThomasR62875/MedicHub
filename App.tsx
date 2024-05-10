@@ -121,7 +121,7 @@ const App = () => {
                                   backgroundColor: '#2e5829',
                                 },
                                 headerTintColor: '#abd2a8',
-                                headerBackTitle: 'Volver', // Cambia la etiqueta del botón de retroceso
+                                headerBackTitle: 'Iniciar Sesión', // Cambia la etiqueta del botón de retroceso
                                 }}/>
               </>
           ) : (
@@ -133,34 +133,66 @@ const App = () => {
                 <Stack.Screen name="AddAppointment"
                               component={AddAppointment}
                               initialParams={{session: session}}
-                              options={{ headerShown: false }}/>
+                              options={{
+                                title: '',
+                                headerTintColor: '#abd2a8',
+                                headerBackTitle: 'Volver',
+                              }}/>
                 <Stack.Screen name="AddDoctor"
                               component={AddDoctor}
-                              initialParams={{session: session}} />
+                              initialParams={{session: session}}
+                              options={{
+                                title: '',
+                                headerTintColor: '#abd2a8',
+                                headerBackTitle: 'Doctores',
+                              }}/>
                 <Stack.Screen name="AddDependentUser"
                               component={AddDependentUser}
-                              initialParams={{session: session}} />
+                              initialParams={{session: session}}
+                              options={{
+                                title: '',
+                                headerTintColor: '#abd2a8',
+                                headerBackTitle: 'Usuario Dependiente',
+                              }}/>
                 <Stack.Screen name="AddMedication"
                               component={AddMedication}
-                              initialParams={{session: session}} />
+                              initialParams={{session: session}}
+                              options={{
+                                title: '',
+                                headerTintColor: '#abd2a8',
+                                headerBackTitle: 'Medicamentos',
+                              }}/>
                 <Stack.Screen name="Appointments"
                               component={Appointments}
                               initialParams={{session: session}}
-                              options={{headerShown: false}}/>
+                              options={{
+                                title: '',
+                                headerTintColor: '#abd2a8',
+                                headerBackTitle: 'Perfil',
+                              }}/>
                  <Stack.Screen name="Doctors"
                                component={Doctors} initialParams={{session: session}}
-                               options={{headerShown: false}}/>
+                               options={{
+                                 title: '',
+                                 headerTintColor: '#abd2a8',
+                                 headerBackTitle: 'Perfil',
+                               }}/>
                 <Stack.Screen name="EditAccount"
                                 component={EditAccount}
                                 initialParams={{session: session}}
                                 options={{
                                     title: '',
-                                    headerTintColor: '#003124',
+                                    headerTintColor: '#abd2a8',
+                                    headerBackTitle: 'Perfil',
                                 }}/>
                   <Stack.Screen name="Medication"
                                 component={Medication}
                                 initialParams={{session: session}}
-                                options={{headerShown: false}}/>
+                                options={{
+                                  title: '',
+                                  headerTintColor: '#abd2a8',
+                                  headerBackTitle: 'Perfil',
+                                }}/>
               </>
           )}
         </Stack.Navigator>
