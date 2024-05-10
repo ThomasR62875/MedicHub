@@ -10,12 +10,10 @@ import {
     TouchableWithoutFeedback,
     Keyboard
 } from 'react-native'
-import {ActivityIndicator} from "react-native-paper";
 import { supabase } from '../lib/supabase'
 import { Button, Input } from 'react-native-elements'
-import { useNavigation, ParamListBase } from '@react-navigation/native'; // Importa useNavigation desde @react-navigation/native
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import StandardGreenButton from "../components/StandardGreenButton";
+// import StandardGreenButton from "../components/StandardGreenButton";
 import {RootStackParamList} from "../App";
 // @ts-ignore
 import Logo from '../assets/icon.png'
