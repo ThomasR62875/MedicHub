@@ -60,17 +60,12 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}) => {
     }, [session]); // Dependencia de sesión para ejecutar solo cuando la sesión cambie
 
     useEffect(() => {
-        if (session_user_id) {
-            getAllUsers();
-        }
-    }, [session_user_id]);
-
-    useEffect(() => {
         if (session) getSpecialties()
     }, [session])
     async function getSpecialties(){
         try {
             const {data, error} = await supabase.rpc('get_specialties');
+            console.log(data)
             setSpecialties(data);
             if (error) {
                 console.error('Error inserting specialty data:', error.message);
@@ -82,6 +77,13 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}) => {
         }
 
     }
+
+    useEffect(() => {
+        if (session_user_id) {
+            getAllUsers();
+        }
+    }, [session_user_id]);
+
 
     async function getAllUsers(){
         try {
