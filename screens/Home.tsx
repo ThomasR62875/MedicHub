@@ -151,9 +151,6 @@ const Home: React.FC = ({navigation, route}: any) => {
                         </View> esto vuela o queda todo*/}
                 </ScrollView>
             </View>
-            <View style={styles.bottomBar}>
-                {/*<BottomBar navigation={navigation} route={route} />*/}
-            </View>
         </View>
     );
 }
