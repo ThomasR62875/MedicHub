@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabase'
 import {StyleSheet, View, Alert, Text, Modal, ScrollView, Dimensions} from 'react-native'
 import {Button, Icon} from 'react-native-elements'
+import {MaterialCommunityIcons} from "@expo/vector-icons";
 
 const Account: React.FC = ({ navigation, route } : any) => {
     const {session} = route.params;
@@ -34,6 +35,8 @@ const Account: React.FC = ({ navigation, route } : any) => {
         }
     }
 
+    const size=25;
+
     // @ts-ignore
     return (
         <View style={{marginTop: screenHeight*0.1}}>
@@ -57,20 +60,20 @@ const Account: React.FC = ({ navigation, route } : any) => {
                 <Text style={styles.title}>DNI:</Text>
                 <Text style={styles.text2}>{dni}</Text>
                 <View style={{ marginTop: 15 }} />
-                <Button title={<Text style={styles.buttonText}>Mis doctores</Text>}
+                <Button title={<Text style={styles.buttonText}><MaterialCommunityIcons name="doctor" size={size}/>Mis doctores</Text>}
                         buttonStyle={styles.misCosas}
                         onPress={() => navigation.navigate('Doctors', {session: session})}
                 />
-                <Button title={<Text style={styles.buttonText}>Mis turnos</Text>}
+                <Button title={<Text style={styles.buttonText}><MaterialCommunityIcons name="archive-clock" size={size}/>Mis turnos</Text>}
                         buttonStyle={styles.misCosas}
                         onPress={() => navigation.navigate({name: 'Appointments', params: {session: session}})}/>
-                <Button title={<Text style={styles.buttonText}>Mis vacunas</Text>}
+                <Button title={<Text style={styles.buttonText}><MaterialCommunityIcons name="needle" size={size}/>Mis vacunas</Text>}
                         buttonStyle={styles.misCosas}
                 />
-                <Button title={<Text style={styles.buttonText}>Mis medicamentos</Text>}
+                <Button title={<Text style={styles.buttonText}><MaterialCommunityIcons name="pill" size={size}/>Mis medicamentos</Text>}
                         buttonStyle={styles.misCosas}
                         onPress={() => navigation.navigate({name: 'Medication', params: {session: session}})}/>
-                <Button title={<Text style={styles.buttonText}>Mis archivos</Text>}
+                <Button title={<Text style={styles.buttonText}><MaterialCommunityIcons name="archive" size={size}/>Mis archivos</Text>}
                         buttonStyle={styles.misCosas}
                 />
 
