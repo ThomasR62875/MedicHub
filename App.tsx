@@ -20,22 +20,24 @@ import AddMedication from './screens/AddMedication'
 import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
 import {StackNavigationProp} from "@react-navigation/stack";
 import 'react-native-reanimated'
+import Calender from './screens/Calender';
 
 export type RootStackParamList = {
+  Account: { session: Session | null };
+  AddMedication: {session: Session | null};
+  AddAppointment: {session: Session | null};
+  AddDoctor: {session: Session | null};
+  AddDependentUser: {session: Session | null};
+  Appointments: { session: Session | null };
+  Calendar: {session: Session | null};
+  Doctors: {session: Session | null};
+  DependentUsers: {session: Session | null};
+  EditAccount: {session: Session | null};
   HomeTabs: { session: Session | null };
   Home: { session: Session | null };
   Login: {session: Session | null};
+  Medication: {session: Session | null};
   Register: undefined;
-  Account: { session: Session | null };
-  Appointments: { session: Session | null };
-  EditAccount: {session: Session | null};
-  AddAppointment: {session: Session | null};
-  AddDoctor: {session: Session | null};
-  Doctors: {session: Session | null};
-  DependentUsers: {session: Session | null};
-  AddDependentUser: {session: Session | null};
-    Medication: {session: Session | null};
-    AddMedication: {session: Session | null};
 };
 
 
@@ -56,9 +58,9 @@ function HomeTabs({route}: Props) {
   return (
       <Tab.Navigator>
         <Tab.Screen name="Home" component={Home} initialParams={{session: session}}/>
-        <Tab.Screen name="Appointments" component={Appointments} initialParams={{session: session}}/>
-        <Tab.Screen name="Medication" component={Medication} initialParams={{session: session}}/>
-        <Tab.Screen name="Doctors" component={Doctors} initialParams={{session: session}}/>
+        <Tab.Screen name="Calendar" component={Calender} initialParams={{session: session}}/>
+        <Tab.Screen name="DependentUsers" component={DependentUsers} initialParams={{session: session}} />
+        <Tab.Screen name="Account" component={Account} initialParams={{session: session}}/>
       </Tab.Navigator>
   );
 }
@@ -100,13 +102,14 @@ const App = () => {
           ) : (
               <>
                 <Stack.Screen name="HomeTabs" component={HomeTabs} initialParams={{session: session}} />
-                <Stack.Screen name="Account" component={Account} initialParams={{session: session}} />
-                <Stack.Screen name="EditAccount" component={EditAccount} initialParams={{session: session}} />
                 <Stack.Screen name="AddAppointment" component={AddAppointment} initialParams={{session: session}} />
                 <Stack.Screen name="AddDoctor" component={AddDoctor} initialParams={{session: session}} />
-                <Stack.Screen name="DependentUsers" component={DependentUsers} initialParams={{session: session}} />
                 <Stack.Screen name="AddDependentUser" component={AddDependentUser} initialParams={{session: session}} />
                 <Stack.Screen name="AddMedication" component={AddMedication} initialParams={{session: session}} />
+                <Stack.Screen name="Appointments" component={Appointments} initialParams={{session: session}}/>
+                <Stack.Screen name="Doctors" component={Doctors} initialParams={{session: session}}/>
+                <Stack.Screen name="EditAccount" component={EditAccount} initialParams={{session: session}} />
+                <Stack.Screen name="Medication" component={Medication} initialParams={{session: session}}/>
               </>
           )}
         </Stack.Navigator>

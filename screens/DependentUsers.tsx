@@ -1,18 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabase'
 import { StyleSheet, View, Alert, ScrollView,Text} from 'react-native'
-import {NativeStackScreenProps} from "@react-navigation/native-stack";
-import {RootStackParamList} from "../App";
-import {Doctor} from "./Doctors";
-import {Button} from "react-native-elements";
 import AddButton from "../components/AddButton";
 
 // UNA IDEA DE DEPENDENT USERS SERIA PODER VER CADA USUARIO Y EDITARLO DESDE AHI (por ej eliminarlo, lo de migrar info etc)
-// TAMBIEN QUE CUANDO ABRIMOS UN USUARIO DEPENDEDIENTE, NOS DESPIEGLUE SU INFO (doctores, appointments, etc)
-
-
-type DependentUsersProps = NativeStackScreenProps<RootStackParamList, 'DependentUsers'>;
-
+// TAMBIEN QUE CUANDO ABRIMOS UN USUARIO DEPENDEDIENTE, NOS DESPIEGLUE SU INFO (doctores, appointments, etc) todo
 
 export type DependentUser = {
     first_name: string;
@@ -21,12 +13,11 @@ export type DependentUser = {
     id: string;
 }
 
-const DependentUsers: React.FC<DependentUsersProps> = ({navigation, route}) => {
+const DependentUsers: React.FC = ({navigation, route} : any) => {
     const {session} = route.params;
     const [loading, setLoading] = useState(true)
     const [users,setUsers]= useState([])
     const [dependent_users,setDependentUsers]= useState<DependentUser[] | undefined>(undefined)
-
 
     useEffect(() => {
         if (session) getUsers()
@@ -62,31 +53,40 @@ const DependentUsers: React.FC<DependentUsersProps> = ({navigation, route}) => {
         setDependentUsers(to_return)
         return to_return;
     }
+
 return(
     <View style={styles.container}>
         <View style={styles.titleContainer}>
-            <Text style={styles.titleText}>     Usuarios Dependientes</Text>
+            <Text style={styles.titleText}>Usuarios Dependientes</Text>
         </View>
         <View style={styles.addContainer}>
             <AddButton onPress={() => navigation.navigate('AddDependentUser', {session: session})} />
         </View>
         <ScrollView>
-            {dependent_users && dependent_users.map((d_user: DependentUser, i) => (
-                <View key={i} style={styles.userContainer}>
-                    <View style={styles.infoRow}>
-                        <Text style={styles.label}>Nombre:</Text>
-                        <Text style={styles.value}>{d_user.first_name}</Text>
+            {dependent_users && dependent_users.length >0 ? (
+                dependent_users.map((d_user: DependentUser, i) => {
+                return (
+                    <View key={i} style={styles.userContainer}>
+                        <View style={styles.infoRow}>
+                            <Text style={styles.label}>Nombre:</Text>
+                            <Text style={styles.value}>{d_user.first_name}</Text>
+                        </View>
+                        <View style={styles.infoRow}>
+                            <Text style={styles.label}>Apellido:</Text>
+                            <Text style={styles.value}>{d_user.last_name}</Text>
+                        </View>
+                        <View style={styles.infoRow}>
+                            <Text style={styles.label}>Mail:</Text>
+                            <Text style={styles.value}>{d_user.dni}</Text>
+                        </View>
                     </View>
-                    <View style={styles.infoRow}>
-                        <Text style={styles.label}>Apellido:</Text>
-                        <Text style={styles.value}>{d_user.last_name}</Text>
-                    </View>
-                    <View style={styles.infoRow}>
-                        <Text style={styles.label}>Mail:</Text>
-                        <Text style={styles.value}>{d_user.dni}</Text>
-                    </View>
+                )
+            })) : (
+                <View style={[styles.turnoContainer, {padding: 10}]}>
+                    <Text style={styles.text}>No tienes usuarios dependientes </Text>
+                    <Text style={[styles.text, {fontStyle: 'italic'}]}> Presiona el + para crear un nuevo usuario direcatmente relacionado a esta cuenta</Text>
                 </View>
-            ))}
+            )}
         </ScrollView>
     </View>
 )
@@ -96,8 +96,8 @@ export default DependentUsers;
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
         justifyContent: 'center',
+        alignItems: 'center',
         padding: 20,
     },
     userContainer: {
@@ -127,11 +127,22 @@ const styles = StyleSheet.create({
         fontSize: 24,
         fontWeight: 'bold',
         color: '#333',
+        textAlign: 'center',
     },
     addContainer: {
         left: 290,
         bottom: 80,
         alignSelf: 'flex-start',
-    }
-
+    },
+    text: {
+        fontSize: 18,
+        textAlign: 'center',
+    },
+    turnoContainer: {
+        backgroundColor: '#D6EFD4',
+        borderTopRightRadius: 5,
+        borderTopLeftRadius: 5,
+        borderColor: 'black',
+        borderWidth: 1,
+    },
 });

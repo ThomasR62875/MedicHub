@@ -1,5 +1,3 @@
-import {NativeStackScreenProps} from "@react-navigation/native-stack";
-import {RootStackParamList} from "../App";
 import React, {useEffect, useState} from "react";
 import {Alert, ScrollView, StyleSheet, Text, View} from "react-native";
 import {Appointment} from "./Appointments";
@@ -8,12 +6,11 @@ import AddButton from "../components/AddButton";
 import TurnoContainer from "../components/TurnContainer";
 import {supabase} from "../lib/supabase";
 
-type CalenderScreenProps = NativeStackScreenProps<RootStackParamList, 'Calender'>;
-
-const Calender: React.FC<CalenderScreenProps> = ({ navigation, route }) => {
+const Calender: React.FC = ({ navigation, route } : any) => {
     const {session} = route.params;
     const [appointments,setAppointments]= useState<Appointment[] | undefined>(undefined)
     const [loading, setLoading] = useState(true)
+
     useEffect(() => {
         if (session) {
             getProfile()
@@ -78,9 +75,10 @@ const Calender: React.FC<CalenderScreenProps> = ({ navigation, route }) => {
     const getCurrentDate = () => {
         const date = new Date();
         const year = date.getFullYear();
-        const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Month is zero-indexed
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
         const day = date.getDate().toString().padStart(2, '0');
-        return `${year}-${month}-${day}`;
+        const stringDay = day.toString();
+        return `${year}-${month}-${stringDay}`;
     };
     const currentDate = getCurrentDate(); //es necesario porq no le gusta a AllMarkedDays q currentDate sea una funcion
     const [selectedDate, setSelectedDate] = useState(currentDate);
@@ -89,18 +87,19 @@ const Calender: React.FC<CalenderScreenProps> = ({ navigation, route }) => {
     };
 
     let targetDate = selectedDate;
+    let parts = targetDate.split('-');
+    let dateNormal = `${parts[2]}-${parts[1]}-${parts[0]}`;
     let filteredData : Appointment[] | undefined = undefined; //es un array donde se guardan todos los appointments los cuales su date coinciden con el día seleccionado en el calendario (targeDate)
     let markedDates : string[] = []; //Es un array donde se guardan todos los dates de appointments, en formato string YYYY-MM-DD porq es lo q usa el calendar
     if(appointments){
         filteredData = appointments.filter(item => {
-            //no se si anda porq cuando vas a un seleccionar (osea targetDate se convierte) un día q tiene turnos, crashea diciendo q date.getDate is not a fucntion (it is undefined) todo
             return item.date.toString().slice(0,10) === targetDate;
         });
         markedDates = appointments.map(item => item.date.toString().slice(0,10));
     }
     const markedDatesString = markedDates.reduce<{ [key: string]:
             { marked: boolean, dotColor: string } }>((acc, date) => {
-        acc[date] = { marked: true, dotColor: '#80FF80' };
+        acc[date] = { marked: true, dotColor: '#48B445' };
         return acc;
     }, {});
 
@@ -110,9 +109,15 @@ const Calender: React.FC<CalenderScreenProps> = ({ navigation, route }) => {
         },
         [selectedDate]: {
             selected: true,
-            selectedColor: '#038839',
+            selectedColor: '#073A29',
             ...(markedDatesString[selectedDate] || {})
-        }
+        },
+        //acá faltaria agregar para que se marquen los días de toma de medicamentos, esto lo hariamos con "period"s todo
+    }
+
+    const customTheme = {
+        arrowColor: '#00A36C',
+        todayTextColor: '#00A36C',
     }
 
     return (
@@ -121,12 +126,14 @@ const Calender: React.FC<CalenderScreenProps> = ({ navigation, route }) => {
             markingType={'custom'}
             markedDates={AllMarkedDays}
             onDayPress={handleDayPress}
+            theme={customTheme}
             />
             <ScrollView>
                 {filteredData && filteredData.length > 0 ? (
                     filteredData.map((turno: Appointment, i: number) => {
+
                         return(
-                            <View key={i}>
+                            <View key={i} style={{alignItems: 'center', marginTop: 10}}>
                                 <TurnoContainer
                                     date={turno.date}
                                     turno={turno}
@@ -135,47 +142,17 @@ const Calender: React.FC<CalenderScreenProps> = ({ navigation, route }) => {
                             </View>
                         )
                         })) :  (
-                            <View style={[styles.turnoContainer, {padding: 10}]}>
-                                <Text style={styles.text}>No hay turnos este día</Text>
-                                <Text style={[styles.text, {fontStyle: 'italic'}]}> Presiona el + para crear un turno el {targetDate}</Text>
+                            <View style={{alignItems: 'center', marginTop: 10}}>
+                                <View style={[styles.turnoContainer, {padding: 10}]}>
+                                    <Text style={styles.text}>No hay turnos este día</Text>
+                                    <Text style={[styles.text, {fontStyle: 'italic'}]}>Presiona el + para crear un turno el {dateNormal}</Text>
+                                </View>
                             </View>
-                        )
-                        }
+                        )}
                 <View style={{alignItems: 'center', marginTop: 10}}>
                     <AddButton onPress={() => navigation.navigate('AddAppointment', {session})} />
-                    <View style={{marginTop:60}}>
-                        {!filteredData && <Text>filteredData is undefined</Text>}
-                        {!markedDates && <Text>markedDatesArray is undefined</Text>}
-
-                        {filteredData && (
-                            <>
-                                <Text>Contenido de filteredData:</Text>
-                                <Text>{filteredData.length}</Text>
-                                {filteredData.map((item, index) => (
-                                    <Text key={index}>{item.date.toString()}</Text>
-                                ))}
-                            </>
-                        )}
-                        {appointments && appointments.length > 0 ? (
-                            <>
-                                <Text> el targetDate {targetDate}</Text>
-                                <Text>Contenido de appointments:</Text>
-                                {appointments.map((item, index) => (
-                                    <View key={index}>
-                                        <Text>{item.date.toString().slice(0,10)} === {targetDate}</Text>
-                                    </View>
-
-                                ))}
-                            </>
-                        ) : (
-                            <Text>No hay citas disponibles</Text>
-                        )}
-                    </View>
                 </View>
             </ScrollView>
-            <View style={styles.bottomBar}>
-                {/*<BottomBar navigation={navigation} route={route} />*/}
-            </View>
         </View>
     )
 }
@@ -203,10 +180,39 @@ const styles = StyleSheet.create({
         borderTopLeftRadius: 5,
         borderColor: 'black',
         borderWidth: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
         width: '90%',
     },
 });
 
 export default Calender;
+
+/*
+Esto lo use para encontrar errores, asiq queda acá por si se vuelve a necesitar
+
+<View style={{marginTop:60}}>
+                        {!filteredData && <Text>filteredData is undefined</Text>}
+                        {filteredData && (
+                            <>
+                                <Text>Contenido de filteredData:</Text>
+                                <Text>{filteredData.length}</Text>
+                                {filteredData.map((item, index) => (
+                                    <Text key={index}>{item.date.toString()}</Text>
+                                ))}
+                            </>
+                        )}
+                        {appointments && appointments.length > 0 ? (
+                            <>
+                                <Text> el targetDate {targetDate}</Text>
+                                <Text>Contenido de appointments:</Text>
+                                {appointments.map((item, index) => (
+                                    <View key={index}>
+                                        <Text>{item.date.toString().slice(0,10)} === {targetDate}</Text>
+                                    </View>
+
+                                ))}
+                            </>
+                        ) : (
+                            <Text>No hay citas disponibles</Text>
+                        )}
+                    </View>
+ */

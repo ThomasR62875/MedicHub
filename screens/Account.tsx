@@ -1,14 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabase'
-import {StyleSheet, View, Alert, Text, Modal} from 'react-native'
+import {StyleSheet, View, Alert, Text, Modal, ScrollView} from 'react-native'
 import {Button, Icon} from 'react-native-elements'
-import {NativeStackScreenProps} from "@react-navigation/native-stack";
-import {RootStackParamList} from "../App";
 
-
-type AccountScreenProps = NativeStackScreenProps<RootStackParamList, 'Account'>;
-
-const Account: React.FC<AccountScreenProps> = ({ navigation, route }) => {
+const Account: React.FC = ({ navigation, route } : any) => {
     const {session} = route.params;
     const [first_name, setFirstName] = useState('')
     const [last_name, setLastName] = useState('')
@@ -38,8 +33,10 @@ const Account: React.FC<AccountScreenProps> = ({ navigation, route }) => {
         }
     }
 
+    // @ts-ignore
     return (
         <View>
+            <ScrollView>
             <View style={styles.iconContainer}>
                 <Icon name='build-outline' type='ionicon' size={35} onPress={() => navigation.navigate('EditAccount', {session: session})} />
             </View>
@@ -59,18 +56,25 @@ const Account: React.FC<AccountScreenProps> = ({ navigation, route }) => {
                 <Text style={styles.title}>DNI:</Text>
                 <Text style={styles.text2}>{dni}</Text>
                 <View style={{ marginTop: 15 }} />
-                <Button title={<Text style={styles.buttonText}>Mis vacunas</Text>}
-                        buttonStyle={styles.misCosas}/>
-                <Button title={<Text style={styles.buttonText}>Mis archivos</Text>}
-                        buttonStyle={styles.misCosas}/>
-                <Button title={<Text style={styles.buttonText}>Mis medicamentos</Text>}
-                buttonStyle={styles.misCosas} onPress={() => navigation.navigate({name: 'Medication', params: {session: session}})}/>
-                <Button title={<Text style={styles.buttonText}>Usuarios dependientes</Text>}
+                <Button title={<Text style={styles.buttonText}>Mis doctores</Text>}
                         buttonStyle={styles.misCosas}
-                        icon={<Icon name="person" type="ionicon" size={25} />}
-                        onPress={() => navigation.navigate('DependentUsers', {session: session})}
+                        onPress={() => navigation.navigate('Doctors', {session: session})}
                 />
-                <View style={{marginTop: 20}}>
+                <Button title={<Text style={styles.buttonText}>Mis turnos</Text>}
+                        buttonStyle={styles.misCosas}
+                        onPress={() => navigation.navigate({name: 'Appointments', params: {session: session}})}/>
+                <Button title={<Text style={styles.buttonText}>Mis vacunas</Text>}
+                        buttonStyle={styles.misCosas}
+                />
+                <Button title={<Text style={styles.buttonText}>Mis medicamentos</Text>}
+                        buttonStyle={styles.misCosas}
+                        onPress={() => navigation.navigate({name: 'Medication', params: {session: session}})}/>
+                <Button title={<Text style={styles.buttonText}>Mis archivos</Text>}
+                        buttonStyle={styles.misCosas}
+                />
+
+                {/* Cuando se entra a esta pestaña no se llega a ver el button de Cerrar sesión todo*/}
+                <View style={{marginTop: 10, marginBottom: 10}}>
                     <Button title="Cerrar sesión"
                             onPress={()=>setShowModal(true)}
                             icon={<Icon name="log-in-outline" type="ionicon" size={54} color="white" />}
@@ -99,8 +103,8 @@ const Account: React.FC<AccountScreenProps> = ({ navigation, route }) => {
                     </Modal>
                 </View>
             </View>
+            </ScrollView>
         </View>
-
     )
 }
 
@@ -160,11 +164,10 @@ const styles = StyleSheet.create({
     },
     modalBackground: {
         flex: 1,
-        backgroundColor: 'rgba(0, 0, 0, 0.7)',
+        backgroundColor: 'rgba(0, 0, 0, 0.9)',
         justifyContent: 'flex-end',
     },
     modalContainer: {
-        backgroundColor: 'black',
         padding: 20,
         borderRadius: 15,
         alignSelf: 'center',
