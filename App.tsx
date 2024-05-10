@@ -55,10 +55,21 @@ function HomeTabs({route}: Props) {
   const {session} = route.params;
   return (
       <Tab.Navigator>
-        <Tab.Screen name="Home" component={Home} initialParams={{session: session}}/>
-        <Tab.Screen name="Appointments" component={Appointments} initialParams={{session: session}}/>
-        <Tab.Screen name="Medication" component={Medication} initialParams={{session: session}}/>
-        <Tab.Screen name="Doctors" component={Doctors} initialParams={{session: session}}/>
+        <Tab.Screen name="Home"
+                    component={Home}
+                    initialParams={{session: session}}
+                    options={{headerShown: false}}/>
+        <Tab.Screen name="Appointments"
+                    component={Appointments}
+                    initialParams={{session: session}}
+                    options={{headerShown: false}}/>
+        <Tab.Screen name="Medication"
+                    component={Medication}
+                    initialParams={{session: session}}
+                    options={{headerShown: false}}/>
+        <Tab.Screen name="Doctors"
+                    component={Doctors} initialParams={{session: session}}
+                    options={{headerShown: false}}/>
       </Tab.Navigator>
   );
 }
@@ -94,19 +105,52 @@ const App = () => {
         <Stack.Navigator>
           {!session ? (
               <>
-                <Stack.Screen name="Login" component={LoginScreen} initialParams={{session: session}} />
-                <Stack.Screen name="Register" component={Register} />
+                <Stack.Screen name="Login"
+                              component={LoginScreen}
+                              initialParams={{session: session}}
+                              options={{ headerShown: false }}
+                />
+                <Stack.Screen name="Register"
+                              component={Register}
+                              options={{
+                                title: '',
+                                headerTintColor: '#003124',
+                              }}/>
               </>
           ) : (
               <>
-                <Stack.Screen name="HomeTabs" component={HomeTabs} initialParams={{session: session}} />
-                <Stack.Screen name="Account" component={Account} initialParams={{session: session}} />
-                <Stack.Screen name="EditAccount" component={EditAccount} initialParams={{session: session}} />
-                <Stack.Screen name="AddAppointment" component={AddAppointment} initialParams={{session: session}} />
-                <Stack.Screen name="AddDoctor" component={AddDoctor} initialParams={{session: session}} />
-                <Stack.Screen name="DependentUsers" component={DependentUsers} initialParams={{session: session}} />
-                <Stack.Screen name="AddDependentUser" component={AddDependentUser} initialParams={{session: session}} />
-                <Stack.Screen name="AddMedication" component={AddMedication} initialParams={{session: session}} />
+                <Stack.Screen name="HomeTabs"
+                              component={HomeTabs}
+                              initialParams={{session: session}}
+                              options={{ headerShown: false }}/>
+                <Stack.Screen name="Account"
+                              component={Account}
+                              initialParams={{session: session}}
+                              options={{ headerShown: false }}/>
+                <Stack.Screen name="EditAccount"
+                              component={EditAccount}
+                              initialParams={{session: session}}
+                              options={{
+                                title: '',
+                                headerTintColor: '#003124',
+                              }}/>
+                <Stack.Screen name="AddAppointment"
+                              component={AddAppointment}
+                              initialParams={{session: session}}
+                              options={{ headerShown: false }}/>
+                <Stack.Screen name="AddDoctor"
+                              component={AddDoctor}
+                              initialParams={{session: session}} />
+                <Stack.Screen name="DependentUsers"
+                              component={DependentUsers}
+                              initialParams={{session: session}}
+                              options={{ headerShown: false }}/>
+                <Stack.Screen name="AddDependentUser"
+                              component={AddDependentUser}
+                              initialParams={{session: session}} />
+                <Stack.Screen name="AddMedication"
+                              component={AddMedication}
+                              initialParams={{session: session}} />
               </>
           )}
         </Stack.Navigator>
