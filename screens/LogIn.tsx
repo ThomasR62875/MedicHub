@@ -51,7 +51,7 @@ const LogIn: React.FC<LogInProps> = ({navigation, route})=> {
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
             <View style={styles.container}>
-                <View style={{marginBottom: 50, alignItems: 'center'}}>
+                <View style={styles.window}>
                     <Image source={Logo} style={styles.logo} />
                     <Text style={{textAlign: 'center', color: '#2E5829', fontWeight: 'bold', fontSize: 20}}>HomeDome</Text>
                 </View>
@@ -131,7 +131,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: '#e9f4e9',
         paddingHorizontal: 20,
-        marginTop: 10,
+        height: '100%'
     },
     inputContainer: {
         width: '100%',
@@ -161,6 +161,12 @@ const styles = StyleSheet.create({
         textAlign: "center",
     }, activityIndicator: {
         position: 'absolute',
-        right: 16,}
+        right: 16,},
+    window: {
+        marginBottom: 50,
+        alignItems: 'center',
+        marginTop: 90,
+    }
+
 
 });

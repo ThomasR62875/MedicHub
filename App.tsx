@@ -114,8 +114,12 @@ const App = () => {
                               component={Register}
                               options={{
                                 title: '',
-                                headerTintColor: '#003124',
-                              }}/>
+                                headerStyle: {
+                                  backgroundColor: '#2e5829',
+                                },
+                                headerTintColor: '#abd2a8',
+                                headerBackTitle: 'Volver', // Cambia la etiqueta del botón de retroceso
+                                }}/>
               </>
           ) : (
               <>
