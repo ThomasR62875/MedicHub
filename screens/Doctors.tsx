@@ -18,7 +18,7 @@ export type Doctor = {
 
 type DoctorProps = NativeStackScreenProps<RootStackParamList, 'Doctors'>;
 
-const Doctors: React.FC<DoctorProps> = ({ navigation, route }) => {
+const Doctors: React.FC= ({ navigation, route }: any) => {
     const {session} = route.params;
     const [loading, setLoading] = useState(true)
     const [doctors,setDoctors]= useState<Doctor[] | undefined>(undefined)
