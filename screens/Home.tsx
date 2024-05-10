@@ -101,9 +101,6 @@ const Home: React.FC = ({navigation, route}: any) => {
 
     return (
         <View>
-            <View style={styles.profileIconContainer} >
-                <Icon name='person-circle-outline' type='ionicon' onPress={() => navigation.navigate({name: 'Account', params: {session: session}})} size={35} />
-            </View>
             <View style={styles.container}>
                 <Text style={styles.titleText}>Bienvenido {first_name}</Text>
                 <ScrollView style={{width:'90%'}}>
@@ -148,7 +145,11 @@ const Home: React.FC = ({navigation, route}: any) => {
                                 <View style={{ marginBottom: 30 }} />
                                 <Card title="Medicamentos" img={imgMed}  onPress={() => navigation.navigate({name: 'Medication', params: {session: session}})}/>
                             </View>
-                        </View> esto vuela o queda todo*/}
+                        </View>
+
+                        Los tratamos como widgets, dejamos q se puedan agregar solo 2 cards, para eliminarlas usamos onLongPress
+                        todo
+                    */}
                 </ScrollView>
             </View>
         </View>
