@@ -1,5 +1,16 @@
 import React, {useState} from "react";
-import {Alert,Image, StyleSheet, View, Dimensions, AppState, Text, TouchableWithoutFeedback, Keyboard} from 'react-native'
+import {
+    Alert,
+    Image,
+    StyleSheet,
+    View,
+    Dimensions,
+    AppState,
+    Text,
+    TouchableWithoutFeedback,
+    Keyboard
+} from 'react-native'
+import {ActivityIndicator} from "react-native-paper";
 import { supabase } from '../lib/supabase'
 import { Button, Input } from 'react-native-elements'
 import { useNavigation, ParamListBase } from '@react-navigation/native'; // Importa useNavigation desde @react-navigation/native
@@ -52,7 +63,9 @@ const LogIn: React.FC<LogInProps> = ({navigation, route})=> {
                         leftIcon={{ type: 'font-awesome', name: 'envelope', color: '#2E5829FF'}}
                         onChangeText={(text) => setEmail(text)}
                         value={email}
-                        placeholder=" email@address.com"
+                        inputStyle={{marginLeft: 10, color:'#407738'}}
+                        placeholder="Email@address.com"
+                        placeholderTextColor={'#407738'}
                         autoCapitalize={'none'}
                         inputContainerStyle={[{paddingLeft: 10}, styles.input]}
                     />
@@ -66,26 +79,29 @@ const LogIn: React.FC<LogInProps> = ({navigation, route})=> {
                         value={password}
                         secureTextEntry={true}
                         placeholder=" Contraseña"
+                        placeholderTextColor={'#407738'}
                         autoCapitalize={'none'}
                         inputContainerStyle={[{paddingLeft: 10}, styles.input]}
+                        inputStyle={{marginLeft: 10, color:'#407738'}}
                     />
                 </View>
                 <Button
                     title="Ingresar"
+                    loading={loading}
                     buttonStyle={{
                         backgroundColor: '#2E5829',
                         borderWidth: 2,
                         borderColor: 'white',
                         borderRadius: 30,
+                        minHeight: 50
                     }}
                     containerStyle={{
                         width: 150,
                         marginHorizontal: 50,
                         marginVertical: 10,
-                        marginTop: 40
+                        marginTop: 40,
                     }}
                     titleStyle={{ color: '#eef9ed' }}
-                    disabled={loading}
                     onPress={() => signInWithEmail()}
                 />
 
@@ -97,7 +113,6 @@ const LogIn: React.FC<LogInProps> = ({navigation, route})=> {
                     <Text style={{color:'#2E5829', textAlign: 'center', fontSize: 18}}> ¿No tenes una cuenta?
                     </Text>
                     <Button title="Registrate"
-                            disabled={loading}
                             onPress={() => navigation.navigate('Register')}
                             buttonStyle={[styles.buttonRegister]}
                             titleStyle={{color: '#2E5829', textDecorationLine: 'underline'}}
@@ -135,6 +150,7 @@ const styles = StyleSheet.create({
     },
     buttonRegister: {
         backgroundColor: '#e9f4e9',
+        width: 'auto',
     },
     logo:{
         color: '#407738',
@@ -144,5 +160,8 @@ const styles = StyleSheet.create({
     },
     iconContainer: {
         textAlign: "center",
-    },
+    }, activityIndicator: {
+        position: 'absolute',
+        right: 16,}
+
 });
