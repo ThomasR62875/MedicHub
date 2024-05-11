@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {SafeAreaView,TouchableOpacity, Text, Alert, StyleSheet, } from 'react-native';
+import {SafeAreaView, Alert, StyleSheet, View,} from 'react-native';
 import {supabase} from "../lib/supabase";
 import {Input} from "react-native-elements";
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
@@ -36,8 +36,7 @@ const AddDependentUser: React.FC<AddDependentUser> = ({ navigation, route }) => 
     }
 
     return (
-        <SafeAreaView style={styles.container}>
-          
+        <View style={styles.container}>
           <Input
             leftIcon={{ type: 'font-awesome', name: 'user' }}
             style={styles.verticallySpaced}
@@ -58,25 +57,31 @@ const AddDependentUser: React.FC<AddDependentUser> = ({ navigation, route }) => 
             placeholder="DNI"
             value={dni}
             onChangeText={(text) => setDni(text)}
-            // type="number"
             />
             <StandardGreenButton title="Confirmar"
                                  disabled={loading}
                                  onPress={() => addUser()}
             />
-        </SafeAreaView>
+        </View>
       );
-
 }
 
 export default AddDependentUser;
 
 const styles = StyleSheet.create({
     container: {
-      flex: 1,
       justifyContent: 'center',
       alignItems: 'center',
-      padding: 20,
+      marginTop: 30,
+      padding: 12,
+      backgroundColor: '#e9f4e9',
+    },
+    containerTotal:{
+        backgroundColor: '#e9f4e9',
+        height: '100%',
+        marginLeft: 10,
+        marginRight: 10,
+        alignContent: 'center'
     },
     verticallySpaced: {
       paddingTop: 2,

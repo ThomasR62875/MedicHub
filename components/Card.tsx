@@ -14,6 +14,9 @@ interface CardProps extends TouchableOpacityProps {
     title : String;
 }
 
+//
+// NO ELIMINAR
+//
 export const Card: React.FC<CardProps> = ({ onPress, img, title, ...props }) => {
     return (
             <Pressable style={styles.conteinter} onPress={onPress}>

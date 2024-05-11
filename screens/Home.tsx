@@ -1,46 +1,48 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, StyleSheet, Alert, Image, Pressable} from 'react-native';
+import {View, Text, StyleSheet, Alert, Image, Pressable, Dimensions, ScrollView} from 'react-native';
 import {Icon} from "react-native-elements";
 import {Card} from '../components/Card';
 import {supabase} from "../lib/supabase";
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
 import {Appointment} from "./Appointments";
+import TurnoContainer from "../components/TurnContainer";
 
-
-type HomeProps = NativeStackScreenProps<RootStackParamList, 'Home'>;
-
-const Home: React.FC<HomeProps> = ({navigation, route}) => {
-    const {session} = route.params;
+const Home: React.FC = ({navigation, route}: any) => {
+    const session = route.params.session;
     const [first_name, setFirstName] = useState('')
     const [loading, setLoading] = useState(true)
     const [appointments,setAppointments]= useState<Appointment[] | undefined>(undefined)
     const imgDoc = require('../assets/doc.png');
     const imgTurno = require('../assets/calendario.png');
     const imgMed = require('../assets/meds.png');
-    const width = '90%';
+    const screenHeight = Dimensions.get('window').height;
+    const percentageMargin = screenHeight * 0.05;
     let turno1, turno2 : Appointment | null = null;
-    let date1, date2 : Date | null = null;;
+    let date1, date2 : Date | null = null;
 
     //se tiene q orderna por fecha appointments todo
 
-    if (appointments) {
+    if (appointments && appointments.length==1) {
         turno1 = appointments[0];
         date1 = new Date(turno1.date);
     }
     if (appointments && appointments?.length > 1) {
+        turno1 = appointments[0];
+        date1 = new Date(turno1.date);
         turno2 = appointments[1];
         date2 = new Date(turno2.date);
     }
 
     useEffect(() => {
         if (session) getProfile()
+        if (session) getAppointments()
     }, [session])
 
     async function getProfile() {
         try {
             if (!session?.user) throw new Error('No user on the session!')
-            const {data, error} = await supabase.rpc('get_independent_user', {auth_id_input: session?.user.id});
+            const {data} = await supabase.rpc('get_independent_user', {auth_id_input: session?.user.id});
 
             if (data) {
                 setFirstName(data.first_name)
@@ -51,10 +53,6 @@ const Home: React.FC<HomeProps> = ({navigation, route}) => {
             }
         }
     }
-
-    useEffect(() => {
-        if (session) getAppointments()
-    }, [session])
 
     async function getAppointments() {
         const to_return: Appointment[] = [];
@@ -75,7 +73,7 @@ const Home: React.FC<HomeProps> = ({navigation, route}) => {
                 for (const appoint of data) {
                     try {
                         const { data: user_data, error: user_error } = await supabase.rpc('get_user', {user_id: appoint.user})
-                        const { data: doctor_data, error: doctor_error } = await supabase.rpc('get_doctor', {doctor_id: appoint.doctor})
+                        const { data: doctor_data} = await supabase.rpc('get_doctor', {doctor_id: appoint.doctor})
                         if (user_error) {
                             throw user_error;
                         }
@@ -102,68 +100,65 @@ const Home: React.FC<HomeProps> = ({navigation, route}) => {
 
     return (
         <View>
-            <View style={styles.profileIconContainer} >
-                <Icon name='person-circle-outline' type='ionicon' onPress={() => navigation.navigate({name: 'Account', params: {session: session}})} size={35} />
-            </View>
             <View style={styles.container}>
-                <Text style={styles.text}>Bienvenido {first_name}</Text>
-                <View style={styles.grid}>
-                    <View style={styles.col}>
-                        <Card title="Turnos" img={imgTurno} onPress={() => navigation.navigate({name: 'Appointments', params: {session: session}})}/>
-                        <View style={{ marginBottom: 30 }} />
+                <Text style={styles.titleText}>Bienvenido {first_name}</Text>
+                <ScrollView style={{width:'90%'}}>
+                    <Pressable style={{marginTop: percentageMargin}}
+                               onPress={() => navigation.navigate({name: 'Appointments', params: {session: session}})}>
+                        {turno1 && date1 ? (
+                                <View>
+                                    <TurnoContainer
+                                        turno={turno1}
+                                        date={date1}
+                                        styleExterior={styles.turnoContainer}
+                                    />
+                                    {turno2 && date2 ? (
+                                        <TurnoContainer
+                                            styleExterior={styles.turnoContainer2}
+                                            date={date2}
+                                            turno={turno2}
+                                        />
+                                    ) : (<View/>) }
+                                </View>
+                            ) : (
+                                <View style={[styles.turnoContainer, {padding: 10}]}>
+                                    <Text style={styles.text}>No hay turnos</Text>
+                                    <Text style={[styles.text, {fontStyle: 'italic'}]}>Anda al calendario para crear tu primer turno</Text>
+                                </View>
+                            )}
+                        <View style={styles.card}>
+                            <Text style={[styles.titleText, {justifyContent:'center'}]}>Proximos turnos</Text>
+                        </View>
+                    </Pressable>
+                    <Pressable style={{marginTop: percentageMargin}}>
+                        <View style={[styles.turnoContainer, {padding: 10}]}>
+                            <Text style={[styles.text, {fontStyle: 'italic'}]}>Esperar la aplicación de la IA porfavor :)</Text>
+                        </View>
+                        <View style={styles.card}>
+                            <Text style={[styles.titleText, {justifyContent:'center'}]}>Turnos recomendados</Text>
+                        </View>
+                    </Pressable>
+                    <View>
+
                     </View>
-                    <View style={styles.col}>
-                        <Card title="Médicos" img={imgDoc}  onPress={() => navigation.navigate({name: 'Doctors', params: {session: session}})}/>
-                        <View style={{ marginBottom: 30 }} />
-                        <Card title="Medicamentos" img={imgMed}  onPress={() => navigation.navigate({name: 'Medication', params: {session: session}})}/>
-                    </View>
-                </View>
-                <Pressable style={{ width: width}} >
-                    {/*
-                        turno1 && date1 &&(
-                            <View>
-                            <View style={styles.turnoContainer}>
-                                <View style={styles.infoRow}>
-                                    <Text style={styles.label}>Usuario:</Text>
-                                    <Text>{turno1.user_name}</Text>
-                                    <View style={{ width: 30 }} />
-                                    <Text style={styles.label}>Fecha:</Text>
-                                    <Text>{`${date1.getDate()}/${date1.getMonth()}/${date1.getFullYear()}`}</Text>
-                                </View>
-                                <View style={styles.infoRow}>
-                                    <Text style={styles.label}>Descripcion:</Text>
-                                    <Text>{turno1.description}</Text>
-                                </View>
+                    {/* <View style={styles.grid}>
+                            <View style={styles.col}>
+                                <Card title="Archivos" img={imgTurno} onPress={() => navigation.navigate({name: 'Appointments', params: {session: session}})}/>
+                                <View style={{ marginBottom: 30 }} />
+                                <Card title="Medicamentos" img={imgMed}  onPress={() => navigation.navigate({name: 'Medication', params: {session: session}})}/>
                             </View>
-                            <View style={styles.turnoContainer2}>
-                                <View style={styles.infoRow}>
-                                    <Text style={styles.label}>Usuario:</Text>
-                                    <Text>{turno2?.user_name}</Text>
-                                    <View style={{ width: 30 }} />
-                                    <Text style={styles.label}>Fecha:</Text>
-                                    <Text>{`${date2?.getDate()}/${date2?.getMonth()}/${date2?.getFullYear()}`}</Text>
-                                </View>
-                                <View style={styles.infoRow}>
-                                    <Text style={styles.label}>Descripcion:</Text>
-                                    <Text>{turno2?.description}</Text>
-                                </View>
-                            </View>
-                            </View>
-                        ) } : {(
-                            <View style={styles.titleContainer}>
-                                <Text style={styles.titleText}>No hay turnos</Text>
-                                <Text style={[styles.titleText, {fontSize: 16, fontStyle: 'italic'}]}>Usa el simbolo + de la esquina superior derecha para agregar tu primer doctor</Text>
-                            </View>
-                        ) */}
-                    <View style={styles.card}>
-                        <Text style={styles.text}>Proximos turnos</Text>
-                    </View>
-                </Pressable>
+                        </View>
+
+                        Los tratamos como widgets, dejamos q se puedan agregar solo 2 cards, para eliminarlas usamos onLongPress
+                        todo
+                    */}
+                </ScrollView>
             </View>
         </View>
     );
 }
 
+const screenHeight = Dimensions.get('window').height;
 const styles = StyleSheet.create({
     profileIconContainer: {
         top: 10,
@@ -175,25 +170,35 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
+    bottomBar:{
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        right: 0,
+    },
     container: {
-        marginLeft: 15,
         alignItems: 'center',
         justifyContent: 'center',
+        marginTop: screenHeight * 0.15,
     },
     grid: {
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: 10,
     },
     col: {
         flex: 1,
         flexDirection: 'column',
         justifyContent: 'center',
-        marginRight: 10,
+    },
+    titleText: {
+        fontSize: 25,
+        textAlign: 'center',
+        justifyContent: 'center',
+        fontWeight: 'bold',
     },
     text: {
-        fontSize: 20,
+        fontSize: 18,
         textAlign: 'center',
     },
     card: {
@@ -217,31 +222,11 @@ const styles = StyleSheet.create({
         borderWidth: 1,
     },
     turnoContainer2: {
-        backgroundColor: '#C2E5D3',
+        backgroundColor: '#D6EFD4',
         borderColor: 'black',
         borderWidth: 1,
         borderTopWidth: 0,
     },
-    infoRow: {
-        flexDirection: 'row',
-        marginBottom: 5,
-        padding: 5,
-    },
-    label: {
-        fontWeight: 'bold',
-        marginRight: 5,
-    },
-    titleContainer: {
-        alignSelf: 'center',
-        marginBottom: 20,
-    },
-    titleText: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        color: '#333',
-        alignSelf: 'center',
-        justifyContent: 'center',
-    }
 });
 
 export default Home;

@@ -1,17 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabase'
 import { StyleSheet,ScrollView ,View, Text ,Alert } from 'react-native'
-import { Button, Input } from 'react-native-elements'
-import { Session } from '@supabase/supabase-js'
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
-import {Doctor} from "./Doctors";
 import AddButton from "../components/AddButton";
 
 
-
-
-type AppointmentsProps = NativeStackScreenProps<RootStackParamList, 'Appointments'>;
 
 export type Appointment = {
     date: Date;
@@ -20,9 +14,8 @@ export type Appointment = {
     doctor: string;
     user_id: string;
 }
-
-const Appointments: React.FC<AppointmentsProps> = ({ navigation, route }) => {
-    const {session} = route.params
+const Appointments: React.FC =  ({navigation, route}: any) =>{
+    const session = route.params.session;
     const [loading, setLoading] = useState(true)
     const [appointments,setAppointments]= useState<Appointment[] | undefined>(undefined)
 
@@ -53,8 +46,7 @@ const Appointments: React.FC<AppointmentsProps> = ({ navigation, route }) => {
                         if (user_error) {
                             throw user_error;
                         }
-                        // Aquí puedes hacer lo que necesites con user_data
-                        // Por ejemplo, agregarlo a to_return
+
                         to_return.push({
                             description: appoint.description,
                             date: appoint.date,
@@ -85,12 +77,11 @@ const Appointments: React.FC<AppointmentsProps> = ({ navigation, route }) => {
             </View>
             <ScrollView>
                 <View>
-                    {
-                        (appointments?.length ?? 0) > 0 ? (
+                    {appointments && appointments?.length > 0 ? (
                             appointments.map((appointment: Appointment, i) => {
                                 const originalDate = new Date(appointment.date);
-                                const formattedDate = `${originalDate.getDate()}/${originalDate.getMonth() + 1}/${originalDate.getFullYear()}`;
-                                const formattedTime = `${originalDate.getHours()}:${originalDate.getMinutes().toString().padStart(2, '0')}`;
+                                const formattedDate = `${originalDate.getDate()}/${originalDate.getMonth()+1}/${originalDate.getFullYear()}`;
+                                const formattedTime = `${(originalDate.getHours() + 3) % 24}:${originalDate.getMinutes().toString().padStart(2, '0')}`;
                                 return (
                                     <View key={i} style={styles.doctorContainer}>
                                         <View style={styles.infoRow}>
@@ -115,7 +106,7 @@ const Appointments: React.FC<AppointmentsProps> = ({ navigation, route }) => {
                                 )
                             })
                         ) : (
-                            <View style={styles.titleContainer}>
+                            <View style={[styles.titleContainer, {}]}>
                                 <Text style={styles.titleText}>No hay turnos</Text>
                                 <Text style={[styles.titleText, {fontSize: 16, fontStyle: 'italic'}]}>Usa el simbolo + de la esquina superior derecha para agregar tu primer doctor</Text>
                             </View>
@@ -133,6 +124,19 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         padding: 20,
+        backgroundColor: '#e9f4e9',
+        height: '100%',
+    },
+    titleContainer: {
+        marginTop: 10,
+        alignSelf: 'center',
+        marginBottom: 20,
+    },
+    titleText: {
+        fontSize: 25,
+        textAlign: 'center',
+        justifyContent: 'center',
+        fontWeight: 'bold',
     },
     doctorContainer: {
         marginTop: 10,
@@ -151,21 +155,9 @@ const styles = StyleSheet.create({
     value: {
         flex: 1,
     },
-    titleContainer: {
-        alignSelf: 'center',
-        marginBottom: 20,
-    },
-    titleText: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        color: '#333',
-        alignSelf: 'center',
-        justifyContent: 'center',
-    },
     addContainer: {
         left: 290,
         bottom: 60,
         alignSelf: 'flex-start',
     }
-
 });

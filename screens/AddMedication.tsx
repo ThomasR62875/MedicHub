@@ -1,13 +1,11 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {
     View,
-    Text,
     Alert,
     StyleSheet,
     TouchableWithoutFeedback,
     Keyboard,
     KeyboardAvoidingView,
-    TextInput,
     ScrollView
 } from 'react-native';
 import {supabase} from "../lib/supabase";
@@ -15,8 +13,7 @@ import {Input} from "react-native-elements";
 import StandardGreenButton from "../components/StandardGreenButton";
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
-import {Picker} from '@react-native-picker/picker'
-import RNPickerSelect from 'react-native-picker-select';
+
 
 type AddMedicationProps = NativeStackScreenProps<RootStackParamList, 'AddMedication'>
 
@@ -46,12 +43,15 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
             // @ts-ignore
             console.error('An error occurred:', error.message);
         }finally{
-            Alert.alert("El medicamento ya está agregado")
+            Alert.alert('El medicamento fue agregado', '',
+                [{text: 'Ok', onPress: () => navigation.navigate({name: 'Home', params: {session: session}})},]
+            );
         }
 
     }
 
     return (
+        <View style={styles.containerTotal}>
         <KeyboardAvoidingView style={styles.container}>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
             <ScrollView>
@@ -85,6 +85,7 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
             </ScrollView>
         </TouchableWithoutFeedback>
         </KeyboardAvoidingView>
+        </View>
     );
 };
 
@@ -95,6 +96,13 @@ const styles = StyleSheet.create({
     container: {
         marginTop: 30,
         padding: 12,
+    },
+    containerTotal:{
+        backgroundColor: '#e9f4e9',
+        height: '100%',
+        marginLeft: 10,
+        marginRight: 10,
+        alignContent: 'center'
     },
     verticallySpaced: {
         alignSelf: 'stretch',
@@ -119,7 +127,6 @@ const styles = StyleSheet.create({
 
 });
 
-// Define pickerSelectStyles at the bottom
 const pickerSelectStyles = StyleSheet.create({
     inputIOS: {
         fontSize: 16,
@@ -139,6 +146,6 @@ const pickerSelectStyles = StyleSheet.create({
         borderColor: 'purple',
         borderRadius: 8,
         color: 'black',
-        paddingRight: 30, // to ensure the text is never behind the icon
+        paddingRight: 30,
     },
 });

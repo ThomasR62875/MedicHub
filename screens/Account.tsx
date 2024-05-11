@@ -1,20 +1,17 @@
 import React, { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabase'
-import {StyleSheet, View, Alert, Text, Modal} from 'react-native'
+import {StyleSheet, View, Alert, Text, Modal, ScrollView, Dimensions} from 'react-native'
 import {Button, Icon} from 'react-native-elements'
-import {NativeStackScreenProps} from "@react-navigation/native-stack";
-import {RootStackParamList} from "../App";
+import {MaterialCommunityIcons} from "@expo/vector-icons";
 
-
-type AccountScreenProps = NativeStackScreenProps<RootStackParamList, 'Account'>;
-
-const Account: React.FC<AccountScreenProps> = ({ navigation, route }) => {
+const Account: React.FC = ({ navigation, route } : any) => {
     const {session} = route.params;
     const [first_name, setFirstName] = useState('')
     const [last_name, setLastName] = useState('')
     const [dni, setDni] = useState(0)
     const [avatar_url, setAvatarUrl] = useState('')
     const [showModal, setShowModal] = useState<boolean>(false)
+    const screenHeight = Dimensions.get('window').height;
 
     useEffect(() => {
         if (session) getProfile()
@@ -38,8 +35,11 @@ const Account: React.FC<AccountScreenProps> = ({ navigation, route }) => {
         }
     }
 
+    const size=25;
+
     return (
-        <View>
+        <View style={{marginTop: screenHeight*0.1}}>
+            <ScrollView>
             <View style={styles.iconContainer}>
                 <Icon name='build-outline' type='ionicon' size={35} onPress={() => navigation.navigate('EditAccount', {session: session})} />
             </View>
@@ -59,43 +59,55 @@ const Account: React.FC<AccountScreenProps> = ({ navigation, route }) => {
                 <Text style={styles.title}>DNI:</Text>
                 <Text style={styles.text2}>{dni}</Text>
                 <View style={{ marginTop: 15 }} />
-                <Button title={<Text style={styles.buttonText}>Mis vacunas</Text>}
+                <Button  title={<Text style={styles.buttonText}><MaterialCommunityIcons name="doctor" size={size}/>Mis doctores</Text>}
+                        buttonStyle={styles.misCosas}
+                        onPress={() => navigation.navigate('Doctors', {session: session})}
+                />
+                <Button  title={<Text style={styles.buttonText}><MaterialCommunityIcons name="archive-clock" size={size}/>Mis turnos</Text>}
+                        buttonStyle={styles.misCosas}
+                        onPress={() => navigation.navigate({name: 'Appointments', params: {session: session}})}/>
+                <Button  title={<Text style={styles.buttonText}><MaterialCommunityIcons name="needle" size={size}/>Mis vacunas</Text>}
                         buttonStyle={styles.misCosas}
                 />
-                <View style={{ marginTop: 10 }} />
-                <Button title={<Text style={styles.buttonText}>Usuarios dependientes</Text>}
+                <Button  title={<Text style={styles.buttonText}><MaterialCommunityIcons name="pill" size={size}/>Mis medicamentos</Text>}
                         buttonStyle={styles.misCosas}
-                        icon={<Icon name="person" type="ionicon" size={25} />}
-                        onPress={() => navigation.navigate('DependentUsers', {session: session})}
+                        onPress={() => navigation.navigate({name: 'Medication', params: {session: session}})}/>
+                <Button  title={<Text style={styles.buttonText}><MaterialCommunityIcons name="archive" size={size}/>Mis archivos</Text>}
+                        buttonStyle={styles.misCosas}
                 />
-                <View style={{marginTop: 20}}>
+
+                {/* Cuando se entra a esta pestaña no se llega a ver el button de Cerrar sesión todo*/}
+                <View style={{marginTop: 10, marginBottom: 10}}>
                     <Button title="Cerrar sesión"
                             onPress={()=>setShowModal(true)}
                             icon={<Icon name="log-in-outline" type="ionicon" size={54} color="white" />}
                             buttonStyle={styles.cerrarSesion}/>
                     <Modal
                         transparent={true}
-                        visible={showModal}
-                    >
-                        <View style={styles.modalContainer}>
-                            <View style={[styles.modalInfoContainer, {marginTop: 555}]}>
-                                <Text style={styles.modalText}>¿ Seguro queres cerrar sesion ?</Text>
-                            </View>
-                            <View style={[styles.modalInfoContainer, {marginTop: 15}]}>
-                                <Button title="Cancelar"
-                                        onPress={()=>setShowModal(false)}
-                                        buttonStyle={{backgroundColor: '#073A29'}}/>
-                                <View style={{ width: 30 }} />
-                                <Button title="Cerrar"
-                                        onPress={() => supabase.auth.signOut()}
-                                        buttonStyle={{backgroundColor: '#073A29'}}/>
+                        visible={showModal}>
+                        <View style={styles.modalBackground}>
+                            <View style={styles.modalContainer}>
+                                <View style={[styles.modalInfoContainer, ]}>
+                                    <Text style={styles.modalText}>¿ Seguro queres cerrar sesion ?</Text>
+                                </View>
+                                <View style={[styles.modalInfoContainer, {marginTop: 15}]}>
+                                    <Button title="Cancelar"
+                                            onPress={()=>setShowModal(false)}
+                                            buttonStyle={{backgroundColor: '#073A29'}}/>
+                                    <View style={{ width: 30 }} />
+                                    <Button title="Cerrar"
+                                            onPress={() => {
+                                                supabase.auth.signOut().then(r => {
+                                                    navigation.navigate({name: 'Login', params: {session: session}})} )}}
+                                            buttonStyle={{backgroundColor: '#073A29'}}/>
+                                </View>
                             </View>
                         </View>
                     </Modal>
                 </View>
             </View>
+            </ScrollView>
         </View>
-
     )
 }
 
@@ -153,11 +165,16 @@ const styles = StyleSheet.create({
         color: 'black',
         fontSize: 20,
     },
-    modalContainer: {
+    modalBackground: {
         flex: 1,
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
-        justifyContent: 'center',
-        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.9)',
+        justifyContent: 'flex-end',
+    },
+    modalContainer: {
+        padding: 20,
+        borderRadius: 15,
+        alignSelf: 'center',
+        marginBottom: 20,
     },
     modalInfoContainer: {
         flexDirection: 'row',
