@@ -51,6 +51,7 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
     }
 
     return (
+        <View style={styles.containerTotal}>
         <KeyboardAvoidingView style={styles.container}>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
             <ScrollView>
@@ -84,6 +85,7 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
             </ScrollView>
         </TouchableWithoutFeedback>
         </KeyboardAvoidingView>
+        </View>
     );
 };
 
@@ -94,6 +96,13 @@ const styles = StyleSheet.create({
     container: {
         marginTop: 30,
         padding: 12,
+    },
+    containerTotal:{
+        backgroundColor: '#e9f4e9',
+        height: '100%',
+        marginLeft: 10,
+        marginRight: 10,
+        alignContent: 'center'
     },
     verticallySpaced: {
         alignSelf: 'stretch',

@@ -37,7 +37,6 @@ const Account: React.FC = ({ navigation, route } : any) => {
 
     const size=25;
 
-    // @ts-ignore
     return (
         <View style={{marginTop: screenHeight*0.1}}>
             <ScrollView>
@@ -60,20 +59,20 @@ const Account: React.FC = ({ navigation, route } : any) => {
                 <Text style={styles.title}>DNI:</Text>
                 <Text style={styles.text2}>{dni}</Text>
                 <View style={{ marginTop: 15 }} />
-                <Button title={<Text style={styles.buttonText}><MaterialCommunityIcons name="doctor" size={size}/>Mis doctores</Text>}
+                <Button  title={<Text style={styles.buttonText}><MaterialCommunityIcons name="doctor" size={size}/>Mis doctores</Text>}
                         buttonStyle={styles.misCosas}
                         onPress={() => navigation.navigate('Doctors', {session: session})}
                 />
-                <Button title={<Text style={styles.buttonText}><MaterialCommunityIcons name="archive-clock" size={size}/>Mis turnos</Text>}
+                <Button  title={<Text style={styles.buttonText}><MaterialCommunityIcons name="archive-clock" size={size}/>Mis turnos</Text>}
                         buttonStyle={styles.misCosas}
                         onPress={() => navigation.navigate({name: 'Appointments', params: {session: session}})}/>
-                <Button title={<Text style={styles.buttonText}><MaterialCommunityIcons name="needle" size={size}/>Mis vacunas</Text>}
+                <Button  title={<Text style={styles.buttonText}><MaterialCommunityIcons name="needle" size={size}/>Mis vacunas</Text>}
                         buttonStyle={styles.misCosas}
                 />
-                <Button title={<Text style={styles.buttonText}><MaterialCommunityIcons name="pill" size={size}/>Mis medicamentos</Text>}
+                <Button  title={<Text style={styles.buttonText}><MaterialCommunityIcons name="pill" size={size}/>Mis medicamentos</Text>}
                         buttonStyle={styles.misCosas}
                         onPress={() => navigation.navigate({name: 'Medication', params: {session: session}})}/>
-                <Button title={<Text style={styles.buttonText}><MaterialCommunityIcons name="archive" size={size}/>Mis archivos</Text>}
+                <Button  title={<Text style={styles.buttonText}><MaterialCommunityIcons name="archive" size={size}/>Mis archivos</Text>}
                         buttonStyle={styles.misCosas}
                 />
 
@@ -88,7 +87,7 @@ const Account: React.FC = ({ navigation, route } : any) => {
                         visible={showModal}>
                         <View style={styles.modalBackground}>
                             <View style={styles.modalContainer}>
-                                <View style={[styles.modalInfoContainer, {marginTop: 555}]}>
+                                <View style={[styles.modalInfoContainer, ]}>
                                     <Text style={styles.modalText}>¿ Seguro queres cerrar sesion ?</Text>
                                 </View>
                                 <View style={[styles.modalInfoContainer, {marginTop: 15}]}>

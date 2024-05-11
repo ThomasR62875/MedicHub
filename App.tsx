@@ -24,6 +24,7 @@ import * as Animatable from 'react-native-animatable'
 import 'react-native-reanimated'
 import {MaterialCommunityIcons} from "@expo/vector-icons";
 import {StyleSheet, TouchableOpacity, View} from "react-native";
+import {backgroundColor} from "react-native-calendars/src/style";
 
 export type RootStackParamList = {
   HomeTabs: { session: Session | null };
@@ -64,7 +65,7 @@ function HomeTabs({route, navigation}: Props) {
   const colorNot = '#000000';
 
   //para saber q tab esta seleccionada
-  const [selectedTab, setSelectedTab] = useState<number | null>(null);
+  const [selectedTab, setSelectedTab] = useState<number | null>(0);
   const tabRefs = useRef<Array<TouchableOpacity | null>>([]);
   useEffect(() => {
     if (selectedTab !== null) {
@@ -119,14 +120,15 @@ function HomeTabs({route, navigation}: Props) {
             right: 16,
             left: 16,
             borderRadius: 10,
-          }
+            backgroundColor: '#ECECEC',
+          },
         }}
       >
         <Tab.Screen name="Home"
                     component={Home}
                     initialParams={{session: session}}
                     options={{title: '', headerShown: false, tabBarIcon:({color})=>(
-                        <MaterialCommunityIcons name="home" size={size} color={color} />
+                        <MaterialCommunityIcons/>
                     ), tabBarButton: (props) => (
                               <TouchableOpacity
                                   style={styles.container}
@@ -137,10 +139,9 @@ function HomeTabs({route, navigation}: Props) {
                                   ref={(ref) => (tabRefs.current[0] = ref)}
                               >
                                   <Animatable.View
-                                      style={styles.container}
                                       ref={viewRef0}
                                       duration={1000}>
-                                      <MaterialCommunityIcons name="home" size={size} />
+                                      <MaterialCommunityIcons name="home" size={size} color={selectedTab==0 ? 'black' : 'grey'}/>
                                   </Animatable.View>
                               </TouchableOpacity>
                           ),}}/>
@@ -148,7 +149,7 @@ function HomeTabs({route, navigation}: Props) {
                     component={Calender}
                     initialParams={{session: session}}
                     options={{title: '', headerShown: false, tabBarIcon:({color})=>(
-                          <MaterialCommunityIcons name="calendar" size={size} color={color} />
+                          <MaterialCommunityIcons/>
                     ), tabBarButton: (props) =>(
                           <TouchableOpacity
                               style={styles.container}
@@ -162,7 +163,7 @@ function HomeTabs({route, navigation}: Props) {
                                   style={styles.container}
                                   ref={viewRef1}
                                   duration={1000}>
-                                <MaterialCommunityIcons name="calendar" size={size} />
+                                <MaterialCommunityIcons name="calendar" size={size} color={selectedTab==1 ? 'black' : 'grey'} />
                               </Animatable.View>
                           </TouchableOpacity>
                       ),}}
@@ -171,7 +172,7 @@ function HomeTabs({route, navigation}: Props) {
                     component={DependentUsers}
                     initialParams={{session: session}}
                     options={{title: '', headerShown: false, tabBarIcon:({color})=>(
-                          <MaterialCommunityIcons name="account-multiple-outline" size={size} color={color} />
+                          <MaterialCommunityIcons/>
                     ), tabBarButton: (props) =>(
                           <TouchableOpacity
                               style={styles.container}
@@ -185,7 +186,7 @@ function HomeTabs({route, navigation}: Props) {
                                   style={styles.container}
                                   ref={viewRef2}
                                   duration={1000}>
-                                <MaterialCommunityIcons name="account-multiple-outline" size={size} />
+                                <MaterialCommunityIcons name="account-multiple-outline" size={size} color={selectedTab==2 ? 'black' : 'grey'}/>
                               </Animatable.View>
                           </TouchableOpacity>
                       ),}}
@@ -194,7 +195,7 @@ function HomeTabs({route, navigation}: Props) {
                     component={Account}
                     initialParams={{session: session}}
                     options={{title: '', headerShown: false, tabBarIcon:({color})=>(
-                          <MaterialCommunityIcons name="account" size={size} color={color} />
+                          <MaterialCommunityIcons/>
                     ), tabBarButton: (props) =>(
                           <TouchableOpacity
                               style={styles.container}
@@ -208,7 +209,7 @@ function HomeTabs({route, navigation}: Props) {
                                   style={styles.container}
                                   ref={viewRef3}
                                   duration={1000}>
-                                <MaterialCommunityIcons name="account" size={size} />
+                                <MaterialCommunityIcons name="account" size={size} color={selectedTab==3 ? 'black' : 'grey'}/>
                               </Animatable.View>
                           </TouchableOpacity>
                       ),}}
@@ -275,6 +276,9 @@ const App = () => {
                               initialParams={{session: session}}
                               options={{
                                 title: '',
+                                headerStyle: {
+                                  backgroundColor: '#2e5829',
+                                },
                                 headerTintColor: '#abd2a8',
                                 headerBackTitle: 'Volver',
                               }}/>
@@ -283,6 +287,9 @@ const App = () => {
                               initialParams={{session: session}}
                               options={{
                                 title: '',
+                                headerStyle: {
+                                    backgroundColor: '#2e5829',
+                                },
                                 headerTintColor: '#abd2a8',
                                 headerBackTitle: 'Doctores',
                               }}/>
@@ -291,6 +298,9 @@ const App = () => {
                               initialParams={{session: session}}
                               options={{
                                 title: '',
+                                  headerStyle: {
+                                      backgroundColor: '#2e5829',
+                                  },
                                 headerTintColor: '#abd2a8',
                                 headerBackTitle: 'Usuario Dependiente',
                               }}/>
@@ -299,6 +309,9 @@ const App = () => {
                               initialParams={{session: session}}
                               options={{
                                 title: '',
+                                  headerStyle: {
+                                      backgroundColor: '#2e5829',
+                                  },
                                 headerTintColor: '#abd2a8',
                                 headerBackTitle: 'Medicamentos',
                               }}/>
@@ -307,6 +320,9 @@ const App = () => {
                               initialParams={{session: session}}
                               options={{
                                 title: '',
+                                  headerStyle: {
+                                      backgroundColor: '#2e5829',
+                                  },
                                 headerTintColor: '#abd2a8',
                                 headerBackTitle: 'Volver',
                               }}/>
@@ -314,6 +330,9 @@ const App = () => {
                                component={Doctors} initialParams={{session: session}}
                                options={{
                                  title: '',
+                                   headerStyle: {
+                                       backgroundColor: '#2e5829',
+                                   },
                                  headerTintColor: '#abd2a8',
                                  headerBackTitle: 'Perfil',
                                }}/>
@@ -322,6 +341,9 @@ const App = () => {
                                 initialParams={{session: session}}
                                 options={{
                                     title: '',
+                                    headerStyle: {
+                                        backgroundColor: '#2e5829',
+                                    },
                                     headerTintColor: '#abd2a8',
                                     headerBackTitle: 'Perfil',
                                 }}/>
@@ -330,6 +352,9 @@ const App = () => {
                                 initialParams={{session: session}}
                                 options={{
                                   title: '',
+                                    headerStyle: {
+                                        backgroundColor: '#2e5829',
+                                    },
                                   headerTintColor: '#abd2a8',
                                   headerBackTitle: 'Perfil',
                                 }}/>

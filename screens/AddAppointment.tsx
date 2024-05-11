@@ -125,17 +125,16 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
     }
 
     return (
+        <View style={styles.containerTotal}>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
                 <SafeAreaView style={styles.container}>
                 <DatePicker
                     locale={'ES'}
                     options={{
-                        textHeaderColor: '#073A29',
-                        textDefaultColor: '#000000',
-                        selectedTextColor: '#fff',
-                        mainColor: '#073A29',
-                        textSecondaryColor: '#B5DCCA',
-                        borderColor: 'rgba(122, 146, 165, 0.1)',
+                        mainColor: '#000',
+                        textSecondaryColor: '#000',
+                        borderColor: '#000',
+                        backgroundColor: '#e9f4e9',
                     }}
                     // date={date}
                     // onSelectedChange={(date: React.SetStateAction<dayjs.Dayjs>) => setDate(date)}
@@ -143,7 +142,7 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
                 <Input
                     leftIcon={{ type: 'font-awesome', name: 'book' }}
                     style={styles.verticallySpaced}
-                    placeholder="Título"
+                    placeholder="Descripción"
                     value={description}
                     onChangeText={(text) => setDescription(text)}
                 />
@@ -172,6 +171,7 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
                 />
             </SafeAreaView>
         </TouchableWithoutFeedback>
+        </View>
       );
 }
 
@@ -183,6 +183,13 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         padding: 20,
+    },
+    containerTotal:{
+        backgroundColor: '#e9f4e9',
+        height: '100%',
+        marginLeft: 10,
+        marginRight: 10,
+        alignContent: 'center'
     },
     verticallySpaced: {
         paddingTop: 2,

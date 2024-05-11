@@ -121,6 +121,8 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         padding: 20,
+        backgroundColor: '#e9f4e9',
+        height: '100%',
       },
     bottomBar:{
         position: 'absolute',

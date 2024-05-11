@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabase'
-import {View, Alert} from 'react-native'
+import {View, Alert, StyleSheet} from 'react-native'
 import {Icon, Input} from 'react-native-elements'
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
@@ -83,7 +83,7 @@ const EditAccount:React.FC<EditAccountProps> = ({navigation, route }) =>{
 
     return(
 
-        <View >
+        <View style={styles.container} >
             <Icon name='person-circle-outline' type='ionicon' size={90} onPress={() => navigation.navigate('EditAccount', {session: session})} />
             {/* aca iria una carga de archivo/imagen q tdv no sabemos hacer todo*/}
                 <Input label="Nombre" value={first_name} onChangeText={(text) => setFirstName(text)}/>
@@ -99,3 +99,13 @@ const EditAccount:React.FC<EditAccountProps> = ({navigation, route }) =>{
 }
 
 export default EditAccount
+
+const styles = StyleSheet.create({
+    container: {
+        backgroundColor: '#e9f4e9',
+        height: '100%',
+        marginLeft: 10,
+        marginRight: 10,
+        alignContent: 'center'
+    },
+})
