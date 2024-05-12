@@ -13,4 +13,8 @@ services:
       - ./lib:/app/lib
       - ./screens:/app/screens
       - ./App.tsx:/app/App.tsx
+      - ./tests:/app/tests
+      - ./jest.config.js:/app/jest.config.js
+      - ./package.json:/app/package.json
+      - ./babel.config.js:/app/babel.config.js
     tty: true
