@@ -1,5 +1,6 @@
-import {useState, useEffect, useRef} from 'react'
-import { supabase } from './lib/supabase'
+import 'react-native-url-polyfill/auto'
+import { useState, useEffect } from 'react'
+import { supabase} from './lib/supabase'
 import { Session } from '@supabase/supabase-js'
 import React from 'react';
 import AddAppointment from "./screens/AddAppointment"
@@ -222,6 +223,7 @@ function HomeTabs({route, navigation}: Props) {
 const App = () => {
   const [session, setSession] = useState<Session | null>(null)
 
+  const Stack = createNativeStackNavigator<RootStackParamList>();
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -232,15 +234,6 @@ const App = () => {
       setSession(session)
     })
 
-    supabase.auth.getSession();
-
-    const unsubscribe = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-    });
-
-    return () => {
-      unsubscribe;
-    };
   }, []);
 
 
