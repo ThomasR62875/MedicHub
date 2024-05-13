@@ -136,6 +136,7 @@ function HomeTabs({route, navigation}: Props) {
                     tabBarIcon: ({ color, size }) => (
                         <Ionicons name="calendar" color={color} size={size} />
                     ),
+                    headerShown: false
                 }
                 }
             />
