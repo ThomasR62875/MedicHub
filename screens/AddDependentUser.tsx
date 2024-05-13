@@ -45,7 +45,6 @@ const AddDependentUser: React.FC<AddDependentUser> = ({ navigation, route }) => 
                     leftIcon={<Icon type="material-icons" name="person" color={styles.colorLable.color}/>}
                     onChangeText={(text) => setFirstName(text)}
                     value={firstName}
-                    secureTextEntry={true}
                     placeholder="Nombre"
                     autoCapitalize={'none'}
                     inputStyle={{color: '#407738', marginLeft: 10}}
@@ -57,7 +56,6 @@ const AddDependentUser: React.FC<AddDependentUser> = ({ navigation, route }) => 
                     leftIcon={<Icon type="material-icons" name="person" color={styles.colorLable.color}/>}
                     onChangeText={(text) => setLastName(text)}
                     value={lastName}
-                    secureTextEntry={true}
                     placeholder="Apellido"
                     autoCapitalize={'none'}
                     inputStyle={{color: '#407738', marginLeft: 10}}
