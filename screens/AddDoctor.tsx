@@ -18,7 +18,7 @@ import {DependentUser} from "./DependentUsers";
 
 type AddDoctorProps = NativeStackScreenProps<RootStackParamList, 'AddDoctor'>
 
-type Specialty = {
+export type Specialty = {
     name: string;
 };
 
