@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabase'
 import {StyleSheet, View, Alert, ScrollView, Text, Dimensions} from 'react-native'
 import AddButton from "../components/AddButton";
+import {Button} from "react-native-elements";
 
 // UNA IDEA DE DEPENDENT USERS SERIA PODER VER CADA USUARIO Y EDITARLO DESDE AHI (por ej eliminarlo, lo de migrar info etc)
 // TAMBIEN QUE CUANDO ABRIMOS UN USUARIO DEPENDEDIENTE, NOS DESPIEGLUE SU INFO (doctores, appointments, etc) todo
@@ -59,38 +60,48 @@ const DependentUsers: React.FC = ({navigation, route} : any) => {
 
 return(
     <View style={styles.container}>
-        <View style={styles.titleContainer}>
-            <Text style={styles.titleText}>Usuarios Dependientes</Text>
-        </View>
-        <View style={styles.addContainer}>
-            <AddButton onPress={() => navigation.navigate('AddDependentUser', {session: session})} />
-        </View>
-        <ScrollView style={{width:'90%', marginTop: percentageMargin }}>
-            {dependent_users && dependent_users.length >0 ? (
-                dependent_users.map((d_user: DependentUser, i) => {
-                return (
-                    <View key={i} style={styles.userContainer}>
-                        <View style={styles.infoRow}>
-                            <Text style={styles.label}>Nombre:</Text>
-                            <Text style={styles.value}>{d_user.first_name}</Text>
+        <View style={styles.window}>
+            <View style={styles.topContent}>
+                <Text style={styles.titleText}>Usuarios Dependientes</Text>
+                <Button
+                    title="Agregar"
+                    loading={loading}
+                    buttonStyle={{
+                        backgroundColor: '#2E5829',
+                        borderColor: 'white',
+                        borderRadius: 20,
+                        minHeight: 10,
+                        minWidth: 10,
+                    }}
+                    titleStyle={{ color: '#E9F4E9FF',fontSize: 15, margin: 5 }}
+                    onPress={() => navigation.navigate('AddDependentUser', {session: session})} />
+            </View>
+            <ScrollView style={{width:'90%', marginTop: percentageMargin }}>
+                {dependent_users && dependent_users.length >0 ? (
+                    dependent_users.map((d_user: DependentUser, i) => {
+                    return (
+                        <View key={i} style={styles.userContainer}>
+                            <View style={styles.infoRow}>
+                                <Text style={styles.label}>Nombre:</Text>
+                                <Text style={styles.value}>{d_user.first_name}</Text>
+                            </View>
+                            <View style={styles.infoRow}>
+                                <Text style={styles.label}>Apellido:</Text>
+                                <Text style={styles.value}>{d_user.last_name}</Text>
+                            </View>
+                            <View style={styles.infoRow}>
+                                <Text style={styles.label}>Mail:</Text>
+                                <Text style={styles.value}>{d_user.dni}</Text>
+                            </View>
                         </View>
-                        <View style={styles.infoRow}>
-                            <Text style={styles.label}>Apellido:</Text>
-                            <Text style={styles.value}>{d_user.last_name}</Text>
-                        </View>
-                        <View style={styles.infoRow}>
-                            <Text style={styles.label}>Mail:</Text>
-                            <Text style={styles.value}>{d_user.dni}</Text>
-                        </View>
+                    )
+                })) : (
+                    <View style={[styles.userContainer]}>
+                        <Text style={styles.text}>Aún no tienes usuarios dependientes </Text>
                     </View>
-                )
-            })) : (
-                <View style={[styles.turnoContainer, {padding: 10}]}>
-                    <Text style={styles.text}>No tienes usuarios dependientes </Text>
-                    <Text style={[styles.text, {fontStyle: 'italic'}]}> Presiona el + para crear un nuevo usuario direcatmente relacionado a esta cuenta</Text>
-                </View>
-            )}
-        </ScrollView>
+                )}
+            </ScrollView>
+        </View>
     </View>
 )
 }
@@ -102,13 +113,21 @@ const styles = StyleSheet.create({
     container: {
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: screenHeight * 0.15,
+        backgroundColor: "#e9f4e9",
+        height: "100%"
     },
     userContainer: {
-        marginTop: 10,
-        backgroundColor: '#C2E5D3',
-        marginBottom: 10,
-        borderRadius: 5,
+        backgroundColor: '#cbe4c9',
+        borderRadius: 20,
+        borderColor: '#cbe4c9',
+        borderWidth: 1,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        minHeight: '50%',
+        minWidth: "100%",
+        margin: "1%"
     },
     infoRow: {
         flexDirection: 'row',
@@ -121,17 +140,14 @@ const styles = StyleSheet.create({
     value: {
         flex: 1,
     },
-    titleContainer: {
-        marginLeft: 45,
-        marginRight: 45,
-        alignSelf: 'center',
-        marginBottom: 20,
-    },
     titleText: {
-        fontSize: 24,
+        fontFamily: 'Roboto-Thin',
+        fontSize: 25,
+        textAlign: 'left',
         fontWeight: 'bold',
-        color: '#333',
-        textAlign: 'center',
+        marginTop: "1%",
+        color: "#2E5829FF",
+        width: "60%"
     },
     addContainer: {
         left: 310,
@@ -139,14 +155,21 @@ const styles = StyleSheet.create({
         alignSelf: 'flex-start',
     },
     text: {
-        fontSize: 18,
+        fontSize: 12,
         textAlign: 'center',
+        justifyContent: 'center',
+        margin: '5%',
+        color: "#215a1b"
     },
-    turnoContainer: {
-        backgroundColor: '#D6EFD4',
-        borderTopRightRadius: 5,
-        borderTopLeftRadius: 5,
-        borderColor: 'black',
-        borderWidth: 1,
+    window: {
+        marginTop: "30%",
+        marginLeft: "5%",
+        marginRight: "5%",
     },
+    topContent: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+    }
+
 });
