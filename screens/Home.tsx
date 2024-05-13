@@ -1,12 +1,15 @@
 import React, {useEffect, useState} from 'react';
 import {View, Text, StyleSheet, Alert, Image, Pressable, Dimensions, ScrollView} from 'react-native';
-import {Icon} from "react-native-elements";
-import {Card} from '../components/Card';
+import {Button, Icon} from "react-native-elements";
+// import {Card} from '../components/Card';
+import {Card} from "react-native-elements"
 import {supabase} from "../lib/supabase";
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
 import {Appointment} from "./Appointments";
 import TurnoContainer from "../components/TurnContainer";
+// @ts-ignore
+import Logo from "../assets/icon.png";
 
 const Home: React.FC = ({navigation, route}: any) => {
     const session = route.params.session;
@@ -99,77 +102,67 @@ const Home: React.FC = ({navigation, route}: any) => {
     }
 
     return (
-        <View>
             <View style={styles.container}>
-                <Text style={styles.titleText}>Bienvenido {first_name}</Text>
-                <ScrollView style={{width:'90%'}}>
-                    <Pressable style={{marginTop: percentageMargin}}
-                               onPress={() => navigation.navigate({name: 'Appointments', params: {session: session}})}>
-                        {turno1 && date1 ? (
-                                <View>
-                                    <TurnoContainer
-                                        turno={turno1}
-                                        date={date1}
-                                        styleExterior={styles.turnoContainer}
-                                    />
-                                    {turno2 && date2 ? (
+                <View style={styles.centerContent}>
+                    <Text style={styles.screenTitle}>Bienvenido {first_name}!</Text>
+                    <ScrollView style={{width:'85%', marginLeft: "5%",  marginRight: "5%"}}>
+                        <Pressable style={{margin: "1%"}}
+                                   onPress={() => navigation.navigate({name: 'Appointments', params: {session: session}})}>
+                            {turno1 && date1 ? (
+                                    <View>
                                         <TurnoContainer
-                                            styleExterior={styles.turnoContainer2}
-                                            date={date2}
-                                            turno={turno2}
+                                            turno={turno1}
+                                            date={date1}
+                                            styleExterior={styles.turnoContainer}
                                         />
-                                    ) : (<View/>) }
+                                        {turno2 && date2 ? (
+                                            <TurnoContainer
+                                                styleExterior={styles.turnoContainer2}
+                                                date={date2}
+                                                turno={turno2}
+                                            />
+                                        ) : (<View/>) }
+                                    </View>
+                                ) : (
+                                    <View style={[styles.turnoContainer]}>
+                                        <View style={styles.card}>
+                                            <Text style={[styles.titleText, {justifyContent:'center'}]}>Proximos turnos</Text>
+                                        </View>
+                                        <Text style={styles.text}>No hay turnos</Text>
+                                        <Text style={[styles.text, {fontStyle: 'italic'}]}>Anda al calendario para crear tu primer turno</Text>
+                                    </View>
+                                )}
+                        </Pressable>
+                        <Pressable style={{margin: "1%"}}>
+                            <View style={[styles.turnoContainer]}>
+                                <View style={styles.card}>
+                                    <Text style={[styles.titleText, {justifyContent:'center'}]}>Turnos recomendados</Text>
                                 </View>
-                            ) : (
-                                <View style={[styles.turnoContainer, {padding: 10}]}>
-                                    <Text style={styles.text}>No hay turnos</Text>
-                                    <Text style={[styles.text, {fontStyle: 'italic'}]}>Anda al calendario para crear tu primer turno</Text>
-                                </View>
-                            )}
-                        <View style={styles.card}>
-                            <Text style={[styles.titleText, {justifyContent:'center'}]}>Proximos turnos</Text>
-                        </View>
-                    </Pressable>
-                    <Pressable style={{marginTop: percentageMargin}}>
-                        <View style={[styles.turnoContainer, {padding: 10}]}>
-                            <Text style={[styles.text, {fontStyle: 'italic'}]}>Esperar la aplicación de la IA porfavor :)</Text>
-                        </View>
-                        <View style={styles.card}>
-                            <Text style={[styles.titleText, {justifyContent:'center'}]}>Turnos recomendados</Text>
-                        </View>
-                    </Pressable>
-                    <View>
-
-                    </View>
-                    {/* <View style={styles.grid}>
-                            <View style={styles.col}>
-                                <Card title="Archivos" img={imgTurno} onPress={() => navigation.navigate({name: 'Appointments', params: {session: session}})}/>
-                                <View style={{ marginBottom: 30 }} />
-                                <Card title="Medicamentos" img={imgMed}  onPress={() => navigation.navigate({name: 'Medication', params: {session: session}})}/>
+                                <Text style={[styles.text]}>Esperar la aplicación de la IA porfavor :)</Text>
                             </View>
+                        </Pressable>
+                        <View>
+    
                         </View>
-
-                        Los tratamos como widgets, dejamos q se puedan agregar solo 2 cards, para eliminarlas usamos onLongPress
-                        todo
-                    */}
-                </ScrollView>
+                        {/* <View style={styles.grid}>
+                                <View style={styles.col}>
+                                    <Card title="Archivos" img={imgTurno} onPress={() => navigation.navigate({name: 'Appointments', params: {session: session}})}/>
+                                    <View style={{ marginBottom: 30 }} />
+                                    <Card title="Medicamentos" img={imgMed}  onPress={() => navigation.navigate({name: 'Medication', params: {session: session}})}/>
+                                </View>
+                            </View>
+    
+                            Los tratamos como widgets, dejamos q se puedan agregar solo 2 cards, para eliminarlas usamos onLongPress
+                            todo
+                        */}
+                    </ScrollView>
+                </View>
             </View>
-        </View>
     );
 }
 
 const screenHeight = Dimensions.get('window').height;
 const styles = StyleSheet.create({
-    profileIconContainer: {
-        top: 10,
-        left: 315,
-        width: 50,
-        height: 50,
-        borderRadius: 25,
-        backgroundColor: '#B5DCCA',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
     bottomBar:{
         position: 'absolute',
         bottom: 0,
@@ -177,9 +170,8 @@ const styles = StyleSheet.create({
         right: 0,
     },
     container: {
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginTop: screenHeight * 0.15,
+        backgroundColor: "#E9F4E9FF",
+        height: '100%',
     },
     grid: {
         flexDirection: 'row',
@@ -192,20 +184,25 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     titleText: {
-        fontSize: 25,
+        fontFamily: 'Roboto-Thin',
+        fontSize: 20,
         textAlign: 'center',
-        justifyContent: 'center',
         fontWeight: 'bold',
+        marginTop: "1%",
+        color: "#2E5829FF",
     },
     text: {
-        fontSize: 18,
-        textAlign: 'center',
+        fontSize: 20,
+        textAlign: 'left',
+        color: "#2E5829FF",
+        fontFamily: 'Roboto-Thin',
+        margin: "4%"
     },
     card: {
-        backgroundColor: '#B5DCCA',
+        backgroundColor: '#b7dab1',
         padding: 10,
-        borderBottomLeftRadius: 10,
-        borderBottomRightRadius: 10,
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20,
         elevation: 3,
         height: 45
     },
@@ -215,18 +212,46 @@ const styles = StyleSheet.create({
         borderTopLeftRadius: 10,
     },
     turnoContainer: {
-        backgroundColor: '#D6EFD4',
-        borderTopRightRadius: 5,
-        borderTopLeftRadius: 5,
-        borderColor: 'black',
+        backgroundColor: '#cbe4c9',
+        borderRadius: 20,
+        marginTop: "10%",
+        borderColor: '#cbe4c9',
         borderWidth: 1,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
     },
     turnoContainer2: {
         backgroundColor: '#D6EFD4',
-        borderColor: 'black',
+        borderColor: '#D6EFD4',
         borderWidth: 1,
         borderTopWidth: 0,
     },
+    logo:{
+        color: '#407738',
+        width: 50,
+        height: 50,
+
+    },
+    topContent: {
+        alignItems: 'flex-start',
+        marginTop: "8%",
+        marginLeft: "6%"
+    },
+    centerContent: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: "30%"
+    },
+    screenTitle: {
+        fontFamily: 'Roboto-Thin',
+        fontSize: 25,
+        textAlign: 'center',
+        fontWeight: 'bold',
+        marginTop: "1%",
+        color: "#2E5829FF",
+    }
 });
 
 export default Home;

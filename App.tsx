@@ -22,9 +22,10 @@ import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
 import {StackNavigationProp} from "@react-navigation/stack";
 import * as Animatable from 'react-native-animatable'
 import 'react-native-reanimated'
-import {MaterialCommunityIcons} from "@expo/vector-icons";
+import {Ionicons, MaterialCommunityIcons} from "@expo/vector-icons";
 import {StyleSheet, TouchableOpacity, View} from "react-native";
 import {backgroundColor} from "react-native-calendars/src/style";
+import {Easing} from "react-native-reanimated";
 
 export type RootStackParamList = {
   HomeTabs: { session: Session | null };
@@ -111,110 +112,158 @@ function HomeTabs({route, navigation}: Props) {
     }, )
 
     return (
-      <Tab.Navigator
-        screenOptions={{
-          tabBarStyle: {
-            height: 80,
-            position: "absolute",
-            bottom: 16,
-            right: 16,
-            left: 16,
-            borderRadius: 10,
-            backgroundColor: '#ECECEC',
-          },
-        }}
-      >
-        <Tab.Screen name="Home"
-                    component={Home}
-                    initialParams={{session: session}}
-                    options={{title: '', headerShown: false, tabBarIcon:({color})=>(
-                        <MaterialCommunityIcons/>
-                    ), tabBarButton: (props) => (
-                              <TouchableOpacity
-                                  style={styles.container}
-                                  onPress={() => {
-                                    handleTabPress(0);
-                                    navigation.navigate({ name: 'Home', params: { session: session } });
-                                  }}
-                                  ref={(ref) => (tabRefs.current[0] = ref)}
-                              >
-                                  <Animatable.View
-                                      ref={viewRef0}
-                                      duration={1000}>
-                                      <MaterialCommunityIcons name="home" size={size} color={selectedTab==0 ? 'black' : 'grey'}/>
-                                  </Animatable.View>
-                              </TouchableOpacity>
-                          ),}}/>
-        <Tab.Screen name="Calendar"
-                    component={Calender}
-                    initialParams={{session: session}}
-                    options={{title: '', headerShown: false, tabBarIcon:({color})=>(
-                          <MaterialCommunityIcons/>
-                    ), tabBarButton: (props) =>(
-                          <TouchableOpacity
-                              style={styles.container}
-                              onPress={() => {
-                                handleTabPress(1);
-                                navigation.navigate({ name: 'Calendar', params: { session: session } });
-                              }}
-                              ref={(ref) => (tabRefs.current[1] = ref)}
-                          >
-                              <Animatable.View
-                                  style={styles.container}
-                                  ref={viewRef1}
-                                  duration={1000}>
-                                <MaterialCommunityIcons name="calendar" size={size} color={selectedTab==1 ? 'black' : 'grey'} />
-                              </Animatable.View>
-                          </TouchableOpacity>
-                      ),}}
-        />
-        <Tab.Screen name="DependentUsers"
-                    component={DependentUsers}
-                    initialParams={{session: session}}
-                    options={{title: '', headerShown: false, tabBarIcon:({color})=>(
-                          <MaterialCommunityIcons/>
-                    ), tabBarButton: (props) =>(
-                          <TouchableOpacity
-                              style={styles.container}
-                              onPress={() => {
-                                handleTabPress(2);
-                                navigation.navigate({ name: 'DependentUsers', params: { session: session } });
-                              }}
-                              ref={(ref) => (tabRefs.current[3] = ref)}
-                          >
-                              <Animatable.View
-                                  style={styles.container}
-                                  ref={viewRef2}
-                                  duration={1000}>
-                                <MaterialCommunityIcons name="account-multiple-outline" size={size} color={selectedTab==2 ? 'black' : 'grey'}/>
-                              </Animatable.View>
-                          </TouchableOpacity>
-                      ),}}
-        />
-        <Tab.Screen name="Account"
-                    component={Account}
-                    initialParams={{session: session}}
-                    options={{title: '', headerShown: false, tabBarIcon:({color})=>(
-                          <MaterialCommunityIcons/>
-                    ), tabBarButton: (props) =>(
-                          <TouchableOpacity
-                              style={styles.container}
-                              onPress={() => {
-                                handleTabPress(3);
-                                navigation.navigate({ name: 'Account', params: { session: session } });
-                              }}
-                              ref={(ref) => (tabRefs.current[3] = ref)}
-                          >
-                              <Animatable.View
-                                  style={styles.container}
-                                  ref={viewRef3}
-                                  duration={1000}>
-                                <MaterialCommunityIcons name="account" size={size} color={selectedTab==3 ? 'black' : 'grey'}/>
-                              </Animatable.View>
-                          </TouchableOpacity>
-                      ),}}
-        />
-      </Tab.Navigator>
+        <Tab.Navigator screenOptions={{
+            tabBarStyle: {backgroundColor: "#2E5829FF"},
+            tabBarActiveTintColor: "#cbe4c9",
+            tabBarInactiveTintColor: "#0e1e0d",
+        }}>
+            <Tab.Screen
+                name="Inicio"
+                component={Home}
+                initialParams={{session: session}}
+                options={{
+                    tabBarIcon: ({ color, size }) => (
+                        <Ionicons name="home" color={color} size={size} />
+                    ),
+                    headerShown: false
+                }}
+            />
+            <Tab.Screen
+                name="Turnos"
+                component={Calender}
+                initialParams={{session: session}}
+                options={{
+                    tabBarIcon: ({ color, size }) => (
+                        <Ionicons name="calendar" color={color} size={size} />
+                    ),
+                }
+                }
+            />
+            <Tab.Screen
+                name="Usuarios"
+                component={DependentUsers}
+                initialParams={{session: session}}
+                options={{
+                    tabBarIcon: ({ color, size }) => (
+                        <Ionicons name="people" color={color} size={size} />
+                    ),
+                    headerShown: false
+                }}/>
+            <Tab.Screen
+                name="Perfil"
+                component={Account}
+                initialParams={{session: session}}
+                options={{
+                    tabBarIcon: ({ color, size }) => (
+                        <Ionicons name="person" color={color} size={size} />
+                    ),
+                    headerShown: false
+                }}/>
+        </Tab.Navigator>
+      // <Tab.Navigator
+      //   screenOptions={{
+      //     tabBarStyle: {
+      //       height: 80,
+      //       position: "absolute",
+      //       bottom: 16,
+      //       right: 16,
+      //       left: 16,
+      //       borderRadius: 10,
+      //       backgroundColor: '#ECECEC',
+      //     },
+      //   }}
+      // >
+      //   <Tab.Screen name="Home"
+      //               component={Home}
+      //               initialParams={{session: session}}
+      //               options={{title: '', headerShown: false, tabBarIcon:({color})=>(
+      //                   <MaterialCommunityIcons/>
+      //               ), tabBarButton: (props) => (
+      //                         <TouchableOpacity
+      //                             style={styles.container}
+      //                             onPress={() => {
+      //                               handleTabPress(0);
+      //                               navigation.navigate({ name: 'Home', params: { session: session } });
+      //                             }}
+      //                             ref={(ref) => (tabRefs.current[0] = ref)}
+      //                         >
+      //                             <Animatable.View
+      //                                 ref={viewRef0}
+      //                                 duration={1000}>
+      //                                 <MaterialCommunityIcons name="home" size={size} color={selectedTab==0 ? 'black' : 'grey'}/>
+      //                             </Animatable.View>
+      //                         </TouchableOpacity>
+      //                     ),}}/>
+      //   <Tab.Screen name="Calendar"
+      //               component={Calender}
+      //               initialParams={{session: session}}
+      //               options={{title: '', headerShown: false, tabBarIcon:({color})=>(
+      //                     <MaterialCommunityIcons/>
+      //               ), tabBarButton: (props) =>(
+      //                     <TouchableOpacity
+      //                         style={styles.container}
+      //                         onPress={() => {
+      //                           handleTabPress(1);
+      //                           navigation.navigate({ name: 'Calendar', params: { session: session } });
+      //                         }}
+      //                         ref={(ref) => (tabRefs.current[1] = ref)}
+      //                     >
+      //                         <Animatable.View
+      //                             style={styles.container}
+      //                             ref={viewRef1}
+      //                             duration={1000}>
+      //                           <MaterialCommunityIcons name="calendar" size={size} color={selectedTab==1 ? 'black' : 'grey'} />
+      //                         </Animatable.View>
+      //                     </TouchableOpacity>
+      //                 ),}}
+      //   />
+      //   <Tab.Screen name="DependentUsers"
+      //               component={DependentUsers}
+      //               initialParams={{session: session}}
+      //               options={{title: '', headerShown: false, tabBarIcon:({color})=>(
+      //                     <MaterialCommunityIcons/>
+      //               ), tabBarButton: (props) =>(
+      //                     <TouchableOpacity
+      //                         style={styles.container}
+      //                         onPress={() => {
+      //                           handleTabPress(2);
+      //                           navigation.navigate({ name: 'DependentUsers', params: { session: session } });
+      //                         }}
+      //                         ref={(ref) => (tabRefs.current[3] = ref)}
+      //                     >
+      //                         <Animatable.View
+      //                             style={styles.container}
+      //                             ref={viewRef2}
+      //                             duration={1000}>
+      //                           <MaterialCommunityIcons name="account-multiple-outline" size={size} color={selectedTab==2 ? 'black' : 'grey'}/>
+      //                         </Animatable.View>
+      //                     </TouchableOpacity>
+      //                 ),}}
+      //   />
+      //   <Tab.Screen name="Account"
+      //               component={Account}
+      //               initialParams={{session: session}}
+      //               options={{title: '', headerShown: false, tabBarIcon:({color})=>(
+      //                     <MaterialCommunityIcons/>
+      //               ), tabBarButton: (props) =>(
+      //                     <TouchableOpacity
+      //                         style={styles.container}
+      //                         onPress={() => {
+      //                           handleTabPress(3);
+      //                           navigation.navigate({ name: 'Account', params: { session: session } });
+      //                         }}
+      //                         ref={(ref) => (tabRefs.current[3] = ref)}
+      //                     >
+      //                         <Animatable.View
+      //                             style={styles.container}
+      //                             ref={viewRef3}
+      //                             duration={1000}>
+      //                           <MaterialCommunityIcons name="account" size={size} color={selectedTab==3 ? 'black' : 'grey'}/>
+      //                         </Animatable.View>
+      //                     </TouchableOpacity>
+      //                 ),}}
+      //   />
+      // </Tab.Navigator>
   );
 }
 
