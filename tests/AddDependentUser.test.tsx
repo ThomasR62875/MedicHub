@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
-import AddDependentUser from './AddDependentUser';
+import AddDependentUser from '../screens/AddDependentUser';
 
 jest.mock('../lib/supabase', () => ({
     supabase: {

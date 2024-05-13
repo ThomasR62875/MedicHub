@@ -13,7 +13,8 @@ import RNPickerSelect from 'react-native-picker-select';
 type AddAppointmentProps = NativeStackScreenProps<RootStackParamList, 'AddAppointment'>
 
 
-const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) => {
+
+const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }:any) => {
     const {session} = route.params;
     const [date, setDate] = useState(dayjs())
     const [loading, setLoading] = useState(false)
@@ -29,7 +30,7 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
     useEffect(() => {
         if (session) {
             async function fetchUserId() {
-                setSessionUserId(await getUserId());                 
+                setSessionUserId(await getUserId());
             };
             fetchUserId();
 
@@ -40,7 +41,7 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
         if (session_user_id) {
             async function getInfo() {
                 setDoctors(await getAllDoctorsByUser(session_user_id));
-                setAllUsers(await getAllUsers(session_user_id));            
+                setAllUsers(await getAllUsers(session_user_id));
             }
             getInfo()
         }

@@ -5,8 +5,7 @@ import {useNavigation} from "@react-navigation/native";
 import {Session} from '@supabase/supabase-js';
 
 
-const navigation = useNavigation();
-const mockSession = {
+const mockSession: Session = {
     user: {
         id: 'user_id',
         email: 'test@example.com',

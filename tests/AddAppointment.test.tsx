@@ -1,6 +1,7 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 import AddAppointment from '../screens/AddAppointment';
+import {Session} from "@supabase/supabase-js";
 
 jest.mock('../lib/supabase', () => ({
     supabase: {
@@ -8,11 +9,21 @@ jest.mock('../lib/supabase', () => ({
     },
 }));
 
-const mockSession = {
+const mockSession: Session = {
     user: {
         id: 'user_id',
         email: 'test@example.com',
+        // @ts-ignore
+        app_metadata: undefined,
+        // @ts-ignore
+        user_metadata: undefined,
+        aud: '',
+        created_at: ''
     },
+    access_token: 'your_access_token_here',
+    refresh_token: 'your_refresh_token_here',
+    expires_in: 3600, // Example value
+    token_type: 'Bearer',
 };
 
 describe('<AddAppointment />', () => {
