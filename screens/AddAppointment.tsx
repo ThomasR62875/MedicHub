@@ -2,15 +2,15 @@ import React, {useEffect, useState} from 'react'
 import { addAppointment, getAllDoctorsByUser, getAllUsers, getUserId } from '../lib/supabase'
 import {SafeAreaView, StyleSheet, Alert, View, Keyboard, TouchableWithoutFeedback} from 'react-native'
 import {Input} from "react-native-elements";
-import DateTimePicker from 'react-native-ui-datepicker';
 import dayjs from 'dayjs';
 import StandardGreenButton from "../components/StandardGreenButton";
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
+import {Appointment} from "./Appointments";
 import {DependentUser} from "./DependentUsers"
-import Doctors, {Doctor} from "./Doctors";
-import {Picker} from '@react-native-picker/picker'
+import {Doctor} from "./Doctors";
 import RNPickerSelect from 'react-native-picker-select';
+import DatePicker from 'react-native-modern-datepicker';
 
 type AddAppointmentProps = NativeStackScreenProps<RootStackParamList, 'AddAppointment'>
 
@@ -31,7 +31,7 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
     useEffect(() => {
         if (session) {
             async function fetchUserId() {
-                setSessionUserId(await getUserId());                 
+                setSessionUserId(await getUserId());
             };
             fetchUserId();
 
@@ -42,7 +42,7 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
         if (session_user_id) {
             async function getInfo() {
                 setDoctors(await getAllDoctorsByUser(session_user_id));
-                setAllUsers(await getAllUsers(session_user_id));            
+                setAllUsers(await getAllUsers(session_user_id));
             }
             getInfo()
         }
@@ -58,26 +58,24 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
         value: user.id,
     })): [];
     return (
+        <View style={styles.containerTotal}>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-            <SafeAreaView style={styles.container}>
-                {/*<DatePicker*/}
-                {/*    locale={'ES'}*/}
-                {/*    options={{*/}
-                {/*        textHeaderColor: '#073A29',*/}
-                {/*        textDefaultColor: '#000000',*/}
-                {/*        selectedTextColor: '#fff',*/}
-                {/*        mainColor: '#073A29',*/}
-                {/*        textSecondaryColor: '#B5DCCA',*/}
-                {/*        borderColor: 'rgba(122, 146, 165, 0.1)',*/}
-                {/*    }}*/}
-                {/*    // date={date}*/}
-                {/*    // onSelectedChange={(date: React.SetStateAction<dayjs.Dayjs>) => setDate(date)}*/}
-                {/*/>*/}
-
+                <SafeAreaView style={styles.container}>
+                <DatePicker
+                    locale={'ES'}
+                    options={{
+                        mainColor: '#000',
+                        textSecondaryColor: '#000',
+                        borderColor: '#000',
+                        backgroundColor: '#e9f4e9',
+                    }}
+                    // date={date}
+                    // onSelectedChange={(date: React.SetStateAction<dayjs.Dayjs>) => setDate(date)}
+                />
                 <Input
                     leftIcon={{ type: 'font-awesome', name: 'book' }}
                     style={styles.verticallySpaced}
-                    placeholder="Título"
+                    placeholder="Descripción"
                     value={description}
                     onChangeText={(text) => setDescription(text)}
                 />
@@ -99,8 +97,6 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
                         value={user_id}
                     />
                 </View>
-
-                {/* Confirm Button */}
                 <StandardGreenButton
                     title="Confirmar"
                     disabled={loading}
@@ -108,6 +104,7 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
                 />
             </SafeAreaView>
         </TouchableWithoutFeedback>
+        </View>
       );
 }
 
@@ -119,6 +116,13 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         padding: 20,
+    },
+    containerTotal:{
+        backgroundColor: '#e9f4e9',
+        height: '100%',
+        marginLeft: 10,
+        marginRight: 10,
+        alignContent: 'center'
     },
     verticallySpaced: {
         paddingTop: 2,

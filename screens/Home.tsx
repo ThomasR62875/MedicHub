@@ -1,43 +1,50 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, StyleSheet, Alert, Pressable} from 'react-native';
-import {Icon} from "react-native-elements";
-import {Card} from '../components/Card';
+import {View, Text, StyleSheet, Alert, Image, Pressable, Dimensions, ScrollView} from 'react-native';
+import {Button, Icon} from "react-native-elements";
+import {Card} from "react-native-elements"
 import {supabase} from "../lib/supabase";
+import {NativeStackScreenProps} from "@react-navigation/native-stack";
+import {RootStackParamList} from "../App";
 import {Appointment} from "./Appointments";
-
+import TurnoContainer from "../components/TurnContainer";
+// @ts-ignore
+import Logo from "../assets/icon.png";
 
 const Home: React.FC = ({navigation, route}: any) => {
     const session = route.params.session;
-    console.log(session);
     const [first_name, setFirstName] = useState('')
     const [loading, setLoading] = useState(true)
     const [appointments,setAppointments]= useState<Appointment[] | undefined>(undefined)
     const imgDoc = require('../assets/doc.png');
     const imgTurno = require('../assets/calendario.png');
     const imgMed = require('../assets/meds.png');
-    const width = '90%';
+    const screenHeight = Dimensions.get('window').height;
+    const percentageMargin = screenHeight * 0.05;
     let turno1, turno2 : Appointment | null = null;
-    let date1, date2 : Date | null = null;;
+    let date1, date2 : Date | null = null;
 
     //se tiene q orderna por fecha appointments todo
 
-    if (appointments) {
+    if (appointments && appointments.length==1) {
         turno1 = appointments[0];
-        // date1 = new Date(turno1.date);
+        date1 = new Date(turno1.date);
     }
     if (appointments && appointments?.length > 1) {
+        turno1 = appointments[0];
+        date1 = new Date(turno1.date);
         turno2 = appointments[1];
-        // date2 = new Date(turno2.date);
+        date2 = new Date(turno2.date);
     }
 
     useEffect(() => {
         if (session) getProfile()
+        if (session) getAppointments()
     }, [session])
 
     async function getProfile() {
         try {
             if (!session?.user) throw new Error('No user on the session!')
-            const {data, error} = await supabase.rpc('get_independent_user', {auth_id_input: session?.user.id});
+            const {data} = await supabase.rpc('get_independent_user', {auth_id_input: session?.user.id});
 
             if (data) {
                 setFirstName(data.first_name)
@@ -48,10 +55,6 @@ const Home: React.FC = ({navigation, route}: any) => {
             }
         }
     }
-
-    useEffect(() => {
-        if (session) getAppointments()
-    }, [session])
 
     async function getAppointments() {
         const to_return: Appointment[] = [];
@@ -72,7 +75,7 @@ const Home: React.FC = ({navigation, route}: any) => {
                 for (const appoint of data) {
                     try {
                         const { data: user_data, error: user_error } = await supabase.rpc('get_user', {user_id: appoint.user})
-                        const { data: doctor_data, error: doctor_error } = await supabase.rpc('get_doctor', {doctor_id: appoint.doctor})
+                        const { data: doctor_data} = await supabase.rpc('get_doctor', {doctor_id: appoint.doctor})
                         if (user_error) {
                             throw user_error;
                         }
@@ -98,106 +101,107 @@ const Home: React.FC = ({navigation, route}: any) => {
     }
 
     return (
-        <View>
-            <View style={styles.profileIconContainer} >
-                <Icon name='person-circle-outline' type='ionicon' onPress={() => navigation.navigate({name: 'Account', params: {session: session}})} size={35} />
-            </View>
             <View style={styles.container}>
-                <Text style={styles.text}>Bienvenido {first_name}</Text>
-                <View style={styles.grid}>
-                    <View style={styles.col}>
-                        <Card title="Turnos" img={imgTurno} onPress={() => navigation.navigate({name: 'Appointments', params: {session: session}})}/>
-                        <View style={{ marginBottom: 30 }} />
-                    </View>
-                    <View style={styles.col}>
-                        <Card title="Médicos" img={imgDoc}  onPress={() => navigation.navigate({name: 'Doctors', params: {session: session}})}/>
-                        <View style={{ marginBottom: 30 }} />
-                        <Card title="Medicamentos" img={imgMed}  onPress={() => navigation.navigate({name: 'Medication', params: {session: session}})}/>
-                    </View>
+                <View style={styles.centerContent}>
+                    <ScrollView style={{width:'85%', marginLeft: "5%",  marginRight: "5%", height: "100%"}}>
+                        <Text style={styles.screenTitle}>Bienvenido {first_name}!</Text>
+                        <Pressable style={{margin: "1%"}}
+                                   onPress={() => navigation.navigate({name: 'Appointments', params: {session: session}})}>
+                            {turno1 && date1 ? (
+                                    <View>
+                                        <TurnoContainer
+                                            turno={turno1}
+                                            date={date1}
+                                            styleExterior={styles.turnoContainer}
+                                        />
+                                        {turno2 && date2 ? (
+                                            <TurnoContainer
+                                                styleExterior={styles.turnoContainer2}
+                                                date={date2}
+                                                turno={turno2}
+                                            />
+                                        ) : (<View/>) }
+                                    </View>
+                                ) : (
+                                    <View style={[styles.turnoContainer]}>
+                                        <View style={styles.card}>
+                                            <Text style={[styles.titleText, {justifyContent:'center'}]}>Proximos turnos</Text>
+                                        </View>
+                                        <Text style={styles.text}>No hay turnos</Text>
+                                        <Text style={[styles.text, {fontStyle: 'italic'}]}>Anda al calendario para crear tu primer turno</Text>
+                                    </View>
+                                )}
+                        </Pressable>
+                        <Pressable style={{margin: "1%"}}>
+                            <View style={[styles.turnoContainer]}>
+                                <View style={styles.card}>
+                                    <Text style={[styles.titleText, {justifyContent:'center'}]}>Turnos recomendados</Text>
+                                </View>
+                                <Text style={[styles.text]}>Esperar la aplicación de la IA porfavor :)</Text>
+                            </View>
+                        </Pressable>
+                        <View>
+
+                        </View>
+                        {/* <View style={styles.grid}>
+                                <View style={styles.col}>
+                                    <Card title="Archivos" img={imgTurno} onPress={() => navigation.navigate({name: 'Appointments', params: {session: session}})}/>
+                                    <View style={{ marginBottom: 30 }} />
+                                    <Card title="Medicamentos" img={imgMed}  onPress={() => navigation.navigate({name: 'Medication', params: {session: session}})}/>
+                                </View>
+                            </View>
+
+                            Los tratamos como widgets, dejamos q se puedan agregar solo 2 cards, para eliminarlas usamos onLongPress
+                            todo
+                        */}
+                    </ScrollView>
                 </View>
-                <Pressable style={{ width: width}} >
-                    {/*
-                        turno1 && date1 &&(
-                            <View>
-                            <View style={styles.turnoContainer}>
-                                <View style={styles.infoRow}>
-                                    <Text style={styles.label}>Usuario:</Text>
-                                    <Text>{turno1.user_name}</Text>
-                                    <View style={{ width: 30 }} />
-                                    <Text style={styles.label}>Fecha:</Text>
-                                    <Text>{`${date1.getDate()}/${date1.getMonth()}/${date1.getFullYear()}`}</Text>
-                                </View>
-                                <View style={styles.infoRow}>
-                                    <Text style={styles.label}>Descripcion:</Text>
-                                    <Text>{turno1.description}</Text>
-                                </View>
-                            </View>
-                            <View style={styles.turnoContainer2}>
-                                <View style={styles.infoRow}>
-                                    <Text style={styles.label}>Usuario:</Text>
-                                    <Text>{turno2?.user_name}</Text>
-                                    <View style={{ width: 30 }} />
-                                    <Text style={styles.label}>Fecha:</Text>
-                                    <Text>{`${date2?.getDate()}/${date2?.getMonth()}/${date2?.getFullYear()}`}</Text>
-                                </View>
-                                <View style={styles.infoRow}>
-                                    <Text style={styles.label}>Descripcion:</Text>
-                                    <Text>{turno2?.description}</Text>
-                                </View>
-                            </View>
-                            </View>
-                        ) } : {(
-                            <View style={styles.titleContainer}>
-                                <Text style={styles.titleText}>No hay turnos</Text>
-                                <Text style={[styles.titleText, {fontSize: 16, fontStyle: 'italic'}]}>Usa el simbolo + de la esquina superior derecha para agregar tu primer doctor</Text>
-                            </View>
-                        ) */}
-                    <View style={styles.card}>
-                        <Text style={styles.text}>Proximos turnos</Text>
-                    </View>
-                </Pressable>
             </View>
-        </View>
     );
 }
 
+const screenHeight = Dimensions.get('window').height;
 const styles = StyleSheet.create({
-    profileIconContainer: {
-        top: 10,
-        left: 315,
-        width: 50,
-        height: 50,
-        borderRadius: 25,
-        backgroundColor: '#B5DCCA',
-        justifyContent: 'center',
-        alignItems: 'center',
+    bottomBar:{
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        right: 0,
     },
     container: {
-        marginLeft: 15,
-        alignItems: 'center',
-        justifyContent: 'center',
+        backgroundColor: "#E9F4E9",
+        height: '100%',
     },
     grid: {
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: 10,
     },
     col: {
         flex: 1,
         flexDirection: 'column',
         justifyContent: 'center',
-        marginRight: 10,
+    },
+    titleText: {
+        fontFamily: 'Roboto-Thin',
+        fontSize: 20,
+        textAlign: 'center',
+        fontWeight: 'bold',
+        marginTop: "1%",
+        color: "#2E5829",
     },
     text: {
         fontSize: 20,
-        textAlign: 'center',
+        textAlign: 'left',
+        color: "#2E5829",
+        fontFamily: 'Roboto-Thin',
+        margin: "4%"
     },
     card: {
-        backgroundColor: '#B5DCCA',
+        backgroundColor: '#B7DAB1',
         padding: 10,
-        borderBottomLeftRadius: 10,
-        borderBottomRightRadius: 10,
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20,
         elevation: 3,
         height: 45
     },
@@ -207,37 +211,45 @@ const styles = StyleSheet.create({
         borderTopLeftRadius: 10,
     },
     turnoContainer: {
-        backgroundColor: '#D6EFD4',
-        borderTopRightRadius: 5,
-        borderTopLeftRadius: 5,
-        borderColor: 'black',
+        backgroundColor: '#CBE4C9',
+        borderRadius: 20,
+        marginTop: "10%",
+        borderColor: '#CBE4C9',
         borderWidth: 1,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
     },
     turnoContainer2: {
-        backgroundColor: '#C2E5D3',
-        borderColor: 'black',
+        backgroundColor: '#D6EFD4',
+        borderColor: '#D6EFD4',
         borderWidth: 1,
         borderTopWidth: 0,
     },
-    infoRow: {
-        flexDirection: 'row',
-        marginBottom: 5,
-        padding: 5,
+    logo:{
+        color: '#407738',
+        width: 50,
+        height: 50,
+
     },
-    label: {
-        fontWeight: 'bold',
-        marginRight: 5,
+    topContent: {
+        alignItems: 'flex-start',
+        marginTop: "8%",
+        marginLeft: "6%"
     },
-    titleContainer: {
-        alignSelf: 'center',
-        marginBottom: 20,
-    },
-    titleText: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        color: '#333',
-        alignSelf: 'center',
+    centerContent: {
         justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: "30%"
+    },
+    screenTitle: {
+        fontFamily: 'Roboto-Thin',
+        fontSize: 25,
+        textAlign: 'center',
+        fontWeight: 'bold',
+        marginTop: "1%",
+        color: "#2E5829FF",
     }
 });
 

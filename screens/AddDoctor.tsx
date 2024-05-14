@@ -9,7 +9,7 @@ import {
     ScrollView
 } from 'react-native';
 import {supabase} from "../lib/supabase";
-import {Button, Input} from "react-native-elements";
+import {Input} from "react-native-elements";
 import StandardGreenButton from "../components/StandardGreenButton";
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
@@ -126,11 +126,14 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}) => {
             // @ts-ignore
             console.error('An error occurred:', error.message);
         }finally{
-            Alert.alert("El Médico ya está agregado")
+            Alert.alert('El doctor fue agregado', '',
+                [{text: 'Ok', onPress: () => navigation.navigate({name: 'Home', params: {session: session}})},]
+            );
         }
     }
 
     return (
+        <View style={styles.containerTotal}>
         <KeyboardAvoidingView style={styles.container}>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
             <ScrollView>
@@ -201,6 +204,7 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}) => {
             </ScrollView>
         </TouchableWithoutFeedback>
         </KeyboardAvoidingView>
+        </View>
     );
 };
 
@@ -211,6 +215,13 @@ const styles = StyleSheet.create({
     container: {
         marginTop: 30,
         padding: 12,
+    },
+    containerTotal:{
+        backgroundColor: '#e9f4e9',
+        height: '100%',
+        marginLeft: 10,
+        marginRight: 10,
+        alignContent: 'center'
     },
     verticallySpaced: {
         alignSelf: 'stretch',

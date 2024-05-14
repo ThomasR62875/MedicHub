@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabase'
-import { StyleSheet, View, Alert, ScrollView,Text} from 'react-native'
-import {NavigationContainer} from "@react-navigation/native";
-import {createNativeStackNavigator, NativeStackScreenProps} from '@react-navigation/native-stack';
+import { StyleSheet, View, ScrollView,Text} from 'react-native'
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {RootStackParamList} from "../App";
 import AddButton from "../components/AddButton";
 
@@ -63,7 +62,6 @@ const Medication: React.FC = ({ navigation, route }: any) => {
             <View style={styles.addContainer}>
                 <AddButton onPress={() => navigation.navigate({name: 'AddMedication', params: {session: session}})}/>
             </View>
-
             <ScrollView>
                 <View>
                     {
@@ -80,7 +78,6 @@ const Medication: React.FC = ({ navigation, route }: any) => {
                                             <Text style={styles.value}>{medic.prescription}</Text>
                                         </View>
                                     </View>
-                                    // AGREGAR PARA VER EL ARRAY DE ADDRESSES
                                 )
                             })
                         ) : (
@@ -103,6 +100,8 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         padding: 20,
+        backgroundColor: '#e9f4e9',
+        height: '100%',
       },
     doctorContainer: {
         marginTop: 10,
@@ -130,11 +129,11 @@ const styles = StyleSheet.create({
         fontSize: 24,
         fontWeight: 'bold',
         color: '#333',
+        textAlign: 'center'
     },
     addContainer: {
         left: 290,
         bottom: 63,
         alignSelf: 'flex-start',
     }
-
 });

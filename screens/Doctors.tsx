@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabase'
-import { StyleSheet, View, Alert, ScrollView,Text} from 'react-native'
+import { StyleSheet, View, ScrollView,Text} from 'react-native'
 import {createNativeStackNavigator, NativeStackScreenProps} from '@react-navigation/native-stack';
 import {RootStackParamList} from "../App";
 import AddButton from "../components/AddButton";
@@ -72,11 +72,9 @@ const Doctors: React.FC= ({ navigation, route }: any) => {
             <View style={styles.addContainer}>
                 <AddButton onPress={() => navigation.navigate({name: 'AddDoctor', params: {session: session}})}/>
             </View>
-
             <ScrollView>
                 <View>
-                    {
-                        doctors ? (
+                    {doctors ? (
                             doctors.map((doc: Doctor, i) => {
                                 return (
                                     <View key={i} style={styles.doctorContainer}>
@@ -101,7 +99,6 @@ const Doctors: React.FC= ({ navigation, route }: any) => {
                                             <Text style={styles.value}>{doc.addresses}</Text>
                                         </View>
                                     </View>
-                                    // AGREGAR PARA VER EL ARRAY DE ADDRESSES
                                 )
                             })
                         ) : (
@@ -124,7 +121,26 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         padding: 20,
+        backgroundColor: '#e9f4e9',
+        height: '100%',
       },
+    bottomBar:{
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        right: 0,
+    },
+    titleContainer: {
+        marginTop: 10,
+        alignSelf: 'center',
+        marginBottom: 20,
+    },
+    titleText: {
+        fontSize: 25,
+        textAlign: 'center',
+        justifyContent: 'center',
+        fontWeight: 'bold',
+    },
     doctorContainer: {
         marginTop: 10,
         backgroundColor: '#C2E5D3',
@@ -142,23 +158,9 @@ const styles = StyleSheet.create({
     value: {
         flex: 1,
     },
-    titleContainer: {
-        marginTop: 10,
-        alignSelf: 'center',
-        marginBottom: 20,
-    },
-    titleText: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        color: '#333',
-        alignSelf: 'center',
-        justifyContent: 'center',
-
-    },
     addContainer: {
         left: 290,
-        bottom: 63,
+        bottom: 60,
         alignSelf: 'flex-start',
     }
-
 });
