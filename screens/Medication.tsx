@@ -18,14 +18,23 @@ const Medication: React.FC = ({ navigation, route }: any) => {
     const [medications,setMedications]= useState<Medication[] | undefined>(undefined)
 
     useEffect(() => {
-        if(session){
-            getMedications().then(data => {
-                setMedications(data);
-            }).catch(error => {
-                console.error("Error al obtener los medicamentos: ", error);
-            });
-        }
-    }, []);
+        const unsubscribe = navigation.addListener('focus', () => {
+            if (session) {
+                setLoading(true);
+                getMedications().then(data => {
+                    setMedications(data);
+                }).catch(error => {
+                    console.error("Error al obtener los doctores: ", error);
+                }).finally(() => {
+                    setLoading(false);
+                });
+            }
+        });
+
+        // Cleanup the listener on unmount
+        return unsubscribe;
+    }, [navigation, session]);
+
     async function getMedications(): Promise<Medication[] | undefined> {
         let to_return: Medication[] | undefined = undefined
 
@@ -34,7 +43,6 @@ const Medication: React.FC = ({ navigation, route }: any) => {
             throw new Error(user_data_error.message);
 
         const {data, error} = await supabase.rpc("get_all_medications_by_user", {user_id: user_id});
-        console.log(data)
         if(error){
             throw new Error(error.message);
         }
@@ -46,6 +54,7 @@ const Medication: React.FC = ({ navigation, route }: any) => {
 
         to_return = [];
         data.forEach((medication: Medication) => {
+            // @ts-ignore
             to_return.push({
                 name: medication.name,
                 prescription: medication.prescription
