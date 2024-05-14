@@ -53,6 +53,7 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}) => {
     useEffect(() => {
         if (session){ 
             async function fetchData() {
+                // @ts-ignore
                 setSpecialties(await getSpecialties())
                 setAllUsers(await getAllUsers(await getUserId()))
             }  
@@ -81,6 +82,26 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}) => {
             setNameErrorMessage('Debe seleccionar el usuario.');
         } else {
             setNameErrorMessage('');
+        }
+    };
+
+    const handleAddDoctor = async () => {
+        const doctor = {
+            name:name, specialty:specialty, phone:phone, email:email, addresses:
+            addresses, id:user_id
+        };
+
+        const result = await addDoctor(doctor);
+        if (result.success) {
+            Alert.alert(
+                'El Doctor fue agregado',
+                '',
+                [
+                    { text: 'Ok', onPress: () => navigation.navigate('Doctors', { session: session }) }
+                ]
+            );
+        } else {
+            Alert.alert('Error', result.message || 'An unknown error occurred');
         }
     };
 
@@ -158,8 +179,7 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}) => {
                         <StandardGreenButton
                             title="Agregar"
                             disabled={isButtonDisabled}
-                            onPress={() => addDoctor({name:name, specialty:specialty, phone:phone, email:email, addresses:
-                                addresses, id:user_id})}
+                            onPress={handleAddDoctor}
                         />
                     </View>
                 </View>
