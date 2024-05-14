@@ -60,7 +60,6 @@ const DependentUsers: React.FC = ({navigation, route} : any) => {
                     })
                 });
             }
-        
         } catch (error) {
             if (error instanceof Error) {
                 Alert.alert(error.message)
@@ -92,7 +91,7 @@ return(
                 {dependent_users && dependent_users.length >0 ? (
                     dependent_users.map((d_user: DependentUser, i) => {
                     return (
-                        <View key={i} style={[styles.userContainer, {alignItems: 'center'}]}>
+                        <View key={i} style={[styles.userContainer, {alignItems: 'center', padding: "5%", marginTop: '5%',}]}>
                             <View style={styles.infoRow}>
                                 <Text style={styles.label}>Nombre:</Text>
                                 <Text style={styles.value}>{d_user.first_name}</Text>
@@ -102,7 +101,7 @@ return(
                                 <Text style={styles.value}>{d_user.last_name}</Text>
                             </View>
                             <View style={styles.infoRow}>
-                                <Text style={styles.label}>Mail:</Text>
+                                <Text style={styles.label}>DNI:</Text>
                                 <Text style={styles.value}>{d_user.dni}</Text>
                             </View>
                         </View>
@@ -125,7 +124,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: "#e9f4e9",
-        height: "100%"
     },
     userContainer: {
         backgroundColor: '#cbe4c9',
@@ -136,9 +134,7 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
-        minHeight: '50%',
         minWidth: "100%",
-        margin: "1%"
     },
     infoRow: {
         flexDirection: 'row',
