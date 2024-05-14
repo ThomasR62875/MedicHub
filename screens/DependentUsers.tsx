@@ -3,6 +3,10 @@ import { supabase } from '../lib/supabase'
 import {StyleSheet, View, Alert, ScrollView, Text, Dimensions} from 'react-native'
 import AddButton from "../components/AddButton";
 import {Button} from "react-native-elements";
+import {RootStackParamList} from "../App";
+import {createNativeStackNavigator, NativeStackScreenProps} from "@react-navigation/native-stack";
+
+const Stack = createNativeStackNavigator();
 
 // UNA IDEA DE DEPENDENT USERS SERIA PODER VER CADA USUARIO Y EDITARLO DESDE AHI (por ej eliminarlo, lo de migrar info etc)
 // TAMBIEN QUE CUANDO ABRIMOS UN USUARIO DEPENDEDIENTE, NOS DESPIEGLUE SU INFO (doctores, appointments, etc) todo
@@ -14,8 +18,11 @@ export type DependentUser = {
     id: string;
 }
 
+type DependentUsersProps = NativeStackScreenProps<RootStackParamList, 'DependentUsers'>;
+
+
 const DependentUsers: React.FC = ({navigation, route} : any) => {
-    const session = route.params.session;
+    const {session} = route.params;
     const [loading, setLoading] = useState(true)
     const [users,setUsers]= useState([])
     const [dependent_users,setDependentUsers]= useState<DependentUser[] | undefined>(undefined)

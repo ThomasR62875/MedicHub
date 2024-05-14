@@ -3,9 +3,14 @@ import {Alert, StyleSheet, View,} from 'react-native';
 import {supabase} from "../lib/supabase";
 import {Button, Icon, Input, Text} from "react-native-elements";
 import { Image } from 'react-native';
+import {NativeStackScreenProps} from "@react-navigation/native-stack";
+import {RootStackParamList} from "../App";
 
-const AddDependentUser: React.FC = ({ navigation, route } : any) => {
-    const {session} = route.params;
+type AddDependentUserProps = NativeStackScreenProps<RootStackParamList, 'AddDependentUser'>
+
+
+const AddDependentUser:React.FC<AddDependentUserProps> = ({navigation, route}) => {
+    const session = route.params.session;
     const [firstName,setFirstName] = useState('')
     const [lastName,setLastName] = useState('')
     const [dni,setDni]  = useState('')
@@ -29,10 +34,9 @@ const AddDependentUser: React.FC = ({ navigation, route } : any) => {
                 Alert.alert(error.message)
             }
         } finally {
-            Alert.alert('El usuario fue agregado');
-            // [{text: 'Ok', onPress: () => navigation.navigate({name: 'DependentUsers', params: {session: session}})},]
-            // );
-            setLoading(false)
+            Alert.alert('El usuario fue agregado', '',
+                [{text: 'Ok', onPress: () => navigation.navigate({name: 'DependentUsers', params: {session: session}})},]
+            );
         }
     }
 
