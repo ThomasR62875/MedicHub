@@ -36,18 +36,11 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}) => {
     const [user_id, setUserId] = useState('')
 
     const [nameErrorMessage, setNameErrorMessage] = useState('')
-    const [specialtyErrorMessage, setSpecialtyErrorMessage] = useState('');
-    const [user_idErrorMessage, setUserIdErrorMessage] = useState('')
-
 
     useEffect(() => {
         if (
             name.trim() !== '' &&
-            specialty.trim() !== '' &&
-            user_idErrorMessage === '' &&
-            nameErrorMessage === '' &&
-            specialtyErrorMessage === '' &&
-            user_idErrorMessage === ''
+            nameErrorMessage === ''
         ) {
             setIsButtonDisabled(false);
         } else {
@@ -115,10 +108,9 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}) => {
                         <RNPickerSelect
                             placeholder={{ label: 'Especialidad', value: null }}
                             items={specialties ? specialties.map(s => ({ label: s.name, value: s.name })) : []}
-                            onValueChange={(value) => {
-                                setSpecialty(value);
-                                validateSpecialty(value);
-                            }}
+                            onValueChange={(value) =>
+                                setSpecialty(value)
+                            }
                             style={{ ...pickerSelectStyles }}
                             value={specialty}
                         />
@@ -155,10 +147,9 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}) => {
                         <RNPickerSelect
                             placeholder={{ label: 'Usuario', value: null }}
                             items={all_users ? all_users.map(u => ({ label: u.first_name, value: u.id})) : []}
-                            onValueChange={(value) => {
-                                setUserId(value);
-                                validateUser(value);
-                            }}
+                            onValueChange={(value) =>
+                                setUserId(value)
+                            }
                             style={{ ...pickerSelectStyles }}
                             value={user_id}
                         />
