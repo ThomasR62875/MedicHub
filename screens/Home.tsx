@@ -104,8 +104,8 @@ const Home: React.FC = ({navigation, route}: any) => {
     return (
             <View style={styles.container}>
                 <View style={styles.centerContent}>
-                    <Text style={styles.screenTitle}>Bienvenido {first_name}!</Text>
-                    <ScrollView style={{width:'85%', marginLeft: "5%",  marginRight: "5%"}}>
+                    <ScrollView style={{width:'85%', marginLeft: "5%",  marginRight: "5%", height: "100%"}}>
+                        <Text style={styles.screenTitle}>Bienvenido {first_name}!</Text>
                         <Pressable style={{margin: "1%"}}
                                    onPress={() => navigation.navigate({name: 'Appointments', params: {session: session}})}>
                             {turno1 && date1 ? (
