@@ -30,6 +30,9 @@ import {StyleSheet, TouchableOpacity, View} from "react-native";
 import {backgroundColor} from "react-native-calendars/src/style";
 import {Easing} from "react-native-reanimated";
 import SingleAppointment from "./screens/SingleAppointment";
+import EditAppointment from "./screens/EditAppointment";
+import SingleMedication from "./screens/SingleMedication";
+import EditMedication from "./screens/EditMedication";
 
 export type RootStackParamList = {
   HomeTabs: { session: Session | null };
@@ -48,7 +51,9 @@ export type RootStackParamList = {
   AddMedication: {session: Session | null};
   Calendar: {session : Session | null};
   SingleAppointment: {session : Session | null};
-
+  EditAppointment: {session : Session | null};
+  SingleMedication: {session : Session | null};
+  EditMedication: {session : Session | null};
 };
 
 
@@ -345,6 +350,17 @@ const App = () => {
                                     headerTintColor: '#abd2a8',
                                     headerBackTitle: 'Volver',
                                 }}/>
+                  <Stack.Screen name="EditAppointment"
+                                component={EditAppointment}
+                                initialParams={{session: session}}
+                                options={{
+                                    title: '',
+                                    headerStyle: {
+                                        backgroundColor: '#2e5829',
+                                    },
+                                    headerTintColor: '#abd2a8',
+                                    headerBackTitle: 'Volver',
+                                }}/>
                 <Stack.Screen name="AddDoctor"
                               component={AddDoctor}
                               initialParams={{session: session}}
@@ -378,6 +394,28 @@ const App = () => {
                                 headerTintColor: '#abd2a8',
                                 headerBackTitle: 'Medicamentos',
                               }}/>
+                  <Stack.Screen name="SingleMedication"
+                                component={SingleMedication}
+                                initialParams={{session: session}}
+                                options={{
+                                    title: '',
+                                    headerStyle: {
+                                        backgroundColor: '#2e5829',
+                                    },
+                                    headerTintColor: '#abd2a8',
+                                    headerBackTitle: 'Medicamentos',
+                                }}/>
+                  <Stack.Screen name="EditMedication"
+                                component={EditMedication}
+                                initialParams={{session: session}}
+                                options={{
+                                    title: '',
+                                    headerStyle: {
+                                        backgroundColor: '#2e5829',
+                                    },
+                                    headerTintColor: '#abd2a8',
+                                    headerBackTitle: 'Volver',
+                                }}/>
                 <Stack.Screen name="Appointments"
                               component={Appointments}
                               initialParams={{session: session}}
