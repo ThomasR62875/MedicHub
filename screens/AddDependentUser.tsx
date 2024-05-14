@@ -29,9 +29,9 @@ const AddDependentUser: React.FC = ({ navigation, route } : any) => {
                 Alert.alert(error.message)
             }
         } finally {
-            Alert.alert('El usuario fue agregado', '',
-                [{text: 'Ok', onPress: () => navigation.navigate({name: 'DependentUsers', params: {session: session}})},]
-            );
+            Alert.alert('El usuario fue agregado');
+            // [{text: 'Ok', onPress: () => navigation.navigate({name: 'DependentUsers', params: {session: session}})},]
+            // );
             setLoading(false)
         }
     }
