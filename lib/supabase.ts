@@ -110,3 +110,32 @@ export const getAllUsers = async (session_user_id:String) : Promise<DependentUse
     }
     return data
 }
+
+export const getAppointments = async () : Promise<Appointment[] | undefined> => {
+    const to_return: Appointment[] = [];
+    const user_id = await getUserId();
+    
+    const {data, error, status} = await supabase.rpc('get_appointments', {user_id: user_id})
+    if (error && status !== 406) {
+        throw error
+    }
+
+    for (const appoint of data)  {
+        const user: (DependentUser) = await getUser(appoint.user);
+        const doctor: (Doctor) = await getDoctor(appoint.doctor);
+        
+        const new_appoint:Appointment =  {description: appoint.description,
+            date: appoint.date,
+            user_name: user.first_name, // Suponiendo que name es el campo que quieres agregar
+            doctor: doctor && doctor.name ? doctor.name.concat(" (especialidad: ").concat(doctor.specialty).concat(")") : 'Sin datos de doctor',
+            user_id: appoint.user,}
+        to_return.push(new_appoint);
+    
+    };
+    if (error) {
+        console.error('Error inserting specialty data:', error.message);
+    } else {
+        console.log('Specialty data inserted successfully');
+    }
+    return to_return
+}
