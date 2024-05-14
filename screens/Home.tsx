@@ -12,7 +12,6 @@ import Logo from "../assets/icon.png";
 
 const Home: React.FC = ({navigation, route}: any) => {
     const session = route.params.session;
-    const [sessionId, setSessionId] = useState('')
     const [first_name, setFirstName] = useState('')
     const [loading, setLoading] = useState(true)
     const [appointments,setAppointments]= useState<Appointment[] | undefined>(undefined)
@@ -37,19 +36,10 @@ const Home: React.FC = ({navigation, route}: any) => {
         date2 = new Date(turno2.date);
     }
 
-
-
-
-    useEffect(() => {
-        if (session)
-            setSessionId(session);
-    }, [sessionId])
-
-
     useEffect(() => {
         if (session) getProfile()
-        if (sessionId) getAppointments()
-    }, [sessionId])
+        if (session) getAppointments()
+    }, [session])
 
     async function getProfile() {
         try {
@@ -108,7 +98,6 @@ const Home: React.FC = ({navigation, route}: any) => {
         }
         setLoading(false)
         setAppointments(to_return)
-        setSessionId('')
     }
 
     return (
