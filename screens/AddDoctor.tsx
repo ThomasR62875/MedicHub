@@ -8,7 +8,7 @@ import {
     KeyboardAvoidingView,
     ScrollView
 } from 'react-native';
-import {supabase} from "../lib/supabase";
+import {addDoctor, getAllUsers, getSpecialties, getUserId} from "../lib/supabase";
 import {Input} from "react-native-elements";
 import StandardGreenButton from "../components/StandardGreenButton";
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
@@ -18,7 +18,7 @@ import {DependentUser} from "./DependentUsers";
 
 type AddDoctorProps = NativeStackScreenProps<RootStackParamList, 'AddDoctor'>
 
-type Specialty = {
+export type Specialty = {
     name: string;
 };
 
@@ -35,101 +35,15 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}) => {
     const [session_user_id, setSessionUserId] = useState('')
     const [user_id, setUserId] = useState('')
 
-
     useEffect(() => {
-        if (session) {
-            const fetchUserId = async () => {
-                try {
-                    const {data, error} = await supabase.rpc("get_independent_user_id", {})
-                    if (data) {
-                        setSessionUserId(data);
-                    }
-                    if (error) {
-                        console.error('Error inserting UserId data:', error.message);
-                    } else {
-                        console.log('UserId data inserted successfully');
-                    }
-
-                } catch (error) {
-                    console.error('Error fetching UserId data:');
-                }
-            };
-            fetchUserId();
-
+        if (session){ 
+            async function fetchData() {
+                setSpecialties(await getSpecialties())
+                setAllUsers(await getAllUsers(await getUserId()))
+            }  
+            fetchData()
         }
-    }, [session]); // Dependencia de sesión para ejecutar solo cuando la sesión cambie
-
-    useEffect(() => {
-        if (session) getSpecialties()
     }, [session])
-    async function getSpecialties(){
-        try {
-            const {data, error} = await supabase.rpc('get_specialties');
-            setSpecialties(data);
-            if (error) {
-                console.error('Error inserting specialty data:', error.message);
-            } else {
-                console.log('Specialty data inserted successfully');
-            }
-        } catch (error) {
-            console.error('Error fetching specialities:');
-        }
-
-    }
-
-    useEffect(() => {
-        if (session_user_id) {
-            getAllUsers();
-        }
-    }, [session_user_id]);
-
-
-    async function getAllUsers(){
-        try {
-            const { data, error } = await supabase.rpc('get_all_users', { user_id: session_user_id });
-            setAllUsers(data);
-            if (error) {
-                console.error('Error inserting users data:', error.message);
-            } else {
-                console.log('Users data inserted successfully');
-            }
-        } catch (error) {
-            console.error('Error fetching users data:');
-        }
-
-    }
-
-    async function addDoctor({
-        name,
-        specialty,
-        phone,
-        email,
-        addresses,
-        user_id
-    }: {
-        name: string
-        specialty: string
-        phone: string
-        email: string
-        addresses: [string]
-        user_id: string
-    }) {
-        try {
-            const { error } = await supabase.rpc("add_doctor", {name_input: name, specialty_input: specialty,phone_input: phone, email_input: email, addresses_input: addresses, user_id_input:user_id})
-            if (error) {
-                console.error('Error inserting data:', error.message);
-            } else {
-                console.log('Data inserted successfully');
-            }
-        } catch (error) {
-            // @ts-ignore
-            console.error('An error occurred:', error.message);
-        }finally{
-            Alert.alert('El doctor fue agregado', '',
-                [{text: 'Ok', onPress: () => navigation.navigate({name: 'Home', params: {session: session}})},]
-            );
-        }
-    }
 
     return (
         <View style={styles.containerTotal}>
@@ -195,7 +109,8 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}) => {
                     <View style={styles.verticallySpaced}>
                         <StandardGreenButton
                             title="Agregar"
-                            onPress={() => addDoctor({name, specialty, phone, email, addresses, user_id})}
+                            onPress={() => addDoctor({name:name, specialty:specialty, phone:phone, email:email, addresses:
+                                addresses, id:user_id})}
                             disabled={loading}
                         />
                     </View>

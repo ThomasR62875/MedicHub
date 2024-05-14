@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react'
-import { supabase } from '../lib/supabase'
+import { getUser, getUserId, supabase } from '../lib/supabase'
 import {StyleSheet, View, Alert, Text, Modal, ScrollView, Dimensions} from 'react-native'
 import {Button, Icon} from 'react-native-elements'
 import {MaterialCommunityIcons} from "@expo/vector-icons";
+import { DependentUser } from './DependentUsers';
 
 const Account: React.FC = ({ navigation, route } : any) => {
     const {session} = route.params;
@@ -14,26 +15,16 @@ const Account: React.FC = ({ navigation, route } : any) => {
     const screenHeight = Dimensions.get('window').height;
 
     useEffect(() => {
-        if (session) getProfile()
-    }, [session])
-
-    async function getProfile() {
-        try {
-            if (!session?.user) throw new Error('No user on the session!')
-            const {data, error} = await supabase.rpc('get_independent_user', {auth_id_input: session?.user.id});
-
-            if (data) {
+        if (session) {
+            async function fetchData() {
+                const data : DependentUser= await getUser(await getUserId())
                 setFirstName(data.first_name)
                 setLastName(data.last_name)
                 setDni(data.dni)
-                setAvatarUrl(data.avatar_url)
             }
-        } catch (error) {
-            if (error instanceof Error) {
-                Alert.alert(error.message)
-            }
+            fetchData()
         }
-    }
+    }, [session])
 
     const size=25;
 

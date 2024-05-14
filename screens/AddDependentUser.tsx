@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {SafeAreaView, Alert, StyleSheet, View,} from 'react-native';
-import {supabase} from "../lib/supabase";
+import {addDependentUser} from "../lib/supabase";
 import {Button, Icon, Input, Text} from "react-native-elements";
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
@@ -9,31 +9,11 @@ import StandardGreenButton from "../components/StandardGreenButton";
 
 type AddDependentUser = NativeStackScreenProps<RootStackParamList, 'AddDependentUser'>;
 
-
 const AddDependentUser: React.FC<AddDependentUser> = ({ navigation, route }) => {
     const [firstName,setFirstName] = useState('')
     const [lastName,setLastName] = useState('')
     const [dni,setDni]  = useState('')
     const [loading,setLoading]= useState(false)
-
-
-    async function addUser() {
-        setLoading(true)
-            try{
-                const { error } = await supabase.rpc("add_dependent_user",{first_name_input: firstName,
-                    last_name_input :lastName, dni_input:dni})
-                Alert.alert("El Usuario ya está guardado")
-                if (error!= null){
-                    throw error
-                }
-            }
-            catch(error){
-                if (error instanceof Error) {
-                    Alert.alert(error.message)
-                }
-            }
-        setLoading(false)
-    }
 
     return (
         <View style={styles.container}>
@@ -90,7 +70,8 @@ const AddDependentUser: React.FC<AddDependentUser> = ({ navigation, route }) => 
                         marginTop: 40,
                     }}
                     titleStyle={{ color: '#eef9ed' }}
-                    onPress={() => addUser()}
+                    onPress={() => addDependentUser({first_name: firstName,
+                        last_name :lastName, dni:dni})}
                 />
             </View>
         </View>
