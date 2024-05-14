@@ -103,8 +103,7 @@ const Appointments: React.FC =  ({navigation, route}: any) =>{
                                        })
                                     ) : (
                                         <View style={[styles.titleContainer, {}]}>
-                                            <Text style={styles.titleText}>No hay turnos</Text>
-                                           <Text style={[styles.titleText, {fontSize: 16, fontStyle: 'italic'}]}>Usa el simbolo + de la esquina superior derecha para agregar tu primer doctor</Text>
+                                            <Text style={styles.text}>No hay turnos</Text>
                                         </View>
                                     )}
                        </ScrollView>
@@ -167,5 +166,13 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         marginBottom: "5%",
 
+    },
+    text: {
+        fontFamily: 'Roboto-Thin',
+        fontSize: 14,
+        textAlign: 'left',
+        marginTop: "1%",
+        color: "#2E5829FF",
+        width: "60%"
     }
 });
