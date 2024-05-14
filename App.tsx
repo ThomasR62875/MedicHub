@@ -124,10 +124,11 @@ function HomeTabs({route, navigation}: Props) {
             tabBarInactiveTintColor: "#0e1e0d",
         }}>
             <Tab.Screen
-                name="Inicio"
+                name="Home"
                 component={Home}
                 initialParams={{session: session}}
                 options={{
+                    title: 'Inicio',
                     tabBarIcon: ({ color, size }) => (
                         <Ionicons name="home" color={color} size={size} />
                     ),
@@ -135,10 +136,11 @@ function HomeTabs({route, navigation}: Props) {
                 }}
             />
             <Tab.Screen
-                name="Calendario"
+                name="Calender"
                 component={Calender}
                 initialParams={{session: session}}
                 options={{
+                    title: 'Calendario',
                     tabBarIcon: ({ color, size }) => (
                         <Ionicons name="calendar" color={color} size={size} />
                     ),
@@ -147,20 +149,22 @@ function HomeTabs({route, navigation}: Props) {
                 }
             />
             <Tab.Screen
-                name="Usuarios"
+                name="DependentUsers"
                 component={DependentUsers}
                 initialParams={{session: session}}
                 options={{
+                    title: 'Usuarios',
                     tabBarIcon: ({ color, size }) => (
                         <Ionicons name="people" color={color} size={size} />
                     ),
                     headerShown: false
                 }}/>
             <Tab.Screen
-                name="Perfil"
+                name="Account"
                 component={Account}
                 initialParams={{session: session}}
                 options={{
+                    title: 'Perfil',
                     tabBarIcon: ({ color, size }) => (
                         <Ionicons name="person" color={color} size={size} />
                     ),
