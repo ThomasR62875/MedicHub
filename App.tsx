@@ -26,6 +26,7 @@ import {Ionicons, MaterialCommunityIcons} from "@expo/vector-icons";
 import {StyleSheet, TouchableOpacity, View} from "react-native";
 import {backgroundColor} from "react-native-calendars/src/style";
 import {Easing} from "react-native-reanimated";
+import SingleAppointment from "./screens/SingleAppointment";
 
 export type RootStackParamList = {
   HomeTabs: { session: Session | null };
@@ -43,6 +44,8 @@ export type RootStackParamList = {
   Medication: {session: Session | null};
   AddMedication: {session: Session | null};
   Calendar: {session : Session | null};
+  SingleAppointment: {session : Session | null};
+
 };
 
 
@@ -332,6 +335,17 @@ const App = () => {
                                 headerTintColor: '#abd2a8',
                                 headerBackTitle: 'Volver',
                               }}/>
+                  <Stack.Screen name="SingleAppointment"
+                                component={SingleAppointment}
+                                initialParams={{session: session}}
+                                options={{
+                                    title: '',
+                                    headerStyle: {
+                                        backgroundColor: '#2e5829',
+                                    },
+                                    headerTintColor: '#abd2a8',
+                                    headerBackTitle: 'Volver',
+                                }}/>
                 <Stack.Screen name="AddDoctor"
                               component={AddDoctor}
                               initialParams={{session: session}}

@@ -4,8 +4,7 @@ import { StyleSheet,ScrollView ,View, Text ,Alert } from 'react-native'
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
 import AddButton from "../components/AddButton";
-
-
+import AppointmentButton from "../components/AppointmentButton";
 
 export type Appointment = {
     date: Date;
@@ -79,29 +78,10 @@ const Appointments: React.FC =  ({navigation, route}: any) =>{
                 <View>
                     {appointments && appointments?.length > 0 ? (
                             appointments.map((appointment: Appointment, i) => {
-                                const originalDate = new Date(appointment.date);
-                                const formattedDate = `${originalDate.getDate()}/${originalDate.getMonth()+1}/${originalDate.getFullYear()}`;
-                                const formattedTime = `${(originalDate.getHours() + 3) % 24}:${originalDate.getMinutes().toString().padStart(2, '0')}`;
                                 return (
-                                    <View key={i} style={styles.doctorContainer}>
-                                        <View style={styles.infoRow}>
-                                            <Text style={styles.label}>Usuario:</Text>
-                                            <Text style={styles.value}>{appointment.user_name}</Text>
-                                        </View>
-                                        <View style={styles.infoRow}>
-                                            <Text style={styles.label}>Fecha:</Text>
-                                            <Text style={styles.value}>{formattedDate}</Text>
-                                            <Text style={styles.label}>Hora:</Text>
-                                            <Text style={styles.value}>{formattedTime}</Text>
-                                        </View>
-                                        <View style={styles.infoRow}>
-                                            <Text style={styles.label}>Doctor:</Text>
-                                            <Text style={styles.value}>{appointment.doctor}</Text>
-                                        </View>
-                                        <View style={styles.infoRow}>
-                                            <Text style={styles.label}>Descripcion:</Text>
-                                            <Text style={styles.value}>{appointment.description}</Text>
-                                        </View>
+                                    <View key={i} style={styles.appointContainer}>
+                                        <AppointmentButton onPress={() => navigation.navigate({name: 'SingleAppointment', params: {appointment: appointments}})} styleExterior={styles.appointContainer} date={appointment.date} turno={appointment}></AppointmentButton>
+                                        <View style={{ marginBottom: 100 }} />
                                     </View>
                                 )
                             })
@@ -138,10 +118,9 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         fontWeight: 'bold',
     },
-    doctorContainer: {
-        marginTop: 10,
-        backgroundColor: '#C2E5D3',
-        marginBottom: 10,
+    appointContainer: {
+        marginTop: '5%',
+        alignItems: 'center',
         borderRadius: 5,
     },
     infoRow: {
