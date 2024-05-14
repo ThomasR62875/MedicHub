@@ -65,7 +65,6 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}) => {
     async function getSpecialties(){
         try {
             const {data, error} = await supabase.rpc('get_specialties');
-            console.log(data)
             setSpecialties(data);
             if (error) {
                 console.error('Error inserting specialty data:', error.message);
