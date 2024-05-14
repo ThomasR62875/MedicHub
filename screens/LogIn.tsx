@@ -183,7 +183,6 @@ const styles = StyleSheet.create({
         color: '#407738',
         width: 100,
         height: 100
-
     },
     iconContainer: {
         textAlign: "center",
