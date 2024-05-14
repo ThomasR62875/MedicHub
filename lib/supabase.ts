@@ -61,8 +61,8 @@ export const addDoctor = async (doctor: Doctor): Promise<void> => {
     if (error) {
         console.error('Error inserting data:', error.message);
     } else {
-        console.log('Data inserted successfully');
-        Alert.alert("El Doctor ya está agregado");
+        //Alert.alert('El doctor fue agregado', '',
+        //[{text: 'Ok', onPress: () => navigation.navigate({name: 'Doctors', params: {session: session}})},]);
 }};
 export const addDependentUser = async (user:DependentUser): Promise<void> =>{
     const { error } = await supabase.rpc("add_dependent_user",{first_name_input: user.first_name,
