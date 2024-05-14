@@ -113,7 +113,7 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
                 </View>
                 <StandardGreenButton
                     title="Confirmar"
-                    disabled={isButtonDisabled}
+                    disabled={loading}
                     onPress={() => addAppointment({date, description,doctor, user_id})}
                 />
             </SafeAreaView>
