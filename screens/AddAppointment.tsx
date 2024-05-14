@@ -26,7 +26,16 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
     const [all_users, setAllUsers] = useState<DependentUser[]>([])
     const [doctors, setDoctors] = useState<Doctor[]>([])
 
-    // FUNCION PRECARIA PARA QUE DE MOMENTO FUNCIONE CON EL ID DEL PADRE; DEPUES CON EL PICKER ELEGIR QUE USUARIO SE VE
+    const [descriptionErrorMessage, setDescriptionErrorMessage] = useState('')
+    const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(true);
+
+    const validateDescription = (value: string) => {
+        if (value.trim() === '') {
+            setDescriptionErrorMessage('Debe ingresar la descripción del turno.');
+        } else {
+            setDescriptionErrorMessage('');
+        }
+    };
 
     useEffect(() => {
         if (session) {
@@ -77,7 +86,12 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
                     style={styles.verticallySpaced}
                     placeholder="Descripción"
                     value={description}
-                    onChangeText={(text) => setDescription(text)}
+                    onChangeText={(text) => {
+                        setDescription(text);
+                        validateDescription(text);
+                    }}
+                    errorStyle={{ color: 'red' }}
+                    errorMessage={descriptionErrorMessage}
                 />
                 <View style={styles.pickerStyle}>
                     <RNPickerSelect
@@ -99,7 +113,7 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
                 </View>
                 <StandardGreenButton
                     title="Confirmar"
-                    disabled={loading}
+                    disabled={isButtonDisabled}
                     onPress={() => addAppointment({date, description,doctor, user_id})}
                 />
             </SafeAreaView>
