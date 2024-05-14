@@ -47,11 +47,11 @@ const EditAccount:React.FC<EditAccountProps> = ({navigation, route }) =>{
     }
 
     async function updateProfile({
-                                     first_name,
-                                     last_name,
-                                     dni,
-                                     avatar_url,
-                                 }: {
+        first_name,
+        last_name,
+        dni,
+        avatar_url,
+    }: {
         first_name: string
         last_name: string
         dni: number
