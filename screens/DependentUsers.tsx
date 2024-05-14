@@ -16,16 +16,23 @@ export type DependentUser = {
 
 const DependentUsers: React.FC = ({navigation, route} : any) => {
     const {session} = route.params;
+    const [sessionId, setSessionId] = useState('')
     const [loading, setLoading] = useState(true)
     const [users,setUsers]= useState([])
     const [dependent_users,setDependentUsers]= useState<DependentUser[] | undefined>(undefined)
     const screenHeight = Dimensions.get('window').height;
     const percentageMargin = screenHeight * 0.05;
 
+    useEffect(() => {
+        if (session)
+            setSessionId(session);
+    }, [sessionId])
 
     useEffect(() => {
-        if (session) getUsers()
-    }, [session])
+        if (sessionId)
+            getUsers()
+    }, [sessionId])
+
     async function getUsers():Promise<DependentUser[]> {
         let to_return: DependentUser[]=[]
         try {
@@ -33,7 +40,6 @@ const DependentUsers: React.FC = ({navigation, route} : any) => {
             if (!session?.user) throw new Error('No user on the session!')
 
             const {data, error} = await supabase.rpc("get_dependent_users")
-            console.log(data)
             if (error) {
                 throw error
             }
@@ -55,6 +61,7 @@ const DependentUsers: React.FC = ({navigation, route} : any) => {
         }
         setLoading(false)
         setDependentUsers(to_return)
+        setSessionId('')
         return to_return;
     }
 
