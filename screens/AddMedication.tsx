@@ -43,9 +43,14 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
             // @ts-ignore
             console.error('An error occurred:', error.message);
         }finally{
-            Alert.alert('El medicamento fue agregado', '',
-                [{text: 'Ok', onPress: () => navigation.navigate({name: 'Home', params: {session: session}})},]
+            Alert.alert(
+                'El medicamento fue agregado',
+                '',
+                [
+                    { text: 'Ok', onPress: () => navigation.navigate('Medication', { session: session }) }
+                ]
             );
+
         }
 
     }

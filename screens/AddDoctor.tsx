@@ -23,7 +23,7 @@ export type Specialty = {
 };
 
 const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}) => {
-    const {session} = route.params;
+    const session = route.params.session;
     const [email, setEmail] = useState('')
     const [name, setName] = useState('')
     const [loading, setLoading] = useState(false)

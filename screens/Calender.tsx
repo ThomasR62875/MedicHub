@@ -5,12 +5,13 @@ import {Calendar} from "react-native-calendars";
 import AddButton from "../components/AddButton";
 import TurnoContainer from "../components/TurnContainer";
 import {supabase} from "../lib/supabase";
+import {Button} from "react-native-elements";
 
 const Calender: React.FC = ({ navigation, route } : any) => {
     const {session} = route.params;
     const [appointments,setAppointments]= useState<Appointment[] | undefined>(undefined)
     const [loading, setLoading] = useState(true)
-
+    const monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
     useEffect(() => {
         if (session) {
             getProfile()
@@ -122,13 +123,18 @@ const Calender: React.FC = ({ navigation, route } : any) => {
 
     return (
         <View style={styles.container}>
-            <Calendar
-            markingType={'custom'}
-            markedDates={AllMarkedDays}
-            onDayPress={handleDayPress}
-            theme={customTheme}
-            />
-            <ScrollView>
+            <View style={styles.window}>
+                <Text style={styles.screenTitle}>Calendar</Text>
+            </View >
+            <View style={styles.calendarContainer}>
+                <Calendar style={{borderRadius: 10}}
+                markingType={'custom'}
+                markedDates={AllMarkedDays}
+                onDayPress={handleDayPress}
+                theme={customTheme}
+                />
+            </View>
+            <ScrollView centerContent={true} >
                 {filteredData && filteredData.length > 0 ? (
                     filteredData.map((turno: Appointment, i: number) => {
 
@@ -137,20 +143,30 @@ const Calender: React.FC = ({ navigation, route } : any) => {
                                 <TurnoContainer
                                     date={turno.date}
                                     turno={turno}
-                                    styleExterior={styles.turnoContainer}
+                                    styleExterior={styles.turno}
                                 />
                             </View>
                         )
                         })) :  (
                             <View style={{alignItems: 'center', marginTop: 10}}>
-                                <View style={[styles.turnoContainer, {padding: 10}]}>
-                                    <Text style={styles.text}>No hay turnos este día</Text>
-                                    <Text style={[styles.text, {fontStyle: 'italic'}]}>Presiona el + para crear un turno el {dateNormal}</Text>
+                                <View style={[styles.turnoContainer]}>
+                                    <Text style={styles.text}>No hay turnos para el {new Date(dateNormal).getDay()} de {monthNames[new Date(dateNormal).getMonth()]} de {new Date(dateNormal).getFullYear()}</Text>
                                 </View>
                             </View>
                         )}
-                <View style={{alignItems: 'center', marginTop: 10}}>
-                    <AddButton onPress={() => navigation.navigate('AddAppointment', {session})} />
+                <View style={{alignItems: 'center', marginTop: 10, marginLeft: "10%", marginBottom: "20%", alignContent: 'center'}}>
+                    <Button
+                        title="Agregar turno"
+                        buttonStyle={{
+                            backgroundColor: '#2E5829',
+                            borderColor: 'white',
+                            borderRadius: 20,
+                            minHeight: 10,
+                            width: "70%"
+                        }}
+                        titleStyle={{ color: '#E9F4E9FF',fontSize: 15, margin: 5 }}
+                        onPress={() => navigation.navigate('AddAppointment', {session: session})}/>
+                    {/*<AddButton onPress={() => navigation.navigate('AddAppointment', {session})} />*/}
                 </View>
             </ScrollView>
         </View>
@@ -172,20 +188,49 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     text: {
-        fontSize: 18,
+        fontSize: 14,
         textAlign: 'center',
+        marginTop: '5%'
     },
     turnoContainer: {
-        backgroundColor: '#D6EFD4',
-        borderTopRightRadius: 5,
-        borderTopLeftRadius: 5,
-        borderColor: 'black',
-        borderWidth: 1,
+        backgroundColor: '#CBE4C9FF',
+        borderRadius: 5,
         width: '90%',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        minHeight: 200
     },
     container: {
         height: '100%',
-        marginTop: screenHeight * 0.1,
+        backgroundColor: '#e9f4e9',
+    },
+    window: {
+        alignItems: 'center',
+        marginTop: '20%',
+        marginLeft: '5%',
+        marginRight: '5%'
+    },
+    calendarContainer: {
+        margin: '5%',
+        backgroundColor: "#E9F4E9FF"
+    },
+    screenTitle: {
+        fontFamily: 'Roboto-Thin',
+        fontSize: 25,
+        textAlign: 'center',
+        fontWeight: 'bold',
+        marginTop: "1%",
+        marginBottom: "5%",
+        color: "#2E5829FF",
+        width: "60%"
+    },
+    turno: {
+        backgroundColor: '#CBE4C9FF',
+        borderRadius: 5,
+        width: '90%',
+        justifyContent: "center",
     }
 });
 

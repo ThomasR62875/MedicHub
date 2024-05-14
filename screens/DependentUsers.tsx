@@ -3,6 +3,10 @@ import { supabase } from '../lib/supabase'
 import {StyleSheet, View, Alert, ScrollView, Text, Dimensions} from 'react-native'
 import AddButton from "../components/AddButton";
 import {Button} from "react-native-elements";
+import {RootStackParamList} from "../App";
+import {createNativeStackNavigator, NativeStackScreenProps} from "@react-navigation/native-stack";
+
+const Stack = createNativeStackNavigator();
 
 // UNA IDEA DE DEPENDENT USERS SERIA PODER VER CADA USUARIO Y EDITARLO DESDE AHI (por ej eliminarlo, lo de migrar info etc)
 // TAMBIEN QUE CUANDO ABRIMOS UN USUARIO DEPENDEDIENTE, NOS DESPIEGLUE SU INFO (doctores, appointments, etc) todo
@@ -14,6 +18,9 @@ export type DependentUser = {
     id: string;
 }
 
+type DependentUsersProps = NativeStackScreenProps<RootStackParamList, 'DependentUsers'>;
+
+
 const DependentUsers: React.FC = ({navigation, route} : any) => {
     const {session} = route.params;
     const [loading, setLoading] = useState(true)
@@ -22,10 +29,17 @@ const DependentUsers: React.FC = ({navigation, route} : any) => {
     const screenHeight = Dimensions.get('window').height;
     const percentageMargin = screenHeight * 0.05;
 
-
     useEffect(() => {
-        if (session) getUsers()
-    }, [session])
+        const unsubscribe = navigation.addListener('focus', () => {
+            if (session) {
+                getUsers();
+            }
+        });
+
+        return unsubscribe;
+    }, [navigation, session]);
+
+
     async function getUsers():Promise<DependentUser[]> {
         let to_return: DependentUser[]=[]
         try {
@@ -33,7 +47,6 @@ const DependentUsers: React.FC = ({navigation, route} : any) => {
             if (!session?.user) throw new Error('No user on the session!')
 
             const {data, error} = await supabase.rpc("get_dependent_users")
-            console.log(data)
             if (error) {
                 throw error
             }
@@ -47,7 +60,6 @@ const DependentUsers: React.FC = ({navigation, route} : any) => {
                     })
                 });
             }
-        
         } catch (error) {
             if (error instanceof Error) {
                 Alert.alert(error.message)
@@ -65,7 +77,6 @@ return(
                 <Text style={styles.titleText}>Usuarios Dependientes</Text>
                 <Button
                     title="Agregar"
-                    loading={loading}
                     buttonStyle={{
                         backgroundColor: '#2E5829',
                         borderColor: 'white',
@@ -74,13 +85,13 @@ return(
                         minWidth: 10,
                     }}
                     titleStyle={{ color: '#E9F4E9FF',fontSize: 15, margin: 5 }}
-                    onPress={() => navigation.navigate('AddDependentUser', {session: session})} />
+                    onPress={() => navigation.navigate('AddDependentUser', {session: session})}/>
             </View>
             <ScrollView style={{width:'90%', marginTop: percentageMargin }}>
                 {dependent_users && dependent_users.length >0 ? (
                     dependent_users.map((d_user: DependentUser, i) => {
                     return (
-                        <View key={i} style={styles.userContainer}>
+                        <View key={i} style={[styles.userContainer, {alignItems: 'center', padding: "5%", marginTop: '5%',}]}>
                             <View style={styles.infoRow}>
                                 <Text style={styles.label}>Nombre:</Text>
                                 <Text style={styles.value}>{d_user.first_name}</Text>
@@ -90,7 +101,7 @@ return(
                                 <Text style={styles.value}>{d_user.last_name}</Text>
                             </View>
                             <View style={styles.infoRow}>
-                                <Text style={styles.label}>Mail:</Text>
+                                <Text style={styles.label}>DNI:</Text>
                                 <Text style={styles.value}>{d_user.dni}</Text>
                             </View>
                         </View>
@@ -108,13 +119,11 @@ return(
 
 export default DependentUsers;
 
-const screenHeight = Dimensions.get('window').height;
 const styles = StyleSheet.create({
     container: {
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: "#e9f4e9",
-        height: "100%"
     },
     userContainer: {
         backgroundColor: '#cbe4c9',
@@ -125,9 +134,7 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
-        minHeight: '50%',
         minWidth: "100%",
-        margin: "1%"
     },
     infoRow: {
         flexDirection: 'row',
@@ -149,13 +156,8 @@ const styles = StyleSheet.create({
         color: "#2E5829FF",
         width: "60%"
     },
-    addContainer: {
-        left: 310,
-        bottom: 95,
-        alignSelf: 'flex-start',
-    },
     text: {
-        fontSize: 12,
+        fontSize: 20,
         textAlign: 'center',
         justifyContent: 'center',
         margin: '5%',

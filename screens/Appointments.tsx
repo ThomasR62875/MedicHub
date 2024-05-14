@@ -19,8 +19,14 @@ const Appointments: React.FC =  ({navigation, route}: any) =>{
     const [appointments,setAppointments]= useState<Appointment[] | undefined>(undefined)
 
     useEffect(() => {
-        if (session) getAppointments()
-    }, [session])
+        const unsubscribe = navigation.addListener('focus', () => {
+            if (session) {
+                getAppointments();
+            }
+        });
+
+        return unsubscribe;
+    }, [navigation, session]);
 
     async function getAppointments() {
         const to_return: Appointment[] = [];

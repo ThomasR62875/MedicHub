@@ -24,14 +24,23 @@ const Doctors: React.FC= ({ navigation, route }: any) => {
     const [doctors,setDoctors]= useState<Doctor[] | undefined>(undefined)
 
     useEffect(() => {
-        if(session){
-            getDoctors().then(data => {
-                setDoctors(data);
-            }).catch(error => {
-                console.error("Error al obtener los doctores: ", error);
-            });
-        }
-    }, []);
+        const unsubscribe = navigation.addListener('focus', () => {
+            if (session) {
+                setLoading(true);
+                getDoctors().then(data => {
+                    setDoctors(data);
+                }).catch(error => {
+                    console.error("Error al obtener los doctores: ", error);
+                }).finally(() => {
+                    setLoading(false);
+                });
+            }
+        });
+
+        // Cleanup the listener on unmount
+        return unsubscribe;
+    }, [navigation, session]);
+
     async function getDoctors(): Promise<Doctor[] | undefined> {
         let to_return: Doctor[] | undefined = undefined
 
