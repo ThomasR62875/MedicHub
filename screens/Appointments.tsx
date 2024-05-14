@@ -5,6 +5,8 @@ import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
 import AddButton from "../components/AddButton";
 import AppointmentButton from "../components/AppointmentButton";
+import {Button} from "react-native-elements";
+import {DependentUser} from "./DependentUsers";
 
 export type Appointment = {
     date: Date;
@@ -74,44 +76,50 @@ const Appointments: React.FC =  ({navigation, route}: any) =>{
     }
     return(
         <View style={styles.container}>
-            <View style={styles.titleContainer}>
-                <Text style={styles.titleText}>Turnos</Text>
-            </View>
-            <View style={styles.addContainer}>
-                <AddButton onPress={() => navigation.navigate({name: 'AddAppointment', params: {session: session}})}/>
-            </View>
-            <ScrollView>
-                <View>
-                    {appointments && appointments?.length > 0 ? (
-                            appointments.map((appointment: Appointment, i) => {
-                                return (
-                                    <View key={i} style={styles.appointContainer}>
-                                        <AppointmentButton onPress={() => navigation.navigate({name: 'SingleAppointment', params: {appointment: appointments}})} styleExterior={styles.appointContainer} date={appointment.date} turno={appointment}></AppointmentButton>
-                                        <View style={{ marginBottom: 100 }} />
-                                    </View>
-                                )
-                            })
-                        ) : (
-                            <View style={[styles.titleContainer, {}]}>
-                                <Text style={styles.titleText}>No hay turnos</Text>
-                                <Text style={[styles.titleText, {fontSize: 16, fontStyle: 'italic'}]}>Usa el simbolo + de la esquina superior derecha para agregar tu primer doctor</Text>
-                            </View>
-                        )}
+            <View style={styles.window}>
+                <View style={styles.topContent}>
+                    <Text style={styles.titleText}>Tus turnos</Text>
+                    <Button
+                        title="Agregar"
+                        buttonStyle={{
+                            backgroundColor: '#2E5829',
+                            borderColor: 'white',
+                            borderRadius: 20,
+                            minHeight: 10,
+                            minWidth: 10,
+                        }}
+                        titleStyle={{ color: '#E9F4E9FF',fontSize: 15, margin: 5 }}
+                        onPress={() => navigation.navigate('AddDependentUser', {session: session})}/>
                 </View>
-            </ScrollView>
+                <ScrollView>
+                                {appointments && appointments?.length > 0 ? (
+                                        appointments.map((appointment: Appointment, i) => {
+                                         return (
+                                             <View key={i} style={styles.appointContainer}>
+                                                   <AppointmentButton onPress={() => navigation.navigate({name: 'SingleAppointment', params: {appointment: appointments}})} styleExterior={styles.appointContainer} date={appointment.date} turno={appointment}></AppointmentButton>
+                                                    <View style={{ marginBottom: 100 }} />
+                                             </View>
+                                            )
+                                       })
+                                    ) : (
+                                        <View style={[styles.titleContainer, {}]}>
+                                            <Text style={styles.titleText}>No hay turnos</Text>
+                                           <Text style={[styles.titleText, {fontSize: 16, fontStyle: 'italic'}]}>Usa el simbolo + de la esquina superior derecha para agregar tu primer doctor</Text>
+                                        </View>
+                                    )}
+                       </ScrollView>
+            </View>
         </View>
-    )
-}
+    );
+};
 
 export default Appointments
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
         justifyContent: 'center',
-        padding: 20,
-        backgroundColor: '#e9f4e9',
-        height: '100%',
+        alignItems: 'center',
+        backgroundColor: "#e9f4e9",
     },
     titleContainer: {
         marginTop: 10,
@@ -119,15 +127,18 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     titleText: {
+        fontFamily: 'Roboto-Thin',
         fontSize: 25,
-        textAlign: 'center',
-        justifyContent: 'center',
+        textAlign: 'left',
         fontWeight: 'bold',
+        marginTop: "1%",
+        color: "#2E5829FF",
+        width: "60%"
     },
     appointContainer: {
         marginTop: '5%',
         alignItems: 'center',
-        borderRadius: 5,
+        borderRadius: 10,
     },
     infoRow: {
         flexDirection: 'row',
@@ -144,5 +155,17 @@ const styles = StyleSheet.create({
         left: 290,
         bottom: 60,
         alignSelf: 'flex-start',
+    },
+    window: {
+        marginTop: "20%",
+        marginLeft: "5%",
+        marginRight: "5%",
+    },
+    topContent: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        marginBottom: "5%",
+
     }
 });
