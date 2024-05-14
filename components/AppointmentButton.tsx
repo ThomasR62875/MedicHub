@@ -35,10 +35,10 @@ const AppointmentButton: React.FC<AppointmentButtonProps> = ( { styleExterior, t
 const styles = StyleSheet.create({
     container: {
         position: 'absolute',
-        width: '90%',
+        width: '100%',
         height: 100,
         borderRadius: 28,
-        backgroundColor: '#C2E5D3',
+        backgroundColor: '#CBE4C9FF',
         justifyContent: 'center',
         alignItems: 'center',
     },

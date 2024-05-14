@@ -116,11 +116,11 @@ const Home: React.FC = ({navigation, route}: any) => {
                                             <TurnoContainer
                                                 turno={turno1}
                                                 date={date1}
-                                                styleExterior={[styles.turnoContainer, {backgroundColor: '#d8fcc5', padding: "2%"}]}
+                                                styleExterior={[styles.turnoContainer, {backgroundColor: '#dcf1d8', padding: "2%"}]}
                                             />
                                             {turno2 && date2 ? (
                                                 <TurnoContainer
-                                                    styleExterior={[styles.turnoContainer, {marginTop: "5%", backgroundColor: '#d8fcc5', padding: "2%"}]}
+                                                    styleExterior={[styles.turnoContainer, {marginTop: "2%", backgroundColor: '#dcf1d8', padding: "2%"}]}
                                                     date={date2}
                                                     turno={turno2}
                                                 />
