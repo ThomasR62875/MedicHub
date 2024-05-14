@@ -4,11 +4,13 @@ import { StyleSheet, View, Text, Alert } from 'react-native';
 import {Appointment} from "./Appointments";
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
+import {Icon} from "react-native-elements";
+import AddButton from "../components/AddButton";
 
-type AddAppointmentProps = NativeStackScreenProps<RootStackParamList, 'SingleAppointment'>
+type SingleAppointmentProps = NativeStackScreenProps<RootStackParamList, 'SingleAppointment'>
 
 
-const SingleAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }: any) => {
+const SingleAppointment: React.FC<SingleAppointmentProps> = ({ navigation, route }: any) => {
     // Convert date to desired format
     const originalDate = new Date(route.params.appointment.date);
     const formattedDate = `${originalDate.getDate()}/${originalDate.getMonth() + 1}/${originalDate.getFullYear()}`;
@@ -16,7 +18,19 @@ const SingleAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }:
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Detalles del Turno</Text>
+            <View style={styles.titleContainer}>
+                <Text style={styles.titleText}>Detalles del Turno</Text>
+            </View>
+            <View style={styles.addContainer}>
+                <Icon
+                    name='pencil'
+                    iconStyle={{ color: '#1E3A1AFF' }}
+                    type='ionicon'
+                    size={25}
+                    style={{margin: "10%"}}
+                    onPress={() => navigation.navigate('EditAppointment')}
+                />
+            </View>
             <View style={styles.detailRow}>
                 <Text style={styles.label}>Usuario:</Text>
                 <Text style={styles.value}>{route.params.appointment.user_name}</Text>
@@ -49,11 +63,18 @@ const styles = StyleSheet.create({
         padding: 20,
         backgroundColor: '#e9f4e9',
     },
-    title: {
-        alignItems: 'center',
+    titleContainer: {
         fontSize: 25,
         fontWeight: 'bold',
+        marginTop: 10,
+        alignSelf: 'center',
         marginBottom: 20,
+    },
+    titleText: {
+        fontSize: 25,
+        textAlign: 'center',
+        justifyContent: 'center',
+        fontWeight: 'bold',
     },
     detailRow: {
         flexDirection: 'row',
@@ -66,4 +87,9 @@ const styles = StyleSheet.create({
     value: {
         flex: 1,
     },
+    addContainer: {
+        left: 290,
+        bottom: 60,
+        alignSelf: 'flex-start',
+    }
 });

@@ -23,7 +23,7 @@ type Specialty = {
 };
 
 const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}) => {
-    const {session} = route.params;
+    const session = route.params.session;
     const [email, setEmail] = useState('')
     const [name, setName] = useState('')
     const [loading, setLoading] = useState(false)
@@ -126,7 +126,7 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}) => {
             console.error('An error occurred:', error.message);
         }finally{
             Alert.alert('El doctor fue agregado', '',
-                [{text: 'Ok', onPress: () => navigation.navigate({name: 'Home', params: {session: session}})},]
+                [{text: 'Ok', onPress: () => navigation.navigate({name: 'Doctors', params: {session: session}})},]
             );
         }
     }
