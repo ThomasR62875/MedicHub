@@ -105,35 +105,37 @@ const Home: React.FC = ({navigation, route}: any) => {
                 <View style={styles.centerContent}>
                     <ScrollView style={{width:'85%', marginLeft: "5%",  marginRight: "5%", height: "100%"}}>
                         <Text style={styles.screenTitle}>Bienvenido {first_name}!</Text>
-                        <Pressable style={{margin: "1%"}}
+                        <Pressable style={{marginTop: "3%"}}
                                    onPress={() => navigation.navigate({name: 'Appointments', params: {session: session}})}>
-                            {turno1 && date1 ? (
-                                    <View>
-                                        <TurnoContainer
-                                            turno={turno1}
-                                            date={date1}
-                                            styleExterior={styles.turnoContainer}
-                                        />
-                                        {turno2 && date2 ? (
+                            <View style={styles.turnoContainer}>
+                                <View style={styles.card}>
+                                    <Text style={[styles.titleText, {justifyContent:'center'}]}>Proximos turnos</Text>
+                                </View>
+                                {turno1 && date1 ? (
+                                        <View style={{padding: "2%"}}>
                                             <TurnoContainer
-                                                styleExterior={styles.turnoContainer2}
-                                                date={date2}
-                                                turno={turno2}
+                                                turno={turno1}
+                                                date={date1}
+                                                styleExterior={[styles.turnoContainer, {backgroundColor: '#d8fcc5', padding: "2%"}]}
                                             />
-                                        ) : (<View/>) }
-                                    </View>
-                                ) : (
-                                    <View style={[styles.turnoContainer]}>
-                                        <View style={styles.card}>
-                                            <Text style={[styles.titleText, {justifyContent:'center'}]}>Proximos turnos</Text>
+                                            {turno2 && date2 ? (
+                                                <TurnoContainer
+                                                    styleExterior={[styles.turnoContainer, {marginTop: "5%", backgroundColor: '#d8fcc5', padding: "2%"}]}
+                                                    date={date2}
+                                                    turno={turno2}
+                                                />
+                                            ) : (<View/>) }
                                         </View>
-                                        <Text style={styles.text}>No hay turnos</Text>
-                                        <Text style={[styles.text, {fontStyle: 'italic'}]}>Anda al calendario para crear tu primer turno</Text>
-                                    </View>
+                                        ) : (
+                                        <View style={styles.turnoContainer}>
+                                            <Text style={styles.text}>No hay turnos</Text>
+                                            <Text style={[styles.text, {fontStyle: 'italic'}]}>Anda al calendario para crear tu primer turno</Text>
+                                        </View>
                                 )}
+                            </View>
                         </Pressable>
-                        <Pressable style={{margin: "1%"}}>
-                            <View style={[styles.turnoContainer]}>
+                        <Pressable style={{marginTop: "5%"}}>
+                            <View style={styles.turnoContainer}>
                                 <View style={styles.card}>
                                     <Text style={[styles.titleText, {justifyContent:'center'}]}>Turnos recomendados</Text>
                                 </View>
@@ -143,17 +145,6 @@ const Home: React.FC = ({navigation, route}: any) => {
                         <View>
 
                         </View>
-                        {/* <View style={styles.grid}>
-                                <View style={styles.col}>
-                                    <Card title="Archivos" img={imgTurno} onPress={() => navigation.navigate({name: 'Appointments', params: {session: session}})}/>
-                                    <View style={{ marginBottom: 30 }} />
-                                    <Card title="Medicamentos" img={imgMed}  onPress={() => navigation.navigate({name: 'Medication', params: {session: session}})}/>
-                                </View>
-                            </View>
-
-                            Los tratamos como widgets, dejamos q se puedan agregar solo 2 cards, para eliminarlas usamos onLongPress
-                            todo
-                        */}
                     </ScrollView>
                 </View>
             </View>
@@ -213,19 +204,12 @@ const styles = StyleSheet.create({
     turnoContainer: {
         backgroundColor: '#CBE4C9',
         borderRadius: 20,
-        marginTop: "10%",
         borderColor: '#CBE4C9',
         borderWidth: 1,
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.25,
-        shadowRadius: 3.84,
-    },
-    turnoContainer2: {
-        backgroundColor: '#D6EFD4',
-        borderColor: '#D6EFD4',
-        borderWidth: 1,
-        borderTopWidth: 0,
+        shadowRadius: 3.85,
     },
     logo:{
         color: '#407738',
