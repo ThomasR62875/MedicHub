@@ -8,9 +8,12 @@ import {Doctor} from "../screens/Doctors";
 import {Alert} from 'react-native'
 import { DependentUser } from '../screens/DependentUsers';
 import {Specialty} from "../screens/AddDoctor"
+import {NativeStackScreenProps} from "@react-navigation/native-stack";
+import {RootStackParamList} from "../App";
 
 const supabaseUrl = "https://ockjaboenzpwwhzlsvdj.supabase.co";
 const supabaseAnonKey ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9ja2phYm9lbnpwd3doemxzdmRqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTI1MDMwNTgsImV4cCI6MjAyODA3OTA1OH0.hqvQbK0ydgz75DszpuZWjfufpxky9qZi21G5qCtm4eE";
+
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
     auth: {
@@ -44,34 +47,49 @@ export const getUserId= async () : Promise<String> => {
 }
 
 // Agrega un appointment recibiendo el appointment como parametro
-export const addAppointment = async (appoint: Appointment): Promise<void> => {
+export const addAppointment = async (appoint: Appointment): Promise<{ success: boolean; message?: string }> => {
     const { error } = await supabase.rpc("add_appointment", {date_input: appoint.date, description_input: appoint.description,
         doctor_input: appoint.doctor, user_id: appoint.user_id});
     if (error) {
         console.error('Error inserting data:', error.message);
+        return { success: false, message: error.message };
     } else {
-        console.log('Data inserted successfully');
-        Alert.alert("El Turno ya está agregado");
-}};
+        console.log('Appointment added successfully');
+        return { success: true };
+    }
+};
 
 // Agrega un Doctor recibiendo el doctor como parametro
-export const addDoctor = async (doctor: Doctor): Promise<void> => {
-    const { error } = await supabase.rpc("add_doctor", {name_input: doctor.name, specialty_input: doctor.specialty,
-        phone_input: doctor.phone, email_input: doctor.email, addresses_input: doctor.addresses, user_id_input:doctor.id});
+export const addDoctor = async (doctor: Doctor): Promise<{ success: boolean; message?: string }> => {
+    const { error } = await supabase.rpc("add_doctor", {
+        name_input: doctor.name,
+        specialty_input: doctor.specialty,
+        phone_input: doctor.phone,
+        email_input: doctor.email,
+        addresses_input: doctor.addresses,
+        user_id_input: doctor.id
+    });
+
     if (error) {
         console.error('Error inserting data:', error.message);
+        return { success: false, message: error.message };
     } else {
-        //Alert.alert('El doctor fue agregado', '',
-        //[{text: 'Ok', onPress: () => navigation.navigate({name: 'Doctors', params: {session: session}})},]);
-}};
-export const addDependentUser = async (user:DependentUser): Promise<void> =>{
+        console.log('Doctor added successfully');
+        return { success: true };
+    }
+};
+
+
+
+export const addDependentUser = async (user: DependentUser): Promise<{ success: boolean; message?: string }> =>{
     const { error } = await supabase.rpc("add_dependent_user",{first_name_input: user.first_name,
         last_name_input : user.last_name, dni_input:user.dni});
     if (error) {
         console.error('Error inserting data:', error.message);
+        return { success: false, message: error.message };
     } else {
-        console.log('Data inserted successfully');
-        Alert.alert("El Turno ya está agregado");
+        console.log('DependentUser added successfully');
+        return { success: true };
     }
 }    
 
@@ -111,10 +129,11 @@ export const getAllUsers = async (session_user_id:String) : Promise<DependentUse
     return data
 }
 
+/*
 export const getAppointments = async () : Promise<Appointment[] | undefined> => {
     const to_return: Appointment[] = [];
     const user_id = await getUserId();
-    
+
     const {data, error, status} = await supabase.rpc('get_appointments', {user_id: user_id})
     if (error && status !== 406) {
         throw error
@@ -123,14 +142,14 @@ export const getAppointments = async () : Promise<Appointment[] | undefined> => 
     for (const appoint of data)  {
         const user: (DependentUser) = await getUser(appoint.user);
         const doctor: (Doctor) = await getDoctor(appoint.doctor);
-        
+
         const new_appoint:Appointment =  {description: appoint.description,
             date: appoint.date,
             user_name: user.first_name, // Suponiendo que name es el campo que quieres agregar
             doctor: doctor && doctor.name ? doctor.name.concat(" (especialidad: ").concat(doctor.specialty).concat(")") : 'Sin datos de doctor',
             user_id: appoint.user,}
         to_return.push(new_appoint);
-    
+
     };
     if (error) {
         console.error('Error inserting specialty data:', error.message);
@@ -139,3 +158,4 @@ export const getAppointments = async () : Promise<Appointment[] | undefined> => 
     }
     return to_return
 }
+*/
