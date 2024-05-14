@@ -21,15 +21,11 @@ const DependentUsers: React.FC = ({navigation, route} : any) => {
     const [dependent_users,setDependentUsers]= useState<DependentUser[] | undefined>(undefined)
     const screenHeight = Dimensions.get('window').height;
     const percentageMargin = screenHeight * 0.05;
-    const [sessionId, setSessionId] = useState('')
 
 
     useEffect(() => {
-        if (session)
-            setSessionId(session)
-            getUsers()
-    }, [sessionId])
-
+        if (session) getUsers()
+    }, [session])
     async function getUsers():Promise<DependentUser[]> {
         let to_return: DependentUser[]=[]
         try {
@@ -37,6 +33,7 @@ const DependentUsers: React.FC = ({navigation, route} : any) => {
             if (!session?.user) throw new Error('No user on the session!')
 
             const {data, error} = await supabase.rpc("get_dependent_users")
+            console.log(data)
             if (error) {
                 throw error
             }
@@ -58,7 +55,6 @@ const DependentUsers: React.FC = ({navigation, route} : any) => {
         }
         setLoading(false)
         setDependentUsers(to_return)
-        setSessionId('')
         return to_return;
     }
 
