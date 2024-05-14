@@ -16,16 +16,25 @@ const Medication: React.FC = ({ navigation, route }: any) => {
     const session = route.params.session;
     const [loading, setLoading] = useState(true)
     const [medications,setMedications]= useState<Medication[] | undefined>(undefined)
+    const [sessionId, setSessionId] = useState('')
+
+
 
     useEffect(() => {
-        if(session){
+        if (session)
+            setSessionId(session);
+    }, [sessionId])
+
+
+    useEffect(() => {
+        if(sessionId){
             getMedications().then(data => {
                 setMedications(data);
             }).catch(error => {
                 console.error("Error al obtener los medicamentos: ", error);
             });
         }
-    }, []);
+    }, [sessionId]);
     async function getMedications(): Promise<Medication[] | undefined> {
         let to_return: Medication[] | undefined = undefined
 
@@ -52,6 +61,7 @@ const Medication: React.FC = ({ navigation, route }: any) => {
             });
         });
         setLoading(false)
+        setSessionId('')
         return to_return;
     }
     return(
