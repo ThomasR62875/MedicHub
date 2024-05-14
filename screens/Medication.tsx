@@ -16,25 +16,16 @@ const Medication: React.FC = ({ navigation, route }: any) => {
     const session = route.params.session;
     const [loading, setLoading] = useState(true)
     const [medications,setMedications]= useState<Medication[] | undefined>(undefined)
-    const [sessionId, setSessionId] = useState('')
-
-
 
     useEffect(() => {
-        if (session)
-            setSessionId(session);
-    }, [sessionId])
-
-
-    useEffect(() => {
-        if(sessionId){
+        if(session){
             getMedications().then(data => {
                 setMedications(data);
             }).catch(error => {
                 console.error("Error al obtener los medicamentos: ", error);
             });
         }
-    }, [sessionId]);
+    }, []);
     async function getMedications(): Promise<Medication[] | undefined> {
         let to_return: Medication[] | undefined = undefined
 
@@ -43,6 +34,7 @@ const Medication: React.FC = ({ navigation, route }: any) => {
             throw new Error(user_data_error.message);
 
         const {data, error} = await supabase.rpc("get_all_medications_by_user", {user_id: user_id});
+        console.log(data)
         if(error){
             throw new Error(error.message);
         }
@@ -54,14 +46,12 @@ const Medication: React.FC = ({ navigation, route }: any) => {
 
         to_return = [];
         data.forEach((medication: Medication) => {
-            // @ts-ignore
             to_return.push({
                 name: medication.name,
                 prescription: medication.prescription
             });
         });
         setLoading(false)
-        setSessionId('')
         return to_return;
     }
     return(

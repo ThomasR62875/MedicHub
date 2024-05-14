@@ -17,19 +17,10 @@ const Appointments: React.FC =  ({navigation, route}: any) =>{
     const session = route.params.session;
     const [loading, setLoading] = useState(true)
     const [appointments,setAppointments]= useState<Appointment[] | undefined>(undefined)
-    const [sessionId, setSessionId] = useState('')
-
-
 
     useEffect(() => {
-        if (session)
-            setSessionId(session);
-    }, [sessionId])
-
-
-    useEffect(() => {
-        if (sessionId) getAppointments()
-    }, [sessionId])
+        if (session) getAppointments()
+    }, [session])
 
     async function getAppointments() {
         const to_return: Appointment[] = [];
@@ -73,7 +64,6 @@ const Appointments: React.FC =  ({navigation, route}: any) =>{
             }
         }
         setLoading(false)
-        setSessionId('')
         setAppointments(to_return)
     }
     return(
