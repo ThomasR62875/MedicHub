@@ -88,8 +88,8 @@ const Appointments: React.FC =  ({navigation, route}: any) =>{
                             minHeight: 10,
                             minWidth: 10,
                         }}
-                        titleStyle={{ color: '#E9F4E9FF',fontSize: 15, margin: 5 }}
-                        onPress={() => navigation.navigate('AddDependentUser', {session: session})}/>
+                        titleStyle={{ color: '#E9F4E9',fontSize: 15, margin: 5 }}
+                        onPress={() => navigation.navigate('AddAppointment', {session: session})}/>
                 </View>
                 <ScrollView>
                                 {appointments && appointments?.length > 0 ? (
