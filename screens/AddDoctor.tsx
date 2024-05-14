@@ -35,6 +35,21 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}) => {
     const [session_user_id, setSessionUserId] = useState('')
     const [user_id, setUserId] = useState('')
 
+    const [nameErrorMessage, setNameErrorMessage] = useState('')
+
+    useEffect(() => {
+        if (
+            name.trim() !== '' &&
+            nameErrorMessage === ''
+        ) {
+            setIsButtonDisabled(false);
+        } else {
+            setIsButtonDisabled(true);
+        }
+    }, [name, specialty]);
+
+    const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(true);
+
     useEffect(() => {
         if (session){ 
             async function fetchData() {
@@ -45,6 +60,30 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}) => {
         }
     }, [session])
 
+    const validateName = (value: string) => {
+        if (value.trim() === '') {
+            setNameErrorMessage('Debe ingresar el nombre del médico.');
+        } else {
+            setNameErrorMessage('');
+        }
+    };
+
+    const validateSpecialty = (value: string) => {
+        if (value.trim() === '') {
+            setNameErrorMessage('Debe seleccionar la especialidad del médico.');
+        } else {
+            setNameErrorMessage('');
+        }
+    };
+
+    const validateUser = (value: string) => {
+        if (value.trim() === '') {
+            setNameErrorMessage('Debe seleccionar el usuario.');
+        } else {
+            setNameErrorMessage('');
+        }
+    };
+
     return (
         <View style={styles.containerTotal}>
         <KeyboardAvoidingView style={styles.container}>
@@ -54,17 +93,24 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}) => {
                     <View style={styles.verticallySpaced}>
                         <Input
                             leftIcon={{ type: 'font-awesome', name: 'user' }}
-                            onChangeText={(text) => setName(text)}
+                            onChangeText={(text) => {
+                                setName(text);
+                                validateName(text);
+                            }}
                             value={name}
                             placeholder="Nombre"
                             autoCapitalize={'none'}
+                            errorStyle={{ color: 'red' }}
+                            errorMessage={nameErrorMessage}
                         />
                     </View>
                     <View style={styles.pickerStyle}>
                         <RNPickerSelect
                             placeholder={{ label: 'Especialidad', value: null }}
                             items={specialties ? specialties.map(s => ({ label: s.name, value: s.name })) : []}
-                            onValueChange={(value) => setSpecialty(value)}
+                            onValueChange={(value) =>
+                                setSpecialty(value)
+                            }
                             style={{ ...pickerSelectStyles }}
                             value={specialty}
                         />
@@ -101,7 +147,9 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}) => {
                         <RNPickerSelect
                             placeholder={{ label: 'Usuario', value: null }}
                             items={all_users ? all_users.map(u => ({ label: u.first_name, value: u.id})) : []}
-                            onValueChange={(value) => setUserId(value)}
+                            onValueChange={(value) =>
+                                setUserId(value)
+                            }
                             style={{ ...pickerSelectStyles }}
                             value={user_id}
                         />
@@ -109,9 +157,9 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}) => {
                     <View style={styles.verticallySpaced}>
                         <StandardGreenButton
                             title="Agregar"
+                            disabled={isButtonDisabled}
                             onPress={() => addDoctor({name:name, specialty:specialty, phone:phone, email:email, addresses:
                                 addresses, id:user_id})}
-                            disabled={loading}
                         />
                     </View>
                 </View>

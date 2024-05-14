@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
     View,
     Alert,
@@ -22,9 +22,26 @@ type AddMedicationProps = NativeStackScreenProps<RootStackParamList, 'AddMedicat
 const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
     const {session} = route.params;
     const [name, setName] = useState('')
-    const [loading, setLoading] = useState(false)
     const [prescription, setPrescription] = useState('');
-    
+
+    const [nameErrorMessage, setNameErrorMessage] = useState('')
+    const [prescriptionErrorMessage, setPrescriptionErrorMessage] = useState('');
+
+    useEffect(() => {
+        if (
+            name.trim() !== '' &&
+            prescription.trim() !== '' &&
+            nameErrorMessage === '' &&
+            prescriptionErrorMessage === ''
+        ) {
+            setIsButtonDisabled(false);
+        } else {
+            setIsButtonDisabled(true);
+        }
+    }, [name, prescription]);
+
+    const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(true);
+
     async function AddMedication({
         name,
         prescription
@@ -55,6 +72,21 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
 
     }
 
+    const validateName = (value: string) => {
+        if (value.trim() === '') {
+            setNameErrorMessage('Debe ingresar el nombre del medicamento.');
+        } else {
+            setNameErrorMessage('');
+        }
+    };
+    const validatePrescription = (value: string) => {
+        if (value.trim() === '') {
+            setPrescriptionErrorMessage('Debe ingresar la prescripción.');
+        } else {
+            setPrescriptionErrorMessage('');
+        }
+    };
+
     return (
         <View style={styles.containerTotal}>
         <KeyboardAvoidingView style={styles.container}>
@@ -64,26 +96,36 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
                     <View style={styles.verticallySpaced}>
                         <Input
                             leftIcon={{ type: 'font-awesome', name: 'user' }}
-                            onChangeText={(text) => setName(text)}
+                            onChangeText={(text) => {
+                                setName(text);
+                                validateName(text)
+                            }}
                             value={name}
                             placeholder="Nombre"
                             autoCapitalize={'none'}
+                            errorStyle={{ color: 'red' }}
+                            errorMessage={nameErrorMessage}
                         />
                     </View>
                     <View style={styles.verticallySpaced}>
                         <Input
                             leftIcon={{ type: 'font-awesome', name: 'envelope' }}
-                            onChangeText={(text) => setPrescription(text)}
+                            onChangeText={(text) => {
+                                setPrescription(text);
+                                validatePrescription(text)
+                            }}
                             value={prescription}
                             placeholder="Prescripción"
                             autoCapitalize={'none'}
+                            errorStyle={{ color: 'red' }}
+                            errorMessage={nameErrorMessage}
                         />
                     </View>
                     <View style={styles.verticallySpaced}>
                         <StandardGreenButton
                             title="Agregar"
+                            disabled={isButtonDisabled}
                             onPress={() => AddMedication({name, prescription})}
-                            disabled={loading}
                         />
                     </View>
                 </View>

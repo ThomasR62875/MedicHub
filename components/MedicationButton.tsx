@@ -2,30 +2,27 @@ import React from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {Icon} from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
-import {Appointment} from "../screens/Appointments";
+import {Medication} from "../screens/Medication";
 
-interface AppointmentButtonProps {
+interface MedicationButtonProps {
     //onPress: any;
     styleExterior: any;
-    date : Date;
-    turno: Appointment;
+    meds: Medication;
 }
 
-const AppointmentButton: React.FC<AppointmentButtonProps> = ( { styleExterior, turno, date }) => {
+const MedicationButton: React.FC<MedicationButtonProps> = ( { styleExterior, meds }) => {
     const navigation = useNavigation();
-    const otraDate = new Date(date);
     return (
         <TouchableOpacity style={styles.container}>
             <View style={styleExterior}>
                 <View style={styles.infoRow}>
-                    <Text style={{textAlign: 'center'}}>{turno.description}</Text>
+                    <Text style={styles.label}>Nombre:</Text>
+                    <Text>{meds.name}</Text>
                 </View>
                 <View style={styles.infoRow}>
-                    <Text style={styles.label}>Usuario:</Text>
-                    <Text>{turno.user_name}</Text>
+                    <Text style={styles.label}>Prescripción:</Text>
+                    <Text>{meds.prescription}</Text>
                     <View style={{ width: 30 }} />
-                    <Text style={styles.label}>Fecha:</Text>
-                    <Text>{otraDate.getDate()}/{otraDate.getMonth()+1}/{otraDate.getFullYear()}</Text>
                 </View>
             </View>
         </TouchableOpacity>
@@ -35,10 +32,10 @@ const AppointmentButton: React.FC<AppointmentButtonProps> = ( { styleExterior, t
 const styles = StyleSheet.create({
     container: {
         position: 'absolute',
-        width: '100%',
+        width: '90%',
         height: 100,
         borderRadius: 28,
-        backgroundColor: '#CBE4C9FF',
+        backgroundColor: '#C2E5D3',
         justifyContent: 'center',
         alignItems: 'center',
     },
@@ -53,4 +50,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default AppointmentButton;
+export default MedicationButton;

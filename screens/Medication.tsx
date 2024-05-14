@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabase'
 import { StyleSheet, View, ScrollView,Text} from 'react-native'
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {RootStackParamList} from "../App";
 import AddButton from "../components/AddButton";
+import MedicationButton from "../components/MedicationButton";
 
 
 export type Medication = {
@@ -77,15 +76,9 @@ const Medication: React.FC = ({ navigation, route }: any) => {
                         medications ? (
                             medications.map((medic: Medication, i) => {
                                 return (
-                                    <View key={i} style={styles.doctorContainer}>
-                                        <View style={styles.infoRow}>
-                                            <Text style={styles.label}>Nombre:</Text>
-                                            <Text style={styles.value}>{medic.name}</Text>
-                                        </View>
-                                        <View style={styles.infoRow}>
-                                            <Text style={styles.label}>Prescription:</Text>
-                                            <Text style={styles.value}>{medic.prescription}</Text>
-                                        </View>
+                                    <View key={i} style={styles.medsContainer}>
+                                        <MedicationButton styleExterior={styles.medsContainer} meds={medic}></MedicationButton>
+                                        <View style={{ marginBottom: 100 }} />
                                     </View>
                                 )
                             })
@@ -112,10 +105,9 @@ const styles = StyleSheet.create({
         backgroundColor: '#e9f4e9',
         height: '100%',
       },
-    doctorContainer: {
-        marginTop: 10,
-        backgroundColor: '#C2E5D3',
-        marginBottom: 10,
+    medsContainer: {
+        marginTop: '5%',
+        alignItems: 'center',
         borderRadius: 5,
     },
     infoRow: {
