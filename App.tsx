@@ -135,7 +135,7 @@ function HomeTabs({route, navigation}: Props) {
                 }}
             />
             <Tab.Screen
-                name="Turnos"
+                name="Calendario"
                 component={Calender}
                 initialParams={{session: session}}
                 options={{
