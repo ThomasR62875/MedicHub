@@ -188,9 +188,10 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     text: {
-        fontSize: 14,
+        fontSize: 20,
         textAlign: 'center',
-        marginTop: '5%'
+        marginTop: '5%',
+        color: "#2E5829",
     },
     turnoContainer: {
         backgroundColor: '#CBE4C9FF',
@@ -200,7 +201,7 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
-        minHeight: 200
+        minHeight: 60
     },
     container: {
         height: '100%',
@@ -227,10 +228,15 @@ const styles = StyleSheet.create({
         width: "60%"
     },
     turno: {
-        backgroundColor: '#CBE4C9FF',
-        borderRadius: 5,
-        width: '90%',
-        justifyContent: "center",
+        backgroundColor: '#CBE4C9',
+        borderRadius: 20,
+        borderColor: '#CBE4C9',
+        borderWidth: 1,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.85,
+        padding: "2%",
     }
 });
 
