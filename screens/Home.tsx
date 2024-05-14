@@ -142,9 +142,6 @@ const Home: React.FC = ({navigation, route}: any) => {
                                 <Text style={[styles.text]}>Esperar la aplicación de la IA porfavor :)</Text>
                             </View>
                         </Pressable>
-                        <View>
-
-                        </View>
                     </ScrollView>
                 </View>
             </View>
@@ -153,20 +150,9 @@ const Home: React.FC = ({navigation, route}: any) => {
 
 const screenHeight = Dimensions.get('window').height;
 const styles = StyleSheet.create({
-    bottomBar:{
-        position: 'absolute',
-        bottom: 0,
-        left: 0,
-        right: 0,
-    },
     container: {
         backgroundColor: "#E9F4E9",
         height: '100%',
-    },
-    grid: {
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
     },
     col: {
         flex: 1,
