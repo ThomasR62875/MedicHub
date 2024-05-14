@@ -150,7 +150,7 @@ const Calender: React.FC = ({ navigation, route } : any) => {
                         })) :  (
                             <View style={{alignItems: 'center', marginTop: 10}}>
                                 <View style={[styles.turnoContainer]}>
-                                    <Text style={styles.text}>No hay turnos para el {new Date(dateNormal).getDay()} de {monthNames[new Date(dateNormal).getMonth()]} de {new Date(dateNormal).getFullYear()}</Text>
+                                    <Text style={styles.text}>No hay turnos para el {dateNormal}</Text>
                                 </View>
                             </View>
                         )}
