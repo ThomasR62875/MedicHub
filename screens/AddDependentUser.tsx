@@ -1,39 +1,49 @@
 import React, {useState} from 'react';
-import {SafeAreaView, Alert, StyleSheet, View,} from 'react-native';
+import {Alert, StyleSheet, View,} from 'react-native';
 import {supabase} from "../lib/supabase";
 import {Button, Icon, Input, Text} from "react-native-elements";
-import {NativeStackScreenProps} from "@react-navigation/native-stack";
-import {RootStackParamList} from "../App";
 import { Image } from 'react-native';
-import StandardGreenButton from "../components/StandardGreenButton";
 
-type AddDependentUser = NativeStackScreenProps<RootStackParamList, 'AddDependentUser'>;
-
-
-const AddDependentUser: React.FC<AddDependentUser> = ({ navigation, route }) => {
+const AddDependentUser: React.FC = ({ navigation, route } : any) => {
+    const {session} = route.params;
     const [firstName,setFirstName] = useState('')
     const [lastName,setLastName] = useState('')
     const [dni,setDni]  = useState('')
     const [loading,setLoading]= useState(false)
+    const [DNIErrorMessage, setDNIErrorMessage] = useState<string>('');
 
 
     async function addUser() {
         setLoading(true)
-            try{
-                const { error } = await supabase.rpc("add_dependent_user",{first_name_input: firstName,
-                    last_name_input :lastName, dni_input:dni})
-                Alert.alert("El Usuario ya está guardado")
-                if (error!= null){
-                    throw error
-                }
+        try {
+            const {error} = await supabase.rpc("add_dependent_user", {
+                first_name_input: firstName,
+                last_name_input: lastName, dni_input: dni
+            })
+            Alert.alert("El Usuario ya está guardado")
+            if (error != null) {
+                throw error
             }
-            catch(error){
-                if (error instanceof Error) {
-                    Alert.alert(error.message)
-                }
+        } catch (error) {
+            if (error instanceof Error) {
+                Alert.alert(error.message)
             }
-        setLoading(false)
+        } finally {
+            Alert.alert('El usuario fue agregado', '',
+                [{text: 'Ok', onPress: () => navigation.navigate({name: 'DependentUsers', params: {session: session}})},]
+            );
+            setLoading(false)
+        }
     }
+
+    const validateDNI = (value: string) => {
+        const containsLetterOrSymbol = /^(?=(?:\D*\d){6})(?=.*[a-zA-Z!@#$%^&*()_+{}\[\]:;<>,.?\/\\|'"`~-])/.test(value);
+        if (containsLetterOrSymbol) {
+            setDNIErrorMessage('Debe ingresar su DNI. Ej: 12345678');
+        } else {
+            setDNIErrorMessage('');
+        }
+    };
 
     return (
         <View style={styles.container}>
@@ -64,18 +74,21 @@ const AddDependentUser: React.FC<AddDependentUser> = ({ navigation, route }) => 
                 <Input
                     label="DNI"
                     labelStyle={styles.colorLable}
-                    leftIcon={<Icon type="material-icons" name="fingerprint" color={styles.colorLable.color}/>}
-                    onChangeText={(text) => setDni(text)}
+                    leftIcon={<Image source={require('../assets/fingerprint.png')} style={styles.icon} />}
+                    onChangeText={(text) => {
+                        setDni(text);
+                        validateDNI(text);
+                    }}
                     value={dni}
-                    secureTextEntry={true}
                     placeholder="DNI"
                     autoCapitalize={'none'}
-                    inputStyle={{color: '#407738', marginLeft: 10}}
                     placeholderTextColor={"#407738"}
+                    inputStyle={{color: '#407738', marginLeft: 10}}
+                    errorStyle={{ color: 'red' }}
+                    errorMessage={DNIErrorMessage}
                 />
                 <Button
                     title="Agregar"
-                    loading={loading}
                     buttonStyle={{
                         backgroundColor: '#2E5829',
                         borderWidth: 2,
@@ -104,33 +117,11 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: '#e9f4e9', height: "100%"
     },
-    containerTotal:{
-        backgroundColor: '#e9f4e9',
-        height: '100%',
-        marginLeft: 10,
-        marginRight: 10,
-        alignContent: 'center'
-    },
-    verticallySpaced: {
-      paddingTop: 2,
-      paddingBottom: 2,
-      alignSelf: 'stretch',
-  },
-    confirmButton: {
-    backgroundColor: 'blue',
-    padding: 10,
-    borderRadius: 5,
-    marginTop: 20,
-    },
-    confirmButtonText: {
-      color: 'white',
-      textAlign: 'center',
-      fontWeight: 'bold',
-    },
     icon: {
         width: 24,
         height: 24,
-    }, screenTitle: {
+    },
+    screenTitle: {
         fontFamily: 'Roboto-Thin',
         fontSize: 25,
         textAlign: 'center',

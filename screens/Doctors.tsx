@@ -24,14 +24,23 @@ const Doctors: React.FC= ({ navigation, route }: any) => {
     const [doctors,setDoctors]= useState<Doctor[] | undefined>(undefined)
 
     useEffect(() => {
-        if(session){
-            getDoctors().then(data => {
-                setDoctors(data);
-            }).catch(error => {
-                console.error("Error al obtener los doctores: ", error);
-            });
-        }
-    }, []);
+        const unsubscribe = navigation.addListener('focus', () => {
+            if (session) {
+                setLoading(true);
+                getDoctors().then(data => {
+                    setDoctors(data);
+                }).catch(error => {
+                    console.error("Error al obtener los doctores: ", error);
+                }).finally(() => {
+                    setLoading(false);
+                });
+            }
+        });
+
+        // Cleanup the listener on unmount
+        return unsubscribe;
+    }, [navigation, session]);
+
     async function getDoctors(): Promise<Doctor[] | undefined> {
         let to_return: Doctor[] | undefined = undefined
 
@@ -40,7 +49,6 @@ const Doctors: React.FC= ({ navigation, route }: any) => {
             throw new Error(user_data_error.message);
 
         const {data, error} = await supabase.rpc("get_doctors", {user_id: user_id});
-        console.log(data)
         if(error){
             throw new Error(error.message);
         }
@@ -52,6 +60,7 @@ const Doctors: React.FC= ({ navigation, route }: any) => {
 
         to_return = [];
         data.forEach((doctor: Doctor) => {
+            // @ts-ignore
             to_return.push({
                 name: doctor.name,
                 specialty: doctor.specialty,
