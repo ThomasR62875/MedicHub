@@ -20,7 +20,6 @@ const AddDependentUser: React.FC = ({ navigation, route } : any) => {
                 first_name_input: firstName,
                 last_name_input: lastName, dni_input: dni
             })
-            Alert.alert("El Usuario ya está guardado")
             if (error != null) {
                 throw error
             }
@@ -30,14 +29,14 @@ const AddDependentUser: React.FC = ({ navigation, route } : any) => {
             }
         } finally {
             Alert.alert('El usuario fue agregado', '',
-                [{text: 'Ok', onPress: () => navigation.navigate({name: 'DependentUsers', params: {session: session}})},]
+                [{text: 'Ok'}]
             );
             setLoading(false)
         }
     }
 
     const validateDNI = (value: string) => {
-        const containsLetterOrSymbol = /^(?=(?:\D*\d){6})(?=.*[a-zA-Z!@#$%^&*()_+{}\[\]:;<>,.?\/\\|'"`~-])/.test(value);
+        const containsLetterOrSymbol = /([a-zA-Z!@#$%^&*()_+{}\[\]:;<>,.?\/\\|'"`~-])/.test(value);
         if (containsLetterOrSymbol) {
             setDNIErrorMessage('Debe ingresar su DNI. Ej: 12345678');
         } else {
