@@ -65,7 +65,6 @@ return(
                 <Text style={styles.titleText}>Usuarios Dependientes</Text>
                 <Button
                     title="Agregar"
-                    loading={loading}
                     buttonStyle={{
                         backgroundColor: '#2E5829',
                         borderColor: 'white',
@@ -74,13 +73,13 @@ return(
                         minWidth: 10,
                     }}
                     titleStyle={{ color: '#E9F4E9FF',fontSize: 15, margin: 5 }}
-                    onPress={() => navigation.navigate('AddDependentUser', {session: session})} />
+                    onPress={() => navigation.navigate('AddDependentUser', {session: session})}/>
             </View>
             <ScrollView style={{width:'90%', marginTop: percentageMargin }}>
                 {dependent_users && dependent_users.length >0 ? (
                     dependent_users.map((d_user: DependentUser, i) => {
                     return (
-                        <View key={i} style={styles.userContainer}>
+                        <View key={i} style={[styles.userContainer, {alignItems: 'center'}]}>
                             <View style={styles.infoRow}>
                                 <Text style={styles.label}>Nombre:</Text>
                                 <Text style={styles.value}>{d_user.first_name}</Text>
@@ -108,7 +107,6 @@ return(
 
 export default DependentUsers;
 
-const screenHeight = Dimensions.get('window').height;
 const styles = StyleSheet.create({
     container: {
         justifyContent: 'center',
@@ -149,13 +147,8 @@ const styles = StyleSheet.create({
         color: "#2E5829FF",
         width: "60%"
     },
-    addContainer: {
-        left: 310,
-        bottom: 95,
-        alignSelf: 'flex-start',
-    },
     text: {
-        fontSize: 12,
+        fontSize: 20,
         textAlign: 'center',
         justifyContent: 'center',
         margin: '5%',

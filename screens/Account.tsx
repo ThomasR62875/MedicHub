@@ -67,7 +67,7 @@ const Account: React.FC = ({ navigation, route } : any) => {
                         />
                     </View>
                 </View>
-                <View style={{marginTop: 5, marginLeft: "10%", marginBottom: "10%"}}>
+                <View style={{marginTop: 5, marginLeft: "10%", marginBottom: "5%"}}>
                     <Text style={styles.title}>Mail:</Text>
                     <Text style={styles.text2}>{session?.user.email}</Text>
                     <View style={{ marginTop: 5 }} />
@@ -76,22 +76,96 @@ const Account: React.FC = ({ navigation, route } : any) => {
                     <View style={{ marginTop: 15 }} />
                 </View>
                 <View style={{alignItems: 'center', width: 'auto'}}>
-                        <Button  title={<Text style={styles.buttonText}><MaterialCommunityIcons name="doctor" size={size}/>Mis doctores</Text>}
-                                buttonStyle={styles.misCosas}
-                                onPress={() => navigation.navigate('Doctors', {session: session})}
-                        />
-                        <Button  title={<Text style={styles.buttonText}><MaterialCommunityIcons style={styles.icons} name="archive-clock" size={size}/>Mis turnos</Text>}
-                                buttonStyle={styles.misCosas}
-                                onPress={() => navigation.navigate({name: 'Appointments', params: {session: session}})}/>
-                        <Button  title={<Text style={styles.buttonText}><MaterialCommunityIcons name="needle" size={size}/>Mis vacunas</Text>}
-                                buttonStyle={styles.misCosas}
-                        />
-                        <Button  title={<Text style={styles.buttonText}><MaterialCommunityIcons name="pill" size={size}/>Mis medicamentos</Text>}
-                                buttonStyle={styles.misCosas}
-                                onPress={() => navigation.navigate({name: 'Medication', params: {session: session}})}/>
-                        <Button  title={<Text style={styles.buttonText}><MaterialCommunityIcons name="archive" size={size}/>Mis archivos</Text>}
-                                buttonStyle={styles.misCosas}
-                        />
+                    <Button
+                        title="Mis doctores"
+                        icon={{
+                            name: 'doctor',
+                            type: 'material-community',
+                            size: 20,
+                            color: '#12210f',
+                        }}
+                        iconContainerStyle={{ marginRight: 10}}
+                        titleStyle={styles.buttonText}
+                        buttonStyle={styles.misCosas}
+                        containerStyle={{
+                            width: '80%',
+                            marginHorizontal: 50,
+                            marginVertical: 2,
+
+                        }}
+                        onPress={() => navigation.navigate({name: 'Doctors', params: {session: session}})}
+                    />
+                    <Button
+                        title="Mis turnos"
+                        icon={{
+                            name: 'archive-clock',
+                            type: 'material-community',
+                            size: 20,
+                            color: '#1e3a1a',
+                        }}
+                        iconContainerStyle={{ marginRight: 10}}
+                        titleStyle={styles.buttonText}
+                        buttonStyle={styles.misCosas}
+                        containerStyle={{
+                            width: '80%',
+                            marginHorizontal: 50,
+                            marginVertical: 2,
+
+                        }}
+                        onPress={() => navigation.navigate({name: 'Appointments', params: {session: session}})}
+                    />
+                    <Button
+                        title="Mis vacunas"
+                        icon={{
+                            name: 'needle',
+                            type: 'material-community',
+                            size: 20,
+                            color: '#1e3a1a',
+                        }}
+                        iconContainerStyle={{ marginRight: 10}}
+                        titleStyle={styles.buttonText}
+                        buttonStyle={styles.misCosas}
+                        containerStyle={{
+                            width: '80%',
+                            marginHorizontal: 50,
+                            marginVertical: 2,
+                        }}
+                    />
+                    <Button
+                        title="Mis medicamentos"
+                        icon={{
+                            name: 'pill',
+                            type: 'material-community',
+                            size: 20,
+                            color: '#1e3a1a',
+                        }}
+                        iconContainerStyle={{ marginRight: 10}}
+                        titleStyle={styles.buttonText}
+                        buttonStyle={styles.misCosas}
+                        containerStyle={{
+                            width: '80%',
+                            marginHorizontal: 50,
+                            marginVertical: 2,
+                        }}
+                        onPress={() => navigation.navigate({name: 'Medication', params: {session: session}})}
+                    />
+                    <Button
+                        title="Mis archivos"
+                        icon={{
+                            name: 'archive',
+                            type: 'material-community',
+                            size: 20,
+                            color: '#1e3a1a',
+                        }}
+                        iconContainerStyle={{ marginRight: 10}}
+                        titleStyle={styles.buttonText}
+                        buttonStyle={styles.misCosas}
+                        containerStyle={{
+                            width: '80%',
+                            marginHorizontal: 50,
+                            marginVertical: 2,
+                        }}
+                    />
                     <Button
                         title="Cerrar sesión"
                         buttonStyle={{
@@ -172,13 +246,21 @@ const styles = StyleSheet.create({
     },
     misCosas: {
         width: 225,
-        backgroundColor: '#e9f4e9',
-        borderColor: '#215a1b',
+        backgroundColor: '#cae4c8',
+        borderColor: '#cae4c8',
         borderWidth: 1,
         color: 'black',
         borderRadius: 10,
-        marginBottom: 5,
         alignSelf: 'center',
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
+        marginBottom: "2%"
     },
     text2: {
         fontFamily: 'Roboto-Thin',
@@ -255,7 +337,11 @@ const styles = StyleSheet.create({
         marginLeft: "2%",
         marginTop: '10%'
     }, icons: {
-        color: '#2E5829FF'
+        color: '#2E5829FF',
+    },
+    buttonContainer: {
+        width: 225, // Ancho deseado para todos los botones
+        marginVertical: 10,
     }
 
 
