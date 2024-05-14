@@ -5,17 +5,17 @@ import { useNavigation } from '@react-navigation/native';
 import {Appointment} from "../screens/Appointments";
 
 interface AppointmentButtonProps {
-    onPress: any;
+    //onPress: any;
     styleExterior: any;
     date : Date;
     turno: Appointment;
 }
 
-const AppointmentButton: React.FC<AppointmentButtonProps> = ( { styleExterior, turno, date, onPress }) => {
+const AppointmentButton: React.FC<AppointmentButtonProps> = ( { styleExterior, turno, date }) => {
     const navigation = useNavigation();
     const otraDate = new Date(date);
     return (
-        <TouchableOpacity style={styles.container} onPress={onPress}>
+        <TouchableOpacity style={styles.container}>
             <View style={styleExterior}>
                 <View style={styles.infoRow}>
                     <Text style={{textAlign: 'center'}}>{turno.description}</Text>
