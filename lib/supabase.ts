@@ -8,6 +8,7 @@ import {Doctor} from "../screens/Doctors";
 import {Alert} from 'react-native'
 import { DependentUser } from '../screens/DependentUsers';
 import {Specialty} from "../screens/AddDoctor"
+import {Medication} from "../screens/Medication"
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
 
@@ -80,7 +81,7 @@ export const addDoctor = async (doctor: Doctor): Promise<{ success: boolean; mes
 };
 
 
-
+//Agrega un dependent user
 export const addDependentUser = async (user: DependentUser): Promise<{ success: boolean; message?: string }> =>{
     const { error } = await supabase.rpc("add_dependent_user",{first_name_input: user.first_name,
         last_name_input : user.last_name, dni_input:user.dni});
@@ -93,6 +94,17 @@ export const addDependentUser = async (user: DependentUser): Promise<{ success: 
     }
 }    
 
+//Agregar medication
+export const addMedication = async (medication : Medication) : Promise<{success:boolean; message?:string}> => {
+    const { error } = await supabase.rpc("add_medication",{name_input: medication.name,prescription_input: medication.prescription});
+    if (error) {
+        console.error('Error inserting data:', error.message);
+        return { success: false, message: error.message };
+    } else {
+        console.log('Medication added successfully');
+        return { success: true };
+    }
+}
 // Devuelve todos los Doctores por usuario
 export const getAllDoctorsByUser = async (session_user_id:String) : Promise <Doctor [] | undefined> => {
         const {data, error} = await supabase.rpc('get_all_doctors_by_user', {user_id: session_user_id});

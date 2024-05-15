@@ -8,11 +8,12 @@ import {
     KeyboardAvoidingView,
     ScrollView
 } from 'react-native';
-import {supabase} from "../lib/supabase";
+import {addMedication, supabase} from "../lib/supabase";
 import {Input} from "react-native-elements";
 import StandardGreenButton from "../components/StandardGreenButton";
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
+import { Medication } from './Medication';
 
 
 type AddMedicationProps = NativeStackScreenProps<RootStackParamList, 'AddMedication'>
@@ -42,32 +43,21 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
 
     const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(true);
 
-    async function AddMedication({
-        name,
-        prescription
-    }: {
-        name: string
-        prescription: string
-    }) {
-        try {
-            const { error } = await supabase.rpc("add_medication", {name_input: name, prescription_input: prescription})
-            if (error) {
-                console.error('Error inserting data:', error.message);
-            } else {
-                console.log('Data inserted successfully');
-            }
-        } catch (error) {
-            // @ts-ignore
-            console.error('An error occurred:', error.message);
-        }finally{
+    const handleAddMedication= async () => {
+        
+        const medication : Medication = {name:name,prescription:prescription}
+        
+        const result = await addMedication(medication);
+        if (result.success) {
             Alert.alert(
-                'El medicamento fue agregado',
+                'El Medicamento fue agregado',
                 '',
                 [
                     { text: 'Ok', onPress: () => navigation.navigate('Medication', { session: session }) }
                 ]
             );
-
+        } else {
+            Alert.alert('Error', result.message || 'An unknown error occurred');
         }
 
     }
@@ -125,7 +115,7 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
                         <StandardGreenButton
                             title="Agregar"
                             disabled={isButtonDisabled}
-                            onPress={() => AddMedication({name, prescription})}
+                            onPress={() => handleAddMedication()}
                         />
                     </View>
                 </View>
