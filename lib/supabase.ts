@@ -122,9 +122,21 @@ export const getSpecialties = async () : Promise<Specialty[] | undefined> => {
     
     const { data, error } = await supabase.rpc('get_specialties');
     if (error) {
-        console.error('Error inserting specialty data:', error.message);
+        console.error('Error getting specialty data:', error.message);
     } else {
-        console.log('Specialty data inserted successfully');
+        console.log('Specialty data got successfully');
+    }
+    return data
+}
+
+// Obtiene el doctor por su id
+export const getDoctor = async (doctor_id : string) : Promise<Doctor> => {
+    
+    const { data, error } = await supabase.rpc('get_doctor',{id: doctor_id});
+    if (error) {
+        console.error('Error getting doctor data:', error.message);
+    } else {
+        console.log('Doctor data got successfully');
     }
     return data
 }
@@ -134,14 +146,14 @@ export const getAllUsers = async (session_user_id:String) : Promise<DependentUse
     console.log(session_user_id)
     const { data, error } = await supabase.rpc('get_all_users', { user_id: session_user_id });
     if (error) {
-        console.error('Error inserting users data:', error.message);
+        console.error('Error getting users data:', error.message);
     } else {
         console.log('Users data inserted successfully');
     }
     return data
 }
 
-/*
+
 export const getAppointments = async () : Promise<Appointment[] | undefined> => {
     const to_return: Appointment[] = [];
     const user_id = await getUserId();
@@ -170,4 +182,3 @@ export const getAppointments = async () : Promise<Appointment[] | undefined> => 
     }
     return to_return
 }
-*/
