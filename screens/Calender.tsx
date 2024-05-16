@@ -4,7 +4,7 @@ import {Appointment} from "./Appointments";
 import {Calendar} from "react-native-calendars";
 import AddButton from "../components/AddButton";
 import TurnoContainer from "../components/TurnContainer";
-import {supabase} from "../lib/supabase";
+import {getAppointments} from "../lib/supabase";
 import {Button} from "react-native-elements";
 
 const Calender: React.FC = ({ navigation, route } : any) => {
@@ -14,65 +14,13 @@ const Calender: React.FC = ({ navigation, route } : any) => {
     const monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
     useEffect(() => {
         if (session) {
-            getProfile()
-            getAppointments()
+            async function fetchData() {
+                setAppointments(await getAppointments())
+            }  
+            fetchData()
         }
     }, [session])
 
-    async function getAppointments() {
-        const to_return: Appointment[] = [];
-        try {
-            setLoading(true)
-            if (!session?.user) throw new Error('No user on the session!')
-
-            const {data: user_id,error: user_data_error} = await supabase.rpc('get_independent_user_id')
-            if(user_data_error)
-                throw new Error(user_data_error.message);
-
-            const {data, error, status} = await supabase.rpc('get_appointments', {user_id: user_id})
-            if (error && status !== 406) {
-                throw error
-            }
-
-            if (data) {
-                for (const appoint of data) {
-                    try {
-                        const { data: user_data, error: user_error } = await supabase.rpc('get_user', {user_id: appoint.user})
-                        const { data: doctor_data} = await supabase.rpc('get_doctor', {doctor_id: appoint.doctor})
-                        if (user_error) {
-                            throw user_error;
-                        }
-                        to_return.push({
-                            description: appoint.description,
-                            date: appoint.date,
-                            user_name: user_data.first_name, // Suponiendo que name es el campo que quieres agregar
-                            doctor: doctor_data && doctor_data.name ? doctor_data.name.concat(" (especialidad: ").concat(doctor_data.specialty).concat(")") : 'Sin datos de doctor',
-                            user_id: appoint.user,
-                        });
-                    } catch (error) {
-                        console.error('Error al obtener el usuario:', error);
-                    }
-                }
-            }
-        } catch (error) {
-            if (error instanceof Error) {
-                Alert.alert(error.message)
-            }
-        }
-        setLoading(false)
-        setAppointments(to_return)
-    }
-    async function getProfile() {
-        try {
-            if (!session?.user) throw new Error('No user on the session!')
-            const {data, error} = await supabase.rpc('get_independent_user', {auth_id_input: session?.user.id});
-
-        } catch (error) {
-            if (error instanceof Error) {
-                Alert.alert(error.message)
-            }
-        }
-    }
     const getCurrentDate = () => {
         const date = new Date();
         const year = date.getFullYear();

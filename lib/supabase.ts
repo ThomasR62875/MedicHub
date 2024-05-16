@@ -36,9 +36,19 @@ export const getUser = async (session_user_id:String) : Promise<DependentUser> =
     return data
 }
 
+export const getUserSession = async (auth_id: string) : Promise<DependentUser> => {
+    const {data, error} = await supabase.rpc('get_independent_user', {auth_id_input: auth_id});
+    if (error) {
+        console.error('Error inserting users data:', error.message);
+    } else {
+        console.log('Users data inserted successfully');
+    }
+    return data
+}
+
 // Obtiene el usuario id del ususario
 export const getUserId= async () : Promise<String> => {
-    const {data, error} = await supabase.rpc("get_independent_user_id", {})
+    const {data, error} = await supabase.rpc("get_independent_user_id", )
     if (error) {
         console.error('Error inserting UserId data:', error.message);
     } else {
