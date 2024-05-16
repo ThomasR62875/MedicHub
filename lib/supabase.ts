@@ -142,7 +142,7 @@ export const getSpecialties = async () : Promise<Specialty[] | undefined> => {
 // Obtiene el doctor por su id
 export const getDoctor = async (doctor_id : string) : Promise<Doctor> => {
     
-    const { data, error } = await supabase.rpc('get_doctor',{id: doctor_id});
+    const { data, error } = await supabase.rpc('get_doctor',{doctor_id: doctor_id});
     if (error) {
         console.error('Error getting doctor data:', error.message);
     } else {
