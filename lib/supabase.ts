@@ -151,9 +151,8 @@ export const getDoctor = async (doctor_id : string) : Promise<Doctor> => {
     return data
 }
 
-// Devuelve todos los usuarios dependiendo de un user_id
+// Devuelve todos los usuarios dependiendo de un user_id incluyendo el usuario independiente
 export const getAllUsers = async (session_user_id:String) : Promise<DependentUser[] | undefined> => {
-    console.log(session_user_id)
     const { data, error } = await supabase.rpc('get_all_users', { user_id: session_user_id });
     if (error) {
         console.error('Error getting users data:', error.message);
@@ -163,6 +162,27 @@ export const getAllUsers = async (session_user_id:String) : Promise<DependentUse
     return data
 }
 
+// Devuelve todos los usuarios dependiendo de un user_id
+export const getDependentUsers = async (session_user_id:String) : Promise<DependentUser[] | undefined> => {
+    let to_return: DependentUser[]=[]
+    const { data, error } = await supabase.rpc('get_dependent_users');
+    if (error) {
+        console.error('Error getting users data:', error.message);
+    } else {
+        console.log('Users data inserted successfully');
+    }
+    if (data) {
+        data.forEach( (dependent_user: DependentUser) => {
+            to_return.push({
+                first_name: dependent_user.first_name,
+                last_name: dependent_user.last_name,
+                dni: dependent_user.dni,
+                id: dependent_user.id
+            })
+        });
+    }
+    return to_return
+}
 
 export const getAppointments = async () : Promise<Appointment[] | undefined> => {
     const to_return: Appointment[] = [];
