@@ -96,7 +96,7 @@ const Appointments: React.FC =  ({navigation, route}: any) =>{
                                         appointments.map((appointment: Appointment, i) => {
                                          return (
                                              <View key={i} style={styles.appointContainer}>
-                                                   <AppointmentButton styleExterior={styles.appointContainer} date={appointment.date} turno={appointment}></AppointmentButton>
+                                                 <AppointmentButton onPress={() => navigation.navigate({name: 'SingleAppointment', params: {appointment: appointment}})} styleExterior={styles.appointContainer} date={appointment.date} turno={appointment}></AppointmentButton>
                                                     <View style={{ marginBottom: 100 }} />
                                              </View>
                                             )
