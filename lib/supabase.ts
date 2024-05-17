@@ -151,6 +151,30 @@ export const getDoctor = async (doctor_id : string) : Promise<Doctor> => {
     return data
 }
 
+// Obtiene los doctores por el id del usuario
+export const getDoctors = async () : Promise<Doctor[] | undefined> => {
+    let to_return: Doctor[] =[]
+    const id:String = await getUserId();
+    const {data, error} = await supabase.rpc("get_doctors", {user_id: id});
+    if (error) {
+        console.error('Error getting doctor data:', error.message);
+    } else {
+        console.log('Doctor data got successfully');
+    }
+    data.forEach((doctor: Doctor) => {
+        // @ts-ignore
+        to_return.push({
+            name: doctor.name,
+            specialty: doctor.specialty,
+            phone: doctor.phone,
+            email: doctor.email,
+            addresses: doctor.addresses,
+            id:doctor.id
+        });
+    });
+    return to_return
+}
+
 // Devuelve todos los usuarios dependiendo de un user_id incluyendo el usuario independiente
 export const getAllUsers = async (session_user_id:String) : Promise<DependentUser[] | undefined> => {
     const { data, error } = await supabase.rpc('get_all_users', { user_id: session_user_id });

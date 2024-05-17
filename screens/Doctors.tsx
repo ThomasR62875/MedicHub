@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { supabase } from '../lib/supabase'
+import { getDoctors} from '../lib/supabase'
 import { StyleSheet, View, ScrollView,Text} from 'react-native'
 import {createNativeStackNavigator, NativeStackScreenProps} from '@react-navigation/native-stack';
 import {RootStackParamList} from "../App";
@@ -25,54 +25,18 @@ const Doctors: React.FC= ({ navigation, route }: any) => {
 
     useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
-            if (session) {
-                setLoading(true);
-                getDoctors().then(data => {
-                    setDoctors(data);
-                }).catch(error => {
-                    console.error("Error al obtener los doctores: ", error);
-                }).finally(() => {
-                    setLoading(false);
-                });
+            async function fetchData() {
+                if (session) {
+                    setDoctors( await getDoctors());        
+                }
             }
+            fetchData();
         });
 
         // Cleanup the listener on unmount
         return unsubscribe;
     }, [navigation, session]);
 
-    async function getDoctors(): Promise<Doctor[] | undefined> {
-        let to_return: Doctor[] | undefined = undefined
-
-        const {data: user_id,error: user_data_error} = await supabase.rpc('get_independent_user_id')
-        if(user_data_error)
-            throw new Error(user_data_error.message);
-
-        const {data, error} = await supabase.rpc("get_doctors", {user_id: user_id});
-        if(error){
-            throw new Error(error.message);
-        }
-
-        if (data.length == 0) {
-            setLoading(false)
-            return to_return;
-        }
-
-        to_return = [];
-        data.forEach((doctor: Doctor) => {
-            // @ts-ignore
-            to_return.push({
-                name: doctor.name,
-                specialty: doctor.specialty,
-                phone: doctor.phone,
-                email: doctor.email,
-                addresses: doctor.addresses,
-                id:doctor.id
-            });
-        });
-        setLoading(false)
-        return to_return;
-    }
     return(
         <View style={styles.container}>
             <View style={styles.titleContainer}>
