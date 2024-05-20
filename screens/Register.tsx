@@ -13,7 +13,7 @@ import {Input, Icon, Button} from "react-native-elements";
 import StandardGreenButton from "../components/StandardGreenButton";
 // @ts-ignore
 import Logo from '../assets/icon.png'
-import novu from "../novu";
+import novu from "../notifications/novu";
 
 
 
