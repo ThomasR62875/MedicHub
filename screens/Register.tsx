@@ -13,6 +13,7 @@ import {Input, Icon, Button} from "react-native-elements";
 import StandardGreenButton from "../components/StandardGreenButton";
 // @ts-ignore
 import Logo from '../assets/icon.png'
+import novu from "../novu";
 
 
 
@@ -92,12 +93,8 @@ const Register: React.FC = ({ navigation }: any) => {
     };
 
     async function signUpWithEmail() {
-        setLoading(true)
-
-        const {
-            data: { session },
-            error,
-        } = await supabase.auth.signUp({
+        setLoading(true);
+        const { data, error } = await supabase.auth.signUp({
             email: email,
             password: password,
             options: {
@@ -107,10 +104,33 @@ const Register: React.FC = ({ navigation }: any) => {
                     dni: dni,
                 },
             },
-        })
+        });
 
-        if (!error) Alert.alert('¡Revise su bandeja de entrada para verificar el mail!')
-        setLoading(false)
+        if (!error) {
+            const { user } = data;
+            if (user) {
+                const userId = user.id; // Supongamos que `user.id` es el identificador único del usuario en Supabase
+                Alert.alert('¡Revise su bandeja de entrada para verificar el mail!');
+
+                try {
+                    await novu.subscribers.identify(userId, {
+                        email: email,
+                        firstName: firstName,
+                        lastName: lastName,
+                    });
+                    console.log('Suscriptor creado en Novu');
+                } catch (novuError) {
+                    console.error('Error al crear el suscriptor en Novu:', novuError);
+                }
+            } else {
+                console.error('No se pudo obtener el ID del usuario después del registro');
+            }
+        } else {
+            console.error('Error al registrar el usuario en Supabase:', error);
+            Alert.alert('Error al registrar el usuario');
+        }
+
+        setLoading(false);
     }
 
     return (
