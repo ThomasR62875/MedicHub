@@ -3,6 +3,7 @@ import { supabase } from '../lib/supabase'
 import { StyleSheet, View, ScrollView,Text} from 'react-native'
 import AddButton from "../components/AddButton";
 import MedicationButton from "../components/MedicationButton";
+import {Button} from "react-native-elements";
 
 
 export type Medication = {
@@ -64,12 +65,21 @@ const Medication: React.FC = ({ navigation, route }: any) => {
     }
     return(
         <View style={styles.container}>
-            <View style={styles.titleContainer}>
-                <Text style={styles.titleText}>Medicamentos</Text>
-            </View>
-            <View style={styles.addContainer}>
-                <AddButton onPress={() => navigation.navigate({name: 'AddMedication', params: {session: session}})}/>
-            </View>
+            <View style={styles.window}>
+                <View style={styles.topContent}>
+                    <Text style={styles.titleText}>Medicamentos</Text>
+                    <Button
+                        title="Agregar"
+                        buttonStyle={{
+                            backgroundColor: '#2E5829',
+                            borderColor: 'white',
+                            borderRadius: 20,
+                            minHeight: 10,
+                            minWidth: 10,
+                        }}
+                        titleStyle={{ color: '#E9F4E9',fontSize: 15, margin: 5 }}
+                        onPress={() => navigation.navigate('AddMedication', {session: session})}/>
+                </View>
             <ScrollView>
                 <View>
                     {
@@ -83,14 +93,14 @@ const Medication: React.FC = ({ navigation, route }: any) => {
                                 )
                             })
                         ) : (
-                            <View style={styles.titleContainer}>
-                                <Text style={styles.titleText}>No hay medicamentos</Text>
-                                <Text style={[styles.titleText, {fontSize: 16, fontStyle: 'italic'}]}>Usa el simbolo + de la esquina superior derecha para agregar tu primer doctor</Text>
+                            <View style={[styles.titleContainer]}>
+                                <Text style={styles.text}>No hay medicamentos</Text>
                             </View>
                         )
                     }
                 </View>
             </ScrollView>
+            </View>
         </View>
     )
 }
@@ -99,11 +109,9 @@ export default Medication;
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
         justifyContent: 'center',
-        padding: 20,
-        backgroundColor: '#e9f4e9',
-        height: '100%',
+        alignItems: 'center',
+        backgroundColor: "#e9f4e9",
       },
     medsContainer: {
         marginTop: '5%',
@@ -127,14 +135,37 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     titleText: {
-        fontSize: 24,
+        fontFamily: 'Roboto-Thin',
+        fontSize: 25,
+        textAlign: 'left',
         fontWeight: 'bold',
-        color: '#333',
-        textAlign: 'center'
+        marginTop: "1%",
+        color: "#2E5829FF",
+        width: "60%"
     },
     addContainer: {
         left: 290,
         bottom: 63,
         alignSelf: 'flex-start',
+    },
+    window: {
+        marginTop: "20%",
+        marginLeft: "5%",
+        marginRight: "5%",
+    },
+    topContent: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        marginBottom: "5%",
+
+    },
+    text: {
+        fontFamily: 'Roboto-Thin',
+        fontSize: 14,
+        textAlign: 'left',
+        marginTop: "1%",
+        color: "#2E5829FF",
+        width: "60%"
     }
 });
