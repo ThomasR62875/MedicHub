@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import { addAppointment, getAllDoctorsByUser, getAllUsers, getUserId } from '../lib/supabase'
+import {addAppointment, addDoctor, getAllDoctorsByUser, getAllUsers, getUserId} from '../lib/supabase'
 import {SafeAreaView, StyleSheet, Alert, View, Keyboard, TouchableWithoutFeedback} from 'react-native'
 import {Input} from "react-native-elements";
 import dayjs from 'dayjs';
@@ -40,6 +40,7 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
     useEffect(() => {
         if (session) {
             async function fetchUserId() {
+                // @ts-ignore
                 setSessionUserId(await getUserId());
             };
             fetchUserId();
@@ -50,12 +51,33 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
     useEffect(() => {
         if (session_user_id) {
             async function getInfo() {
+                // @ts-ignore
                 setDoctors(await getAllDoctorsByUser(session_user_id));
+                // @ts-ignore
                 setAllUsers(await getAllUsers(session_user_id));
             }
             getInfo()
         }
     }, [session_user_id]);
+
+
+    const handleAddAppointment = async () => {
+        const appointment = {
+            date: date.toDate(), description: description, user_name: '',doctor: doctor, user_id: user_id};
+
+        const result = await addAppointment(appointment);
+        if (result.success) {
+            Alert.alert(
+                'El turno fue agregado',
+                '',
+                [
+                    { text: 'Ok', onPress: () => navigation.navigate('Appointments', { session: session }) }
+                ]
+            );
+        } else {
+            Alert.alert('Error', result.message || 'An unknown error occurred');
+        }
+    };
 
     const doctorsList = doctors ? (doctors as Doctor[]).map((doctor: Doctor) => ({
         label: doctor.name,
@@ -114,7 +136,7 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
                 <StandardGreenButton
                     title="Confirmar"
                     disabled={loading}
-                    onPress={() => addAppointment({date, description,doctor, user_id})}
+                    onPress={handleAddAppointment}
                 />
             </SafeAreaView>
         </TouchableWithoutFeedback>

@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {SafeAreaView, Alert, StyleSheet, View,} from 'react-native';
-import {addDependentUser} from "../lib/supabase";
+import {addDependentUser, addDoctor} from "../lib/supabase";
 import {Button, Icon, Input, Text} from "react-native-elements";
 import { Image } from 'react-native';
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
@@ -23,6 +23,24 @@ const AddDependentUser:React.FC<AddDependentUserProps> = ({navigation, route}) =
             setDNIErrorMessage('Debe ingresar su DNI. Ej: 12345678');
         } else {
             setDNIErrorMessage('');
+        }
+    };
+
+    const handleAddDependentUser = async () => {
+        const dep_user = {
+            first_name: firstName, last_name :lastName, dni:dni, id: ''};
+
+        const result = await addDependentUser(dep_user);
+        if (result.success) {
+            Alert.alert(
+                'El Usuario fue agregado',
+                '',
+                [
+                    { text: 'Ok', onPress: () => navigation.navigate('DependentUsers', { session: session }) }
+                ]
+            );
+        } else {
+            Alert.alert('Error', result.message || 'An unknown error occurred');
         }
     };
 
@@ -84,8 +102,7 @@ const AddDependentUser:React.FC<AddDependentUserProps> = ({navigation, route}) =
                         marginTop: 40,
                     }}
                     titleStyle={{ color: '#eef9ed' }}
-                    onPress={() => addDependentUser({first_name: firstName,
-                        last_name :lastName, dni:dni})}
+                    onPress={handleAddDependentUser}
                 />
             </View>
         </View>

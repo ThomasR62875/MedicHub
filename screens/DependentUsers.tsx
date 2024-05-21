@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { supabase } from '../lib/supabase'
+import { getDependentUsers} from '../lib/supabase'
 import {StyleSheet, View, Alert, ScrollView, Text, Dimensions} from 'react-native'
 import AddButton from "../components/AddButton";
 import {Button} from "react-native-elements";
@@ -31,44 +31,14 @@ const DependentUsers: React.FC = ({navigation, route} : any) => {
 
     useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
-            if (session) {
-                getUsers();
-            }
+            async function fetchData() {
+                setDependentUsers(await getDependentUsers())
+            }  
+            fetchData()
         });
 
         return unsubscribe;
     }, [navigation, session]);
-
-
-    async function getUsers():Promise<DependentUser[]> {
-        let to_return: DependentUser[]=[]
-        try {
-            setLoading(true)
-            if (!session?.user) throw new Error('No user on the session!')
-
-            const {data, error} = await supabase.rpc("get_dependent_users")
-            if (error) {
-                throw error
-            }
-            if (data) {
-                data.forEach( (dependent_user: DependentUser) => {
-                    to_return.push({
-                        first_name: dependent_user.first_name,
-                        last_name: dependent_user.last_name,
-                        dni: dependent_user.dni,
-                        id: dependent_user.id
-                    })
-                });
-            }
-        } catch (error) {
-            if (error instanceof Error) {
-                Alert.alert(error.message)
-            }
-        }
-        setLoading(false)
-        setDependentUsers(to_return)
-        return to_return;
-    }
 
 return(
     <View style={styles.container}>
