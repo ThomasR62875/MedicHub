@@ -281,3 +281,6 @@ export const getNotificationEmail = async (user_id:String) : Promise<String | un
 
     return data;
 }
+
+//get_user_relation(user_id) ---> devuelve el independent
+//get_notification_email(user_id) ---> devuelve text (sin validacion de independiente o dependiente)
