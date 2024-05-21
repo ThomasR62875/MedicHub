@@ -78,7 +78,7 @@ export const addDoctor = async (doctor: Doctor): Promise<{ success: boolean; mes
         phone_input: doctor.phone,
         email_input: doctor.email,
         addresses_input: doctor.addresses,
-        user_id_input: doctor.id
+        user_id_input: doctor.user_id
     });
 
     if (error) {
@@ -221,7 +221,9 @@ export const getAppointments = async () : Promise<Appointment[] | undefined> => 
         const user: (DependentUser) = await getUser(appoint.user);
         const doctor: (Doctor) = await getDoctor(appoint.doctor);
 
-        const new_appoint:Appointment =  {description: appoint.description,
+        const new_appoint:Appointment =  {
+            id: appoint.id,
+            description: appoint.description,
             date: appoint.date,
             user_name: user.first_name, // Suponiendo que name es el campo que quieres agregar
             doctor: doctor && doctor.name ? doctor.name.concat(" (especialidad: ").concat(doctor.specialty).concat(")") : 'Sin datos de doctor',
@@ -252,7 +254,9 @@ export const getNotificationAppointments = async () : Promise<Appointment[] | un
         const user: (DependentUser) = await getUser(appointment.user);
         const doctor: (Doctor) = await getDoctor(appointment.doctor);
 
-        const new_appoint:Appointment =  {description: appointment.description,
+        const new_appoint:Appointment =  {
+            id: appointment.id,
+            description: appointment.description,
             date: appointment.date,
             user_name: user.first_name, // Suponiendo que name es el campo que quieres agregar
             doctor: doctor && doctor.name ? doctor.name.concat(" (especialidad: ").concat(doctor.specialty).concat(")") : 'Sin datos de doctor',
@@ -296,7 +300,7 @@ export const getUserRelation = async (user_id:String) : Promise<String | undefin
 }
 
 
-export const updateNotification = async (appointment_id:String)  =>{
+export const updateNotification = async (appointment_id: string)  =>{
     const { error} = await supabase.rpc("update_notification", {appointment_id: appointment_id});
 
     if (error) {

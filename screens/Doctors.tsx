@@ -13,6 +13,7 @@ export type Doctor = {
     phone: string;
     email: string;
     addresses: string[];
+    user_id: string;
     id:string;
 }
 

@@ -6,6 +6,7 @@ import MedicationButton from "../components/MedicationButton";
 
 
 export type Medication = {
+    id: string,
     name: string;
     prescription: string;
 }

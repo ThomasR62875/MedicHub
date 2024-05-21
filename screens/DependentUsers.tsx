@@ -32,7 +32,7 @@ const DependentUsers: React.FC = ({navigation, route} : any) => {
     useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
             async function fetchData() {
-                setDependentUsers(await getDependentUsers())
+                setDependentUsers(await getDependentUsers(session.id))
             }  
             fetchData()
         });
