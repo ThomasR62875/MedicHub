@@ -13,6 +13,12 @@ import Register from "./screens/Register";
 import Home from "./screens/Home";
 import Appointments from "./screens/Appointments";
 import EditAccount from "./screens/EditAccount";
+import SingleAppointment from "./screens/SingleAppointment";
+import EditAppointment from "./screens/EditAppointment";
+import SingleMedication from "./screens/SingleMedication";
+import EditMedication from "./screens/EditMedication";
+import SingleDoctor from "./screens/SingleDoctor";
+import EditDoctor from "./screens/EditDoctor";
 import DependentUsers from "./screens/DependentUsers";
 import Medication from "./screens/Medication";
 import AddMedication from './screens/AddMedication'
@@ -29,10 +35,6 @@ import {Ionicons, MaterialCommunityIcons} from "@expo/vector-icons";
 import {StyleSheet, TouchableOpacity, View} from "react-native";
 import {backgroundColor} from "react-native-calendars/src/style";
 import {Easing} from "react-native-reanimated";
-import SingleAppointment from "./screens/SingleAppointment";
-import EditAppointment from "./screens/EditAppointment";
-import SingleMedication from "./screens/SingleMedication";
-import EditMedication from "./screens/EditMedication";
 
 export type RootStackParamList = {
   HomeTabs: { session: Session | null };
@@ -54,6 +56,8 @@ export type RootStackParamList = {
   EditAppointment: {session : Session | null};
   SingleMedication: {session : Session | null};
   EditMedication: {session : Session | null};
+  SingleDoctor: {session : Session | null};
+  EditDoctor: {session : Session | null};
 };
 
 
@@ -316,9 +320,9 @@ const App = () => {
                               options={{
                                 title: '',
                                 headerStyle: {
-                                  backgroundColor: '#2e5829',
+                                  backgroundColor: '#2E5829',
                                 },
-                                headerTintColor: '#abd2a8',
+                                headerTintColor: '#ABD2A8',
                                 headerBackTitle: 'Iniciar Sesión', // Cambia la etiqueta del botón de retroceso
                                 }}/>
               </>
@@ -334,9 +338,9 @@ const App = () => {
                               options={{
                                 title: '',
                                 headerStyle: {
-                                  backgroundColor: '#2e5829',
+                                  backgroundColor: '#2E5829',
                                 },
-                                headerTintColor: '#abd2a8',
+                                headerTintColor: '#ABD2A8',
                                 headerBackTitle: 'Volver',
                               }}/>
                   <Stack.Screen name="SingleAppointment"
@@ -345,9 +349,9 @@ const App = () => {
                                 options={{
                                     title: '',
                                     headerStyle: {
-                                        backgroundColor: '#2e5829',
+                                        backgroundColor: '#2E5829',
                                     },
-                                    headerTintColor: '#abd2a8',
+                                    headerTintColor: '#ABD2A8',
                                     headerBackTitle: 'Volver',
                                 }}/>
                   <Stack.Screen name="EditAppointment"
@@ -356,9 +360,9 @@ const App = () => {
                                 options={{
                                     title: '',
                                     headerStyle: {
-                                        backgroundColor: '#2e5829',
+                                        backgroundColor: '#2E5829',
                                     },
-                                    headerTintColor: '#abd2a8',
+                                    headerTintColor: '#ABD2A8',
                                     headerBackTitle: 'Volver',
                                 }}/>
                 <Stack.Screen name="AddDoctor"
@@ -367,20 +371,42 @@ const App = () => {
                               options={{
                                 title: '',
                                 headerStyle: {
-                                    backgroundColor: '#2e5829',
+                                    backgroundColor: '#2E5829',
                                 },
-                                headerTintColor: '#abd2a8',
+                                headerTintColor: '#ABD2A8',
                                 headerBackTitle: 'Doctores',
                               }}/>
+                  <Stack.Screen name="SingleDoctor"
+                                component={SingleDoctor}
+                                initialParams={{session: session}}
+                                options={{
+                                    title: '',
+                                    headerStyle: {
+                                        backgroundColor: '#2E5829',
+                                    },
+                                    headerTintColor: '#ABD2A8',
+                                    headerBackTitle: 'Volver',
+                                }}/>
+                  <Stack.Screen name="EditDoctor"
+                                component={EditDoctor}
+                                initialParams={{session: session}}
+                                options={{
+                                    title: '',
+                                    headerStyle: {
+                                        backgroundColor: '#2E5829',
+                                    },
+                                    headerTintColor: '#ABD2A8',
+                                    headerBackTitle: 'Volver',
+                                }}/>
                 <Stack.Screen name="AddDependentUser"
                               component={AddDependentUser}
                               initialParams={{session: session}}
                               options={{
                                 title: '',
                                   headerStyle: {
-                                      backgroundColor: '#2e5829',
+                                      backgroundColor: '#2E5829',
                                   },
-                                headerTintColor: '#abd2a8',
+                                headerTintColor: '#ABD2A8',
                                 headerBackTitle: 'Usuario Dependiente',
                               }}/>
                 <Stack.Screen name="AddMedication"
@@ -389,9 +415,9 @@ const App = () => {
                               options={{
                                 title: '',
                                   headerStyle: {
-                                      backgroundColor: '#2e5829',
+                                      backgroundColor: '#2E5829',
                                   },
-                                headerTintColor: '#abd2a8',
+                                headerTintColor: '#ABD2A8',
                                 headerBackTitle: 'Medicamentos',
                               }}/>
                   <Stack.Screen name="SingleMedication"
@@ -400,9 +426,9 @@ const App = () => {
                                 options={{
                                     title: '',
                                     headerStyle: {
-                                        backgroundColor: '#2e5829',
+                                        backgroundColor: '#2E5829',
                                     },
-                                    headerTintColor: '#abd2a8',
+                                    headerTintColor: '#ABD2A8',
                                     headerBackTitle: 'Medicamentos',
                                 }}/>
                   <Stack.Screen name="EditMedication"
@@ -411,9 +437,9 @@ const App = () => {
                                 options={{
                                     title: '',
                                     headerStyle: {
-                                        backgroundColor: '#2e5829',
+                                        backgroundColor: '#2E5829',
                                     },
-                                    headerTintColor: '#abd2a8',
+                                    headerTintColor: '#ABD2A8',
                                     headerBackTitle: 'Volver',
                                 }}/>
                 <Stack.Screen name="Appointments"
@@ -422,9 +448,9 @@ const App = () => {
                               options={{
                                 title: '',
                                   headerStyle: {
-                                      backgroundColor: '#2e5829',
+                                      backgroundColor: '#2E5829',
                                   },
-                                headerTintColor: '#abd2a8',
+                                headerTintColor: '#ABD2A8',
                                 headerBackTitle: 'Volver',
                               }}/>
                  <Stack.Screen name="Doctors"
@@ -432,9 +458,9 @@ const App = () => {
                                options={{
                                  title: '',
                                    headerStyle: {
-                                       backgroundColor: '#2e5829',
+                                       backgroundColor: '#2E5829',
                                    },
-                                 headerTintColor: '#abd2a8',
+                                 headerTintColor: '#ABD2A8',
                                  headerBackTitle: 'Perfil',
                                }}/>
                 <Stack.Screen name="EditAccount"
@@ -443,9 +469,9 @@ const App = () => {
                                 options={{
                                     title: '',
                                     headerStyle: {
-                                        backgroundColor: '#2e5829',
+                                        backgroundColor: '#2E5829',
                                     },
-                                    headerTintColor: '#abd2a8',
+                                    headerTintColor: '#ABD2A8',
                                     headerBackTitle: 'Perfil',
                                 }}/>
                   <Stack.Screen name="Medication"
@@ -454,9 +480,9 @@ const App = () => {
                                 options={{
                                   title: '',
                                     headerStyle: {
-                                        backgroundColor: '#2e5829',
+                                        backgroundColor: '#2E5829',
                                     },
-                                  headerTintColor: '#abd2a8',
+                                  headerTintColor: '#ABD2A8',
                                   headerBackTitle: 'Perfil',
                                 }}/>
               </>
