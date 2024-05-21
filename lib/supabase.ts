@@ -295,5 +295,16 @@ export const getUserRelation = async (user_id:String) : Promise<String | undefin
     return data;
 }
 
+
+export const updateNotification = async (appointment_id:String)  =>{
+    const { error} = await supabase.rpc("update_notification", {appointment_id: appointment_id});
+
+    if (error) {
+        console.error('Error getting independent user id:', error.message);
+    } else {
+        console.log('Independent user id retrieved successfully');
+    }
+}
+
 //get_user_relation(user_id) ---> devuelve el independent
 //get_notification_email(user_id) ---> devuelve text (sin validacion de independiente o dependiente)
