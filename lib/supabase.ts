@@ -236,3 +236,16 @@ export const getAppointments = async () : Promise<Appointment[] | undefined> => 
     }
     return to_return
 }
+
+
+export const getNotificationEmail = async (user_id:String) : Promise<String | undefined> =>{
+    const {data, error} = await supabase.rpc("get_notification_email", {user_id: user_id});
+
+    if (error) {
+        console.error('Error getting users email:', error.message);
+    } else {
+        console.log('User email retrieved successfully');
+    }
+
+    return data;
+}
