@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react'
 import { getUser, getUserId, supabase } from '../lib/supabase'
 import {StyleSheet, View, Alert, Text, Modal, ScrollView, Dimensions} from 'react-native'
 import {Button, Icon} from 'react-native-elements'
-import {MaterialCommunityIcons} from "@expo/vector-icons";
+import LanguageButton from '../components/LanguageButton'
 import { DependentUser } from './DependentUsers';
+
 
 const Account: React.FC = ({ navigation, route } : any) => {
     const {session} = route.params;
@@ -20,13 +21,12 @@ const Account: React.FC = ({ navigation, route } : any) => {
                 const data : DependentUser= await getUser(await getUserId())
                 setFirstName(data.first_name)
                 setLastName(data.last_name)
+                // @ts-ignore  todo
                 setDni(data.dni)
             }
             fetchData()
         }
     }, [session])
-
-    const size=25;
 
     return (
         <View style={styles.screen}>
@@ -43,6 +43,9 @@ const Account: React.FC = ({ navigation, route } : any) => {
                             size={125}
                         />
                     </View>
+                    <View>
+                        <LanguageButton/>
+                    </View>
                     <View style={styles.namesContainer}>
                         <Text style={styles.name}>{first_name}</Text>
                         <Text style={styles.name}>{last_name}</Text>
@@ -50,7 +53,7 @@ const Account: React.FC = ({ navigation, route } : any) => {
                     <View style={{marginTop: "12%", marginLeft: '20%'}}>
                         <Icon
                             name='pencil'
-                            iconStyle={{ color: '#1E3A1AFF' }}
+                            iconStyle={{color: '#1E3A1AFF'}}
                             type='ionicon'
                             size={25}
                             style={{margin: "5%"}}
@@ -61,10 +64,10 @@ const Account: React.FC = ({ navigation, route } : any) => {
                 <View style={{marginTop: 5, marginLeft: "10%", marginBottom: "5%"}}>
                     <Text style={styles.title}>Mail:</Text>
                     <Text style={styles.text2}>{session?.user.email}</Text>
-                    <View style={{ marginTop: 5 }} />
+                    <View style={{marginTop: 5}}/>
                     <Text style={styles.title}>DNI:</Text>
                     <Text style={styles.text2}>{dni}</Text>
-                    <View style={{ marginTop: 15 }} />
+                    <View style={{marginTop: 15}}/>
                 </View>
                 <View style={{alignItems: 'center', width: 'auto'}}>
                     <Button

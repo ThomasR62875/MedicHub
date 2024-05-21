@@ -9,6 +9,7 @@ import {Appointment} from "./Appointments";
 import TurnoContainer from "../components/TurnContainer";
 // @ts-ignore
 import Logo from "../assets/icon.png";
+import {useTranslation} from "react-i18next";
 
 const Home: React.FC = ({navigation, route}: any) => {
     const session = route.params.session;
@@ -18,8 +19,6 @@ const Home: React.FC = ({navigation, route}: any) => {
     const imgDoc = require('../assets/doc.png');
     const imgTurno = require('../assets/calendario.png');
     const imgMed = require('../assets/meds.png');
-    const screenHeight = Dimensions.get('window').height;
-    const percentageMargin = screenHeight * 0.05;
     let turno1, turno2 : Appointment | null = null;
     let date1, date2 : Date | null = null;
 
@@ -100,11 +99,12 @@ const Home: React.FC = ({navigation, route}: any) => {
         setAppointments(to_return)
     }
 
+    const {t} = useTranslation();
     return (
             <View style={styles.container}>
                 <View style={styles.centerContent}>
                     <ScrollView style={{width:'85%', marginLeft: "5%",  marginRight: "5%", height: "100%"}}>
-                        <Text style={styles.screenTitle}>Bienvenido {first_name}!</Text>
+                        <Text style={styles.screenTitle}>{t('welcome')} {first_name}!</Text>
                         <Pressable style={{marginTop: "3%"}}
                                    onPress={() => navigation.navigate({name: 'Appointments', params: {session: session}})}>
                             <View style={styles.turnoContainer}>

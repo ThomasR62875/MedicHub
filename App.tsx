@@ -22,17 +22,15 @@ import {createNativeStackNavigator} from "@react-navigation/native-stack";
 import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
 import {StackNavigationProp} from "@react-navigation/stack";
 import 'react-native-reanimated'
-
 import * as Animatable from 'react-native-animatable'
 import 'react-native-reanimated'
-import {Ionicons, MaterialCommunityIcons} from "@expo/vector-icons";
-import {StyleSheet, TouchableOpacity, View} from "react-native";
-import {backgroundColor} from "react-native-calendars/src/style";
-import {Easing} from "react-native-reanimated";
+import {Ionicons} from "@expo/vector-icons";
+import {StyleSheet, TouchableOpacity} from "react-native";
 import SingleAppointment from "./screens/SingleAppointment";
 import EditAppointment from "./screens/EditAppointment";
 import SingleMedication from "./screens/SingleMedication";
 import EditMedication from "./screens/EditMedication";
+import './translations/config';
 
 export type RootStackParamList = {
   HomeTabs: { session: Session | null };
