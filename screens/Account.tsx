@@ -5,7 +5,6 @@ import {Button, Icon} from 'react-native-elements'
 import LanguageButton from '../components/LanguageButton'
 import { DependentUser } from './DependentUsers';
 
-
 const Account: React.FC = ({ navigation, route } : any) => {
     const {session} = route.params;
     const [first_name, setFirstName] = useState('')
@@ -21,8 +20,7 @@ const Account: React.FC = ({ navigation, route } : any) => {
                 const data : DependentUser= await getUser(await getUserId())
                 setFirstName(data.first_name)
                 setLastName(data.last_name)
-                // @ts-ignore  todo
-                setDni(data.dni)
+                setDni(parseInt(data.dni.slice(0,8),10))
             }
             fetchData()
         }
@@ -53,7 +51,7 @@ const Account: React.FC = ({ navigation, route } : any) => {
                     <View style={{marginTop: "12%", marginLeft: '20%'}}>
                         <Icon
                             name='pencil'
-                            iconStyle={{color: '#1E3A1AFF'}}
+                            iconStyle={{ color: '#1E3A1AFF' }}
                             type='ionicon'
                             size={25}
                             style={{margin: "5%"}}

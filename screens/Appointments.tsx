@@ -63,7 +63,7 @@ const Appointments: React.FC =  ({navigation, route}: any) =>{
                                             )
                                        })
                                     ) : (
-                                        <View style={[styles.titleContainer, {}]}>
+                                        <View style={[styles.titleContainer]}>
                                             <Text style={styles.text}>No hay turnos</Text>
                                         </View>
                                     )}
