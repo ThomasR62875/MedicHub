@@ -237,6 +237,38 @@ export const getAppointments = async () : Promise<Appointment[] | undefined> => 
     return to_return
 }
 
+export const getNotificationAppointments = async () : Promise<Appointment[] | undefined> => {
+    const to_return: Appointment[] = [];
+    const user_id = await getUserId();
+
+    const {data, error, status} = await supabase.rpc('get_notification_appointments', {user_id: user_id})
+    if (error) {
+        console.error('Error getting notification appointments data:', error.message);
+    } else{
+        console.log('Notification appointments data inserted successfully');
+    }
+
+    for (const appointment of data)  {
+        const user: (DependentUser) = await getUser(appointment.user);
+        const doctor: (Doctor) = await getDoctor(appointment.doctor);
+
+        const new_appoint:Appointment =  {description: appointment.description,
+            date: appointment.date,
+            user_name: user.first_name, // Suponiendo que name es el campo que quieres agregar
+            doctor: doctor && doctor.name ? doctor.name.concat(" (especialidad: ").concat(doctor.specialty).concat(")") : 'Sin datos de doctor',
+            user_id: appointment.user,}
+        to_return.push(new_appoint);
+
+    }
+
+    if (error) {
+        console.error('Error inserting specialty data:', error.message);
+    } else {
+        console.log('Specialty data inserted successfully');
+    }
+    return to_return
+}
+
 
 export const getNotificationEmail = async (user_id:String) : Promise<String | undefined> =>{
     const {data, error} = await supabase.rpc("get_notification_email", {user_id: user_id});
