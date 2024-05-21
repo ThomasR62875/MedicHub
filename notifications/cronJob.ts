@@ -1,5 +1,5 @@
 import { CronJob } from 'cron';
-import {getAppointments, supabase} from '../lib/supabase';
+import {getAppointments, getNotificationEmail, supabase} from '../lib/supabase';
 import novu from './novu';
 import Appointment from '../screens/Appointments'
 
@@ -15,7 +15,7 @@ export type Appointment = {
 
 // Función para enviar notificaciones
 async function sendNotification(date: Date, description:string, user_name:string, doctor: string, user_id: string) {
-    const ; // asignar el email al que se le manda
+    const email = getNotificationEmail(user_id); // asignar el email al que se le manda
     await novu.trigger('appointment-reminder', {
         to: {
             subscriberId: user_id,
@@ -35,13 +35,13 @@ async function checkAppointments() {
 
     const appointments = await getAppointments();
 
-    //fitar appointments
-
     if (appointments) {
         for (const appointment of appointments) {
             const { id, user_id, users, appointment_time } = appointment;
             const { email, first_name } = users;
             const message = `Tienes un turno médico programado para las ${new Date(appointment_time).toLocaleTimeString()}`;
+
+
 
             try {
                 await sendNotification(user_id, email, first_name, message);
