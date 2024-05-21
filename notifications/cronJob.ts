@@ -1,10 +1,19 @@
 import { CronJob } from 'cron';
-import {getAppointments, supabase} from '../lib/supabase';
+import {
+    getAppointments,
+    getNotificationAppointments,
+    getNotificationEmail,
+    getUserId, getUserRelation,
+    supabase,
+    updateNotification
+} from '../lib/supabase';
 import novu from './novu';
 import Appointment from '../screens/Appointments'
+import app from "../App";
 
 /*
 export type Appointment = {
+    id: string,
     date: Date;
     description:string;
     user_name:string;
@@ -14,16 +23,17 @@ export type Appointment = {
 
 
 // Función para enviar notificaciones
-async function sendNotification(date: Date, description:string, user_name:string, doctor: string, user_id: string) {
-    const email = getNotificationEmail(user_id); // asignar el email al que se le manda
+async function sendNotification(date: Date, description:string, user_name:string, doctor: string, user_id: string, email:string) {
     await novu.trigger('appointment-reminder', {
         to: {
             subscriberId: user_id,
+            email: email
         },
         payload: {
-            email,
-            firstName,
-            message,
+            first_name: user_name,
+            appointmentTime: new Date().toISOString(),
+            description: description,
+            doctor: doctor
         },
     });
 }
@@ -39,19 +49,17 @@ async function checkAppointments() {
 
     if (appointments) {
         for (const appointment of appointments) {
-            const { id, user_id, users, appointment_time } = appointment;
-            const { email, first_name } = users;
-            const message = `Tienes un turno médico programado para las ${new Date(appointment_time).toLocaleTimeString()}`;
+            const user_id = await getUserRelation(appointment.user_id);
+            if(!user_id) continue;      //verifica q haya un user_id
 
-
+            const message = `Tienes un turno médico programado para las ${new Date(appointment.date.getTime()).toLocaleDateString()} el dia ${new Date(appointment.date.getDate()).toLocaleDateString()} `;
+            const email = await getNotificationEmail(user_id);
+            if(!email) continue;
 
             try {
-                await sendNotification(user_id, email, first_name, message);
-                await supabase
-                    .from('appointments')
-                    .update({ notification_sent: true })
-                    .eq('id', id);
-                console.log('Notification sent for appointment:', id);
+                await sendNotification(appointment.date, appointment.description, appointment.user_name, appointment.doctor, appointment.user_id, email);
+                await updateNotification(appointment.id)
+                console.log('Notification sent for appointment:', appointment.id);
             } catch (notificationError) {
                 console.error('Error sending notification:', notificationError);
             }
