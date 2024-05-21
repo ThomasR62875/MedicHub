@@ -1,5 +1,5 @@
 import { CronJob } from 'cron';
-import {getAppointments, getNotificationEmail, supabase} from '../lib/supabase';
+import {getAppointments, supabase} from '../lib/supabase';
 import novu from './novu';
 import Appointment from '../screens/Appointments'
 
@@ -33,7 +33,9 @@ async function checkAppointments() {
     const now = new Date();
     const futureTime = new Date(now.getTime() + 30 * 60 * 1000); // 30 minutos en el futuro
 
-    const appointments = await getAppointments();
+    const appointments = await getNotificationAppointments();
+
+    //fitar appointments
 
     if (appointments) {
         for (const appointment of appointments) {

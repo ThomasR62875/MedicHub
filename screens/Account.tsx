@@ -20,6 +20,7 @@ const Account: React.FC = ({ navigation, route } : any) => {
                 const data : DependentUser= await getUser(await getUserId())
                 setFirstName(data.first_name)
                 setLastName(data.last_name)
+                // @ts-ignore
                 setDni(data.dni)
             }
             fetchData()
