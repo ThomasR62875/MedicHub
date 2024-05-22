@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import { getUser, getUserId, supabase } from '../lib/supabase'
-import {StyleSheet, View, Alert, Text, Modal, ScrollView, Dimensions} from 'react-native'
+import {StyleSheet, View, Alert, Modal, ScrollView, Dimensions} from 'react-native'
 import {Button, Icon} from 'react-native-elements'
 import LanguageButton from '../components/LanguageButton'
 import { DependentUser } from './DependentUsers';
+import {Dialog, Text, Button as PaperButton} from "react-native-paper";
 
 const Account: React.FC = ({ navigation, route } : any) => {
     const {session} = route.params;
@@ -11,8 +12,8 @@ const Account: React.FC = ({ navigation, route } : any) => {
     const [last_name, setLastName] = useState('')
     const [dni, setDni] = useState(0)
     const [avatar_url, setAvatarUrl] = useState('')
-    const [showModal, setShowModal] = useState<boolean>(false)
     const screenHeight = Dimensions.get('window').height;
+    const [visible, setVisible] = React.useState(false);
 
     useEffect(() => {
         if (session) {
@@ -25,6 +26,9 @@ const Account: React.FC = ({ navigation, route } : any) => {
             fetchData()
         }
     }, [session])
+
+    const hideDialog = () => setVisible(false);
+    const showDialog = () => setVisible(true);
 
     return (
         <View style={styles.screen}>
@@ -176,9 +180,35 @@ const Account: React.FC = ({ navigation, route } : any) => {
                             marginBottom:100
                         }}
                         titleStyle={{ color: '#eef9ed' }}
-                        onPress={()=>setShowModal(true)}
+                        onPress={()=>showDialog()}
                     />
                     </View>
+
+                    <Dialog
+                        style={{ backgroundColor: '#E9F4E9FF' }}
+                        visible={visible}
+                        onDismiss={hideDialog}
+                    >
+                        <Dialog.Content>
+                            <Text variant="bodyMedium" style={{ textAlign: 'center' }}>
+                                ¿Está seguro de que desea cerrar sesión?
+                            </Text>
+                        </Dialog.Content>
+                        <Dialog.Actions style={{ justifyContent: 'space-between' }}>
+                            <PaperButton
+                                textColor="#2E5829FF"
+                                onPress={hideDialog}
+                            >
+                                Cancelar
+                            </PaperButton>
+                            <PaperButton
+                                textColor="#b6265d"
+                                onPress={() => supabase.auth.signOut()}
+                            >
+                                Cerrar sesión
+                            </PaperButton>
+                        </Dialog.Actions>
+                    </Dialog>
 
                     {/*    /!* Cuando se entra a esta pestaña no se llega a ver el button de Cerrar sesión todo*!/*/}
                     {/*    <View style={{marginTop: 10, marginBottom: 10}}>*/}
@@ -186,28 +216,34 @@ const Account: React.FC = ({ navigation, route } : any) => {
                     {/*                onPress={()=>setShowModal(true)}*/}
                     {/*                icon={<Icon name="log-in-outline" type="ionicon" size={54} color="white" />}*/}
                     {/*                buttonStyle={styles.cerrarSesion}/>*/}
-                            <Modal
-                                transparent={true}
-                                visible={showModal}>
-                                <View style={styles.modalBackground}>
-                                    <View style={styles.modalContainer}>
-                                        <View style={[styles.modalInfoContainer, ]}>
-                                            <Text style={styles.modalText}>¿ Seguro queres cerrar sesion ?</Text>
-                                        </View>
-                                        <View style={[styles.modalInfoContainer, {marginTop: 15}]}>
-                                            <Button title="Cancelar"
-                                                    onPress={()=>setShowModal(false)}
-                                                    buttonStyle={{backgroundColor: '#073A29'}}/>
-                                            <View style={{ width: 30 }} />
-                                            <Button title="Cerrar"
-                                                    onPress={() => {
-                                                        supabase.auth.signOut().then(r => {
-                                                            navigation.navigate({name: 'Login', params: {session: session}})} )}}
-                                                    buttonStyle={{backgroundColor: '#073A29'}}/>
-                                        </View>
-                                    </View>
-                                </View>
-                            </Modal>
+                    {/*        <Modal*/}
+                    {/*            transparent={true}*/}
+                    {/*            visible={showModal}>*/}
+                    {/*            <View style={styles.modalBackground}>*/}
+                    {/*                <View style={styles.modalContainer}>*/}
+                    {/*                    <View style={[styles.modalInfoContainer, ]}>*/}
+                    {/*                        <Text style={styles.modalText}>¿ Seguro queres cerrar sesion ?</Text>*/}
+                    {/*                    </View>*/}
+                    {/*                    <View style={[styles.modalInfoContainer, {marginTop: 15}]}>*/}
+                    {/*                        <Button title="Cancelar"*/}
+                    {/*                                onPress={()=>setShowModal(false)}*/}
+                    {/*                                buttonStyle={{backgroundColor: '#073A29'}}/>*/}
+                    {/*                        <View style={{ width: 30 }} />*/}
+                    {/*                        <Button title="Cerrar"*/}
+                    {/*                                onPress={async () => {*/}
+                    {/*                                    try {*/}
+                    {/*                                        const { error } = await supabase.auth.signOut();*/}
+                    {/*                                        if (error) throw error;*/}
+                    {/*                                        navigation.navigate('Login', { session: null });*/}
+                    {/*                                    } catch (error) {*/}
+                    {/*                                        console.error('Error al cerrar sesión:', error);*/}
+                    {/*                                    }*/}
+                    {/*                                }}*/}
+                    {/*                                buttonStyle={{backgroundColor: '#073A29'}}/>*/}
+                    {/*                    </View>*/}
+                    {/*                </View>*/}
+                    {/*            </View>*/}
+                    {/*        </Modal>*/}
                     {/*    </View>*/}
                     {/*</View>*/}
 
