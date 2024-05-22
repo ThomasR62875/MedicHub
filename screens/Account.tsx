@@ -45,9 +45,6 @@ const Account: React.FC = ({ navigation, route } : any) => {
                             size={125}
                         />
                     </View>
-                    <View>
-                        <LanguageButton/>
-                    </View>
                     <View style={styles.namesContainer}>
                         <Text style={styles.name}>{first_name}</Text>
                         <Text style={styles.name}>{last_name}</Text>
@@ -69,7 +66,9 @@ const Account: React.FC = ({ navigation, route } : any) => {
                     <View style={{marginTop: 5}}/>
                     <Text style={styles.title}>DNI:</Text>
                     <Text style={styles.text2}>{dni}</Text>
-                    <View style={{marginTop: 15}}/>
+                    <View style={{marginTop: 5}}>
+                        <LanguageButton/>
+                    </View>
                 </View>
                 <View style={{alignItems: 'center', width: 'auto'}}>
                     <Button
@@ -183,74 +182,11 @@ const Account: React.FC = ({ navigation, route } : any) => {
                         onPress={()=>showDialog()}
                     />
                     </View>
-
-                    <Dialog
-                        style={{ backgroundColor: '#E9F4E9FF' }}
-                        visible={visible}
-                        onDismiss={hideDialog}
-                    >
-                        <Dialog.Content>
-                            <Text variant="bodyMedium" style={{ textAlign: 'center' }}>
-                                ¿Está seguro de que desea cerrar sesión?
-                            </Text>
-                        </Dialog.Content>
-                        <Dialog.Actions style={{ justifyContent: 'space-between' }}>
-                            <PaperButton
-                                textColor="#2E5829FF"
-                                onPress={hideDialog}
-                            >
-                                Cancelar
-                            </PaperButton>
-                            <PaperButton
-                                textColor="#b6265d"
-                                onPress={() => supabase.auth.signOut()}
-                            >
-                                Cerrar sesión
-                            </PaperButton>
-                        </Dialog.Actions>
-                    </Dialog>
-
-                    {/*    /!* Cuando se entra a esta pestaña no se llega a ver el button de Cerrar sesión todo*!/*/}
-                    {/*    <View style={{marginTop: 10, marginBottom: 10}}>*/}
-                    {/*        <Button title="Cerrar sesión"*/}
-                    {/*                onPress={()=>setShowModal(true)}*/}
-                    {/*                icon={<Icon name="log-in-outline" type="ionicon" size={54} color="white" />}*/}
-                    {/*                buttonStyle={styles.cerrarSesion}/>*/}
-                    {/*        <Modal*/}
-                    {/*            transparent={true}*/}
-                    {/*            visible={showModal}>*/}
-                    {/*            <View style={styles.modalBackground}>*/}
-                    {/*                <View style={styles.modalContainer}>*/}
-                    {/*                    <View style={[styles.modalInfoContainer, ]}>*/}
-                    {/*                        <Text style={styles.modalText}>¿ Seguro queres cerrar sesion ?</Text>*/}
-                    {/*                    </View>*/}
-                    {/*                    <View style={[styles.modalInfoContainer, {marginTop: 15}]}>*/}
-                    {/*                        <Button title="Cancelar"*/}
-                    {/*                                onPress={()=>setShowModal(false)}*/}
-                    {/*                                buttonStyle={{backgroundColor: '#073A29'}}/>*/}
-                    {/*                        <View style={{ width: 30 }} />*/}
-                    {/*                        <Button title="Cerrar"*/}
-                    {/*                                onPress={async () => {*/}
-                    {/*                                    try {*/}
-                    {/*                                        const { error } = await supabase.auth.signOut();*/}
-                    {/*                                        if (error) throw error;*/}
-                    {/*                                        navigation.navigate('Login', { session: null });*/}
-                    {/*                                    } catch (error) {*/}
-                    {/*                                        console.error('Error al cerrar sesión:', error);*/}
-                    {/*                                    }*/}
-                    {/*                                }}*/}
-                    {/*                                buttonStyle={{backgroundColor: '#073A29'}}/>*/}
-                    {/*                    </View>*/}
-                    {/*                </View>*/}
-                    {/*            </View>*/}
-                    {/*        </Modal>*/}
-                    {/*    </View>*/}
-                    {/*</View>*/}
-
             </ScrollView>
         </View>
     )
 }
+
 
 export default Account
 

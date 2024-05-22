@@ -6,23 +6,22 @@ import { en, es } from "../translations";
 //https://www.youtube.com/watch?v=lSsbu0peV0U
 
 const resources = {
-    en: {
-        translation: en,
-    },
-    es: {
+    español: {
         translation: es,
     },
+    english: {
+        translation: en,
+    },
 }
+export default resources;
 
 i18next.use(initReactI18next).init({
     debug: true,
     compatibilityJSON: 'v3',
-    lng: 'es',
-    fallbackLng: 'es',
+    lng: 'español',
+    fallbackLng: 'español',
     interpolation: {
         escapeValue: false,
     },
     resources : resources,
 })
-
-export default i18next;
