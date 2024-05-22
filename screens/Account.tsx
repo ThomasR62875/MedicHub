@@ -26,6 +26,11 @@ const Account: React.FC = ({ navigation, route } : any) => {
         }
     }, [session])
 
+    /*return (
+        <View style={{justifyContent: 'center', marginTop: 30}}>
+            <LanguageButton/>
+        </View>
+    )*/
     return (
         <View style={styles.screen}>
             <ScrollView>
@@ -40,9 +45,6 @@ const Account: React.FC = ({ navigation, route } : any) => {
                             type='ionicon'
                             size={125}
                         />
-                    </View>
-                    <View>
-                        <LanguageButton/>
                     </View>
                     <View style={styles.namesContainer}>
                         <Text style={styles.name}>{first_name}</Text>
@@ -65,7 +67,9 @@ const Account: React.FC = ({ navigation, route } : any) => {
                     <View style={{marginTop: 5}}/>
                     <Text style={styles.title}>DNI:</Text>
                     <Text style={styles.text2}>{dni}</Text>
-                    <View style={{marginTop: 15}}/>
+                    <View style={{marginTop: 5}}>
+                        <LanguageButton/>
+                    </View>
                 </View>
                 <View style={{alignItems: 'center', width: 'auto'}}>
                     <Button
@@ -179,13 +183,6 @@ const Account: React.FC = ({ navigation, route } : any) => {
                         onPress={()=>setShowModal(true)}
                     />
                     </View>
-
-                    {/*    /!* Cuando se entra a esta pestaña no se llega a ver el button de Cerrar sesión todo*!/*/}
-                    {/*    <View style={{marginTop: 10, marginBottom: 10}}>*/}
-                    {/*        <Button title="Cerrar sesión"*/}
-                    {/*                onPress={()=>setShowModal(true)}*/}
-                    {/*                icon={<Icon name="log-in-outline" type="ionicon" size={54} color="white" />}*/}
-                    {/*                buttonStyle={styles.cerrarSesion}/>*/}
                             <Modal
                                 transparent={true}
                                 visible={showModal}>
@@ -208,13 +205,11 @@ const Account: React.FC = ({ navigation, route } : any) => {
                                     </View>
                                 </View>
                             </Modal>
-                    {/*    </View>*/}
-                    {/*</View>*/}
-
-            </ScrollView>
+                        </ScrollView>
         </View>
     )
 }
+
 
 export default Account
 
