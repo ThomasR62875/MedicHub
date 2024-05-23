@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabase'
 import { StyleSheet, View, ScrollView,Text} from 'react-native'
-import AddButton from "../components/AddButton";
 import MedicationButton from "../components/MedicationButton";
 import {Button} from "react-native-elements";
 

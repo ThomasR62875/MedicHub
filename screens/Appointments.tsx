@@ -3,7 +3,6 @@ import { getAppointments, supabase } from '../lib/supabase'
 import { StyleSheet,ScrollView ,View, Text ,Alert } from 'react-native'
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
-import AddButton from "../components/AddButton";
 import AppointmentButton from "../components/AppointmentButton";
 import {Button} from "react-native-elements";
 import {DependentUser} from "./DependentUsers";

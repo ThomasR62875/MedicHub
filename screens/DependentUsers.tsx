@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { getDependentUsers} from '../lib/supabase'
 import {StyleSheet, View, Alert, ScrollView, Text, Dimensions} from 'react-native'
-import AddButton from "../components/AddButton";
 import {Button} from "react-native-elements";
 import {RootStackParamList} from "../App";
 import {createNativeStackNavigator, NativeStackScreenProps} from "@react-navigation/native-stack";

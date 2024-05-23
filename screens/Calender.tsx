@@ -2,7 +2,6 @@ import React, {useEffect, useState} from "react";
 import {Alert, Dimensions, ScrollView, StyleSheet, Text, View} from "react-native";
 import {Appointment} from "./Appointments";
 import {Calendar} from "react-native-calendars";
-import AddButton from "../components/AddButton";
 import TurnoContainer from "../components/TurnContainer";
 import {getAppointments} from "../lib/supabase";
 import {Button} from "react-native-elements";
@@ -114,7 +113,6 @@ const Calender: React.FC = ({ navigation, route } : any) => {
                         }}
                         titleStyle={{ color: '#E9F4E9FF',fontSize: 15, margin: 5 }}
                         onPress={() => navigation.navigate('AddAppointment', {session: session})}/>
-                    {/*<AddButton onPress={() => navigation.navigate('AddAppointment', {session})} />*/}
                 </View>
             </ScrollView>
         </View>

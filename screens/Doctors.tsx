@@ -3,7 +3,6 @@ import { getDoctors} from '../lib/supabase'
 import { StyleSheet, View, ScrollView,Text} from 'react-native'
 import {createNativeStackNavigator, NativeStackScreenProps} from '@react-navigation/native-stack';
 import {RootStackParamList} from "../App";
-import AddButton from "../components/AddButton";
 import {Button} from "react-native-elements";
 
 const Stack = createNativeStackNavigator();
