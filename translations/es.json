@@ -6,5 +6,7 @@
   "password" : "Contraseña",
   "logIn" : "Ingresar",
   "text1" : "¿No tenes una cuenta?",
-  "register" : "Registrate"
+  "register" : "Registrate",
+  "user" : "Usuario",
+  "date" : "Fecha"
 }

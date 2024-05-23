@@ -6,5 +6,7 @@
   "password" : "Password",
   "logIn" : "Log In",
   "text1" : "You don't have an account ?",
-  "register" : "Register"
+  "register" : "Register",
+  "user" : "User",
+  "date" : "Date"
 }
