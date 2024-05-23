@@ -17,6 +17,8 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {RootStackParamList} from "../App";
 // @ts-ignore
 import Logo from '../assets/icon.png'
+import {useTranslation} from "react-i18next";
+import LanguageButton from "../components/LanguageButton";
 
 const windowHeight = Dimensions.get('window').height;
 
@@ -36,6 +38,7 @@ const LogIn: React.FC<LogInProps> = ({navigation, route})=> {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [loading, setLoading] = useState(false)
+    const {t} = useTranslation();
 
     const [errorMessage, setErrorMessage] = useState<string>('');
 
@@ -56,7 +59,7 @@ const LogIn: React.FC<LogInProps> = ({navigation, route})=> {
 
     const validateInput = (value: string) => {
         if (value.trim() === '' || !value.includes("@") || !(value.includes(".edu") || value.includes(".com") || value.includes(".ar"))) {
-            setErrorMessage('Dirección de mail inválida. Ej: email@address.com');
+            setErrorMessage(t('warning1'));
         } else {
             setErrorMessage('');
         }
@@ -69,13 +72,16 @@ const LogIn: React.FC<LogInProps> = ({navigation, route})=> {
             password: password,
         })
 
-        if (error) Alert.alert('Mail o contraseña incorrecto.')
+        if (error) Alert.alert(t('warning2'))
         setLoading(false)
     }
 
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
             <View style={styles.container}>
+                <View style={{marginLeft: "60%", marginTop: "5%"}}>
+                    <LanguageButton/>
+                </View>
                 <View style={styles.window}>
                     <Image source={Logo} style={styles.logo} />
                     <Text style={{textAlign: 'center', color: '#2E5829', fontWeight: 'bold', fontSize: 20}}>MedicHub</Text>
@@ -98,13 +104,13 @@ const LogIn: React.FC<LogInProps> = ({navigation, route})=> {
                 </View>
                 <View style={[styles.inputContainer, {height: windowHeight * 0.08 }]}>
                     <Input
-                        label="Contraseña"
+                        label={t('password')}
                         labelStyle={ {color: '#2E5829FF'}}
                         leftIcon={{ type: 'font-awesome', name: 'lock', color: '#2E5829FF' }}
                         onChangeText={(text) => setPassword(text)}
                         value={password}
                         secureTextEntry={true}
-                        placeholder=" Contraseña"
+                        placeholder={t('password')}
                         placeholderTextColor={'#407738'}
                         autoCapitalize={'none'}
                         inputContainerStyle={[{paddingLeft: 10}, styles.input]}
@@ -112,7 +118,7 @@ const LogIn: React.FC<LogInProps> = ({navigation, route})=> {
                     />
                 </View>
                 <Button
-                    title="Ingresar"
+                    title={t('logIn')}
                     disabled={isButtonDisabled}
                     loading={loading}
                     buttonStyle={{
@@ -131,15 +137,9 @@ const LogIn: React.FC<LogInProps> = ({navigation, route})=> {
                     titleStyle={{ color: '#eef9ed' }}
                     onPress={() => signInWithEmail()}
                 />
-
-                {/*<View style={[styles.buttonSignInContainer, { height: windowHeight * 0.08 }]}>*/}
-                {/*    <StandardGreenButton*/}
-                {/*        title="Ingresar" disabled={loading} onPress={() => signInWithEmail()} />*/}
-                {/*</View>*/}
                 <View style={[styles.buttonRegisterContainer, { marginTop: 80, height: windowHeight * 0.08 }]}>
-                    <Text style={{color:'#2E5829', textAlign: 'center', fontSize: 18}}> ¿No tenes una cuenta?
-                    </Text>
-                    <Button title="Registrate"
+                    <Text style={{color:'#2E5829', textAlign: 'center', fontSize: 18}}>{t('text1')}</Text>
+                    <Button title={t('register')}
                             onPress={() => navigation.navigate('Register')}
                             buttonStyle={[styles.buttonRegister]}
                             titleStyle={{color: '#2E5829', textDecorationLine: 'underline'}}
@@ -181,8 +181,8 @@ const styles = StyleSheet.create({
     },
     logo:{
         color: '#407738',
-        width: 100,
-        height: 100
+        width: 125,
+        height: 125
     },
     iconContainer: {
         textAlign: "center",
@@ -192,7 +192,7 @@ const styles = StyleSheet.create({
     window: {
         marginBottom: 50,
         alignItems: 'center',
-        marginTop: 90,
+        marginTop: 30,
     }
 
 

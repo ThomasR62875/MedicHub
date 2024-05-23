@@ -28,7 +28,6 @@ import {createNativeStackNavigator} from "@react-navigation/native-stack";
 import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
 import {StackNavigationProp} from "@react-navigation/stack";
 import 'react-native-reanimated'
-
 import * as Animatable from 'react-native-animatable'
 import 'react-native-reanimated'
 import {Ionicons, MaterialCommunityIcons} from "@expo/vector-icons";

@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import { getUser, getUserId, supabase } from '../lib/supabase'
-import {StyleSheet, View, Alert, Text, Modal, ScrollView, Dimensions} from 'react-native'
+import {StyleSheet, View, Alert, Modal, ScrollView, Dimensions} from 'react-native'
 import {Button, Icon} from 'react-native-elements'
-import {MaterialCommunityIcons} from "@expo/vector-icons";
+import LanguageButton from '../components/LanguageButton'
 import { DependentUser } from './DependentUsers';
+import {Dialog, Text, Button as PaperButton} from "react-native-paper";
 
 const Account: React.FC = ({ navigation, route } : any) => {
     const {session} = route.params;
@@ -11,8 +12,8 @@ const Account: React.FC = ({ navigation, route } : any) => {
     const [last_name, setLastName] = useState('')
     const [dni, setDni] = useState(0)
     const [avatar_url, setAvatarUrl] = useState('')
-    const [showModal, setShowModal] = useState<boolean>(false)
     const screenHeight = Dimensions.get('window').height;
+    const [visible, setVisible] = React.useState(false);
 
     useEffect(() => {
         if (session) {
@@ -20,13 +21,14 @@ const Account: React.FC = ({ navigation, route } : any) => {
                 const data : DependentUser= await getUser(await getUserId())
                 setFirstName(data.first_name)
                 setLastName(data.last_name)
-                setDni(data.dni)
+                setDni(parseInt(data.dni.slice(0,8),10))
             }
             fetchData()
         }
     }, [session])
 
-    const size=25;
+    const hideDialog = () => setVisible(false);
+    const showDialog = () => setVisible(true);
 
     return (
         <View style={styles.screen}>
@@ -61,10 +63,12 @@ const Account: React.FC = ({ navigation, route } : any) => {
                 <View style={{marginTop: 5, marginLeft: "10%", marginBottom: "5%"}}>
                     <Text style={styles.title}>Mail:</Text>
                     <Text style={styles.text2}>{session?.user.email}</Text>
-                    <View style={{ marginTop: 5 }} />
+                    <View style={{marginTop: 5}}/>
                     <Text style={styles.title}>DNI:</Text>
                     <Text style={styles.text2}>{dni}</Text>
-                    <View style={{ marginTop: 15 }} />
+                    <View style={{marginTop: 5}}>
+                        <LanguageButton/>
+                    </View>
                 </View>
                 <View style={{alignItems: 'center', width: 'auto'}}>
                     <Button
@@ -175,45 +179,14 @@ const Account: React.FC = ({ navigation, route } : any) => {
                             marginBottom:100
                         }}
                         titleStyle={{ color: '#eef9ed' }}
-                        onPress={()=>setShowModal(true)}
+                        onPress={()=>showDialog()}
                     />
                     </View>
-
-                    {/*    /!* Cuando se entra a esta pestaña no se llega a ver el button de Cerrar sesión todo*!/*/}
-                    {/*    <View style={{marginTop: 10, marginBottom: 10}}>*/}
-                    {/*        <Button title="Cerrar sesión"*/}
-                    {/*                onPress={()=>setShowModal(true)}*/}
-                    {/*                icon={<Icon name="log-in-outline" type="ionicon" size={54} color="white" />}*/}
-                    {/*                buttonStyle={styles.cerrarSesion}/>*/}
-                            <Modal
-                                transparent={true}
-                                visible={showModal}>
-                                <View style={styles.modalBackground}>
-                                    <View style={styles.modalContainer}>
-                                        <View style={[styles.modalInfoContainer, ]}>
-                                            <Text style={styles.modalText}>¿ Seguro queres cerrar sesion ?</Text>
-                                        </View>
-                                        <View style={[styles.modalInfoContainer, {marginTop: 15}]}>
-                                            <Button title="Cancelar"
-                                                    onPress={()=>setShowModal(false)}
-                                                    buttonStyle={{backgroundColor: '#073A29'}}/>
-                                            <View style={{ width: 30 }} />
-                                            <Button title="Cerrar"
-                                                    onPress={() => {
-                                                        supabase.auth.signOut().then(r => {
-                                                            navigation.navigate({name: 'Login', params: {session: session}})} )}}
-                                                    buttonStyle={{backgroundColor: '#073A29'}}/>
-                                        </View>
-                                    </View>
-                                </View>
-                            </Modal>
-                    {/*    </View>*/}
-                    {/*</View>*/}
-
             </ScrollView>
         </View>
     )
 }
+
 
 export default Account
 

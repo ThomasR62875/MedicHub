@@ -1,0 +1,10 @@
+{
+  "welcome": "Bienvenido",
+  "language": "Español",
+  "warning1": "Dirección de mail inválida. Ej: email@address.com",
+  "warning2" : "Mail o contraseña incorrecto.",
+  "password" : "Contraseña",
+  "logIn" : "Ingresar",
+  "text1" : "¿No tenes una cuenta?",
+  "register" : "Registrate"
+}

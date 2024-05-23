@@ -1,0 +1,10 @@
+{
+  "welcome" : "Welcome",
+  "language": "English",
+  "warning1" : "Invalid email address. Example: email@address.com",
+  "warning2" : "Wrong email or password",
+  "password" : "Password",
+  "logIn" : "Log In",
+  "text1" : "You don't have an account ?",
+  "register" : "Register"
+}
