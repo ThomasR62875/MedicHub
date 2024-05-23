@@ -13,5 +13,8 @@
   "prescription" : "Prescirpción",
   "medicine" : "Medicamento",
   "text2" : "Detalles del",
-
+  "text" : "Detalles del doctor",
+  "specialty" : "Especialidad",
+  "phone" : "Telefono",
+  "address" : "Dirección",
 }

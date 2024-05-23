@@ -12,5 +12,9 @@
   "doc" : "Doctor",
   "prescription" : "Prescription",
   "medicine" : "Medicine",
-  "text2" : "Details of the"
+  "text2" : "Details of the",
+  "text3" : "Details of the doctor",
+  "specialty" : "Specialty",
+  "phone" : "Phone",
+  "address" : "Address"
 }
