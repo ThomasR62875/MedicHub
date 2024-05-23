@@ -121,12 +121,6 @@ const Calender: React.FC = ({ navigation, route } : any) => {
 
 const screenHeight = Dimensions.get('window').height;
 const styles = StyleSheet.create({
-    bottomBar:{
-        position: 'absolute',
-        bottom: 0,
-        left: 0,
-        right: 0,
-    },
     titleText: {
         fontSize: 25,
         textAlign: 'center',

@@ -105,12 +105,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: "#e9f4e9",
       },
-    bottomBar:{
-        position: 'absolute',
-        bottom: 0,
-        left: 0,
-        right: 0,
-    },
     titleContainer: {
         marginTop: 10,
         alignSelf: 'center',
