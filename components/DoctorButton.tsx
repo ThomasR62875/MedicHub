@@ -2,6 +2,7 @@ import React from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import {Doctor} from "../screens/Doctors";
+import {useTranslation} from "react-i18next";
 
 interface DoctorButtonProps {
     onPress: any;
@@ -11,15 +12,17 @@ interface DoctorButtonProps {
 
 const DoctorButton: React.FC<DoctorButtonProps> = ( { onPress, styleExterior, doc }) => {
     const navigation = useNavigation();
+    const {t} = useTranslation();
+
     return (
         <TouchableOpacity style={styles.container} onPress={onPress}>
             <View style={styleExterior}>
                 <View style={styles.infoRow}>
-                    <Text style={styles.label}>Nombre:</Text>
+                    <Text style={styles.label}>{t('doc')}:</Text>
                     <Text>{doc.name}</Text>
                 </View>
                 <View style={styles.infoRow}>
-                    <Text style={styles.label}>Prescripción:</Text>
+                    <Text style={styles.label}>{t('prescription')}</Text>
                     <Text>{doc.specialty}</Text>
                     <View style={{ width: 30 }} />
                 </View>

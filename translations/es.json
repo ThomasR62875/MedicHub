@@ -8,5 +8,7 @@
   "text1" : "¿No tenes una cuenta?",
   "register" : "Registrate",
   "user" : "Usuario",
-  "date" : "Fecha"
+  "date" : "Fecha",
+  "doc" : "Doctor",
+  "prescription" : "Prescirpción",
 }
