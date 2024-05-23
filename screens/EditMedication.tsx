@@ -1,72 +1,26 @@
 import React, { useState, useEffect } from 'react'
-import { supabase } from '../lib/supabase'
-import {View, Alert, StyleSheet} from 'react-native'
-import {Button, Icon, Input} from 'react-native-elements'
+import {updateMedication} from '../lib/supabase'
+import {View, StyleSheet} from 'react-native'
+import {Button, Input} from 'react-native-elements'
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
-import StandardGreenButton from "../components/StandardGreenButton";
-
-
 
 type EditMedicationProps = NativeStackScreenProps<RootStackParamList, 'EditMedication'>;
 
-
-const EditMedication:React.FC<EditMedicationProps> = ({navigation, route }) =>{
+const EditMedication:React.FC<EditMedicationProps> = ({route }: any) =>{
     const {session} = route.params;
-    const [loading, setLoading] = useState(true)
+    const [id, setId] = useState('')
     const [name, setName] = useState('')
     const [prescription, setPrescription] = useState('');
 
-
     useEffect(() => {
-        if (session) getProfile()
+        if (session) getMed()
     }, [session])
 
-    async function getProfile() {
-        try {
-            setLoading(true)
-            if (!session?.user) throw new Error('No user on the session!')
-
-            const { data, error } = await supabase.rpc('get_independent_user', { auth_id_input: session?.user.id });
-
-            if (data) {
-                setName(data.name)
-                setPrescription(data.prescription)
-
-            }
-
-        } catch (error) {
-            if (error instanceof Error) {
-                Alert.alert(error.message)
-            }
-        } finally {
-            setLoading(false)
-        }
-    }
-
-    async function updateProfile({
-        name, prescription
-                                 }: {
-        name: string
-        prescription: string
-    }) {
-        try {
-            setLoading(true)
-            const {error} = await supabase.rpc("update_medication", {name_input: name,
-                prescription_input: prescription})
-            if (error) {
-                throw error
-            }
-        } catch (error) {
-            if (error instanceof Error) {
-                Alert.alert(error.message)
-            }
-        } finally {
-            setLoading(false)
-            Alert.alert('Los datos fueron actualizados', '',
-                [{text: 'Ok', onPress: () => navigation.navigate({name: 'Home', params: {session: session}})},]
-            );
-        }
+    async function getMed() {
+        setId(route.params.medication.id)
+        setName(route.params.medication.name);
+        setPrescription(route.params.medication.prescription);
     }
 
     return(
@@ -76,7 +30,6 @@ const EditMedication:React.FC<EditMedicationProps> = ({navigation, route }) =>{
                 <Input label="Prescripción" value={prescription} onChangeText={(text) => setPrescription(text)}/>
                 <Button
                     title="Guardar cambios"
-                    loading={loading}
                     buttonStyle={{
                         backgroundColor: '#2E5829',
                         borderWidth: 2,
@@ -91,8 +44,12 @@ const EditMedication:React.FC<EditMedicationProps> = ({navigation, route }) =>{
                         marginTop: 40,
                         alignContent: 'center'
                     }}
-                    titleStyle={{ color: '#eef9ed' }}
-                    onPress={() => updateProfile({name, prescription})}
+                    titleStyle={{ color: '#EEF9ED' }}
+                    onPress={() => updateMedication( {
+                        id: id,
+                        name: name,
+                        prescription: prescription
+                    } )}
                 />
             </View>
         </View>

@@ -8,7 +8,7 @@ type SingleMedicationProps = NativeStackScreenProps<RootStackParamList, 'SingleM
 
 
 const SingleMedication: React.FC<SingleMedicationProps> = ({ navigation, route }: any) => {
-    const { medID } = route.params;
+    //const { medID } = route.params;
     return (
         <View style={styles.container}>
             <View style={styles.titleContainer}>
@@ -22,6 +22,7 @@ const SingleMedication: React.FC<SingleMedicationProps> = ({ navigation, route }
                     type='ionicon'
                     size={25}
                     style={{margin: "5%"}}
+                    onPress={() => navigation.navigate('EditMedication', {medication: route.params.meds})}
                 />
             </View>
             <View style={styles.detailRow}>

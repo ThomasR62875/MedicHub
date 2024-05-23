@@ -5,15 +5,15 @@ import { useNavigation } from '@react-navigation/native';
 import {Medication} from "../screens/Medication";
 
 interface MedicationButtonProps {
-    //onPress: any;
+    onPress: any;
     styleExterior: any;
     meds: Medication;
 }
 
-const MedicationButton: React.FC<MedicationButtonProps> = ( { styleExterior, meds }) => {
+const MedicationButton: React.FC<MedicationButtonProps> = ( { onPress, styleExterior, meds }) => {
     const navigation = useNavigation();
     return (
-        <TouchableOpacity style={styles.container}>
+        <TouchableOpacity style={styles.container} onPress={onPress}>
             <View style={styleExterior}>
                 <View style={styles.infoRow}>
                     <Text style={styles.label}>Nombre:</Text>

@@ -7,6 +7,7 @@ import {Button} from "react-native-elements";
 
 
 export type Medication = {
+    id: string;
     name: string;
     prescription: string;
 }
@@ -87,7 +88,7 @@ const Medication: React.FC = ({ navigation, route }: any) => {
                             medications.map((medic: Medication, i) => {
                                 return (
                                     <View key={i} style={styles.medsContainer}>
-                                        <MedicationButton styleExterior={styles.medsContainer} meds={medic}></MedicationButton>
+                                        <MedicationButton onPress={() => navigation.navigate({name: 'SingleMedication', params: {meds: medic}})} styleExterior={styles.medsContainer} meds={medic}></MedicationButton>
                                         <View style={{ marginBottom: 100 }} />
                                     </View>
                                 )
