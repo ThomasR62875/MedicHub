@@ -1,11 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { supabase } from '../lib/supabase';
-import { StyleSheet, View, Text, Alert } from 'react-native';
-import {Appointment} from "./Appointments";
+import React from 'react';
+import { StyleSheet, View, Text } from 'react-native';
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
 import {Icon} from "react-native-elements";
-import AddButton from "../components/AddButton";
 
 type SingleAppointmentProps = NativeStackScreenProps<RootStackParamList, 'SingleAppointment'>
 

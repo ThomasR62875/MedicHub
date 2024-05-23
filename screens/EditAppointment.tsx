@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { updateAppointment, getAppointmentById, getAllDoctorsByUser, getAllUsers } from '../lib/supabase';
 import { SafeAreaView, StyleSheet, Alert, View, Keyboard, TouchableWithoutFeedback } from 'react-native';
-import { Input } from 'react-native-elements';
+import {Button, Input} from 'react-native-elements';
 import dayjs from 'dayjs';
 import StandardGreenButton from '../components/StandardGreenButton';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -15,7 +15,7 @@ import DatePicker from 'react-native-modern-datepicker';
 type EditAppointmentProps = NativeStackScreenProps<RootStackParamList, 'EditAppointment'>;
 
 const EditAppointment: React.FC<EditAppointmentProps> = ({ navigation, route }) => {
-    const { session, appointmentId } = route.params;
+    const { session } = route.params;
     const [date, setDate] = useState(dayjs());
     const [loading, setLoading] = useState(false);
     const [description, setDescription] = useState('');
@@ -24,32 +24,6 @@ const EditAppointment: React.FC<EditAppointmentProps> = ({ navigation, route }) 
     const [session_user_id, setSessionUserId] = useState('');
     const [all_users, setAllUsers] = useState<DependentUser[]>([]);
     const [doctors, setDoctors] = useState<Doctor[]>([]);
-
-    useEffect(() => {
-        if (session) {
-            async function fetchUserId() {
-                setSessionUserId(await getUserId());
-            }
-            fetchUserId();
-        }
-    }, [session]);
-
-    useEffect(() => {
-        if (session_user_id) {
-            async function fetchData() {
-                const appointment = await getAppointmentById(appointmentId);
-                if (appointment) {
-                    setDate(appointment.date);
-                    setDescription(appointment.description);
-                    setDoctor(appointment.doctor);
-                    setUserId(appointment.user_id);
-                }
-                setDoctors(await getAllDoctorsByUser(session_user_id));
-                setAllUsers(await getAllUsers(session_user_id));
-            }
-            fetchData();
-        }
-    }, [session_user_id, appointmentId]);
 
     const doctorsList = doctors
         ? doctors.map((doctor: Doctor) => ({
@@ -69,24 +43,8 @@ const EditAppointment: React.FC<EditAppointmentProps> = ({ navigation, route }) 
         <View style={styles.containerTotal}>
             <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
                 <SafeAreaView style={styles.container}>
-                    <DatePicker
-                        locale={'ES'}
-                        options={{
-                            mainColor: '#000',
-                            textSecondaryColor: '#000',
-                            borderColor: '#000',
-                            backgroundColor: '#e9f4e9',
-                        }}
-                        date={date}
-                        onSelectedChange={(date: any) => setDate(date)}
-                    />
-                    <Input
-                        leftIcon={{ type: 'font-awesome', name: 'book' }}
-                        style={styles.verticallySpaced}
-                        placeholder="Descripción"
-                        value={description}
-                        onChangeText={(text) => setDescription(text)}
-                    />
+                    <Input label="Descripción" value={description} onChangeText={(text) => setDescription(text)}/>
+
                     <View style={styles.pickerStyle}>
                         <RNPickerSelect
                             placeholder={{ label: 'Médico', value: null }}
@@ -105,10 +63,25 @@ const EditAppointment: React.FC<EditAppointmentProps> = ({ navigation, route }) 
                             value={user_id}
                         />
                     </View>
-                    <StandardGreenButton
-                        title="Guardar Cambios"
-                        disabled={loading}
-                        onPress={() => updateAppointment({ id: appointmentId, date, description, doctor, user_id })}
+                    <Button
+                        title="Guardar cambios"
+                        loading={loading}
+                        buttonStyle={{
+                            backgroundColor: '#2E5829',
+                            borderWidth: 2,
+                            borderColor: 'white',
+                            borderRadius: 30,
+                            minHeight: 50
+                        }}
+                        containerStyle={{
+                            width: 200,
+                            marginHorizontal: 50,
+                            marginVertical: 10,
+                            marginTop: 40,
+                            alignContent: 'center'
+                        }}
+                        titleStyle={{ color: '#eef9ed' }}
+                        onPress={() => updateAppointment({id, date, description, doctor, user_id})}
                     />
                 </SafeAreaView>
             </TouchableWithoutFeedback>
