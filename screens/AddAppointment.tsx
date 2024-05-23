@@ -63,7 +63,7 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
 
     const handleAddAppointment = async () => {
         const appointment = {
-            date: date.toDate(), description: description, user_name: '',doctor: doctor, user_id: user_id};
+            date: date.toDate(), description: description, user_name: '',doctor: doctor, user_id: user_id, id: ''};
 
         const result = await addAppointment(appointment);
         if (result.success) {
