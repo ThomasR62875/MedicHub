@@ -11,5 +11,7 @@
   "date" : "Fecha",
   "doc" : "Doctor",
   "prescription" : "Prescirpción",
-  "medicine" : "Medicamento"
+  "medicine" : "Medicamento",
+  "text2" : "Detalles del",
+
 }

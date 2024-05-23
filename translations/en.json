@@ -11,5 +11,6 @@
   "date" : "Date",
   "doc" : "Doctor",
   "prescription" : "Prescription",
-  "medicine" : "Medicine"
+  "medicine" : "Medicine",
+  "text2" : "Details of the"
 }

@@ -3,17 +3,25 @@ import { StyleSheet, View, Text } from 'react-native';
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
 import {Icon} from "react-native-elements";
+import {useTranslation} from "react-i18next";
 
 type SingleMedicationProps = NativeStackScreenProps<RootStackParamList, 'SingleMedication'>
 
 
 const SingleMedication: React.FC<SingleMedicationProps> = ({ navigation, route }: any) => {
-    //const { medID } = route.params;
+    const {t} = useTranslation();
+    function lowercaseFirstLetter(str: string) {
+        if (!str) return str; // Handle empty strings or null
+        return str.charAt(0).toLowerCase() + str.slice(1);
+    }
+    let str = t('medicine');
+    str = lowercaseFirstLetter(str);
+
     return (
         <View style={styles.container}>
             <View style={styles.titleContainer}>
-                <Text style={styles.titleText}>Detalles del</Text>
-                <Text style={styles.titleText}>Medicamento</Text>
+                <Text style={styles.titleText}>{t('text2')}</Text>
+                <Text style={styles.titleText}>{str}</Text>
             </View>
             <View style={styles.addContainer}>
                 <Icon
@@ -26,11 +34,11 @@ const SingleMedication: React.FC<SingleMedicationProps> = ({ navigation, route }
                 />
             </View>
             <View style={styles.detailRow}>
-                <Text style={styles.label}>Nombre:</Text>
+                <Text style={styles.label}>{t('medicine')}:</Text>
                 <Text style={styles.value}>{route.params.meds.name}</Text>
             </View>
             <View style={styles.detailRow}>
-                <Text style={styles.label}>Prescripción:</Text>
+                <Text style={styles.label}>{t('prescription')}:</Text>
                 <Text style={styles.value}>{route.params.meds.prescription}</Text>
             </View>
         </View>
