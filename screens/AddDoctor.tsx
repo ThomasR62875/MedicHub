@@ -88,7 +88,7 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}) => {
     const handleAddDoctor = async () => {
         const doctor = {
             name:name, specialty:specialty, phone:phone, email:email, addresses:
-            addresses, id:user_id
+            addresses, user_id:user_id, id:''
         };
 
         const result = await addDoctor(doctor);
