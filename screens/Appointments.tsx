@@ -9,6 +9,7 @@ import {Button} from "react-native-elements";
 import {DependentUser} from "./DependentUsers";
 
 export type Appointment = {
+    id: string;
     date: Date;
     description:string;
     user_name:string;
