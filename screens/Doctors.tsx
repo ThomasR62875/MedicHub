@@ -14,6 +14,7 @@ export type Doctor = {
     phone: string;
     email: string;
     addresses: string[];
+    user_id:string;
     id:string;
 }
 
@@ -28,7 +29,7 @@ const Doctors: React.FC= ({ navigation, route }: any) => {
         const unsubscribe = navigation.addListener('focus', () => {
             async function fetchData() {
                 if (session) {
-                    setDoctors( await getDoctors());        
+                    setDoctors( await getDoctors());
                 }
             }
             fetchData();
