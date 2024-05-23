@@ -44,9 +44,9 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
     const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(true);
 
     const handleAddMedication= async () => {
-        
-        const medication : Medication = {name:name,prescription:prescription}
-        
+
+        const medication : Medication = {id: '', name:name,prescription:prescription}
+
         const result = await addMedication(medication);
         if (result.success) {
             Alert.alert(
