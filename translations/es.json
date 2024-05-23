@@ -17,4 +17,7 @@
   "specialty" : "Especialidad",
   "phone" : "Telefono",
   "address" : "Dirección",
+  "text4" : "Detalles del turno",
+  "time" : "Hora",
+  "descritpion" : "Descripción",
 }

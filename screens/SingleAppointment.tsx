@@ -3,20 +3,21 @@ import { StyleSheet, View, Text } from 'react-native';
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
 import {Icon} from "react-native-elements";
+import {useTranslation} from "react-i18next";
 
 type SingleAppointmentProps = NativeStackScreenProps<RootStackParamList, 'SingleAppointment'>
-
 
 const SingleAppointment: React.FC<SingleAppointmentProps> = ({ navigation, route }: any) => {
     // Convert date to desired format
     const originalDate = new Date(route.params.appointment.date);
     const formattedDate = `${originalDate.getDate()}/${originalDate.getMonth() + 1}/${originalDate.getFullYear()}`;
     const formattedTime = `${(originalDate.getHours() + 3) % 24}:${originalDate.getMinutes().toString().padStart(2, '0')}`;
+    const {t} = useTranslation();
 
     return (
         <View style={styles.container}>
             <View style={styles.titleContainer}>
-                <Text style={styles.titleText}>Detalles del Turno</Text>
+                <Text style={styles.titleText}>{t('text4')}</Text>
             </View>
             <View style={styles.addContainer}>
                 <Icon
@@ -29,23 +30,23 @@ const SingleAppointment: React.FC<SingleAppointmentProps> = ({ navigation, route
                 />
             </View>
             <View style={styles.detailRow}>
-                <Text style={styles.label}>Usuario:</Text>
+                <Text style={styles.label}>{t('user')}:</Text>
                 <Text style={styles.value}>{route.params.appointment.user_name}</Text>
             </View>
             <View style={styles.detailRow}>
-                <Text style={styles.label}>Fecha:</Text>
+                <Text style={styles.label}>{t('date')}:</Text>
                 <Text style={styles.value}>{formattedDate}</Text>
             </View>
             <View style={styles.detailRow}>
-                <Text style={styles.label}>Hora:</Text>
+                <Text style={styles.label}>{t('time')}:</Text>
                 <Text style={styles.value}>{formattedTime}</Text>
             </View>
             <View style={styles.detailRow}>
-                <Text style={styles.label}>Doctor:</Text>
+                <Text style={styles.label}>{t('doc')}:</Text>
                 <Text style={styles.value}>{route.params.appointment.doctor}</Text>
             </View>
             <View style={styles.detailRow}>
-                <Text style={styles.label}>Descripción:</Text>
+                <Text style={styles.label}>{t('descritpion')}:</Text>
                 <Text style={styles.value}>{route.params.appointment.description}</Text>
             </View>
         </View>

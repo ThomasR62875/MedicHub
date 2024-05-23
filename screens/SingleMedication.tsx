@@ -9,7 +9,7 @@ type SingleMedicationProps = NativeStackScreenProps<RootStackParamList, 'SingleM
 
 
 const SingleMedication: React.FC<SingleMedicationProps> = ({ navigation, route }: any) => {
-    const {t} = useTranslation();
+    const {t, i18n} = useTranslation();
     function lowercaseFirstLetter(str: string) {
         if (!str) return str; // Handle empty strings or null
         return str.charAt(0).toLowerCase() + str.slice(1);
@@ -17,11 +17,19 @@ const SingleMedication: React.FC<SingleMedicationProps> = ({ navigation, route }
     let str = t('medicine');
     str = lowercaseFirstLetter(str);
 
+
     return (
         <View style={styles.container}>
             <View style={styles.titleContainer}>
-                <Text style={styles.titleText}>{t('text2')}</Text>
-                <Text style={styles.titleText}>{str}</Text>
+                { i18n.language === 'english' ? (
+                        <Text style={styles.titleText}>{t('medicine')} {t('text2')} </Text>
+                    ) : (
+                        <View>
+                            <Text style={styles.titleText}>{t('text2')}</Text>
+                            <Text style={styles.titleText}>{str}</Text>
+                        </View>
+                    )
+                }
             </View>
             <View style={styles.addContainer}>
                 <Icon

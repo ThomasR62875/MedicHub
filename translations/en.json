@@ -12,9 +12,12 @@
   "doc" : "Doctor",
   "prescription" : "Prescription",
   "medicine" : "Medicine",
-  "text2" : "Details of the",
-  "text3" : "Details of the doctor",
+  "text2" : "details",
+  "text3" : "Doctor details",
   "specialty" : "Specialty",
   "phone" : "Phone",
-  "address" : "Address"
+  "address" : "Address",
+  "text4" : "Appointment details",
+  "time" : "Time",
+  "descritpion" : "Description"
 }
