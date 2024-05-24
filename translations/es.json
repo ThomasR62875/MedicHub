@@ -58,5 +58,7 @@
   "text12" : "Proximos turnos",
   "text13" : "No hay turnos",
   "text14" : "Anda al calendario para crear tu primer turno",
-  "text15" : "Turnos recomendados"
+  "text15" : "Turnos recomendados",
+  "warn12" : "Error al obtener los doctores",
+  "text16" : "No hay medicamentos"
 }

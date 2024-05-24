@@ -3,7 +3,7 @@ import { supabase } from '../lib/supabase'
 import { StyleSheet, View, ScrollView,Text} from 'react-native'
 import MedicationButton from "../components/MedicationButton";
 import {Button} from "react-native-elements";
-
+import {useTranslation} from "react-i18next";
 
 export type Medication = {
     id: string;
@@ -11,11 +11,11 @@ export type Medication = {
     prescription: string;
 }
 
-
 const Medication: React.FC = ({ navigation, route }: any) => {
     const session = route.params.session;
     const [loading, setLoading] = useState(true)
     const [medications,setMedications]= useState<Medication[] | undefined>(undefined)
+    const {t} = useTranslation();
 
     useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
@@ -24,7 +24,7 @@ const Medication: React.FC = ({ navigation, route }: any) => {
                 getMedications().then(data => {
                     setMedications(data);
                 }).catch(error => {
-                    console.error("Error al obtener los doctores: ", error);
+                    console.error(t('warn12'), error);
                 }).finally(() => {
                     setLoading(false);
                 });
@@ -67,9 +67,9 @@ const Medication: React.FC = ({ navigation, route }: any) => {
         <View style={styles.container}>
             <View style={styles.window}>
                 <View style={styles.topContent}>
-                    <Text style={styles.titleText}>Medicamentos</Text>
+                    <Text style={styles.titleText}>{t('medicine')}</Text>
                     <Button
-                        title="Agregar"
+                        title={t('add')}
                         buttonStyle={{
                             backgroundColor: '#2E5829',
                             borderColor: 'white',
@@ -94,7 +94,7 @@ const Medication: React.FC = ({ navigation, route }: any) => {
                             })
                         ) : (
                             <View style={[styles.titleContainer]}>
-                                <Text style={styles.text}>No hay medicamentos</Text>
+                                <Text style={styles.text}>{t('text16')}</Text>
                             </View>
                         )
                     }

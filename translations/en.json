@@ -58,5 +58,7 @@
   "text12" : "Next appointments",
   "text13" : "No appointments",
   "text14" : "Go to Calendar to make your first appointment",
-  "text15" : "Recommedned appointments"
+  "text15" : "Recommedned appointments",
+  "warn12" : "Error getting the doctors",
+  "text16" : "No medicnie"
 }
