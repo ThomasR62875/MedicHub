@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import {addDoctor, updateMedication} from '../lib/supabase'
+import {addDoctor, deleteMedication, updateMedication} from '../lib/supabase'
 import {View, StyleSheet, Alert, TouchableWithoutFeedback, Keyboard} from 'react-native'
 import {Button, Input} from 'react-native-elements'
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
@@ -35,6 +35,26 @@ const EditMedication:React.FC<EditMedicationProps> = ({navigation, route }: any)
     useEffect(() => {
         if (session) getMed()
     }, [session])
+
+
+
+    const handleUpdateMedication = async () => {
+
+        const session =  route.params.session;
+        const medication  = {id: id , name: name, prescription: prescription}
+        const result = await updateMedication(medication);
+        if (result.success) {
+            Alert.alert(
+                'El Medicamento fue editado',
+                '',
+                [
+                    { text: 'Ok', onPress: () => navigation.navigate('Medication', { session: session }) }
+                ]
+            );
+        } else {
+            Alert.alert('Error', result.message || 'An unknown error occurred');
+        }
+    };
 
     async function getMed() {
         setId(route.params.medication.id)
@@ -98,11 +118,7 @@ const EditMedication:React.FC<EditMedicationProps> = ({navigation, route }: any)
                         }}
                         titleStyle={{ color: '#EEF9ED' }}
                         disabled={isButtonDisabled}
-                        onPress={() => updateMedication( {
-                            id: id,
-                            name: name,
-                            prescription: prescription
-                        } )}
+                        onPress={handleUpdateMedication}
                     />
                 </View>
             </TouchableWithoutFeedback>

@@ -12,7 +12,6 @@ type SingleMedicationProps = NativeStackScreenProps<RootStackParamList, 'SingleM
 const SingleMedication: React.FC<SingleMedicationProps> = ({ navigation, route }: any) => {
 
     const handleDeleteMedication = async () => {
-        console.log("handleDeleteMedication");
         const session =  route.params.session;
         const medication =  route.params.meds;
         const result = await deleteMedication(medication);
