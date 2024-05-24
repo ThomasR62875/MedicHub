@@ -87,9 +87,9 @@ const Doctors: React.FC= ({ navigation, route }: any) => {
                                 )
                             })
                         ) : (
-                            <View style={[styles.titleContainer]}>
-                                <Text style={styles.text}>{t('text17')}</Text>
-                            </View>
+                        <View style={[styles.userContainer]}>
+                            <Text style={[styles.text, {textAlign: 'center'}]}>{t('text17')}</Text>
+                        </View>
                         )
                     }
                 </View>
@@ -107,10 +107,16 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: "#e9f4e9",
       },
-    titleContainer: {
-        marginTop: 10,
-        alignSelf: 'center',
-        marginBottom: 20,
+    userContainer: {
+        backgroundColor: '#cbe4c9',
+        borderRadius: 20,
+        borderColor: '#cbe4c9',
+        borderWidth: 1,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        padding: 10,
     },
     titleText: {
         fontFamily: 'Roboto-Thin',
@@ -119,7 +125,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         marginTop: "1%",
         color: "#2E5829FF",
-        width: "60%"
+        width: "70%"
     },
     doctorContainer: {
         marginTop: 10,
@@ -138,11 +144,6 @@ const styles = StyleSheet.create({
     value: {
         flex: 1,
     },
-    addContainer: {
-        left: 290,
-        bottom: 60,
-        alignSelf: 'flex-start',
-    },
     window: {
         marginTop: "20%",
         marginLeft: "5%",
@@ -158,7 +159,6 @@ const styles = StyleSheet.create({
     text: {
         fontFamily: 'Roboto-Thin',
         fontSize: 14,
-        textAlign: 'left',
         marginTop: "1%",
         color: "#2E5829FF",
         width: "60%"

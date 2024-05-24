@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         marginTop: "1%",
         color: "#2E5829FF",
-        width: "60%"
+        width: "70%"
     },
     text: {
         fontSize: 20,
@@ -131,7 +131,7 @@ const styles = StyleSheet.create({
         color: "#215a1b"
     },
     window: {
-        marginTop: "30%",
+        marginTop: "25%",
         marginLeft: "5%",
         marginRight: "5%",
     },

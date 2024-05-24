@@ -4,7 +4,7 @@ import {StyleSheet, View, ScrollView} from 'react-native'
 import {Button, Icon} from 'react-native-elements'
 import LanguageButton from '../components/LanguageButton'
 import { DependentUser } from './DependentUsers';
-import {Text} from "react-native-paper";
+import {Dialog, Text, Button as PaperButton} from "react-native-paper";
 import {useTranslation} from "react-i18next";
 
 const Account: React.FC = ({ navigation, route } : any) => {
@@ -89,8 +89,7 @@ const Account: React.FC = ({ navigation, route } : any) => {
                             marginVertical: 2,
 
                         }}
-                        onPress={() => navigation.navigate({name: 'Doctors', params: {session: session}})}
-                    />
+                        onPress={() => navigation.navigate({name: 'Doctors', params: {session: session}})}/>
                     <Button
                         title={t('mappointments')}
                         icon={{
@@ -108,8 +107,7 @@ const Account: React.FC = ({ navigation, route } : any) => {
                             marginVertical: 2,
 
                         }}
-                        onPress={() => navigation.navigate({name: 'Appointments', params: {session: session}})}
-                    />
+                        onPress={() => navigation.navigate({name: 'Appointments', params: {session: session}})}/>
                     <Button
                         title={t('mvaccines')}
                         icon={{
@@ -125,8 +123,7 @@ const Account: React.FC = ({ navigation, route } : any) => {
                             width: '80%',
                             marginHorizontal: 50,
                             marginVertical: 2,
-                        }}
-                    />
+                        }}/>
                     <Button
                         title={t('mmedicine')}
                         icon={{
@@ -143,8 +140,7 @@ const Account: React.FC = ({ navigation, route } : any) => {
                             marginHorizontal: 50,
                             marginVertical: 2,
                         }}
-                        onPress={() => navigation.navigate({name: 'Medication', params: {session: session}})}
-                    />
+                        onPress={() => navigation.navigate({name: 'Medication', params: {session: session}})}/>
                     <Button
                         title={t('mfiles')}
                         icon={{
@@ -160,8 +156,7 @@ const Account: React.FC = ({ navigation, route } : any) => {
                             width: '80%',
                             marginHorizontal: 50,
                             marginVertical: 2,
-                        }}
-                    />
+                        }}/>
                     <Button
                         title={t('logout')}
                         buttonStyle={{
@@ -180,9 +175,27 @@ const Account: React.FC = ({ navigation, route } : any) => {
                             marginBottom:100
                         }}
                         titleStyle={{ color: '#eef9ed' }}
-                        onPress={()=>showDialog()}
-                    />
-                    </View>
+                        onPress={()=>showDialog()}/>
+                </View>
+                <Dialog style={{ backgroundColor: '#E9F4E9FF' }}
+                    visible={visible}
+                    onDismiss={hideDialog}>
+                    <Dialog.Content>
+                        <Text variant="bodyMedium" style={{ textAlign: 'center' }}>
+                            ¿Está seguro de que desea cerrar sesión?
+                        </Text>
+                    </Dialog.Content>
+                    <Dialog.Actions style={{ justifyContent: 'space-between' }}>
+                        <PaperButton textColor="#2E5829FF"
+                            onPress={hideDialog}>
+                            Cancelar
+                        </PaperButton>
+                        <PaperButton textColor="#b6265d"
+                            onPress={() => supabase.auth.signOut()}>
+                            Cerrar sesión
+                        </PaperButton>
+                    </Dialog.Actions>
+                </Dialog>
             </ScrollView>
         </View>
     )

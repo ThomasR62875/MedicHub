@@ -104,7 +104,7 @@ const Calender: React.FC = ({ navigation, route } : any) => {
                                 </View>
                             </View>
                         )}
-                <View style={{alignItems: 'center', marginTop: 10, marginLeft: "10%", marginBottom: "20%", alignContent: 'center'}}>
+                <View style={{marginTop: 10, marginBottom: "20%", alignContent: 'center'}}>
                     <Button
                         title={t('add')+t('appo')}
                         buttonStyle={{
@@ -112,7 +112,8 @@ const Calender: React.FC = ({ navigation, route } : any) => {
                             borderColor: 'white',
                             borderRadius: 20,
                             minHeight: 10,
-                            width: "70%"
+                            width: "auto",
+                            alignSelf: 'center',
                         }}
                         titleStyle={{ color: '#E9F4E9FF',fontSize: 15, margin: 5 }}
                         onPress={() => navigation.navigate('AddAppointment', {session: session})}/>
@@ -122,7 +123,6 @@ const Calender: React.FC = ({ navigation, route } : any) => {
     )
 }
 
-const screenHeight = Dimensions.get('window').height;
 const styles = StyleSheet.create({
     titleText: {
         fontSize: 25,

@@ -118,17 +118,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderRadius: 5,
     },
-    infoRow: {
-        flexDirection: 'row',
-        marginBottom: 5,
-    },
-    label: {
-        fontWeight: 'bold',
-        marginRight: 5,
-    },
-    value: {
-        flex: 1,
-    },
     titleContainer: {
         marginTop: 10,
         alignSelf: 'center',
@@ -141,12 +130,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         marginTop: "1%",
         color: "#2E5829FF",
-        width: "60%"
-    },
-    addContainer: {
-        left: 290,
-        bottom: 63,
-        alignSelf: 'flex-start',
+        width: "70%"
     },
     window: {
         marginTop: "20%",
