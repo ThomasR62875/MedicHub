@@ -3,12 +3,13 @@ import { StyleSheet, View, Text } from 'react-native';
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
 import {Icon} from "react-native-elements";
+import DeleteButton from "../components/DeleteButton";
+import {deleteMedication} from "../lib/supabase";
 
 type SingleMedicationProps = NativeStackScreenProps<RootStackParamList, 'SingleMedication'>
 
 
 const SingleMedication: React.FC<SingleMedicationProps> = ({ navigation, route }: any) => {
-    //const { medID } = route.params;
     return (
         <View style={styles.container}>
             <View style={styles.titleContainer}>
@@ -32,6 +33,9 @@ const SingleMedication: React.FC<SingleMedicationProps> = ({ navigation, route }
             <View style={styles.detailRow}>
                 <Text style={styles.label}>Prescripción:</Text>
                 <Text style={styles.value}>{route.params.meds.prescription}</Text>
+            </View>
+            <View>
+                <DeleteButton onPress={() => deleteMedication(route.params.meds.id)}></DeleteButton>
             </View>
         </View>
     );

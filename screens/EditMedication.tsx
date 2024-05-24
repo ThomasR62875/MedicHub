@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react'
-import {updateMedication} from '../lib/supabase'
-import {View, StyleSheet} from 'react-native'
+import {addDoctor, updateMedication} from '../lib/supabase'
+import {View, StyleSheet, Alert} from 'react-native'
 import {Button, Input} from 'react-native-elements'
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
 
 type EditMedicationProps = NativeStackScreenProps<RootStackParamList, 'EditMedication'>;
 
-const EditMedication:React.FC<EditMedicationProps> = ({route }: any) =>{
+const EditMedication:React.FC<EditMedicationProps> = ({navigation, route }: any) =>{
     const {session} = route.params;
     const [id, setId] = useState('')
     const [name, setName] = useState('')
@@ -22,6 +22,25 @@ const EditMedication:React.FC<EditMedicationProps> = ({route }: any) =>{
         setName(route.params.medication.name);
         setPrescription(route.params.medication.prescription);
     }
+
+    {/*const handleUpdateMedication = async () => {
+        const meds = {
+            id: id, name: name, prescription: prescription
+        };
+
+        const result = await updateMedication(meds);
+        if (result.success) {
+            Alert.alert(
+                'El Doctor fue agregado',
+                '',
+                [
+                    { text: 'Ok', onPress: () => navigation.navigate('Doctors', { session: session }) }
+                ]
+            );
+        } else {
+            Alert.alert('Error', result.message || 'An unknown error occurred');
+        }
+    };*/}
 
     return(
         <View style={styles.container} >
