@@ -7,9 +7,9 @@ import {Button} from "react-native-elements";
 
 
 export type Medication = {
-    id: string;
     name: string;
     prescription: string;
+    id: string;
 }
 
 
@@ -57,6 +57,7 @@ const Medication: React.FC = ({ navigation, route }: any) => {
         data.forEach((medication: Medication) => {
             // @ts-ignore
             to_return.push({
+                id: medication.id,
                 name: medication.name,
                 prescription: medication.prescription
             });
