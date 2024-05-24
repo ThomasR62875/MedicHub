@@ -30,5 +30,15 @@
   "mvaccines" : "My vaccines",
   "mmedicine" : "My medicine",
   "mfiles" : "My files",
-  "logout" : "Log out"
+  "logout" : "Log out",
+  "warn1" : "You must enter a name",
+  "warn2" : "You must enter a surname",
+  "warn3" : "You must enter an ID. Ex: 12345678",
+  "warn4" : "Invalid email address. Ex: email@address.com",
+  "warn5" : "Passwords don't match",
+  "warn6" : "Check your inbox to verify your mail.",
+  "text5" : "Register on MedicHub",
+  "name" : "Name",
+  "surname" : "Surname",
+  "confirmp" : "Confirm password"
 }

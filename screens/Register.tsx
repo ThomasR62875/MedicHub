@@ -1,22 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import {
-    View, ScrollView,
-    Text,
-    Alert,
-    StyleSheet,
-    TouchableWithoutFeedback,
-    Keyboard,
-    Dimensions, KeyboardAvoidingView, Image
-} from 'react-native';
+import {View, ScrollView, Text, Alert, StyleSheet, TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView, Image} from 'react-native';
 import {supabase} from "../lib/supabase";
 import {Input, Icon, Button} from "react-native-elements";
-import StandardGreenButton from "../components/StandardGreenButton";
 // @ts-ignore
 import Logo from '../assets/icon.png'
+import {useTranslation} from "react-i18next";
 
-
-
-const windowHeight = Dimensions.get('window').height;
 
 const Register: React.FC = ({ navigation }: any) => {
     const [email, setEmail] = useState('')
@@ -32,6 +21,7 @@ const Register: React.FC = ({ navigation }: any) => {
     const [DNIErrorMessage, setDNIErrorMessage] = useState<string>('');
     const [mailErrorMessage, setMailErrorMessage] = useState<string>('');
     const [passwordErrorMessage, setPasswordErrorMessage] = useState<string>('');
+    const {t} = useTranslation();
 
     useEffect(() => {
         if (
@@ -56,14 +46,14 @@ const Register: React.FC = ({ navigation }: any) => {
     const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(true);
     const validateName = (value: string) => {
         if (value.trim() === '') {
-            setNameErrorMessage('Debe ingresar su nombre.');
+            setNameErrorMessage(t('warn1'));
         } else {
             setNameErrorMessage('');
         }
     };
     const validateLastName = (value: string) => {
         if (value.trim() === '') {
-            setLastNameErrorMessage('Debe ingresar su apellido.');
+            setLastNameErrorMessage(t('warn2'));
         } else {
             setLastNameErrorMessage('');
         }
@@ -71,21 +61,21 @@ const Register: React.FC = ({ navigation }: any) => {
     const validateDNI = (value: string) => {
         const containsLetterOrSymbol = /[a-zA-Z!@#$%^&*()_+{}\[\]:;<>,.?\/\\|'"`~-]/.test(value);
         if (containsLetterOrSymbol) {
-            setDNIErrorMessage('Debe ingresar su DNI. Ej: 12345678');
+            setDNIErrorMessage(t('warn3'));
         } else {
             setDNIErrorMessage('');
         }
     };
     const validateEmail = (value: string) => {
         if (value.trim() === '' || !value.includes("@") || !(value.includes(".edu") || value.includes(".com") || value.includes(".ar"))) {
-            setMailErrorMessage('Dirección de mail inválida. Ej: email@address.com');
+            setMailErrorMessage(t('warn4'));
         } else {
             setMailErrorMessage('');
         }
     };
     const validatePassword = (value: string) => {
         if (password !== value) {
-            setPasswordErrorMessage('La contraseña ingresada es distinta.');
+            setPasswordErrorMessage(t('warn5'));
         } else {
             setPasswordErrorMessage('');
         }
@@ -121,9 +111,9 @@ const Register: React.FC = ({ navigation }: any) => {
                 <View style={{marginBottom: 50, alignItems: 'center'}}>
                     <Image source={Logo} style={styles.logo} />
                 </View>
-                <Text style={styles.Ptitle}>Registrate a MedicHub</Text>
+                <Text style={styles.Ptitle}>{t('text5')}</Text>
                     <Input
-                        label="Nombre"
+                        label={t('name')}
                         labelStyle={styles.colorLable}
                         leftIcon={<Icon type= "font-awesome" name="user" color={styles.colorIcon.color}/>}
                         onChangeText={(text) => {
@@ -131,7 +121,7 @@ const Register: React.FC = ({ navigation }: any) => {
                             validateName(text)
                         }}
                         value={firstName}
-                        placeholder="Nombre"
+                        placeholder={t('name')}
                         placeholderTextColor={"#407738"}
                         autoCapitalize={'none'}
                         inputStyle={{color: '#407738', marginLeft: 10}}
@@ -139,7 +129,7 @@ const Register: React.FC = ({ navigation }: any) => {
                         errorMessage={nameErrorMessage}
                     />
                     <Input
-                        label="Apellido"
+                        label={t('surname')}
                         labelStyle={styles.colorLable}
                         leftIcon={<Icon type= "font-awesome" name="user" color={styles.colorIcon.color}/>}
                         onChangeText={(text) => {
@@ -147,7 +137,7 @@ const Register: React.FC = ({ navigation }: any) => {
                             validateLastName(text)
                         }}
                         value={lastName}
-                        placeholder="Apellido"
+                        placeholder={t('surname')}
                         autoCapitalize={'none'}
                         placeholderTextColor={"#407738"}
                         inputStyle={{color: '#407738', marginLeft: 10}}
@@ -155,7 +145,7 @@ const Register: React.FC = ({ navigation }: any) => {
                         errorMessage={lastNameErrorMessage}
                     />
                     <Input
-                        label="DNI"
+                        label={t('id')}
                         labelStyle={styles.colorLable}
                         leftIcon={<Image source={require('../assets/fingerprint.png')} style={styles.icon} />}
                         onChangeText={(text) => {
@@ -163,7 +153,7 @@ const Register: React.FC = ({ navigation }: any) => {
                             validateDNI(text);
                         }}
                         value={dni}
-                        placeholder="DNI"
+                        placeholder={t('id')}
                         autoCapitalize={'none'}
                         placeholderTextColor={"#407738"}
                         inputStyle={{color: '#407738', marginLeft: 10}}
@@ -184,19 +174,19 @@ const Register: React.FC = ({ navigation }: any) => {
                         errorMessage={mailErrorMessage}
                     />
                     <Input
-                        label="Contraseña"
+                        label={t('password')}
                         labelStyle={styles.colorLable}
                         leftIcon={<Icon type="font-awesome" name="lock" color={styles.colorIcon.color}/>}
                         onChangeText={(text) => setPassword(text)}
                         value={password}
                         secureTextEntry={true}
-                        placeholder="Contraseña"
+                        placeholder={t('password')}
                         autoCapitalize={'none'}
                         inputStyle={{color: '#407738', marginLeft: 10}}
                         placeholderTextColor={"#407738"}
                     />
                     <Input
-                        label="Confirmar contraseña"
+                        label={t('confirmp')}
                         labelStyle={styles.colorLable}
                         leftIcon={<Icon type="font-awesome"  name="lock" color={styles.colorIcon.color}/>}
                         onChangeText={(text1) => {
@@ -205,7 +195,7 @@ const Register: React.FC = ({ navigation }: any) => {
                         }}
                         value={confirmed_password}
                         secureTextEntry={true}
-                        placeholder="Contraseña"
+                        placeholder={t('password')}
                         autoCapitalize={'none'}
                         inputStyle={{color: '#407738', marginLeft: 10}}
                         placeholderTextColor={"#407738"}
@@ -214,7 +204,7 @@ const Register: React.FC = ({ navigation }: any) => {
                     />
                     <View style={{alignItems: 'center'}}>
                         <Button
-                            title="Registrarse"
+                            title={t('register')}
                             disabled={isButtonDisabled}
                             loading={loading}
                             buttonStyle={{
@@ -237,16 +227,6 @@ const Register: React.FC = ({ navigation }: any) => {
                         />
                     </View>
                 </ScrollView>
-
-
-                {/*<View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }} >*/}
-                {/*    <View style={[styles.buttonSignInContainer, { height: windowHeight * 0.08, marginTop: 40}]}>*/}
-                {/*        <StandardGreenButton title="Ingresar"*/}
-                {/*        disabled={loading}*/}
-                {/*        onPress={() => signUpWithEmail()}*/}
-                {/*        />*/}
-                {/*    </View>*/}
-                {/*</View>*/}
                 </KeyboardAvoidingView>
         </TouchableWithoutFeedback>
         </View>
