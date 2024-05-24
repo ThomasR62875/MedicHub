@@ -77,7 +77,7 @@ const SingleMedication: React.FC<SingleMedicationProps> = ({ navigation, route }
                         Cancelar
                     </PaperButton>
                     <PaperButton textColor="#b6265d"
-                                 onPress={() => deleteMedication(route.params.meds.id)}>
+                                 onPress={() => deleteMedication(route.params.meds)}>
                         Eliminar
                     </PaperButton>
                 </Dialog.Actions>
