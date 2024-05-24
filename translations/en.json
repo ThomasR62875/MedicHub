@@ -23,5 +23,12 @@
   "home" : "Home",
   "calendar" : "Calendar",
   "dusers" : "Users",
-  "account" : "Account"
+  "account" : "Account",
+  "id" : "ID",
+  "mdocs" : "My doctors",
+  "mappointments" : "My appointments",
+  "mvaccines" : "My vaccines",
+  "mmedicine" : "My medicine",
+  "mfiles" : "My files",
+  "logout" : "Log out"
 }

@@ -23,5 +23,12 @@
   "home" : "Inicio",
   "calendar" : "Calendario",
   "dusers" : "Usuarios",
-  "account" : "Perfil"
+  "account" : "Perfil",
+  "id" : "DNI",
+  "mdocs" : "Mis doctores",
+  "mappointments" : "Mis turnos",
+  "mvaccines" : "Mis vacunas",
+  "mmedicine" : "Mis medicamentos",
+  "myfiles" : "Mis archivos",
+  "logout" : "Cerrar sesión"
 }
