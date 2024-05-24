@@ -61,5 +61,7 @@
   "text15" : "Turnos recomendados",
   "warn12" : "Error al obtener los doctores",
   "text16" : "No hay medicamentos",
-  "text17" : "No hay doctores"
+  "text17" : "No hay doctores",
+  "depu" : "Usuarios dependientes",
+  "text18" : "Aún no tienes usuarios dependientes"
 }
