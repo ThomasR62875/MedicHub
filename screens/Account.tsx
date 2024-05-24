@@ -181,7 +181,7 @@ const Account: React.FC = ({ navigation, route } : any) => {
                     visible={visible}
                     onDismiss={hideDialog}>
                     <Dialog.Content>
-                        <Text variant="bodyMedium" style={{ textAlign: 'center' }}>
+                        <Text variant="bodyMedium" style={[{textAlign: 'center'}, {fontSize: 18}]}>
                             ¿Está seguro de que desea cerrar sesión?
                         </Text>
                     </Dialog.Content>
