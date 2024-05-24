@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react'
-import { getAppointments, supabase } from '../lib/supabase'
-import { StyleSheet,ScrollView ,View, Text ,Alert } from 'react-native'
-import {NativeStackScreenProps} from "@react-navigation/native-stack";
-import {RootStackParamList} from "../App";
+import {getAppointments} from '../lib/supabase'
+import {StyleSheet,ScrollView ,View, Text} from 'react-native'
 import AppointmentButton from "../components/AppointmentButton";
 import {Button} from "react-native-elements";
-import {DependentUser} from "./DependentUsers";
+import {useTranslation} from "react-i18next";
 
 export type Appointment = {
     id: string;
@@ -19,6 +17,7 @@ const Appointments: React.FC =  ({navigation, route}: any) =>{
     const session = route.params.session;
     const [loading, setLoading] = useState(true)
     const [appointments,setAppointments]= useState<Appointment[] | undefined>(undefined)
+    const {t} = useTranslation();
 
     useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
@@ -39,9 +38,9 @@ const Appointments: React.FC =  ({navigation, route}: any) =>{
         <View style={styles.container}>
             <View style={styles.window}>
                 <View style={styles.topContent}>
-                    <Text style={styles.titleText}>Tus turnos</Text>
+                    <Text style={styles.titleText}>{t('mappointments')}</Text>
                     <Button
-                        title="Agregar"
+                        title={t('add')}
                         buttonStyle={{
                             backgroundColor: '#2E5829',
                             borderColor: 'white',
@@ -53,21 +52,21 @@ const Appointments: React.FC =  ({navigation, route}: any) =>{
                         onPress={() => navigation.navigate('AddAppointment', {session: session})}/>
                 </View>
                 <ScrollView>
-                                {appointments && appointments?.length > 0 ? (
-                                        appointments.map((appointment: Appointment, i) => {
-                                         return (
-                                             <View key={i} style={styles.appointContainer}>
-                                                 <AppointmentButton onPress={() => navigation.navigate({name: 'SingleAppointment', params: {appointment: appointment}})} styleExterior={styles.appointContainer} date={appointment.date} turno={appointment}></AppointmentButton>
-                                                    <View style={{ marginBottom: 100 }} />
-                                             </View>
-                                            )
-                                       })
-                                    ) : (
-                                        <View style={[styles.titleContainer]}>
-                                            <Text style={styles.text}>No hay turnos</Text>
-                                        </View>
-                                    )}
-                       </ScrollView>
+                        {appointments && appointments?.length > 0 ? (
+                                appointments.map((appointment: Appointment, i) => {
+                                return (
+                                     <View key={i} style={styles.appointContainer}>
+                                         <AppointmentButton onPress={() => navigation.navigate({name: 'SingleAppointment', params: {appointment: appointment}})}
+                                                            styleExterior={styles.appointContainer} date={appointment.date} turno={appointment}></AppointmentButton>
+                                            <View style={{ marginBottom: 100 }} />
+                                     </View>
+                                )})
+                            ) : (
+                                <View style={[styles.titleContainer]}>
+                                    <Text style={styles.text}>{t('text13')}</Text>
+                                </View>
+                        )}
+               </ScrollView>
             </View>
         </View>
     );
