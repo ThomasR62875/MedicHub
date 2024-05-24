@@ -9,13 +9,13 @@ import {Button} from "react-native-elements";
 const Stack = createNativeStackNavigator();
 
 export type Doctor = {
+    id:string;
     name: string;
     specialty: string;
     phone: string;
     email: string;
     addresses: string[];
     user_id:string;
-    id:string;
 }
 
 type DoctorProps = NativeStackScreenProps<RootStackParamList, 'Doctors'>;
