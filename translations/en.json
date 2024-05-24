@@ -54,5 +54,9 @@
   "warn10" : "You must select a user.",
   "text10" : "The doctor has been added",
   "text11" : "The medicine has been added",
-  "warn11" : "You must enter the prescription"
+  "warn11" : "You must enter the prescription",
+  "text12" : "Next appointments",
+  "text13" : "No appointments",
+  "text14" : "Go to Calendar to make your first appointment",
+  "text15" : "Recommedned appointments"
 }

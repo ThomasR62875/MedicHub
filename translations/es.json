@@ -54,5 +54,9 @@
   "warn10" : "Debe seleccionar el usuario.",
   "text10" : "El Doctor fue agregado",
   "text11" : "El medicamento fue agregado",
-  "warn11" : "Debe ingresar la prescripción."
+  "warn11" : "Debe ingresar la prescripción.",
+  "text12" : "Proximos turnos",
+  "text13" : "No hay turnos",
+  "text14" : "Anda al calendario para crear tu primer turno",
+  "text15" : "Turnos recomendados"
 }
