@@ -4,6 +4,7 @@ import { StyleSheet, View, ScrollView,Text} from 'react-native'
 import {createNativeStackNavigator, NativeStackScreenProps} from '@react-navigation/native-stack';
 import {RootStackParamList} from "../App";
 import {Button} from "react-native-elements";
+import {useTranslation} from "react-i18next";
 
 const Stack = createNativeStackNavigator();
 
@@ -23,6 +24,7 @@ const Doctors: React.FC= ({ navigation, route }: any) => {
     const {session} = route.params;
     const [loading, setLoading] = useState(true)
     const [doctors,setDoctors]= useState<Doctor[] | undefined>(undefined)
+    const {t} = useTranslation();
 
     useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
@@ -42,9 +44,9 @@ const Doctors: React.FC= ({ navigation, route }: any) => {
         <View style={styles.container}>
             <View style={styles.window}>
                 <View style={styles.topContent}>
-                    <Text style={styles.titleText}>Médicos</Text>
+                    <Text style={styles.titleText}>{t('doc')}</Text>
                     <Button
-                        title="Agregar"
+                        title={t('add')}
                         buttonStyle={{
                             backgroundColor: '#2E5829',
                             borderColor: 'white',
@@ -62,11 +64,11 @@ const Doctors: React.FC= ({ navigation, route }: any) => {
                                 return (
                                     <View key={i} style={styles.doctorContainer}>
                                         <View style={styles.infoRow}>
-                                            <Text style={styles.label}>Nombre:</Text>
+                                            <Text style={styles.label}>{t('name')}:</Text>
                                             <Text style={styles.value}>{doc.name}</Text>
                                         </View>
                                         <View style={styles.infoRow}>
-                                            <Text style={styles.label}>Especialidad:</Text>
+                                            <Text style={styles.label}>{t('specialty')}:</Text>
                                             <Text style={styles.value}>{doc.specialty}</Text>
                                         </View>
                                         <View style={styles.infoRow}>
@@ -74,11 +76,11 @@ const Doctors: React.FC= ({ navigation, route }: any) => {
                                             <Text style={styles.value}>{doc.email}</Text>
                                         </View>
                                         <View style={styles.infoRow}>
-                                            <Text style={styles.label}>Teléfono:</Text>
+                                            <Text style={styles.label}>{t('phone')}:</Text>
                                             <Text style={styles.value}>{doc.phone}</Text>
                                         </View>
                                         <View style={styles.infoRow}>
-                                            <Text style={styles.label}>Dirección:</Text>
+                                            <Text style={styles.label}>{t('address')}:</Text>
                                             <Text style={styles.value}>{doc.addresses}</Text>
                                         </View>
                                     </View>
@@ -86,7 +88,7 @@ const Doctors: React.FC= ({ navigation, route }: any) => {
                             })
                         ) : (
                             <View style={[styles.titleContainer]}>
-                                <Text style={styles.text}>No hay doctores</Text>
+                                <Text style={styles.text}>{t('text17')}</Text>
                             </View>
                         )
                     }
