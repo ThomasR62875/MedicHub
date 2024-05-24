@@ -19,5 +19,9 @@
   "address" : "Address",
   "text4" : "Appointment details",
   "time" : "Time",
-  "descritpion" : "Description"
+  "descritpion" : "Description",
+  "home" : "Home",
+  "calendar" : "Calendar",
+  "dusers" : "Users",
+  "account" : "Account"
 }

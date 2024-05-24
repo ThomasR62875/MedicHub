@@ -20,4 +20,8 @@
   "text4" : "Detalles del turno",
   "time" : "Hora",
   "descritpion" : "Descripción",
+  "home" : "Inicio",
+  "calendar" : "Calendario",
+  "dusers" : "Usuarios",
+  "account" : "Perfil"
 }
