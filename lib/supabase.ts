@@ -243,12 +243,42 @@ export const getAppointments = async () : Promise<Appointment[] | undefined> => 
 
 // borrar
 
-export const deleteAppointment = async (session_user_id:String) : Promise<Appointment[] | undefined> => {
-    const { data, error } = await supabase.rpc('delete_appointment_by_id', { user_id: session_user_id });
+export const deleteAppointment = async (appoint: Appointment) : Promise<void> => {
+    const { data, error } = await supabase.rpc('delete_appointment_by_id', { input_id: appoint.id });
     if (error) {
-        console.error('Error inserting users data:', error.message);
+        console.error('Error deleting appointment data:', error.message);
     } else {
         console.log('Appointment deleted successfully');
+    }
+    return data
+}
+
+export const deleteDependentUser = async (doc: Doctor): Promise<void> => {
+    const { data, error } = await supabase.rpc('delete_doctor_by_id', { input_id: doc.id });
+    if (error) {
+        console.error('Error deleting dependent user data:', error.message);
+    } else {
+        console.log('Dependent user deleted successfully');
+    }
+    return data
+}
+
+export const deleteDoctor = async (doc: Doctor): Promise<void> => {
+    const { data, error } = await supabase.rpc('delete_doctor_by_id', { input_id: doc.id });
+    if (error) {
+        console.error('Error doctor user data:', error.message);
+    } else {
+        console.log('Doctor deleted successfully');
+    }
+    return data
+}
+
+export const deleteMedication = async (medication: Medication): Promise<void> => {
+    const { data, error } = await supabase.rpc('delete_medication_by_id', { input_id: medication.id });
+    if (error) {
+        console.error('Error deleting medication data:', error.message);
+    } else {
+        console.log('Medication deleted successfully');
     }
     return data
 }
@@ -266,16 +296,13 @@ export const updateAppointment = async (appoint: Appointment): Promise<void> => 
     }
 };
 
-export const updateMedication = async (medication: Medication): Promise<void> => {
-        console.log(medication);
-        console.log(typeof medication.id);
-
-        const { error } = await supabase.rpc('update_medication', {id_input: medication.id, name_input: medication.name, prescription_input: medication.prescription});
-        if (error) {
-            console.error('Error inserting new medication data:', error.message);
-        } else {
-        console.log('Medication updated successfully');
-        Alert.alert("El medicamento fue modificado");
+export const updateDependentUser = async (depUser: DependentUser): Promise<void> => {
+    const { error } = await supabase.rpc("update_doctor", {});
+    if (error) {
+        console.error('Error inserting new dependent user data:', error.message);
+    } else {
+        console.log('Dependent user updated successfully');
+        Alert.alert("El usuario dependiente fue modificado");
     }
 };
 
@@ -286,5 +313,15 @@ export const updateDoctor = async (doc: Doctor): Promise<void> => {
     } else {
         console.log('Doctor updated successfully');
         Alert.alert("El doctor fue modificado");
+    }
+};
+
+export const updateMedication = async (medication: Medication): Promise<void> => {
+    const { error } = await supabase.rpc('update_medication', {id_input: medication.id, name_input: medication.name, prescription_input: medication.prescription,});
+    if (error) {
+        console.error('Error inserting new medication data:', error.message);
+    } else {
+        console.log('Medication updated successfully');
+        Alert.alert("El medicamento fue modificado");
     }
 };
