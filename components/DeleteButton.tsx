@@ -1,6 +1,7 @@
 import React from 'react'
 import {StyleSheet, View, Dimensions} from 'react-native'
 import {Button, ButtonProps} from 'react-native-elements'
+import {Dialog, Text, Button as PaperButton} from "react-native-paper";
 
 interface DeleteButtonProps extends ButtonProps {
     onPress: any;
@@ -9,6 +10,7 @@ interface DeleteButtonProps extends ButtonProps {
 const DeleteButton: React.FC<DeleteButtonProps> = ({ onPress }) => {
     const [visible, setVisible] = React.useState(false);
 
+    const hideDialog = () => setVisible(false);
     const showDialog = () => setVisible(true);
 
 
@@ -33,10 +35,30 @@ const DeleteButton: React.FC<DeleteButtonProps> = ({ onPress }) => {
                         marginBottom:100
                     }}
                     titleStyle={{ color: '#eef9ed' }}
-                    onPress={() => onPress}
+                    onPress={() => showDialog()}
                 />
             </View>
+        <Dialog style={styles.dialog}
+                visible={visible}
+                onDismiss={hideDialog}>
+            <Dialog.Content>
+                <Text variant="bodyMedium" style={[{textAlign: 'center'}, {fontSize: 18}]}>
+                    ¿Está seguro de que desea eliminar?
+                </Text>
+            </Dialog.Content>
+            <Dialog.Actions style={{ justifyContent: 'space-between' }}>
+                <PaperButton textColor="#2E5829FF"
+                             onPress={hideDialog}>
+                    Cancelar
+                </PaperButton>
+                <PaperButton textColor="#b6265d"
+                             onPress={onPress}>
+                    Eliminar
+                </PaperButton>
+            </Dialog.Actions>
+        </Dialog>
         </View>
+
     )
 }
 
@@ -47,5 +69,9 @@ const styles = StyleSheet.create({
     screen: {
         backgroundColor: "#E9F4E9FF",
         height: "100%",
+    },
+    dialog:{
+        backgroundColor: '#E9F4E9FF',
+
     }
 })
