@@ -47,7 +47,7 @@ export const getUserSession = async (auth_id: string) : Promise<DependentUser> =
 }
 
 // Obtiene el usuario id del ususario
-export const getUserId= async () : Promise<String> => {
+export const getUserId= async () : Promise<string> => {
     const {data, error} = await supabase.rpc("get_independent_user_id", )
     if (error) {
         console.error('Error inserting UserId data:', error.message);
@@ -78,7 +78,7 @@ export const addDoctor = async (doctor: Doctor): Promise<{ success: boolean; mes
         phone_input: doctor.phone,
         email_input: doctor.email,
         addresses_input: doctor.addresses,
-        user_id_input: doctor.id
+        user_id_input: doctor.user_id
     });
 
     if (error) {
@@ -154,7 +154,7 @@ export const getDoctor = async (doctor_id : string) : Promise<Doctor> => {
 // Obtiene los doctores por el id del usuario
 export const getDoctors = async () : Promise<Doctor[] | undefined> => {
     let to_return: Doctor[] =[]
-    const id:String = await getUserId();
+    const id:string = await getUserId();
     const {data, error} = await supabase.rpc("get_doctors", {user_id: id});
     if (error) {
         console.error('Error getting doctor data:', error.message);
@@ -169,6 +169,7 @@ export const getDoctors = async () : Promise<Doctor[] | undefined> => {
             phone: doctor.phone,
             email: doctor.email,
             addresses: doctor.addresses,
+            user_id: id,
             id:doctor.id
         });
     });
@@ -221,7 +222,9 @@ export const getAppointments = async () : Promise<Appointment[] | undefined> => 
         const user: (DependentUser) = await getUser(appoint.user);
         const doctor: (Doctor) = await getDoctor(appoint.doctor);
 
-        const new_appoint:Appointment =  {description: appoint.description,
+        const new_appoint:Appointment =  {
+            id: appoint.id,
+            description: appoint.description,
             date: appoint.date,
             user_name: user.first_name, // Suponiendo que name es el campo que quieres agregar
             doctor: doctor && doctor.name ? doctor.name.concat(" (especialidad: ").concat(doctor.specialty).concat(")") : 'Sin datos de doctor',
@@ -241,7 +244,6 @@ export const getAppointments = async () : Promise<Appointment[] | undefined> => 
 // borrar
 
 export const deleteAppointment = async (session_user_id:String) : Promise<Appointment[] | undefined> => {
-    console.log(session_user_id)
     const { data, error } = await supabase.rpc('delete_appointment_by_id', { user_id: session_user_id });
     if (error) {
         console.error('Error inserting users data:', error.message);
@@ -265,15 +267,13 @@ export const updateAppointment = async (appoint: Appointment): Promise<void> => 
 };
 
 export const updateMedication = async (medication: Medication): Promise<void> => {
-    try {
-        const { error } = await supabase.rpc('update_medication', {id_input: medication.id, name_input: medication.name, prescription_input: medication.prescription,});
+        console.log(medication);
+        console.log(typeof medication.id);
+
+        const { error } = await supabase.rpc('update_medication', {id_input: medication.id, name_input: medication.name, prescription_input: medication.prescription});
         if (error) {
-        }
-    } catch (error) {
-        if (error instanceof Error) {
             console.error('Error inserting new medication data:', error.message);
-        }
-    } finally {
+        } else {
         console.log('Medication updated successfully');
         Alert.alert("El medicamento fue modificado");
     }
