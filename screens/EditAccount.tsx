@@ -4,7 +4,7 @@ import {View, Alert, StyleSheet} from 'react-native'
 import {Button, Icon, Input} from 'react-native-elements'
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
-import StandardGreenButton from "../components/StandardGreenButton";
+import {useTranslation} from "react-i18next";
 
 
 
@@ -18,6 +18,7 @@ const EditAccount:React.FC<EditAccountProps> = ({navigation, route }) =>{
     const [last_name, setLastName] = useState('')
     const [avatar_url, setAvatarUrl] = useState('')
     const [dni, setDni] = useState(0)
+    const {t} = useTranslation();
 
     useEffect(() => {
         if (session) getProfile()
@@ -26,7 +27,7 @@ const EditAccount:React.FC<EditAccountProps> = ({navigation, route }) =>{
     async function getProfile() {
         try {
             setLoading(true)
-            if (!session?.user) throw new Error('No user on the session!')
+            if (!session?.user) throw new Error(t('warn7'))
 
             const { data, error } = await supabase.rpc('get_independent_user', { auth_id_input: session?.user.id });
 
@@ -59,7 +60,7 @@ const EditAccount:React.FC<EditAccountProps> = ({navigation, route }) =>{
     }) {
         try {
             setLoading(true)
-            if (!session?.user) throw new Error('No hay ningun usuario conectado!')
+            if (!session?.user) throw new Error(t('warn7'))
 
             const {error} = await supabase.rpc("update_independent_user", {first_name_input: first_name,
                 last_name_input: last_name,
@@ -75,7 +76,7 @@ const EditAccount:React.FC<EditAccountProps> = ({navigation, route }) =>{
             }
         } finally {
             setLoading(false)
-            Alert.alert('Los datos fueron actualizados', '',
+            Alert.alert(t('text6'), '',
                 [{text: 'Ok', onPress: () => navigation.navigate({name: 'Home', params: {session: session}})},]
             );
         }
@@ -86,11 +87,10 @@ const EditAccount:React.FC<EditAccountProps> = ({navigation, route }) =>{
             <View style={styles.window}>
                 <Icon name='person-circle-outline' iconStyle={{color: '#12230f', marginBottom: '10%'}} type='ionicon' size={90}/>
                 {/* aca iria una carga de archivo/imagen q tdv no sabemos hacer todo*/}
-                    <Input label="Nombre" value={first_name} onChangeText={(text) => setFirstName(text)}/>
-                    <Input label="Apellido" value={last_name} onChangeText={(text) => setLastName(text)}/>
-                {/*AGREGAR TAMBIEN LOS CAMPOS QUE SE CONSIDEREN NECESARIOS (EN LA FUNCION DE MOMENTO ESTA AVATAR URL Y DNI TMABN)*/}
+                    <Input label={t('name')} value={first_name} onChangeText={(text) => setFirstName(text)}/>
+                    <Input label={t('surname')} value={last_name} onChangeText={(text) => setLastName(text)}/>
                 <Button
-                    title="Guardar cambios"
+                    title={t('savec')}
                     loading={loading}
                     buttonStyle={{
                         backgroundColor: '#2E5829',

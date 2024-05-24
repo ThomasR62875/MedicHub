@@ -4,6 +4,7 @@ import {View, StyleSheet} from 'react-native'
 import {Button, Input} from 'react-native-elements'
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
+import {useTranslation} from "react-i18next";
 
 type EditMedicationProps = NativeStackScreenProps<RootStackParamList, 'EditMedication'>;
 
@@ -12,6 +13,7 @@ const EditMedication:React.FC<EditMedicationProps> = ({route }: any) =>{
     const [id, setId] = useState('')
     const [name, setName] = useState('')
     const [prescription, setPrescription] = useState('');
+    const {t} = useTranslation();
 
     useEffect(() => {
         if (session) getMed()
@@ -26,10 +28,10 @@ const EditMedication:React.FC<EditMedicationProps> = ({route }: any) =>{
     return(
         <View style={styles.container} >
             <View style={styles.window}>
-                <Input label="Nombre" value={name} onChangeText={(text) => setName(text)}/>
-                <Input label="Prescripción" value={prescription} onChangeText={(text) => setPrescription(text)}/>
+                <Input label={t('name')} value={name} onChangeText={(text) => setName(text)}/>
+                <Input label={t('prescription')} value={prescription} onChangeText={(text) => setPrescription(text)}/>
                 <Button
-                    title="Guardar cambios"
+                    title={t('savec')}
                     buttonStyle={{
                         backgroundColor: '#2E5829',
                         borderWidth: 2,

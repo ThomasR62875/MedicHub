@@ -40,5 +40,8 @@
   "text5" : "Registrate a MedicHub",
   "name" : "Nombre",
   "surname" : "Apellido",
-  "confirmp" : "Confirmar contraseña"
+  "confirmp" : "Confirmar contraseña",
+  "savec" : "Guardar cambios",
+  "warn7" : "No hay usuario en la sesión.",
+  "text6" : "Los datos fueron actualizados"
 }
