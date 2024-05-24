@@ -93,8 +93,8 @@ const Medication: React.FC = ({ navigation, route }: any) => {
                                 )
                             })
                         ) : (
-                            <View style={[styles.titleContainer]}>
-                                <Text style={styles.text}>{t('text16')}</Text>
+                            <View style={[styles.userContainer]}>
+                                <Text style={[styles.text, {textAlign: 'center'}]}>{t('text16')}</Text>
                             </View>
                         )
                     }
@@ -113,6 +113,17 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: "#e9f4e9",
       },
+    userContainer: {
+        backgroundColor: '#cbe4c9',
+        borderRadius: 20,
+        borderColor: '#cbe4c9',
+        borderWidth: 1,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        padding: 10,
+    },
     medsContainer: {
         marginTop: '5%',
         alignItems: 'center',
