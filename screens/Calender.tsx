@@ -5,12 +5,15 @@ import {Calendar} from "react-native-calendars";
 import TurnoContainer from "../components/TurnContainer";
 import {getAppointments} from "../lib/supabase";
 import {Button} from "react-native-elements";
+import {useTranslation} from "react-i18next";
 
 const Calender: React.FC = ({ navigation, route } : any) => {
     const {session} = route.params;
     const [appointments,setAppointments]= useState<Appointment[] | undefined>(undefined)
     const [loading, setLoading] = useState(true)
     const monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+    const {t} = useTranslation();
+
     useEffect(() => {
         if (session) {
             async function fetchData() {
@@ -71,7 +74,7 @@ const Calender: React.FC = ({ navigation, route } : any) => {
     return (
         <View style={styles.container}>
             <View style={styles.window}>
-                <Text style={styles.screenTitle}>Calendar</Text>
+                <Text style={styles.screenTitle}>{t('calendar')}</Text>
             </View >
             <View style={styles.calendarContainer}>
                 <Calendar style={{borderRadius: 10}}
@@ -97,13 +100,13 @@ const Calender: React.FC = ({ navigation, route } : any) => {
                         })) :  (
                             <View style={{alignItems: 'center', marginTop: 10}}>
                                 <View style={[styles.turnoContainer]}>
-                                    <Text style={styles.text}>No hay turnos para el {dateNormal}</Text>
+                                    <Text style={styles.text}>{t('text19')} {dateNormal}</Text>
                                 </View>
                             </View>
                         )}
                 <View style={{alignItems: 'center', marginTop: 10, marginLeft: "10%", marginBottom: "20%", alignContent: 'center'}}>
                     <Button
-                        title="Agregar turno"
+                        title={t('add')+t('appo')}
                         buttonStyle={{
                             backgroundColor: '#2E5829',
                             borderColor: 'white',

@@ -63,5 +63,7 @@
   "text16" : "No hay medicamentos",
   "text17" : "No hay doctores",
   "depu" : "Usuarios dependientes",
-  "text18" : "Aún no tienes usuarios dependientes"
+  "text18" : "Aún no tienes usuarios dependientes",
+  "text19" : "No hay turnos para el",
+  "appo" : " turno"
 }

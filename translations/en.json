@@ -63,6 +63,8 @@
   "text16" : "No medicine yet",
   "text17" : "No doctors yet",
   "depu" : "Dependent users",
-  "text18" : "No dependent users yet"
+  "text18" : "No dependent users yet",
+  "text19" : "No appointments ",
+  "appo" : " appointment"
 }
 
