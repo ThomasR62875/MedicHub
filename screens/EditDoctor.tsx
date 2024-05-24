@@ -22,13 +22,14 @@ const EditDoctor:React.FC<EditDoctorProps> = ({navigation, route }: any) =>{
     const [all_users, setAllUsers] = useState<DependentUser[] | undefined>(undefined)
     const [session_user_id, setSessionUserId] = useState('')
     const [user_id, setUserId] = useState('')
-
+    const [id, setId] = useState('')
 
     useEffect(() => {
         if (session) getDoc()
     }, [session])
 
     async function getDoc() {
+        setId(route.params.doc.id);
         setName(route.params.doc.name);
         setEmail(route.params.doc.email);
         setSpecialty(route.params.doc.specialty);
@@ -66,7 +67,7 @@ const EditDoctor:React.FC<EditDoctorProps> = ({navigation, route }: any) =>{
                         alignContent: 'center'
                     }}
                     titleStyle={{ color: '#eef9ed' }}
-                    onPress={() => updateDoctor({email, name, phone, addresses, specialty, user_id})}
+                    onPress={() => updateDoctor({name, specialty, phone, email, addresses, user_id, id})}
                 />
             </View>
         </View>
