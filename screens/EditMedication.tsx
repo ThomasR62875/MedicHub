@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import {addDoctor, updateMedication} from '../lib/supabase'
+import {addDoctor, addMedication, deleteMedication, updateMedication} from '../lib/supabase'
 import {View, StyleSheet, Alert} from 'react-native'
 import {Button, Input} from 'react-native-elements'
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
@@ -23,24 +23,24 @@ const EditMedication:React.FC<EditMedicationProps> = ({navigation, route }: any)
         setPrescription(route.params.medication.prescription);
     }
 
-    {/*const handleUpdateMedication = async () => {
-        const meds = {
-            id: id, name: name, prescription: prescription
-        };
+    const handleUpdateMedication= async () => {
 
-        const result = await updateMedication(meds);
+        const medication  = {id: id , name: name, prescription: prescription}
+
+        const result = await updateMedication(medication);
         if (result.success) {
             Alert.alert(
-                'El Doctor fue agregado',
+                'El Medicamento fue editado',
                 '',
                 [
-                    { text: 'Ok', onPress: () => navigation.navigate('Doctors', { session: session }) }
+                    { text: 'Ok', onPress: () => navigation.navigate('Medication', { session: session }) }
                 ]
             );
         } else {
             Alert.alert('Error', result.message || 'An unknown error occurred');
         }
-    };*/}
+
+    }
 
     return(
         <View style={styles.container} >
@@ -64,11 +64,7 @@ const EditMedication:React.FC<EditMedicationProps> = ({navigation, route }: any)
                         alignContent: 'center'
                     }}
                     titleStyle={{ color: '#EEF9ED' }}
-                    onPress={() => updateMedication( {
-                        id: id,
-                        name: name,
-                        prescription: prescription
-                    } )}
+                    onPress={() => handleUpdateMedication() }
                 />
             </View>
         </View>

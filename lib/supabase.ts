@@ -273,15 +273,21 @@ export const deleteDoctor = async (doc: Doctor): Promise<void> => {
     return data
 }
 
-export const deleteMedication = async (medication: Medication): Promise<void> => {
+export const deleteMedication = async (medication: Medication): Promise<{ success: boolean, message: string }> => {
     const { data, error } = await supabase.rpc('delete_medication_by_id', { input_id: medication.id });
     if (error) {
-        console.error('Error deleting medication data:', error.message);
+        return {
+            success: false,
+            message: `Error deleting medication: ${error.message}`,
+        }
     } else {
-        console.log('Medication deleted successfully');
+        return {
+            success: true,
+            message: 'Medication deleted successfully',
+        }
     }
-    return data
 }
+
 
 // editar
 
@@ -316,12 +322,44 @@ export const updateDoctor = async (doc: Doctor): Promise<void> => {
     }
 };
 
-export const updateMedication = async (medication: Medication): Promise<void> => {
+export const updateMedication = async (medication: Medication): Promise<{ success: boolean, message: string }> => {
     const { error } = await supabase.rpc('update_medication', {id_input: medication.id, name_input: medication.name, prescription_input: medication.prescription,});
     if (error) {
-        console.error('Error inserting new medication data:', error.message);
+        return {
+            success: false,
+            message: 'Error inserting new medication data',
+        }
     } else {
-        console.log('Medication updated successfully');
-        Alert.alert("El medicamento fue modificado");
+        return {
+            success: true,
+            message: 'Medication updated successfully',
+        }
     }
 };
+
+
+export async function getMedications(): Promise<Medication[] | undefined> {
+    let to_return: Medication[] | undefined = undefined
+
+    const {data: user_id,error: user_data_error} = await supabase.rpc('get_independent_user_id')
+    if(user_data_error)
+        throw new Error(user_data_error.message);
+
+    const {data, error} = await supabase.rpc("get_all_medications_by_user", {user_id: user_id});
+    if(error){
+        throw new Error(error.message);
+    }
+
+    to_return = [];
+    data.forEach((medication: Medication) => {
+        // @ts-ignore
+        to_return.push({
+            id: medication.id,
+            name: medication.name,
+            prescription: medication.prescription
+        });
+    });
+    return to_return;
+}
+
+

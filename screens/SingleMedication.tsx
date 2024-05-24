@@ -1,15 +1,34 @@
-import React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {StyleSheet, View, Text, Alert} from 'react-native';
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
 import {Icon} from "react-native-elements";
-import DeleteButton from "../components/DeleteButton";
-import {deleteMedication} from "../lib/supabase";
+import { deleteMedication } from "../lib/supabase";
+import StandardGreenButton from "../components/StandardGreenButton";
 
 type SingleMedicationProps = NativeStackScreenProps<RootStackParamList, 'SingleMedication'>
 
 
 const SingleMedication: React.FC<SingleMedicationProps> = ({ navigation, route }: any) => {
+
+    const handleDeleteMedication = async () => {
+        console.log("handleDeleteMedication");
+        const session =  route.params.session;
+        const medication =  route.params.meds;
+        const result = await deleteMedication(medication);
+        if (result.success) {
+            Alert.alert(
+                'El Medicamento fue eliminado correctamente',
+                '',
+                [
+                    { text: 'Ok', onPress: () => navigation.navigate('Medication', { session: session }) }
+                ]
+            );
+        } else {
+            Alert.alert('Error', result.message || 'An unknown error occurred');
+        }
+    };
+
     return (
         <View style={styles.container}>
             <View style={styles.titleContainer}>
@@ -35,7 +54,10 @@ const SingleMedication: React.FC<SingleMedicationProps> = ({ navigation, route }
                 <Text style={styles.value}>{route.params.meds.prescription}</Text>
             </View>
             <View>
-                <DeleteButton onPress={() => deleteMedication(route.params.meds.id)}></DeleteButton>
+                <StandardGreenButton
+                    title="Eliminar"
+                    onPress={handleDeleteMedication}
+                />
             </View>
         </View>
     );

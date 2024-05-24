@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import { supabase } from '../lib/supabase'
+import {getDoctors, supabase} from '../lib/supabase'
 import { StyleSheet, View, ScrollView,Text} from 'react-native'
+import { getMedications } from '../lib/supabase'
 import AddButton from "../components/AddButton";
 import MedicationButton from "../components/MedicationButton";
 import {Button} from "react-native-elements";
@@ -13,58 +14,26 @@ export type Medication = {
 }
 
 
-const Medication: React.FC = ({ navigation, route }: any) => {
+const Medication: React.FC= ({ navigation, route }: any) => {
     const session = route.params.session;
     const [loading, setLoading] = useState(true)
     const [medications,setMedications]= useState<Medication[] | undefined>(undefined)
 
     useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
-            if (session) {
-                setLoading(true);
-                getMedications().then(data => {
-                    setMedications(data);
-                }).catch(error => {
-                    console.error("Error al obtener los doctores: ", error);
-                }).finally(() => {
-                    setLoading(false);
-                });
+            async function fetchData() {
+                if (session) {
+                    setMedications( await getMedications());
+                }
             }
+            fetchData();
         });
 
         // Cleanup the listener on unmount
         return unsubscribe;
     }, [navigation, session]);
 
-    async function getMedications(): Promise<Medication[] | undefined> {
-        let to_return: Medication[] | undefined = undefined
 
-        const {data: user_id,error: user_data_error} = await supabase.rpc('get_independent_user_id')
-        if(user_data_error)
-            throw new Error(user_data_error.message);
-
-        const {data, error} = await supabase.rpc("get_all_medications_by_user", {user_id: user_id});
-        if(error){
-            throw new Error(error.message);
-        }
-
-        if (data.length == 0) {
-            setLoading(false)
-            return to_return;
-        }
-
-        to_return = [];
-        data.forEach((medication: Medication) => {
-            // @ts-ignore
-            to_return.push({
-                id: medication.id,
-                name: medication.name,
-                prescription: medication.prescription
-            });
-        });
-        setLoading(false)
-        return to_return;
-    }
     return(
         <View style={styles.container}>
             <View style={styles.window}>
