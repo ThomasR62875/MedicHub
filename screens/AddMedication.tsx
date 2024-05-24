@@ -1,32 +1,22 @@
 import React, {useEffect, useState} from 'react';
-import {
-    View,
-    Alert,
-    StyleSheet,
-    TouchableWithoutFeedback,
-    Keyboard,
-    KeyboardAvoidingView,
-    ScrollView
-} from 'react-native';
-import {addMedication, supabase} from "../lib/supabase";
+import {View, Alert, StyleSheet, TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView, ScrollView} from 'react-native';
+import {addMedication} from "../lib/supabase";
 import {Input} from "react-native-elements";
 import StandardGreenButton from "../components/StandardGreenButton";
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
 import { Medication } from './Medication';
-
+import {useTranslation} from "react-i18next";
 
 type AddMedicationProps = NativeStackScreenProps<RootStackParamList, 'AddMedication'>
-
-
 
 const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
     const {session} = route.params;
     const [name, setName] = useState('')
     const [prescription, setPrescription] = useState('');
-
     const [nameErrorMessage, setNameErrorMessage] = useState('')
     const [prescriptionErrorMessage, setPrescriptionErrorMessage] = useState('');
+    const {t} = useTranslation();
 
     useEffect(() => {
         if (
@@ -49,12 +39,8 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
 
         const result = await addMedication(medication);
         if (result.success) {
-            Alert.alert(
-                'El Medicamento fue agregado',
-                '',
-                [
-                    { text: 'Ok', onPress: () => navigation.navigate('Medication', { session: session }) }
-                ]
+            Alert.alert(t('text11'), '',
+                [{ text: 'Ok', onPress: () => navigation.navigate('Medication', { session: session })}]
             );
         } else {
             Alert.alert('Error', result.message || 'An unknown error occurred');
@@ -64,14 +50,14 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
 
     const validateName = (value: string) => {
         if (value.trim() === '') {
-            setNameErrorMessage('Debe ingresar el nombre del medicamento.');
+            setNameErrorMessage(t('warn1'));
         } else {
             setNameErrorMessage('');
         }
     };
     const validatePrescription = (value: string) => {
         if (value.trim() === '') {
-            setPrescriptionErrorMessage('Debe ingresar la prescripción.');
+            setPrescriptionErrorMessage(t('warn11'));
         } else {
             setPrescriptionErrorMessage('');
         }
@@ -91,7 +77,7 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
                                 validateName(text)
                             }}
                             value={name}
-                            placeholder="Nombre"
+                            placeholder={t('name')}
                             autoCapitalize={'none'}
                             errorStyle={{ color: 'red' }}
                             errorMessage={nameErrorMessage}
@@ -105,7 +91,7 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
                                 validatePrescription(text)
                             }}
                             value={prescription}
-                            placeholder="Prescripción"
+                            placeholder={t('prescription')}
                             autoCapitalize={'none'}
                             errorStyle={{ color: 'red' }}
                             errorMessage={nameErrorMessage}
@@ -113,7 +99,7 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
                     </View>
                     <View style={styles.verticallySpaced}>
                         <StandardGreenButton
-                            title="Agregar"
+                            title={t('add')}
                             disabled={isButtonDisabled}
                             onPress={() => handleAddMedication()}
                         />

@@ -1,16 +1,16 @@
 import React, {useEffect, useState} from 'react'
-import {addAppointment, addDoctor, getAllDoctorsByUser, getAllUsers, getUserId} from '../lib/supabase'
+import {addAppointment, getAllDoctorsByUser, getAllUsers, getUserId} from '../lib/supabase'
 import {SafeAreaView, StyleSheet, Alert, View, Keyboard, TouchableWithoutFeedback} from 'react-native'
 import {Input} from "react-native-elements";
 import dayjs from 'dayjs';
 import StandardGreenButton from "../components/StandardGreenButton";
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
-import {Appointment} from "./Appointments";
 import {DependentUser} from "./DependentUsers"
 import {Doctor} from "./Doctors";
 import RNPickerSelect from 'react-native-picker-select';
 import DatePicker from 'react-native-modern-datepicker';
+import {useTranslation} from "react-i18next";
 
 type AddAppointmentProps = NativeStackScreenProps<RootStackParamList, 'AddAppointment'>
 
@@ -28,10 +28,11 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
 
     const [descriptionErrorMessage, setDescriptionErrorMessage] = useState('')
     const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(true);
+    const {t} = useTranslation();
 
     const validateDescription = (value: string) => {
         if (value.trim() === '') {
-            setDescriptionErrorMessage('Debe ingresar la descripción del turno.');
+            setDescriptionErrorMessage(t('text7'));
         } else {
             setDescriptionErrorMessage('');
         }
@@ -68,7 +69,7 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
         const result = await addAppointment(appointment);
         if (result.success) {
             Alert.alert(
-                'El turno fue agregado',
+                t('text8'),
                 '',
                 [
                     { text: 'Ok', onPress: () => navigation.navigate('Appointments', { session: session }) }
@@ -106,7 +107,7 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
                 <Input
                     leftIcon={{ type: 'font-awesome', name: 'book' }}
                     style={styles.verticallySpaced}
-                    placeholder="Descripción"
+                    placeholder={t('description')}
                     value={description}
                     onChangeText={(text) => {
                         setDescription(text);
@@ -117,7 +118,7 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
                 />
                 <View style={styles.pickerStyle}>
                     <RNPickerSelect
-                        placeholder={{ label: 'Médico', value: null }}
+                        placeholder={{ label: t('doc'), value: null }}
                         items={doctorsList}
                         onValueChange={(value) => setDoctor(value)}
                         style={{ ...pickerSelectStyles }}
@@ -126,7 +127,7 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
                 </View>
                 <View style={styles.pickerStyle}>
                     <RNPickerSelect
-                        placeholder={{ label: 'Usuario', value: null }}
+                        placeholder={{ label: t('user'), value: null }}
                         items={userList}
                         onValueChange={(value) => setUserId(value)}
                         style={{ ...pickerSelectStyles }}
@@ -134,7 +135,7 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
                     />
                 </View>
                 <StandardGreenButton
-                    title="Confirmar"
+                    title={t('confirm')}
                     disabled={loading}
                     onPress={handleAddAppointment}
                 />
@@ -190,6 +191,6 @@ const pickerSelectStyles = StyleSheet.create({
         borderColor: 'purple',
         borderRadius: 8,
         color: 'black',
-        paddingRight: 30, // to ensure the text is never behind the icon
+        paddingRight: 30,
     },
 });

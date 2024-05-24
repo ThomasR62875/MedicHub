@@ -33,7 +33,7 @@
   "logout" : "Cerrar sesión",
   "warn1" : "Debe ingresar su nombre.",
   "warn2" : "Debe ingresar su apellido.",
-  "warn3" : "Debe ingresar su DNI. Ej: 12345678",
+  "warn3" : "Debe ingresar su DNI. Ej: 12345678.",
   "warn4" : "Dirección de mail inválida. Ej: email@address.com",
   "warn5": "La contraseña ingresada es distinta.",
   "warn6" : "¡Revise su bandeja de entrada para verificar el mail!",
@@ -43,5 +43,16 @@
   "confirmp" : "Confirmar contraseña",
   "savec" : "Guardar cambios",
   "warn7" : "No hay usuario en la sesión.",
-  "text6" : "Los datos fueron actualizados"
+  "text6" : "Los datos fueron actualizados",
+  "text7" : "Debe ingresar la descripción del turno.",
+  "text8" : "El turno fue agregado.",
+  "confirm" : "Confirmar",
+  "text9" : "El Usuario fue agregado",
+  "newu" : "Nuevo usuario",
+  "add" : "Agregar",
+  "warn9" : "Debe seleccionar la especialidad del médico.",
+  "warn10" : "Debe seleccionar el usuario.",
+  "text10" : "El Doctor fue agregado",
+  "text11" : "El medicamento fue agregado",
+  "warn11" : "Debe ingresar la prescripción."
 }
