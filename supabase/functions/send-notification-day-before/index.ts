@@ -2,20 +2,31 @@
 // https://deno.land/manual/getting_started/setup_your_environment
 // This enables autocomplete, go to definition, etc.
 
+import { createClient } from "npm:@supabase/supabase-js@^2.42.0";
+
 
 console.log("Hello from Functions!")
+
+const supabase = createClient(
+    Deno.env.get('SUPABASE_URL')!,
+    Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
+)
+
 
 Deno.serve(async (req) => {
   const { name } = await req.json()
   console.log("Sending notification day", name)
-  const data = {
-    message: `Hello ${name}!`,
-  }
+  const { data } = await supabase
+      .from('independent_users')
+      .select('first_name')
+
+console.log(data)
   return new Response(
     JSON.stringify(data),
     { headers: { "Content-Type": "application/json" } },
   )
 })
+
 
 /* To invoke locally:
 
