@@ -46,7 +46,7 @@ const SingleAppointment: React.FC<SingleAppointmentProps> = ({ navigation, route
                 <Text style={styles.value}>{route.params.appointment.doctor}</Text>
             </View>
             <View style={styles.detailRow}>
-                <Text style={styles.label}>{t('descritpion')}:</Text>
+                <Text style={styles.label}>{t('description')}:</Text>
                 <Text style={styles.value}>{route.params.appointment.description}</Text>
             </View>
         </View>
