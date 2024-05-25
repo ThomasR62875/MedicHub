@@ -3,6 +3,7 @@ import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {Icon} from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
 import {Medication} from "../screens/Medication";
+import {useTranslation} from "react-i18next";
 
 interface MedicationButtonProps {
     onPress: any;
@@ -12,15 +13,17 @@ interface MedicationButtonProps {
 
 const MedicationButton: React.FC<MedicationButtonProps> = ( { onPress, styleExterior, meds }) => {
     const navigation = useNavigation();
+    const {t} = useTranslation();
+
     return (
         <TouchableOpacity style={styles.container} onPress={onPress}>
             <View style={styleExterior}>
                 <View style={styles.infoRow}>
-                    <Text style={styles.label}>Nombre:</Text>
+                    <Text style={styles.label}>{t('medicine')}:</Text>
                     <Text>{meds.name}</Text>
                 </View>
                 <View style={styles.infoRow}>
-                    <Text style={styles.label}>Prescripción:</Text>
+                    <Text style={styles.label}>{t('prescription')}:</Text>
                     <Text>{meds.prescription}</Text>
                     <View style={{ width: 30 }} />
                 </View>

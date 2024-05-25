@@ -12,11 +12,9 @@ const Home: React.FC = ({navigation, route}: any) => {
     const [first_name, setFirstName] = useState('')
     const [loading, setLoading] = useState(true)
     const [appointments,setAppointments]= useState<Appointment[] | undefined>(undefined)
-    const imgDoc = require('../assets/doc.png');
-    const imgTurno = require('../assets/calendario.png');
-    const imgMed = require('../assets/meds.png');
     let turno1, turno2 : Appointment | null = null;
     let date1, date2 : Date | null = null;
+    const {t} = useTranslation();
 
     //se tiene q orderna por fecha appointments todo
 
@@ -96,7 +94,6 @@ const Home: React.FC = ({navigation, route}: any) => {
         setAppointments(to_return)
     }
 
-    const {t} = useTranslation();
     return (
             <View style={styles.container}>
                 <View style={styles.centerContent}>
@@ -106,7 +103,7 @@ const Home: React.FC = ({navigation, route}: any) => {
                                    onPress={() => navigation.navigate({name: 'Appointments', params: {session: session}})}>
                             <View style={styles.turnoContainer}>
                                 <View style={styles.card}>
-                                    <Text style={[styles.titleText, {justifyContent:'center'}]}>Proximos turnos</Text>
+                                    <Text style={[styles.titleText, {justifyContent:'center'}]}>{t('text12')}</Text>
                                 </View>
                                 {turno1 && date1 ? (
                                         <View style={{padding: "2%"}}>
@@ -125,8 +122,8 @@ const Home: React.FC = ({navigation, route}: any) => {
                                         </View>
                                         ) : (
                                         <View style={styles.turnoContainer}>
-                                            <Text style={styles.text}>No hay turnos</Text>
-                                            <Text style={[styles.text, {fontStyle: 'italic'}]}>Anda al calendario para crear tu primer turno</Text>
+                                            <Text style={styles.text}>{t('text13')}</Text>
+                                            <Text style={[styles.text, {fontStyle: 'italic'}]}>{t('text14')}</Text>
                                         </View>
                                 )}
                             </View>
@@ -134,7 +131,7 @@ const Home: React.FC = ({navigation, route}: any) => {
                         <Pressable style={{marginTop: "5%"}}>
                             <View style={styles.turnoContainer}>
                                 <View style={styles.card}>
-                                    <Text style={[styles.titleText, {justifyContent:'center'}]}>Turnos recomendados</Text>
+                                    <Text style={[styles.titleText, {justifyContent:'center'}]}>{t('text15')}</Text>
                                 </View>
                                 <Text style={[styles.text]}>Esperar la aplicación de la IA porfavor :)</Text>
                             </View>
@@ -145,7 +142,6 @@ const Home: React.FC = ({navigation, route}: any) => {
     );
 }
 
-const screenHeight = Dimensions.get('window').height;
 const styles = StyleSheet.create({
     container: {
         backgroundColor: "#E9F4E9",

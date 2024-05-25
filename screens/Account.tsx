@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import { getUser, getUserId, supabase } from '../lib/supabase'
-import {StyleSheet, View, Alert, Modal, ScrollView, Dimensions} from 'react-native'
+import {StyleSheet, View, ScrollView} from 'react-native'
 import {Button, Icon} from 'react-native-elements'
 import LanguageButton from '../components/LanguageButton'
 import { DependentUser } from './DependentUsers';
 import {Dialog, Text, Button as PaperButton} from "react-native-paper";
+import {useTranslation} from "react-i18next";
 
 const Account: React.FC = ({ navigation, route } : any) => {
     const {session} = route.params;
@@ -12,8 +13,8 @@ const Account: React.FC = ({ navigation, route } : any) => {
     const [last_name, setLastName] = useState('')
     const [dni, setDni] = useState(0)
     const [avatar_url, setAvatarUrl] = useState('')
-    const screenHeight = Dimensions.get('window').height;
     const [visible, setVisible] = React.useState(false);
+    const {t} = useTranslation();
 
     useEffect(() => {
         if (session) {
@@ -34,7 +35,7 @@ const Account: React.FC = ({ navigation, route } : any) => {
         <View style={styles.screen}>
             <ScrollView>
                 <View style={styles.topContent}>
-                    <Text style={styles.screenTitle}>Perfil</Text>
+                    <Text style={styles.screenTitle}>{t('account')}</Text>
                 </View>
                 <View style={styles.main}>
                     <View style={styles.iconContainer}>
@@ -64,7 +65,7 @@ const Account: React.FC = ({ navigation, route } : any) => {
                     <Text style={styles.title}>Mail:</Text>
                     <Text style={styles.text2}>{session?.user.email}</Text>
                     <View style={{marginTop: 5}}/>
-                    <Text style={styles.title}>DNI:</Text>
+                    <Text style={styles.title}>{t('id')}:</Text>
                     <Text style={styles.text2}>{dni}</Text>
                     <View style={{marginTop: 5}}>
                         <LanguageButton/>
@@ -72,7 +73,7 @@ const Account: React.FC = ({ navigation, route } : any) => {
                 </View>
                 <View style={{alignItems: 'center', width: 'auto'}}>
                     <Button
-                        title="Mis doctores"
+                        title={t('mdocs')}
                         icon={{
                             name: 'doctor',
                             type: 'material-community',
@@ -88,10 +89,9 @@ const Account: React.FC = ({ navigation, route } : any) => {
                             marginVertical: 2,
 
                         }}
-                        onPress={() => navigation.navigate({name: 'Doctors', params: {session: session}})}
-                    />
+                        onPress={() => navigation.navigate({name: 'Doctors', params: {session: session}})}/>
                     <Button
-                        title="Mis turnos"
+                        title={t('mappointments')}
                         icon={{
                             name: 'archive-clock',
                             type: 'material-community',
@@ -107,10 +107,9 @@ const Account: React.FC = ({ navigation, route } : any) => {
                             marginVertical: 2,
 
                         }}
-                        onPress={() => navigation.navigate({name: 'Appointments', params: {session: session}})}
-                    />
+                        onPress={() => navigation.navigate({name: 'Appointments', params: {session: session}})}/>
                     <Button
-                        title="Mis vacunas"
+                        title={t('mvaccines')}
                         icon={{
                             name: 'needle',
                             type: 'material-community',
@@ -124,10 +123,9 @@ const Account: React.FC = ({ navigation, route } : any) => {
                             width: '80%',
                             marginHorizontal: 50,
                             marginVertical: 2,
-                        }}
-                    />
+                        }}/>
                     <Button
-                        title="Mis medicamentos"
+                        title={t('mmedicine')}
                         icon={{
                             name: 'pill',
                             type: 'material-community',
@@ -142,10 +140,9 @@ const Account: React.FC = ({ navigation, route } : any) => {
                             marginHorizontal: 50,
                             marginVertical: 2,
                         }}
-                        onPress={() => navigation.navigate({name: 'Medication', params: {session: session}})}
-                    />
+                        onPress={() => navigation.navigate({name: 'Medication', params: {session: session}})}/>
                     <Button
-                        title="Mis archivos"
+                        title={t('mfiles')}
                         icon={{
                             name: 'archive',
                             type: 'material-community',
@@ -159,10 +156,9 @@ const Account: React.FC = ({ navigation, route } : any) => {
                             width: '80%',
                             marginHorizontal: 50,
                             marginVertical: 2,
-                        }}
-                    />
+                        }}/>
                     <Button
-                        title="Cerrar sesión"
+                        title={t('logout')}
                         buttonStyle={{
                             backgroundColor: '#2E5829',
                             borderWidth: 2,
@@ -179,9 +175,27 @@ const Account: React.FC = ({ navigation, route } : any) => {
                             marginBottom:100
                         }}
                         titleStyle={{ color: '#eef9ed' }}
-                        onPress={()=>showDialog()}
-                    />
-                    </View>
+                        onPress={()=>showDialog()}/>
+                </View>
+                <Dialog style={{ backgroundColor: '#E9F4E9FF' }}
+                    visible={visible}
+                    onDismiss={hideDialog}>
+                    <Dialog.Content>
+                        <Text variant="bodyMedium" style={[{textAlign: 'center'}, {fontSize: 18}]}>
+                            ¿Está seguro de que desea cerrar sesión?
+                        </Text>
+                    </Dialog.Content>
+                    <Dialog.Actions style={{ justifyContent: 'space-between' }}>
+                        <PaperButton textColor="#2E5829FF"
+                            onPress={hideDialog}>
+                            Cancelar
+                        </PaperButton>
+                        <PaperButton textColor="#b6265d"
+                            onPress={() => supabase.auth.signOut()}>
+                            Cerrar sesión
+                        </PaperButton>
+                    </Dialog.Actions>
+                </Dialog>
             </ScrollView>
         </View>
     )
@@ -307,6 +321,4 @@ const styles = StyleSheet.create({
         width: 225, // Ancho deseado para todos los botones
         marginVertical: 10,
     }
-
-
 })

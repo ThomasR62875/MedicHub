@@ -1,18 +1,20 @@
 import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
-import {Doctor} from "./Doctors";
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
 import {Icon} from "react-native-elements";
+import {useTranslation} from "react-i18next";
 
 type SingleDoctorProps = NativeStackScreenProps<RootStackParamList, 'SingleDoctor'>
 
 
 const SingleDoctor: React.FC<SingleDoctorProps> = ({ navigation, route }: any) => {
+    const {t} = useTranslation();
+
     return (
         <View style={styles.container}>
             <View style={styles.titleContainer}>
-                <Text style={styles.titleText}>Detalles del Doctor</Text>
+                <Text style={styles.titleText}>{t('text3')}</Text>
             </View>
             <View style={styles.addContainer}>
                 <Icon
@@ -25,11 +27,11 @@ const SingleDoctor: React.FC<SingleDoctorProps> = ({ navigation, route }: any) =
                 />
             </View>
             <View style={styles.detailRow}>
-                <Text style={styles.label}>Nombre:</Text>
+                <Text style={styles.label}>{t('doc')}:</Text>
                 <Text style={styles.value}>{route.params.doc.name}</Text>
             </View>
             <View style={styles.detailRow}>
-                <Text style={styles.label}>Especialidad:</Text>
+                <Text style={styles.label}>{t('specialty')}:</Text>
                 <Text style={styles.value}>{route.params.doc.specialty}</Text>
             </View>
             <View style={styles.detailRow}>
@@ -37,11 +39,11 @@ const SingleDoctor: React.FC<SingleDoctorProps> = ({ navigation, route }: any) =
                 <Text style={styles.value}>{route.params.doc.email}</Text>
             </View>
             <View style={styles.detailRow}>
-                <Text style={styles.label}>Teléfono:</Text>
+                <Text style={styles.label}>{t('phone')}:</Text>
                 <Text style={styles.value}>{route.params.doc.phone}</Text>
             </View>
             <View style={styles.detailRow}>
-                <Text style={styles.label}>Dirección:</Text>
+                <Text style={styles.label}>{t('address')}:</Text>
                 <Text style={styles.value}>{route.params.doc.addresses}</Text>
             </View>
         </View>

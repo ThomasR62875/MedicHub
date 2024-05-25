@@ -4,6 +4,7 @@ import {View, StyleSheet, Alert, TouchableWithoutFeedback, Keyboard} from 'react
 import {Button, Input} from 'react-native-elements'
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
+import {useTranslation} from "react-i18next";
 
 type EditMedicationProps = NativeStackScreenProps<RootStackParamList, 'EditMedication'>;
 
@@ -12,6 +13,7 @@ const EditMedication:React.FC<EditMedicationProps> = ({navigation, route }: any)
     const [id, setId] = useState('')
     const [name, setName] = useState('')
     const [prescription, setPrescription] = useState('');
+    const {t} = useTranslation();
 
     const [nameErrorMessage, setNameErrorMessage] = useState('')
     const [prescriptionErrorMessage, setPrescriptionErrorMessage] = useState('');
@@ -79,6 +81,33 @@ const EditMedication:React.FC<EditMedicationProps> = ({navigation, route }: any)
 
     return(
         <View style={styles.container} >
+            <View style={styles.window}>
+                <Input label={t('name')} value={name} onChangeText={(text) => setName(text)}/>
+                <Input label={t('prescription')} value={prescription} onChangeText={(text) => setPrescription(text)}/>
+                <Button
+                    title={t('savec')}
+                    buttonStyle={{
+                        backgroundColor: '#2E5829',
+                        borderWidth: 2,
+                        borderColor: 'white',
+                        borderRadius: 30,
+                        minHeight: 50
+                    }}
+                    containerStyle={{
+                        width: 200,
+                        marginHorizontal: 50,
+                        marginVertical: 10,
+                        marginTop: 40,
+                        alignContent: 'center'
+                    }}
+                    titleStyle={{ color: '#EEF9ED' }}
+                    onPress={() => updateMedication( {
+                        id: id,
+                        name: name,
+                        prescription: prescription
+                    } )}
+                />
+            </View>
             <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
                 <View style={styles.window}>
                     <Input

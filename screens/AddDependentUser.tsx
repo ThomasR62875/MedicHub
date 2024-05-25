@@ -1,13 +1,13 @@
 import React, {useState} from 'react';
-import {SafeAreaView, Alert, StyleSheet, View,} from 'react-native';
-import {addDependentUser, addDoctor} from "../lib/supabase";
+import {Alert, StyleSheet, View,} from 'react-native';
+import {addDependentUser} from "../lib/supabase";
 import {Button, Icon, Input, Text} from "react-native-elements";
-import { Image } from 'react-native';
+import {Image} from 'react-native';
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
+import {useTranslation} from "react-i18next";
 
 type AddDependentUserProps = NativeStackScreenProps<RootStackParamList, 'AddDependentUser'>
-
 
 const AddDependentUser:React.FC<AddDependentUserProps> = ({navigation, route}) => {
     const session = route.params.session;
@@ -16,11 +16,12 @@ const AddDependentUser:React.FC<AddDependentUserProps> = ({navigation, route}) =
     const [dni,setDni]  = useState('')
     const [loading,setLoading]= useState(false)
     const [DNIErrorMessage, setDNIErrorMessage] = useState<string>('');
-    
+    const {t} = useTranslation();
+
     const validateDNI = (value: string) => {
         const containsLetterOrSymbol = /([a-zA-Z!@#$%^&*()_+{}\[\]:;<>,.?\/\\|'"`~-])/.test(value);
         if (containsLetterOrSymbol) {
-            setDNIErrorMessage('Debe ingresar su DNI. Ej: 12345678');
+            setDNIErrorMessage(t('warn3'));
         } else {
             setDNIErrorMessage('');
         }
@@ -32,12 +33,8 @@ const AddDependentUser:React.FC<AddDependentUserProps> = ({navigation, route}) =
 
         const result = await addDependentUser(dep_user);
         if (result.success) {
-            Alert.alert(
-                'El Usuario fue agregado',
-                '',
-                [
-                    { text: 'Ok', onPress: () => navigation.navigate('DependentUsers', { session: session }) }
-                ]
+            Alert.alert(t('text9'), '',
+                [{ text: 'Ok', onPress: () => navigation.navigate('DependentUsers', { session: session }) }]
             );
         } else {
             Alert.alert('Error', result.message || 'An unknown error occurred');
@@ -47,31 +44,31 @@ const AddDependentUser:React.FC<AddDependentUserProps> = ({navigation, route}) =
     return (
         <View style={styles.container}>
             <View style={styles.window}>
-            <Text style={styles.screenTitle}>Nuevo Usuario</Text>
+            <Text style={styles.screenTitle}>{t('newu')}</Text>
                 <Input
-                    label="Nombre"
+                    label={t('name')}
                     labelStyle={styles.colorLable}
                     leftIcon={<Icon type="material-icons" name="person" color={styles.colorLable.color}/>}
                     onChangeText={(text) => setFirstName(text)}
                     value={firstName}
-                    placeholder="Nombre"
+                    placeholder={t('name')}
                     autoCapitalize={'none'}
                     inputStyle={{color: '#407738', marginLeft: 10}}
                     placeholderTextColor={"#407738"}
                 />
                 <Input
-                    label="Apellido"
+                    label={t('surname')}
                     labelStyle={styles.colorLable}
                     leftIcon={<Icon type="material-icons" name="person" color={styles.colorLable.color}/>}
                     onChangeText={(text) => setLastName(text)}
                     value={lastName}
-                    placeholder="Apellido"
+                    placeholder={t('surname')}
                     autoCapitalize={'none'}
                     inputStyle={{color: '#407738', marginLeft: 10}}
                     placeholderTextColor={"#407738"}
                 />
                 <Input
-                    label="DNI"
+                    label={t('id')}
                     labelStyle={styles.colorLable}
                     leftIcon={<Image source={require('../assets/fingerprint.png')} style={styles.icon} />}
                     onChangeText={(text) => {
@@ -79,7 +76,7 @@ const AddDependentUser:React.FC<AddDependentUserProps> = ({navigation, route}) =
                         validateDNI(text);
                     }}
                     value={dni}
-                    placeholder="DNI"
+                    placeholder={t('id')}
                     autoCapitalize={'none'}
                     placeholderTextColor={"#407738"}
                     inputStyle={{color: '#407738', marginLeft: 10}}
@@ -87,7 +84,7 @@ const AddDependentUser:React.FC<AddDependentUserProps> = ({navigation, route}) =
                     errorMessage={DNIErrorMessage}
                 />
                 <Button
-                    title="Agregar"
+                    title={t('add')}
                     buttonStyle={{
                         backgroundColor: '#2E5829',
                         borderWidth: 2,
