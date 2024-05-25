@@ -1,14 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import {View, Text, StyleSheet, Alert, Image, Pressable, Dimensions, ScrollView} from 'react-native';
 import {Button, Icon} from "react-native-elements";
-import {Card} from "react-native-elements"
 import {supabase} from "../lib/supabase";
-import {NativeStackScreenProps} from "@react-navigation/native-stack";
-import {RootStackParamList} from "../App";
 import {Appointment} from "./Appointments";
 import TurnoContainer from "../components/TurnContainer";
 // @ts-ignore
-import Logo from "../assets/icon.png";
 import {useTranslation} from "react-i18next";
 
 const Home: React.FC = ({navigation, route}: any) => {
@@ -79,6 +75,7 @@ const Home: React.FC = ({navigation, route}: any) => {
                             throw user_error;
                         }
                         to_return.push({
+                            id: appoint.id,
                             description: appoint.description,
                             date: appoint.date,
                             user_name: user_data.first_name, // Suponiendo que name es el campo que quieres agregar
@@ -104,7 +101,7 @@ const Home: React.FC = ({navigation, route}: any) => {
             <View style={styles.container}>
                 <View style={styles.centerContent}>
                     <ScrollView style={{width:'85%', marginLeft: "5%",  marginRight: "5%", height: "100%"}}>
-                        <Text style={styles.screenTitle}>{t('welcome')} {first_name}!</Text>
+                        <Text style={styles.screenTitle}>{t('welcome nuevo')} {first_name}!</Text>
                         <Pressable style={{marginTop: "3%"}}
                                    onPress={() => navigation.navigate({name: 'Appointments', params: {session: session}})}>
                             <View style={styles.turnoContainer}>

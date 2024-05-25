@@ -1,23 +1,22 @@
 import React, {useEffect, useState} from 'react'
-import {addAppointment, addDoctor, getAllDoctorsByUser, getAllUsers, getUserId} from '../lib/supabase'
+import {addAppointment, getAllDoctorsByUser, getAllUsers, getUserId} from '../lib/supabase'
 import {SafeAreaView, StyleSheet, Alert, View, Keyboard, TouchableWithoutFeedback} from 'react-native'
 import {Input} from "react-native-elements";
 import dayjs from 'dayjs';
 import StandardGreenButton from "../components/StandardGreenButton";
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
-import {Appointment} from "./Appointments";
 import {DependentUser} from "./DependentUsers"
 import {Doctor} from "./Doctors";
 import RNPickerSelect from 'react-native-picker-select';
-import DatePicker from 'react-native-modern-datepicker';
+import DatePicker from 'react-native-date-picker';
 
 type AddAppointmentProps = NativeStackScreenProps<RootStackParamList, 'AddAppointment'>
 
 
 const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) => {
     const {session} = route.params;
-    const [date, setDate] = useState(dayjs())
+    const [date, setDate] = useState(new Date())
     const [loading, setLoading] = useState(false)
     const [description, setDescription] = useState('')
     const [doctor, setDoctor] = useState('')
@@ -27,7 +26,6 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
     const [doctors, setDoctors] = useState<Doctor[]>([])
 
     const [descriptionErrorMessage, setDescriptionErrorMessage] = useState('')
-    const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(true);
 
     const validateDescription = (value: string) => {
         if (value.trim() === '') {
@@ -63,7 +61,7 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
 
     const handleAddAppointment = async () => {
         const appointment = {
-            date: date.toDate(), description: description, user_name: '',doctor: doctor, user_id: user_id, id: ''};
+            date: date, description: description, user_name: '',doctor: doctor, user_id: user_id, id: ''};
 
         const result = await addAppointment(appointment);
         if (result.success) {
@@ -92,16 +90,16 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
         <View style={styles.containerTotal}>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
                 <SafeAreaView style={styles.container}>
-                <DatePicker
-                    locale={'ES'}
-                    options={{
-                        mainColor: '#000',
-                        textSecondaryColor: '#000',
-                        borderColor: '#000',
-                        backgroundColor: '#e9f4e9',
-                    }}
-                    // date={date}
-                    // onSelectedChange={(date: React.SetStateAction<dayjs.Dayjs>) => setDate(date)}
+                <DatePicker  date={date} onDateChange={setDate}
+                    // locale={'ES'}
+                    // options={{
+                    //     mainColor: '#000',
+                    //     textSecondaryColor: '#000',
+                    //     borderColor: '#000',
+                    //     backgroundColor: '#e9f4e9',
+                    // }}
+                    // // date={date}
+                    // // onSelectedChange={(date: React.SetStateAction<dayjs.Dayjs>) => setDate(date)}
                 />
                 <Input
                     leftIcon={{ type: 'font-awesome', name: 'book' }}
