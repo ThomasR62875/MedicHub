@@ -15,7 +15,6 @@ import { DatePickerModal } from 'react-native-paper-dates';
 import { TimePickerModal } from 'react-native-paper-dates';
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { Button } from 'react-native-paper';
-import { es } from 'date-fns/locale';
 //
 import DatePicker from 'react-native-date-picker';
 
@@ -71,7 +70,7 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
 
     const handleAddAppointment = async () => {
         const appointment = {
-            date: date.toDate(), description: description, user_name: '',doctor: doctor, user_id: user_id, id: ''};
+            date: date, description: description, user_name: '',doctor: doctor, user_id: user_id, id: ''};
 
         const result = await addAppointment(appointment);
         if (result.success) {
@@ -106,7 +105,7 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
     }, [setOpen]);
 
     const onConfirmSingle = React.useCallback(
-        (params) => {
+        (params:any) => {
             setOpen(false);
             setDate2(params.date);
         },
@@ -119,7 +118,7 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
     }, [setVisible])
 
     const onConfirm = React.useCallback(
-        ({ hours, minutes }) => {
+        ({ hours, minutes }:any) => {
             setVisible(false);
             console.log({ hours, minutes });
         },

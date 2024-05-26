@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react'
 import {getDoctors, supabase} from '../lib/supabase'
 import { StyleSheet, View, ScrollView,Text} from 'react-native'
 import { getMedications } from '../lib/supabase'
-import AddButton from "../components/AddButton";
 import MedicationButton from "../components/MedicationButton";
 import {Button} from "react-native-elements";
 import {useTranslation} from "react-i18next";
@@ -37,7 +36,7 @@ const Medication: React.FC = ({ navigation, route }: any) => {
                 });
             }
             fetchData();
-        });
+        }});
 
         // Cleanup the listener on unmount
         return unsubscribe;
@@ -85,6 +84,7 @@ const Medication: React.FC = ({ navigation, route }: any) => {
         </View>
     )
 }
+
 
 export default Medication;
 
