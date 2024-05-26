@@ -1,22 +1,22 @@
 import React, {useEffect, useState} from 'react'
 import {addAppointment, getAllDoctorsByUser, getAllUsers, getUserId} from '../lib/supabase'
 import {SafeAreaView, StyleSheet, Alert, View, Keyboard, TouchableWithoutFeedback} from 'react-native'
-import {Input} from "react-native-elements";
+import {Button, Input} from "react-native-elements";
 import dayjs from 'dayjs';
 import StandardGreenButton from "../components/StandardGreenButton";
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
 import {DependentUser} from "./DependentUsers"
 import {Doctor} from "./Doctors";
-import RNPickerSelect from 'react-native-picker-select';
-import DatePicker from 'react-native-date-picker';
+// import RNPickerSelect from 'react-native-picker-select';
+import DateTimePicker, {DateTimePickerEvent} from '@react-native-community/datetimepicker';
+// import DatePicker from 'react-native-date-picker';
 
 type AddAppointmentProps = NativeStackScreenProps<RootStackParamList, 'AddAppointment'>
 
 
 const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) => {
     const {session} = route.params;
-    const [date, setDate] = useState(new Date())
     const [loading, setLoading] = useState(false)
     const [description, setDescription] = useState('')
     const [doctor, setDoctor] = useState('')
@@ -24,6 +24,11 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
     const [session_user_id, setSessionUserId] = useState('')
     const [all_users, setAllUsers] = useState<DependentUser[]>([])
     const [doctors, setDoctors] = useState<Doctor[]>([])
+
+    const [date, setDate] = useState(new Date(1598051730000));
+    const [mode, setMode] = useState<'date' | 'time'>('date');
+    const [show, setShow] = useState(false);
+
 
     const [descriptionErrorMessage, setDescriptionErrorMessage] = useState('')
 
@@ -86,11 +91,37 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
         label: user.first_name,
         value: user.id,
     })): [];
+
+    const onChange = (event: DateTimePickerEvent, selectedDate?: Date | undefined): void => {
+        const currentDate = selectedDate || date;
+        setShow(false);
+        setDate(currentDate);
+    };
+
+    const showMode = (currentMode: 'date' | 'time'): void => {
+        setShow(true);
+        setMode(currentMode);
+    };
+
+    const showDatepicker = (): void => {
+        showMode('date');
+    };
+
+    const showTimepicker = (): void => {
+        showMode('time');
+    };
+
     return (
         <View style={styles.containerTotal}>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
                 <SafeAreaView style={styles.container}>
-                <DatePicker  date={date} onDateChange={setDate}
+                    <Button onPress={showDatepicker} title="Show date picker!" />
+                    <Button onPress={showTimepicker} title="Show time picker!" />
+                <DateTimePicker  testID="dateTimePicker"
+                                 value={date}
+                                 mode={mode}
+                                 is24Hour={true}
+                                 onChange={onChange}
                     // locale={'ES'}
                     // options={{
                     //     mainColor: '#000',
@@ -114,22 +145,22 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
                     errorMessage={descriptionErrorMessage}
                 />
                 <View style={styles.pickerStyle}>
-                    <RNPickerSelect
-                        placeholder={{ label: 'Médico', value: null }}
-                        items={doctorsList}
-                        onValueChange={(value) => setDoctor(value)}
-                        style={{ ...pickerSelectStyles }}
-                        value={doctor}
-                    />
+                    {/*<RNPickerSelect*/}
+                    {/*    placeholder={{ label: 'Médico', value: null }}*/}
+                    {/*    items={doctorsList}*/}
+                    {/*    onValueChange={(value) => setDoctor(value)}*/}
+                    {/*    style={{ ...pickerSelectStyles }}*/}
+                    {/*    value={doctor}*/}
+                    {/*/>*/}
                 </View>
                 <View style={styles.pickerStyle}>
-                    <RNPickerSelect
-                        placeholder={{ label: 'Usuario', value: null }}
-                        items={userList}
-                        onValueChange={(value) => setUserId(value)}
-                        style={{ ...pickerSelectStyles }}
-                        value={user_id}
-                    />
+                    {/*<RNPickerSelect*/}
+                    {/*    placeholder={{ label: 'Usuario', value: null }}*/}
+                    {/*    items={userList}*/}
+                    {/*    onValueChange={(value) => setUserId(value)}*/}
+                    {/*    style={{ ...pickerSelectStyles }}*/}
+                    {/*    value={user_id}*/}
+                    {/*/>*/}
                 </View>
                 <StandardGreenButton
                     title="Confirmar"
