@@ -173,22 +173,22 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
                     errorMessage={descriptionErrorMessage}
                 />
                 <View style={styles.pickerStyle}>
-                    <RNPickerSelect
-                        placeholder={{ label: t('doc'), value: null }}
-                        items={doctorsList}
-                        onValueChange={(value) => setDoctor(value)}
-                        style={{ ...pickerSelectStyles }}
-                        value={doctor}
-                    />
+                    {/*<RNPickerSelect*/}
+                    {/*    placeholder={{ label: t('doc'), value: null }}*/}
+                    {/*    items={doctorsList}*/}
+                    {/*    onValueChange={(value) => setDoctor(value)}*/}
+                    {/*    style={{ ...pickerSelectStyles }}*/}
+                    {/*    value={doctor}*/}
+                    {/*/>*/}
                 </View>
                 <View style={styles.pickerStyle}>
-                    <RNPickerSelect
-                        placeholder={{ label: t('user'), value: null }}
-                        items={userList}
-                        onValueChange={(value) => setUserId(value)}
-                        style={{ ...pickerSelectStyles }}
-                        value={user_id}
-                    />
+                    {/*<RNPickerSelect*/}
+                    {/*    placeholder={{ label: t('user'), value: null }}*/}
+                    {/*    items={userList}*/}
+                    {/*    onValueChange={(value) => setUserId(value)}*/}
+                    {/*    style={{ ...pickerSelectStyles }}*/}
+                    {/*    value={user_id}*/}
+                    {/*/>*/}
                 </View>
                 <StandardGreenButton
                     title={t('confirm')}
