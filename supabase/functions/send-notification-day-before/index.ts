@@ -58,8 +58,8 @@ async function sendNotification(date: Date, description:string, user_name:string
 
   await novu.trigger('appointment-reminder', {
     to: {
-      subscriberId: '903eb237-15dd-4cfe-9674-27a3b5adedad',
-      email: 'valila2002@hotmail.com.ar'
+      subscriberId: user_id,
+      email: email
     },
     payload: {
       first_name: user_name,
