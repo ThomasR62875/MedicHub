@@ -79,7 +79,7 @@ const LogIn: React.FC<LogInProps> = ({navigation, route})=> {
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
             <View style={styles.container}>
-                <View style={{marginLeft: "60%", marginTop: "5%"}}>
+                <View style={{marginLeft: "60%", marginTop: "5%", alignSelf: 'center'}}>
                     <LanguageButton/>
                 </View>
                 <View style={styles.window}>

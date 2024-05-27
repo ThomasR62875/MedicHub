@@ -72,11 +72,11 @@ const Account: React.FC = ({ navigation, route } : any) => {
                     <View style={{marginTop: 5}}/>
                     <Text style={styles.title}>{t('id')}:</Text>
                     <Text style={styles.text2}>{dni}</Text>
-                    <View style={{marginTop: 5}}>
+                    <View style={{marginTop: 5, alignSelf: 'center'}}>
                         <LanguageButton/>
                     </View>
                 </View>
-                <View style={{alignItems: 'center', width: 'auto'}}>
+                <View style={{alignItems: 'center', width: 'auto', alignSelf: 'center'}}>
                     <Button
                         title={t('mdocs')}
                         icon={{
