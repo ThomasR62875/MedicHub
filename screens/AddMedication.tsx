@@ -6,27 +6,42 @@ import {
     TouchableWithoutFeedback,
     Keyboard,
     KeyboardAvoidingView,
-    ScrollView
+    Text as RNText, ScrollView
 } from 'react-native';
-import {addMedication, supabase} from "../lib/supabase";
-import {Input} from "react-native-elements";
+import {addMedication} from "../lib/supabase";
+import {Button, Input} from "react-native-elements";
 import StandardGreenButton from "../components/StandardGreenButton";
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
-import { Medication } from './Medication';
-
+import {Medication} from './Medication';
+import {useTranslation} from "react-i18next";
+import dayjs from "dayjs";
+import {Picker} from '@react-native-picker/picker'
+import DateTimePicker, {DateTimePickerEvent} from '@react-native-community/datetimepicker';
+import UnderlinedText from '../components/UnderlinedText';
 
 type AddMedicationProps = NativeStackScreenProps<RootStackParamList, 'AddMedication'>
-
-
 
 const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
     const {session} = route.params;
     const [name, setName] = useState('')
     const [prescription, setPrescription] = useState('');
-
     const [nameErrorMessage, setNameErrorMessage] = useState('')
     const [prescriptionErrorMessage, setPrescriptionErrorMessage] = useState('');
+    const [howOften, setHowOften] =useState(dayjs(null));
+    const {t} = useTranslation();
+    const times = [
+        '02:00:00',
+        '04:00:00',
+        '06:00:00',
+        '08:00:00',
+        '12:00:00',
+        '48:00:00',
+    ];
+    const timesList = times.map((time) => ({
+        label: time,
+        value: time,
+    }));
 
     useEffect(() => {
         if (
@@ -44,44 +59,79 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
     const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(true);
 
     const handleAddMedication= async () => {
-
-        const medication : Medication = {id: '', name:name,prescription:prescription}
+        console.log("11")
+        const medication : Medication = {
+            id: '',
+            name:name,
+            prescription:prescription,
+            sinceWhen : sinceWhen.toDate(),
+            untilWhen : untilWhen.toDate(),
+            howOften: howOften.toDate(),
+        }
 
         const result = await addMedication(medication);
         if (result.success) {
-            Alert.alert(
-                'El Medicamento fue agregado',
-                '',
-                [
-                    { text: 'Ok', onPress: () => navigation.navigate('Medication', { session: session }) }
-                ]
-            );
+            Alert.alert(t('text11'), '',
+                [{ text: 'Ok', onPress: () => navigation.navigate('Medication', { session: session })}]);
+            console.log("22")
         } else {
             Alert.alert('Error', result.message || 'An unknown error occurred');
+            console.log("33")
         }
-
+        console.log("44")
     }
 
     const validateName = (value: string) => {
         if (value.trim() === '') {
-            setNameErrorMessage('Debe ingresar el nombre del medicamento.');
+            setNameErrorMessage(t('warn1'));
         } else {
             setNameErrorMessage('');
         }
     };
     const validatePrescription = (value: string) => {
         if (value.trim() === '') {
-            setPrescriptionErrorMessage('Debe ingresar la prescripción.');
+            setPrescriptionErrorMessage(t('warn11'));
         } else {
             setPrescriptionErrorMessage('');
         }
     };
 
+    const [dateSince, setDateSince] = useState(new Date());
+    const [dateUntil, setDateUntil] = useState(new Date());
+    const [mode, setMode] = useState<'date' | 'time'>('date');
+
+    const onChange1 = (event: DateTimePickerEvent, selectedDate1?: Date | undefined): void => {
+        const currentDate = selectedDate1 || dateSince;
+        setDateSince(currentDate);
+        setSinceWhen(dayjs(currentDate).startOf('day'));
+    };
+
+    const onChange2 = (event: DateTimePickerEvent, selectedDate2?: Date | undefined): void => {
+        const currentDate = selectedDate2 || dateUntil;
+        setDateUntil(currentDate);
+        setUntilWhen(dayjs(currentDate).startOf('day'));
+    };
+
+    const [sinceWhen , setSinceWhen] =useState(dayjs(dateSince).startOf('day'));
+    const [untilWhen, setUntilWhen] =useState(dayjs(null));
+
+    const resetForm = () => {
+        setName('');
+        setPrescription('');
+        setHowOften(dayjs(null));
+        setDateSince(new Date());
+        setDateUntil(new Date());
+        setSinceWhen(dayjs(new Date()).startOf('day'));
+        setUntilWhen(dayjs(null));
+        setNameErrorMessage('');
+        setPrescriptionErrorMessage('');
+    };
+
     return (
         <View style={styles.containerTotal}>
+        <ScrollView>
         <KeyboardAvoidingView style={styles.container}>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-            <ScrollView>
                 <View>
                     <View style={styles.verticallySpaced}>
                         <Input
@@ -91,7 +141,7 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
                                 validateName(text)
                             }}
                             value={name}
-                            placeholder="Nombre"
+                            placeholder={t('name')}
                             autoCapitalize={'none'}
                             errorStyle={{ color: 'red' }}
                             errorMessage={nameErrorMessage}
@@ -105,23 +155,84 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
                                 validatePrescription(text)
                             }}
                             value={prescription}
-                            placeholder="Prescripción"
+                            placeholder={t('prescription')}
                             autoCapitalize={'none'}
                             errorStyle={{ color: 'red' }}
                             errorMessage={nameErrorMessage}
                         />
                     </View>
-                    <View style={styles.verticallySpaced}>
-                        <StandardGreenButton
-                            title="Agregar"
-                            disabled={isButtonDisabled}
-                            onPress={() => handleAddMedication()}
-                        />
+                    <View>
+                        <RNText style={styles.buttons} >
+                            <UnderlinedText>  {t('text22')} </UnderlinedText>
+                        </RNText>
+                        <View style={styles.datePicker}>
+                            <DateTimePicker  testID="dateTimePicker"
+                                             value={dateSince}
+                                             mode="date"
+                                             onChange={onChange1}
+                            />
+                        </View>
+                    </View>
+                    <View style={{marginBottom: "5%", marginTop: "5%"}}>
+                        <RNText style={styles.buttons} >
+                            <UnderlinedText>  {t('text20')} </UnderlinedText>
+                        </RNText>
+                        <Picker
+                            mode="dropdown"
+                            selectedValue={howOften}
+                            onValueChange={(value) => setHowOften(value)}>
+                            {timesList.map((item, index) => (
+                                <Picker.Item label={item.label} value={item.value}/>
+                            ))}
+                        </Picker>
+                        <RNText style={{ marginTop: 10 }}>Selected option: {howOften.toString()}</RNText>
+
+                    </View>
+                    <View>
+                        <RNText style={styles.buttons}>
+                            <UnderlinedText>  {t('text21')} </UnderlinedText>
+                        </RNText>
+                        <View style={styles.datePicker}>
+                            <DateTimePicker  testID="dateTimePicker"
+                                             value={dateUntil}
+                                             mode={mode}
+                                             onChange={onChange2}
+                            />
+                            <RNText style={{ marginTop: 10 }}>Selected option: {untilWhen.toString()}</RNText>
+                        </View>
+                    </View>
+                    <View>
+                        <View style={[styles.verticallySpaced, {marginTop : "5%"}]}>
+                            <StandardGreenButton
+                                title={t('add')}
+                                disabled={isButtonDisabled}
+                                onPress={() => {
+                                    if(!dayjs(untilWhen).isValid()){
+                                        Alert.alert(t('warning'), t('warn15') ,
+                                            [{ text: 'Cancel', onPress: () => {setIsButtonDisabled(true);  resetForm();}},
+                                                { text: 'Ok', onPress: () => [handleAddMedication(), navigation.navigate('Medication', { session: session })]}])
+                                    }
+                                    else if(!dayjs(sinceWhen).isValid()){
+                                        Alert.alert(t('warning'), t('warn14') ,
+                                            [{ text: 'Cancel', onPress: () => {setIsButtonDisabled(true);  resetForm();}},
+                                                { text: 'Ok', onPress: () => [handleAddMedication(), navigation.navigate('Medication', { session: session })]}])
+                                    }
+                                    else if(!dayjs(howOften).isValid()){
+                                        Alert.alert(t('warning') , t('warn13'),
+                                            [{ text: 'Cancel', onPress: () => {setIsButtonDisabled(true);  resetForm();}},
+                                                { text: 'Ok', onPress: () => [handleAddMedication(), navigation.navigate('Medication', { session: session })]}])
+                                        console.log("howOften")
+                                    }
+                                    else{handleAddMedication(); console.log("else");}
+                                    }
+                                }
+                            />
+                    </View>
                     </View>
                 </View>
-            </ScrollView>
         </TouchableWithoutFeedback>
         </KeyboardAvoidingView>
+        </ScrollView>
         </View>
     );
 };
@@ -144,25 +255,20 @@ const styles = StyleSheet.create({
     verticallySpaced: {
         alignSelf: 'stretch',
     },
-    mt20: {
-        marginTop: 5,
+    buttons: {
+        alignItems: "flex-start"
     },
-    horizontallySpaced: {
-        paddingTop: 2,
-        paddingBottom: 2,
+    datePicker: {
+      alignSelf: 'center',
+      marginTop: "5%",
     },
-    textInput: {
-        height: 40,
-        borderColor: '#000000',
-        borderBottomWidth: 1,
-        marginBottom: 36,
-        fontSize: 20,
+    titleB : {
+        fontFamily: 'Roboto-Thin',
+        alignSelf: 'center',
+        color: '#12210f',
+        fontSize: 18,
     },
-    pickerStyle: {
-        marginBottom: 20,
-    }
-
-});
+ });
 
 const pickerSelectStyles = StyleSheet.create({
     inputIOS: {

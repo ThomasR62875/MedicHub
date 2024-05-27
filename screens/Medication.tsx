@@ -5,12 +5,15 @@ import { getMedications } from '../lib/supabase'
 import AddButton from "../components/AddButton";
 import MedicationButton from "../components/MedicationButton";
 import {Button} from "react-native-elements";
-
+import {useTranslation} from "react-i18next";
 
 export type Medication = {
+    id: string;
     name: string;
     prescription: string;
-    id: string;
+    sinceWhen : Date;
+    untilWhen : Date;
+    howOften : Date | undefined | null;
 }
 
 
@@ -18,6 +21,7 @@ const Medication: React.FC= ({ navigation, route }: any) => {
     const session = route.params.session;
     const [loading, setLoading] = useState(true)
     const [medications,setMedications]= useState<Medication[] | undefined>(undefined)
+    const {t} = useTranslation();
 
     useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
@@ -38,9 +42,9 @@ const Medication: React.FC= ({ navigation, route }: any) => {
         <View style={styles.container}>
             <View style={styles.window}>
                 <View style={styles.topContent}>
-                    <Text style={styles.titleText}>Medicamentos</Text>
+                    <Text style={styles.titleText}>{t('medicine')}</Text>
                     <Button
-                        title="Agregar"
+                        title={t('add')}
                         buttonStyle={{
                             backgroundColor: '#2E5829',
                             borderColor: 'white',
@@ -64,8 +68,8 @@ const Medication: React.FC= ({ navigation, route }: any) => {
                                 )
                             })
                         ) : (
-                            <View style={[styles.titleContainer]}>
-                                <Text style={styles.text}>No hay medicamentos</Text>
+                            <View style={[styles.userContainer]}>
+                                <Text style={[styles.text, {textAlign: 'center'}]}>{t('text16')}</Text>
                             </View>
                         )
                     }
@@ -84,21 +88,21 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: "#e9f4e9",
       },
+    userContainer: {
+        backgroundColor: '#cbe4c9',
+        borderRadius: 20,
+        borderColor: '#cbe4c9',
+        borderWidth: 1,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        padding: 10,
+    },
     medsContainer: {
         marginTop: '5%',
         alignItems: 'center',
         borderRadius: 5,
-    },
-    infoRow: {
-        flexDirection: 'row',
-        marginBottom: 5,
-    },
-    label: {
-        fontWeight: 'bold',
-        marginRight: 5,
-    },
-    value: {
-        flex: 1,
     },
     titleContainer: {
         marginTop: 10,
@@ -112,12 +116,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         marginTop: "1%",
         color: "#2E5829FF",
-        width: "60%"
-    },
-    addContainer: {
-        left: 290,
-        bottom: 63,
-        alignSelf: 'flex-start',
+        width: "70%"
     },
     window: {
         marginTop: "20%",

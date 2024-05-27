@@ -1,13 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {
-    View,
-    Alert,
-    StyleSheet,
-    TouchableWithoutFeedback,
-    Keyboard,
-    KeyboardAvoidingView,
-    ScrollView
-} from 'react-native';
+import {View, Alert, StyleSheet, TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView, ScrollView} from 'react-native';
 import {addDoctor, getAllUsers, getSpecialties, getUserId} from "../lib/supabase";
 import {Input} from "react-native-elements";
 import StandardGreenButton from "../components/StandardGreenButton";
@@ -15,6 +7,7 @@ import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
 import RNPickerSelect from 'react-native-picker-select';
 import {DependentUser} from "./DependentUsers";
+import {useTranslation} from "react-i18next";
 
 type AddDoctorProps = NativeStackScreenProps<RootStackParamList, 'AddDoctor'>
 
@@ -34,8 +27,8 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}) => {
     const [all_users, setAllUsers] = useState<DependentUser[] | undefined>(undefined)
     const [session_user_id, setSessionUserId] = useState('')
     const [user_id, setUserId] = useState('')
-
     const [nameErrorMessage, setNameErrorMessage] = useState('')
+    const {t} = useTranslation();
 
     useEffect(() => {
         if (
@@ -63,7 +56,7 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}) => {
 
     const validateName = (value: string) => {
         if (value.trim() === '') {
-            setNameErrorMessage('Debe ingresar el nombre del médico.');
+            setNameErrorMessage(t('warn1'));
         } else {
             setNameErrorMessage('');
         }
@@ -71,7 +64,7 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}) => {
 
     const validateSpecialty = (value: string) => {
         if (value.trim() === '') {
-            setNameErrorMessage('Debe seleccionar la especialidad del médico.');
+            setNameErrorMessage(t('warn9'));
         } else {
             setNameErrorMessage('');
         }
@@ -79,7 +72,7 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}) => {
 
     const validateUser = (value: string) => {
         if (value.trim() === '') {
-            setNameErrorMessage('Debe seleccionar el usuario.');
+            setNameErrorMessage(t('warn10'));
         } else {
             setNameErrorMessage('');
         }
@@ -94,7 +87,7 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}) => {
         const result = await addDoctor(doctor);
         if (result.success) {
             Alert.alert(
-                'El Doctor fue agregado',
+                t('text10'),
                 '',
                 [
                     { text: 'Ok', onPress: () => navigation.navigate('Doctors', { session: session }) }
@@ -119,7 +112,7 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}) => {
                                 validateName(text);
                             }}
                             value={name}
-                            placeholder="Nombre"
+                            placeholder={t('name')}
                             autoCapitalize={'none'}
                             errorStyle={{ color: 'red' }}
                             errorMessage={nameErrorMessage}
@@ -127,7 +120,7 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}) => {
                     </View>
                     <View style={styles.pickerStyle}>
                         <RNPickerSelect
-                            placeholder={{ label: 'Especialidad', value: null }}
+                            placeholder={{ label: t('specialty'), value: null }}
                             items={specialties ? specialties.map(s => ({ label: s.name, value: s.name })) : []}
                             onValueChange={(value) =>
                                 setSpecialty(value)
@@ -142,7 +135,7 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}) => {
                             leftIcon={{ type: 'font-awesome', name: 'phone' }}
                             onChangeText={(text) => setPhone(text)}
                             value={phone}
-                            placeholder="Teléfono"
+                            placeholder={t('phone')}
                             autoCapitalize={'none'}
                         />
                     </View>
@@ -151,7 +144,7 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}) => {
                             leftIcon={{ type: 'font-awesome', name: 'envelope' }}
                             onChangeText={(text) => setEmail(text)}
                             value={email}
-                            placeholder="email@address.com"
+                            placeholder="Mail"
                             autoCapitalize={'none'}
                         />
                     </View>
@@ -160,13 +153,13 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}) => {
                             leftIcon={{ type: 'font-awesome', name: 'map-marker' }}
                             onChangeText={(text) => setAddresses([text])}
                             value={addresses[0] || ''}
-                            placeholder="Dirección"
+                            placeholder={t('address')}
                             autoCapitalize={'none'}
                         />
                     </View>
                     <View style={styles.pickerStyle}>
                         <RNPickerSelect
-                            placeholder={{ label: 'Usuario', value: null }}
+                            placeholder={{ label: t('user'), value: null }}
                             items={all_users ? all_users.map(u => ({ label: u.first_name, value: u.id})) : []}
                             onValueChange={(value) =>
                                 setUserId(value)
@@ -177,7 +170,7 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}) => {
                     </View>
                     <View style={styles.verticallySpaced}>
                         <StandardGreenButton
-                            title="Agregar"
+                            title={t('add')}
                             disabled={isButtonDisabled}
                             onPress={handleAddDoctor}
                         />

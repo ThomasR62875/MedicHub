@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react'
-import {supabase, updateDoctor, updateMedication} from '../lib/supabase'
-import {View, Alert, StyleSheet} from 'react-native'
-import {Button, Icon, Input} from 'react-native-elements'
+import {updateDoctor} from '../lib/supabase'
+import {View, StyleSheet} from 'react-native'
+import {Button, Input} from 'react-native-elements'
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
 import StandardGreenButton from "../components/StandardGreenButton";
 import {DependentUser} from "./DependentUsers";
 import {Specialty} from "./AddDoctor";
-import {Doctor} from "./Doctors";
+import {useTranslation} from "react-i18next";
 
 type EditDoctorProps = NativeStackScreenProps<RootStackParamList, 'EditDoctor'>;
 
@@ -23,6 +23,7 @@ const EditDoctor:React.FC<EditDoctorProps> = ({navigation, route }: any) =>{
     const [session_user_id, setSessionUserId] = useState('')
     const [user_id, setUserId] = useState('')
     const [id, setId] = useState('')
+    const {t} = useTranslation();
 
     useEffect(() => {
         if (session) getDoc()
@@ -41,17 +42,17 @@ const EditDoctor:React.FC<EditDoctorProps> = ({navigation, route }: any) =>{
     return(
         <View style={styles.container} >
             <View style={styles.window}>
-                <Input label="Nombre" value={name} onChangeText={(text) => setName(text)}/>
+                <Input label={t('name')} value={name} onChangeText={(text) => setName(text)}/>
                 <Input label="Mail" value={email} onChangeText={(text) => setEmail(text)}/>
-                <Input label="Specialty" value={specialty} onChangeText={(text) => setSpecialty(text)}/>
-                <Input label="Teléfono" value={phone} onChangeText={(text) => setPhone(text)}/>
+                <Input label={t('specialty')} value={specialty} onChangeText={(text) => setSpecialty(text)}/>
+                <Input label={t('phone')} value={phone} onChangeText={(text) => setPhone(text)}/>
                 {/*{addresses ? (
                     addresses.map((address: string, i) => {
-                        <Input label="Dirección" value={phone} onChangeText={(text) => setAddresses(address)}/>
+                        <Input label={t('address')} value={phone} onChangeText={(text) => setAddresses(address)}/>
                     })}*/}
-                <Input label="Usuario" value={user_id} onChangeText={(text) => setUserId(text)}/>
+                <Input label={t('user')} value={user_id} onChangeText={(text) => setUserId(text)}/>
                 <Button
-                    title="Guardar cambios"
+                    title={t('savec')}
                     buttonStyle={{
                         backgroundColor: '#2E5829',
                         borderWidth: 2,

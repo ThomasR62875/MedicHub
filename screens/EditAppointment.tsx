@@ -1,16 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import { updateAppointment, getAppointmentById, getAllDoctorsByUser, getAllUsers } from '../lib/supabase';
-import { SafeAreaView, StyleSheet, Alert, View, Keyboard, TouchableWithoutFeedback } from 'react-native';
+import React, { useState } from 'react';
+import { updateAppointment} from '../lib/supabase';
+import { SafeAreaView, StyleSheet, View, Keyboard, TouchableWithoutFeedback } from 'react-native';
 import {Button, Input} from 'react-native-elements';
 import dayjs from 'dayjs';
-import StandardGreenButton from '../components/StandardGreenButton';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../App';
-import { Appointment } from './Appointments';
 import { DependentUser } from './DependentUsers';
 import { Doctor } from './Doctors';
 import RNPickerSelect from 'react-native-picker-select';
-import DatePicker from 'react-native-modern-datepicker';
+import {useTranslation} from "react-i18next";
 
 type EditAppointmentProps = NativeStackScreenProps<RootStackParamList, 'EditAppointment'>;
 
@@ -24,6 +22,7 @@ const EditAppointment: React.FC<EditAppointmentProps> = ({ navigation, route }) 
     const [session_user_id, setSessionUserId] = useState('');
     const [all_users, setAllUsers] = useState<DependentUser[]>([]);
     const [doctors, setDoctors] = useState<Doctor[]>([]);
+    const {t} = useTranslation();
 
     const doctorsList = doctors
         ? doctors.map((doctor: Doctor) => ({
@@ -43,11 +42,11 @@ const EditAppointment: React.FC<EditAppointmentProps> = ({ navigation, route }) 
         <View style={styles.containerTotal}>
             <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
                 <SafeAreaView style={styles.container}>
-                    <Input label="Descripción" value={description} onChangeText={(text) => setDescription(text)}/>
+                    <Input label={t('despcription')} value={description} onChangeText={(text) => setDescription(text)}/>
 
                     <View style={styles.pickerStyle}>
                         <RNPickerSelect
-                            placeholder={{ label: 'Médico', value: null }}
+                            placeholder={{ label: t('doc'), value: null }}
                             items={doctorsList}
                             onValueChange={(value) => setDoctor(value)}
                             style={{ ...pickerSelectStyles }}
@@ -56,7 +55,7 @@ const EditAppointment: React.FC<EditAppointmentProps> = ({ navigation, route }) 
                     </View>
                     <View style={styles.pickerStyle}>
                         <RNPickerSelect
-                            placeholder={{ label: 'Usuario', value: null }}
+                            placeholder={{ label: t('user'), value: null }}
                             items={userList}
                             onValueChange={(value) => setUserId(value)}
                             style={{ ...pickerSelectStyles }}
@@ -64,7 +63,7 @@ const EditAppointment: React.FC<EditAppointmentProps> = ({ navigation, route }) 
                         />
                     </View>
                     <Button
-                        title="Guardar cambios"
+                        title={t('savec')}
                         loading={loading}
                         buttonStyle={{
                             backgroundColor: '#2E5829',

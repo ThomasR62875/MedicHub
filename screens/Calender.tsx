@@ -2,16 +2,18 @@ import React, {useEffect, useState} from "react";
 import {Alert, Dimensions, ScrollView, StyleSheet, Text, View} from "react-native";
 import {Appointment} from "./Appointments";
 import {Calendar} from "react-native-calendars";
-import AddButton from "../components/AddButton";
 import TurnoContainer from "../components/TurnContainer";
 import {getAppointments} from "../lib/supabase";
 import {Button} from "react-native-elements";
+import {useTranslation} from "react-i18next";
 
 const Calender: React.FC = ({ navigation, route } : any) => {
     const {session} = route.params;
     const [appointments,setAppointments]= useState<Appointment[] | undefined>(undefined)
     const [loading, setLoading] = useState(true)
     const monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+    const {t} = useTranslation();
+
     useEffect(() => {
         if (session) {
             async function fetchData() {
@@ -72,7 +74,7 @@ const Calender: React.FC = ({ navigation, route } : any) => {
     return (
         <View style={styles.container}>
             <View style={styles.window}>
-                <Text style={styles.screenTitle}>Calendar</Text>
+                <Text style={styles.screenTitle}>{t('calendar')}</Text>
             </View >
             <View style={styles.calendarContainer}>
                 <Calendar style={{borderRadius: 10}}
@@ -98,37 +100,30 @@ const Calender: React.FC = ({ navigation, route } : any) => {
                         })) :  (
                             <View style={{alignItems: 'center', marginTop: 10}}>
                                 <View style={[styles.turnoContainer]}>
-                                    <Text style={styles.text}>No hay turnos para el {dateNormal}</Text>
+                                    <Text style={styles.text}>{t('text19')} {dateNormal}</Text>
                                 </View>
                             </View>
                         )}
-                <View style={{alignItems: 'center', marginTop: 10, marginLeft: "10%", marginBottom: "20%", alignContent: 'center'}}>
+                <View style={{marginTop: 10, marginBottom: "20%", alignContent: 'center'}}>
                     <Button
-                        title="Agregar turno"
+                        title={t('add')+t('appo')}
                         buttonStyle={{
                             backgroundColor: '#2E5829',
                             borderColor: 'white',
                             borderRadius: 20,
                             minHeight: 10,
-                            width: "70%"
+                            width: "auto",
+                            alignSelf: 'center',
                         }}
                         titleStyle={{ color: '#E9F4E9FF',fontSize: 15, margin: 5 }}
                         onPress={() => navigation.navigate('AddAppointment', {session: session})}/>
-                    {/*<AddButton onPress={() => navigation.navigate('AddAppointment', {session})} />*/}
                 </View>
             </ScrollView>
         </View>
     )
 }
 
-const screenHeight = Dimensions.get('window').height;
 const styles = StyleSheet.create({
-    bottomBar:{
-        position: 'absolute',
-        bottom: 0,
-        left: 0,
-        right: 0,
-    },
     titleText: {
         fontSize: 25,
         textAlign: 'center',

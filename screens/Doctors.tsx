@@ -3,8 +3,8 @@ import { getDoctors} from '../lib/supabase'
 import { StyleSheet, View, ScrollView,Text} from 'react-native'
 import {createNativeStackNavigator, NativeStackScreenProps} from '@react-navigation/native-stack';
 import {RootStackParamList} from "../App";
-import AddButton from "../components/AddButton";
 import {Button} from "react-native-elements";
+import {useTranslation} from "react-i18next";
 
 const Stack = createNativeStackNavigator();
 
@@ -24,6 +24,7 @@ const Doctors: React.FC= ({ navigation, route }: any) => {
     const {session} = route.params;
     const [loading, setLoading] = useState(true)
     const [doctors,setDoctors]= useState<Doctor[] | undefined>(undefined)
+    const {t} = useTranslation();
 
     useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
@@ -43,9 +44,9 @@ const Doctors: React.FC= ({ navigation, route }: any) => {
         <View style={styles.container}>
             <View style={styles.window}>
                 <View style={styles.topContent}>
-                    <Text style={styles.titleText}>Médicos</Text>
+                    <Text style={styles.titleText}>{t('doc')}</Text>
                     <Button
-                        title="Agregar"
+                        title={t('add')}
                         buttonStyle={{
                             backgroundColor: '#2E5829',
                             borderColor: 'white',
@@ -63,11 +64,11 @@ const Doctors: React.FC= ({ navigation, route }: any) => {
                                 return (
                                     <View key={i} style={styles.doctorContainer}>
                                         <View style={styles.infoRow}>
-                                            <Text style={styles.label}>Nombre:</Text>
+                                            <Text style={styles.label}>{t('name')}:</Text>
                                             <Text style={styles.value}>{doc.name}</Text>
                                         </View>
                                         <View style={styles.infoRow}>
-                                            <Text style={styles.label}>Especialidad:</Text>
+                                            <Text style={styles.label}>{t('specialty')}:</Text>
                                             <Text style={styles.value}>{doc.specialty}</Text>
                                         </View>
                                         <View style={styles.infoRow}>
@@ -75,20 +76,20 @@ const Doctors: React.FC= ({ navigation, route }: any) => {
                                             <Text style={styles.value}>{doc.email}</Text>
                                         </View>
                                         <View style={styles.infoRow}>
-                                            <Text style={styles.label}>Teléfono:</Text>
+                                            <Text style={styles.label}>{t('phone')}:</Text>
                                             <Text style={styles.value}>{doc.phone}</Text>
                                         </View>
                                         <View style={styles.infoRow}>
-                                            <Text style={styles.label}>Dirección:</Text>
+                                            <Text style={styles.label}>{t('address')}:</Text>
                                             <Text style={styles.value}>{doc.addresses}</Text>
                                         </View>
                                     </View>
                                 )
                             })
                         ) : (
-                            <View style={[styles.titleContainer]}>
-                                <Text style={styles.text}>No hay doctores</Text>
-                            </View>
+                        <View style={[styles.userContainer]}>
+                            <Text style={[styles.text, {textAlign: 'center'}]}>{t('text17')}</Text>
+                        </View>
                         )
                     }
                 </View>
@@ -106,16 +107,16 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: "#e9f4e9",
       },
-    bottomBar:{
-        position: 'absolute',
-        bottom: 0,
-        left: 0,
-        right: 0,
-    },
-    titleContainer: {
-        marginTop: 10,
-        alignSelf: 'center',
-        marginBottom: 20,
+    userContainer: {
+        backgroundColor: '#cbe4c9',
+        borderRadius: 20,
+        borderColor: '#cbe4c9',
+        borderWidth: 1,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        padding: 10,
     },
     titleText: {
         fontFamily: 'Roboto-Thin',
@@ -124,7 +125,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         marginTop: "1%",
         color: "#2E5829FF",
-        width: "60%"
+        width: "70%"
     },
     doctorContainer: {
         marginTop: 10,
@@ -143,11 +144,6 @@ const styles = StyleSheet.create({
     value: {
         flex: 1,
     },
-    addContainer: {
-        left: 290,
-        bottom: 60,
-        alignSelf: 'flex-start',
-    },
     window: {
         marginTop: "20%",
         marginLeft: "5%",
@@ -163,7 +159,6 @@ const styles = StyleSheet.create({
     text: {
         fontFamily: 'Roboto-Thin',
         fontSize: 14,
-        textAlign: 'left',
         marginTop: "1%",
         color: "#2E5829FF",
         width: "60%"

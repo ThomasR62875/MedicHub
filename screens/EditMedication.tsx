@@ -4,6 +4,7 @@ import {View, StyleSheet, Alert, TouchableWithoutFeedback, Keyboard} from 'react
 import {Button, Input} from 'react-native-elements'
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
+import {useTranslation} from "react-i18next";
 
 type EditMedicationProps = NativeStackScreenProps<RootStackParamList, 'EditMedication'>;
 
@@ -12,6 +13,7 @@ const EditMedication:React.FC<EditMedicationProps> = ({navigation, route }: any)
     const [id, setId] = useState('')
     const [name, setName] = useState('')
     const [prescription, setPrescription] = useState('');
+    const {t} = useTranslation();
 
     const [nameErrorMessage, setNameErrorMessage] = useState('')
     const [prescriptionErrorMessage, setPrescriptionErrorMessage] = useState('');
@@ -82,7 +84,7 @@ const EditMedication:React.FC<EditMedicationProps> = ({navigation, route }: any)
             <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
                 <View style={styles.window}>
                     <Input
-                        label="Nombre"
+                        label={t('name')}
                         value={name}
                         onChangeText={(text) => {
                             setName(text);
@@ -91,7 +93,7 @@ const EditMedication:React.FC<EditMedicationProps> = ({navigation, route }: any)
                         errorStyle={{ color: 'red' }}
                         errorMessage={nameErrorMessage}/>
                     <Input
-                        label="Prescripción"
+                        label={t('prescription')}
                         value={prescription}
                         onChangeText={(text) => {
                             setPrescription(text);
@@ -101,7 +103,7 @@ const EditMedication:React.FC<EditMedicationProps> = ({navigation, route }: any)
                         errorMessage={prescriptionErrorMessage}
                     />
                     <Button
-                        title="Guardar cambios"
+                        title={t('savec')}
                         buttonStyle={{
                             backgroundColor: '#2E5829',
                             borderWidth: 2,
