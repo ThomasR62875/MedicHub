@@ -21,18 +21,17 @@ const MedicationButton: React.FC<MedicationButtonProps> = ( { onPress, styleExte
                     <Text style={styles.label}>{t('medicine')}:</Text>
                     <Text>{meds.name}</Text>
                 </View>
-                { meds.howOften != null && (
-                <View>
-                    <Text style={styles.label}></Text>
-                    <Text>{meds.howOften.toString()}</Text>
-                </View>
-                )
-                }
                 <View style={styles.infoRow}>
                     <Text style={styles.label}>{t('prescription')}:</Text>
                     <Text>{meds.prescription}</Text>
                     <View style={{ width: 30 }} />
                 </View>
+                { meds.howOften != null && (
+                    <View style={styles.infoRow}>
+                        <Text style={styles.label}>{t('text23')}:</Text>
+                        <Text>{parseInt(meds.howOften.toString().split(':')[0], 10)} {t('text24')}</Text>
+                    </View>
+                )}
             </View>
         </TouchableOpacity>
     );

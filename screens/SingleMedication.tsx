@@ -69,6 +69,18 @@ const SingleMedication: React.FC<SingleMedicationProps> = ({ navigation, route }
                 <Text style={styles.label}>{t('prescription')}:</Text>
                 <Text style={styles.value}>{route.params.meds.prescription}</Text>
             </View>
+            <View style={styles.detailRow}>
+                <Text style={styles.label}>{t('text22').slice(2, -2)}:</Text>
+                <Text style={styles.value}>{route.params.meds.sinceWhen ? route.params.meds.sinceWhen : ''}</Text>
+            </View>
+            <View style={styles.detailRow}>
+                <Text style={styles.label}>{t('text23')}</Text>
+                <Text>{route.params.meds.howOften ? parseInt(route.params.meds.howOften.toString().split(':')[0]+t('text24'), 10) : ''}</Text>
+            </View>
+            <View style={styles.detailRow}>
+                <Text style={styles.label}>{t('text21').slice(2, -2)}:</Text>
+                <Text style={styles.value}>{route.params.meds.untilWhen ? route.params.meds.untilWhen : ''}</Text>
+            </View>
             <View>
                 <StandardGreenButton
                     title="Eliminar" //translate todo
