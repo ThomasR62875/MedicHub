@@ -60,14 +60,14 @@ const Medication: React.FC= ({ navigation, route }: any) => {
                         medications ? (
                             medications.map((medic: Medication, i) => {
                                 return (
-                                    <View key={i} style={styles.medsContainer}>
+                                    <View key={i}>
                                         <MedicationButton onPress={() => navigation.navigate({name: 'SingleMedication', params: {meds: medic}})} styleExterior={styles.medsContainer} meds={medic}></MedicationButton>
                                     </View>
                                 )
                             })
                         ) : (
-                            <View style={[styles.userContainer]}>
-                                <Text style={[styles.text, {textAlign: 'center'}]}>{t('text16')}</Text>
+                            <View style={[cardStyle.container]}>
+                                <Text style={cardStyle.text}>{t('text16')}</Text>
                             </View>
                         )
                     }
@@ -86,17 +86,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: "#e9f4e9",
       },
-    userContainer: {
-        backgroundColor: '#cbe4c9',
-        borderRadius: 20,
-        borderColor: '#cbe4c9',
-        borderWidth: 1,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
-        padding: 10,
-    },
     medsContainer: {
         marginTop: '5%',
         alignItems: 'center',

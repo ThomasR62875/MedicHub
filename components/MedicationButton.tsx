@@ -17,7 +17,7 @@ const MedicationButton: React.FC<MedicationButtonProps> = ( { onPress, styleExte
 
     return (
         <TouchableOpacity style={cardStyle.container} onPress={onPress}>
-            <View style={styleExterior}>
+            <View>
                 <View style={cardStyle.infoRow}>
                     <Text style={cardStyle.label}>{t('medicine')}:</Text>
                     <Text>{meds.name}</Text>
