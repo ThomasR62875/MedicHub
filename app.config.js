@@ -24,7 +24,7 @@ export default {
                 foregroundImage: "./assets/adaptive-icon.png",
                 backgroundColor: "#ffffff"
             },
-            package: 'com.jtechenski.tpingesoft'
+            package: "com.jtechenski.tpingesoft"
         },
         web: {
             favicon: "./assets/favicon.png"
@@ -38,7 +38,7 @@ export default {
                 origin: false
             },
             eas: {
-                projectId: '4ce8f699-ec16-44ff-b06f-ee1f44aee4a4'
+                projectId: "4ce8f699-ec16-44ff-b06f-ee1f44aee4a4",
             }
         }
     }
