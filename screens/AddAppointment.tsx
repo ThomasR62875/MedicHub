@@ -13,8 +13,7 @@ import DateTimePicker, {DateTimePickerEvent} from '@react-native-community/datet
 import {Picker} from "@react-native-picker/picker";
 import {useTranslation} from "react-i18next";
 //
-import { Button } from 'react-native-paper';
-import { es } from 'date-fns/locale';
+import { Button as PaperButton } from 'react-native-paper';
 //
 
 type AddAppointmentProps = NativeStackScreenProps<RootStackParamList, 'AddAppointment'>
@@ -22,7 +21,6 @@ type AddAppointmentProps = NativeStackScreenProps<RootStackParamList, 'AddAppoin
 
 const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) => {
     const {session} = route.params;
-    const [date, setDate] = useState(dayjs())
     const [loading, setLoading] = useState(false)
     const [description, setDescription] = useState('')
     const [doctor, setDoctor] = useState('')
@@ -129,7 +127,7 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
     }, [setOpen]);
 
     const onConfirmSingle = React.useCallback(
-        (params) => {
+        (params: any) => {
             setOpen(false);
             setDate2(params.date);
         },
@@ -142,7 +140,7 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
     }, [setVisible])
 
     const onConfirm = React.useCallback(
-        ({ hours, minutes }) => {
+        ({ hours, minutes }: any) => {
             setVisible(false);
             console.log({ hours, minutes });
         },
@@ -186,7 +184,7 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
                 <Picker
                 mode='dropdown'
                 selectedValue={doctor}
-                onValueChange={(value) => setDoctor(value)}
+                onValueChange={(value: any) => setDoctor(value)}
                 placeholder='Médico'
                 enabled={true}
                 itemStyle={styles.pickerStyle }
@@ -200,7 +198,7 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
                     <Picker
                         mode='dropdown'
                         selectedValue={doctor}
-                        onValueChange={(value) => setUserId(value)}
+                        onValueChange={(value: any) => setUserId(value)}
                         placeholder='Médico'
                         enabled={true}
                         itemStyle={styles.pickerStyle }
