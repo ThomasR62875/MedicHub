@@ -65,5 +65,13 @@
   "depu" : "Usuarios dependientes",
   "text18" : "Aún no tienes usuarios dependientes",
   "text19" : "No hay turnos para el",
-  "appo" : " turno"
+  "appo" : " turno",
+  "text20" : "¿ Cada cuanto lo tomarias ?",
+  "text21" : "¿ Hasta cuando lo debes tomar ?",
+  "text22" : "¿ Desde cuando lo vas a estar tomando ?",
+  "warning" : "Advertencia",
+  "warn13" : "Si no completas el dato 'Cada cuanto' no podremos notificarte cuando tomarlo",
+  "warn14" : "Si no completas el dato 'Desde cuando' no podremos notificarte cuando tomarlo",
+  "warn15" : "Si no completas el dato 'Hasta cuando' no podremos notificarte cuando tomarlo",
+  "text23" : "Cada:"
 }

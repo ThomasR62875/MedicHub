@@ -1,6 +1,5 @@
 import React from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {Icon} from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
 import {Medication} from "../screens/Medication";
 import {useTranslation} from "react-i18next";
@@ -22,6 +21,13 @@ const MedicationButton: React.FC<MedicationButtonProps> = ( { onPress, styleExte
                     <Text style={styles.label}>{t('medicine')}:</Text>
                     <Text>{meds.name}</Text>
                 </View>
+                { meds.howOften != null && (
+                <View>
+                    <Text style={styles.label}></Text>
+                    <Text>{meds.howOften.toString()}</Text>
+                </View>
+                )
+                }
                 <View style={styles.infoRow}>
                     <Text style={styles.label}>{t('prescription')}:</Text>
                     <Text>{meds.prescription}</Text>
