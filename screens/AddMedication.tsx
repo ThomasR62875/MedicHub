@@ -15,7 +15,6 @@ import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
 import {Medication} from './Medication';
 import {useTranslation} from "react-i18next";
-import dayjs from "dayjs";
 import {Picker} from '@react-native-picker/picker'
 import DateTimePicker, {DateTimePickerEvent} from '@react-native-community/datetimepicker';
 import UnderlinedText from '../components/UnderlinedText';
@@ -28,7 +27,9 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
     const [prescription, setPrescription] = useState('');
     const [nameErrorMessage, setNameErrorMessage] = useState('')
     const [prescriptionErrorMessage, setPrescriptionErrorMessage] = useState('');
-    const [howOften, setHowOften] =useState(dayjs(null));
+    const [dateSince, setDateSince] = useState(new Date());
+    const [dateUntil, setDateUntil] = useState<Date | null>(null);
+    const [howOften, setHowOften] = useState<Date | null>(null);
     const {t} = useTranslation();
     const times = [
         '02:00:00',
@@ -59,26 +60,22 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
     const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(true);
 
     const handleAddMedication= async () => {
-        console.log("11")
         const medication : Medication = {
-            id: '',
+            id:'',
             name:name,
             prescription:prescription,
-            sinceWhen : sinceWhen.toDate(),
-            untilWhen : untilWhen.toDate(),
-            howOften: howOften.toDate(),
+            sinceWhen:dateSince,
+            untilWhen:dateUntil,
+            howOften:howOften,
         }
 
         const result = await addMedication(medication);
         if (result.success) {
             Alert.alert(t('text11'), '',
                 [{ text: 'Ok', onPress: () => navigation.navigate('Medication', { session: session })}]);
-            console.log("22")
         } else {
             Alert.alert('Error', result.message || 'An unknown error occurred');
-            console.log("33")
         }
-        console.log("44")
     }
 
     const validateName = (value: string) => {
@@ -96,33 +93,24 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
         }
     };
 
-    const [dateSince, setDateSince] = useState(new Date());
-    const [dateUntil, setDateUntil] = useState(new Date());
     const [mode, setMode] = useState<'date' | 'time'>('date');
 
     const onChange1 = (event: DateTimePickerEvent, selectedDate1?: Date | undefined): void => {
         const currentDate = selectedDate1 || dateSince;
         setDateSince(currentDate);
-        setSinceWhen(dayjs(currentDate).startOf('day'));
     };
 
     const onChange2 = (event: DateTimePickerEvent, selectedDate2?: Date | undefined): void => {
         const currentDate = selectedDate2 || dateUntil;
         setDateUntil(currentDate);
-        setUntilWhen(dayjs(currentDate).startOf('day'));
     };
-
-    const [sinceWhen , setSinceWhen] =useState(dayjs(dateSince).startOf('day'));
-    const [untilWhen, setUntilWhen] =useState(dayjs(null));
 
     const resetForm = () => {
         setName('');
         setPrescription('');
-        setHowOften(dayjs(null));
         setDateSince(new Date());
-        setDateUntil(new Date());
-        setSinceWhen(dayjs(new Date()).startOf('day'));
-        setUntilWhen(dayjs(null));
+        setHowOften(null);
+        setDateUntil(null);
         setNameErrorMessage('');
         setPrescriptionErrorMessage('');
     };
@@ -163,12 +151,12 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
                     </View>
                     <View>
                         <RNText style={styles.buttons} >
-                            <UnderlinedText>  {t('text22')} </UnderlinedText>
+                            <UnderlinedText>{t('text22')}</UnderlinedText>
                         </RNText>
                         <View style={styles.datePicker}>
                             <DateTimePicker  testID="dateTimePicker"
                                              value={dateSince}
-                                             mode="date"
+                                             mode="datetime"
                                              onChange={onChange1}
                             />
                         </View>
@@ -185,20 +173,21 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
                                 <Picker.Item label={item.label} value={item.value}/>
                             ))}
                         </Picker>
-                        <RNText style={{ marginTop: 10 }}>Selected option: {howOften.toString()}</RNText>
 
                     </View>
                     <View>
                         <RNText style={styles.buttons}>
-                            <UnderlinedText>  {t('text21')} </UnderlinedText>
+                            <UnderlinedText>{t('text21')}</UnderlinedText>
                         </RNText>
                         <View style={styles.datePicker}>
                             <DateTimePicker  testID="dateTimePicker"
-                                             value={dateUntil}
+                                             value={dateUntil ? dateUntil : new Date()}
                                              mode={mode}
                                              onChange={onChange2}
                             />
-                            <RNText style={{ marginTop: 10 }}>Selected option: {untilWhen.toString()}</RNText>
+                        </View>
+                        <View>
+                            {/*checkbox todo*/}
                         </View>
                     </View>
                     <View>
@@ -207,17 +196,12 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
                                 title={t('add')}
                                 disabled={isButtonDisabled}
                                 onPress={() => {
-                                    if(!dayjs(untilWhen).isValid()){
-                                        Alert.alert(t('warning'), t('warn15') ,
-                                            [{ text: 'Cancel', onPress: () => {setIsButtonDisabled(true);  resetForm();}},
-                                                { text: 'Ok', onPress: () => [handleAddMedication(), navigation.navigate('Medication', { session: session })]}])
-                                    }
-                                    else if(!dayjs(sinceWhen).isValid()){
+                                    if(dateUntil === null){
                                         Alert.alert(t('warning'), t('warn14') ,
                                             [{ text: 'Cancel', onPress: () => {setIsButtonDisabled(true);  resetForm();}},
                                                 { text: 'Ok', onPress: () => [handleAddMedication(), navigation.navigate('Medication', { session: session })]}])
                                     }
-                                    else if(!dayjs(howOften).isValid()){
+                                    else if(howOften === null){
                                         Alert.alert(t('warning') , t('warn13'),
                                             [{ text: 'Cancel', onPress: () => {setIsButtonDisabled(true);  resetForm();}},
                                                 { text: 'Ok', onPress: () => [handleAddMedication(), navigation.navigate('Medication', { session: session })]}])
