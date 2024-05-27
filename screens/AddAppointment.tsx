@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { addAppointment, getAllDoctorsByUser, getAllUsers, getUserId } from '../lib/supabase';
-import { StyleSheet, Alert, View, Keyboard, TouchableWithoutFeedback } from 'react-native';
-import { Input } from "react-native-elements";
-import StandardGreenButton from "../components/StandardGreenButton";
+import {StyleSheet, Alert, View, TouchableWithoutFeedback, Text, ScrollView} from 'react-native';
+import {Button, Input} from "react-native-elements";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../App";
 import { DependentUser } from "./DependentUsers";
@@ -10,6 +9,7 @@ import { Doctor } from "./Doctors";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Picker } from "@react-native-picker/picker";
 import { useTranslation } from "react-i18next";
+import {TextInput} from "react-native-paper";
 
 type AddAppointmentProps = NativeStackScreenProps<RootStackParamList, 'AddAppointment'>;
 
@@ -97,34 +97,43 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
     };
 
     return (
-        <View style={styles.containerTotal}>
-            <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-                <View>
-                    <DateTimePicker
-                        testID="datePicker"
-                        value={date}
-                        mode="date"
-                        display="default"
-                        onChange={onDateChange}
-                    />
-                    <DateTimePicker
-                        testID="timePicker"
-                        value={time}
-                        mode="time"
-                        display="default"
-                        onChange={onTimeChange}
-                    />
-                    <Input
-                        leftIcon={{ type: 'font-awesome', name: 'book' }}
-                        style={styles.verticallySpaced}
-                        placeholder={t('description')}
+        <View style={styles.container}>
+                    <View>
+                    <View style={styles.topContent}>
+                        <Text style={styles.titleText}>{t('mappointments')}</Text>
+                    </View>
+                    <View style={styles.datePicker}>
+                        <DateTimePicker
+                            testID="datePicker"
+                            value={date}
+                            mode="date"
+                            display="default"
+                            onChange={onDateChange}
+                        />
+                        <DateTimePicker
+                            testID="timePicker"
+                            value={time}
+                            mode="time"
+                            display="default"
+                            onChange={onTimeChange}
+                        />
+                    </View>
+                    <TextInput
+                        // leftIcon={{ type: 'font-awesome', name: 'book' }}
+                        style={{backgroundColor: "#e9f4e9", marginTop: "10%"}}
+                        label={t('description')}
                         value={description}
                         onChangeText={(text) => {
                             setDescription(text);
                             validateDescription(text);
                         }}
-                        errorStyle={{ color: 'red' }}
-                        errorMessage={descriptionErrorMessage}
+                        mode='outlined'
+                        outlineStyle={styles.descOutline}
+                        outlineColor='#2E5829FF'
+                        activeOutlineColor='#2E5829FF'
+
+                        // errorStyle={{ color: 'red' }}
+                        // errorMessage={descriptionErrorMessage}
                     />
                     <Picker
                         mode='dropdown'
@@ -139,10 +148,9 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
                         ))}
                     </Picker>
 
-                    <View style={styles.pickerStyle}>
                         <Picker
                             mode='dropdown'
-                            selectedValue={selectedUser}
+                            selectedValue={user_id}
                             onValueChange={(value: string) => setUserId(value)}
                             placeholder='Usuario'
                             enabled={true}
@@ -152,14 +160,20 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
                                 <Picker.Item key={item.value} label={item.label} value={item.value} />
                             ))}
                         </Picker>
-                    </View>
-                    <StandardGreenButton
+                    <Button
                         title={t('confirm')}
+                        buttonStyle={{
+                            backgroundColor: '#2E5829',
+                            borderColor: 'white',
+                            borderRadius: 20,
+                            minHeight: 10,
+                            minWidth: 10,
+                            maxWidth: '40%'
+                        }}
                         disabled={loading}
-                        onPress={handleAddAppointment}
-                    />
-                </View>
-            </TouchableWithoutFeedback>
+                        titleStyle={{ color: '#E9F4E9',fontSize: 15, margin: 5 }}
+                        onPress={handleAddAppointment}/>
+                    </View>
         </View>
     );
 }
@@ -170,8 +184,6 @@ const styles = StyleSheet.create({
     containerTotal: {
         backgroundColor: '#e9f4e9',
         height: '100%',
-        marginLeft: 10,
-        marginRight: 10,
         alignContent: 'center'
     },
     verticallySpaced: {
@@ -181,5 +193,44 @@ const styles = StyleSheet.create({
     },
     pickerStyle: {
         marginBottom: 20,
+    },
+    topContent: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        marginBottom: "10%",
+
+    },
+    text: {
+        fontFamily: 'Roboto-Thin',
+        fontSize: 14,
+        marginTop: "1%",
+        color: "#2E5829FF",
+        width: "60%"
+    },
+    titleText: {
+        fontFamily: 'Roboto-Thin',
+        fontSize: 25,
+        textAlign: 'center',
+        fontWeight: 'bold',
+        marginTop: "1%",
+        color: "#2E5829FF",
+        width: "70%"
+    },
+    container: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: "#e9f4e9",
+        height: '100%'
+    },
+    window: {
+        marginTop: "10%",
+        marginLeft: "5%",
+        marginRight: "5%",
+    },
+    datePicker: {
+        flexDirection: 'row',
+    },
+    descOutline: {
     }
 });
