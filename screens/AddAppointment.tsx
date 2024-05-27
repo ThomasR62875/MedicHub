@@ -1,21 +1,19 @@
 import React, {useEffect, useState} from 'react'
-import {addAppointment, getAllDoctorsByUser, getAllUsers, getUserId} from '../lib/supabase'
+import {addAppointment, addDoctor, getAllDoctorsByUser, getAllUsers, getUserId} from '../lib/supabase'
 import {SafeAreaView, StyleSheet, Alert, View, Keyboard, TouchableWithoutFeedback} from 'react-native'
-import {Input} from "react-native-elements";
+import {Button, Input} from "react-native-elements";
 import dayjs from 'dayjs';
 import StandardGreenButton from "../components/StandardGreenButton";
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
+import {Appointment} from "./Appointments";
 import {DependentUser} from "./DependentUsers"
 import {Doctor} from "./Doctors";
-import RNPickerSelect from 'react-native-picker-select';
+import DateTimePicker, {DateTimePickerEvent} from '@react-native-community/datetimepicker';
+import {Picker} from "@react-native-picker/picker";
 import {useTranslation} from "react-i18next";
 //
-import { DatePickerModal } from 'react-native-paper-dates';
-import { TimePickerModal } from 'react-native-paper-dates';
-import { SafeAreaProvider } from "react-native-safe-area-context";
-import { Button } from 'react-native-paper';
-import { es } from 'date-fns/locale';
+import { Button as PaperButton } from 'react-native-paper';
 //
 
 type AddAppointmentProps = NativeStackScreenProps<RootStackParamList, 'AddAppointment'>
@@ -23,7 +21,6 @@ type AddAppointmentProps = NativeStackScreenProps<RootStackParamList, 'AddAppoin
 
 const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) => {
     const {session} = route.params;
-    const [date, setDate] = useState(dayjs())
     const [loading, setLoading] = useState(false)
     const [description, setDescription] = useState('')
     const [doctor, setDoctor] = useState('')
@@ -31,6 +28,11 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
     const [session_user_id, setSessionUserId] = useState('')
     const [all_users, setAllUsers] = useState<DependentUser[]>([])
     const [doctors, setDoctors] = useState<Doctor[]>([])
+
+    const [date, setDate] = useState(new Date(1598051730000));
+    const [mode, setMode] = useState<'date' | 'time'>('date');
+    const [show, setShow] = useState(false);
+
 
     const [descriptionErrorMessage, setDescriptionErrorMessage] = useState('')
     const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(true);
@@ -70,7 +72,7 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
 
     const handleAddAppointment = async () => {
         const appointment = {
-            date: date.toDate(), description: description, user_name: '',doctor: doctor, user_id: user_id, id: ''};
+            date: date, description: description, user_name: '',doctor: doctor, user_id: user_id, id: ''};
 
         const result = await addAppointment(appointment);
         if (result.success) {
@@ -96,6 +98,26 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
         value: user.id,
     })): [];
 
+    const onChange = (event: DateTimePickerEvent, selectedDate?: Date | undefined): void => {
+        const currentDate = selectedDate || date;
+        setShow(false);
+        setDate(currentDate);
+    };
+
+    const showMode = (currentMode: 'date' | 'time'): void => {
+        setShow(true);
+        setMode(currentMode);
+    };
+
+    const showDatepicker = (): void => {
+        showMode('date');
+    };
+
+    const showTimepicker = (): void => {
+        showMode('time');
+    };
+
+
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     const [date2, setDate2] = React.useState(new Date());
     const [open, setOpen] = React.useState(false);
@@ -105,7 +127,7 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
     }, [setOpen]);
 
     const onConfirmSingle = React.useCallback(
-        (params) => {
+        (params: any) => {
             setOpen(false);
             setDate2(params.date);
         },
@@ -118,7 +140,7 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
     }, [setVisible])
 
     const onConfirm = React.useCallback(
-        ({ hours, minutes }) => {
+        ({ hours, minutes }: any) => {
             setVisible(false);
             console.log({ hours, minutes });
         },
@@ -129,38 +151,25 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
     return (
         <View style={styles.containerTotal}>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-                <SafeAreaView style={styles.container}>
-                    <SafeAreaProvider>
-                        <View style={{ justifyContent: 'center', flex: 1, alignItems: 'center' }}>
-                            <Button onPress={() => setOpen(true)} uppercase={false} mode="outlined">
-                                Seleccionar fecha
-                            </Button>
-                            <View style={{ marginTop: 40 }}>
-                                <DatePickerModal
-                                    locale="es"
-                                    mode="single"
-                                    visible={open}
-                                    onDismiss={onDismissSingle}
-                                    date={date2}
-                                    onConfirm={onConfirmSingle}
-                                    presentationStyle={"pageSheet"}
-                                />
-                            </View>
-                            <Button onPress={() => setVisible(true)} uppercase={false} mode="outlined">
-                                Seleccionar horario
-                            </Button>
-                            <View>
-                                <TimePickerModal
-                                    visible={visible}
-                                    onDismiss={onDismiss}
-                                    onConfirm={onConfirm}
-                                    hours={12}
-                                    minutes={14}
-                                />
-                            </View>
-                        </View>
-                    </SafeAreaProvider>
-                    <Input
+            <View>
+                    <Button onPress={showDatepicker} title="Show date picker!" />
+                    <Button onPress={showTimepicker} title="Show time picker!" />
+                <DateTimePicker  testID="dateTimePicker"
+                                 value={date}
+                                 mode={mode}
+                                 is24Hour={true}
+                                 onChange={onChange}
+                    // locale={'ES'}
+                    // options={{
+                    //     mainColor: '#000',
+                    //     textSecondaryColor: '#000',
+                    //     borderColor: '#000',
+                    //     backgroundColor: '#e9f4e9',
+                    // }}
+                    // // date={date}
+                    // // onSelectedChange={(date: React.SetStateAction<dayjs.Dayjs>) => setDate(date)}
+                />
+                <Input
                     leftIcon={{ type: 'font-awesome', name: 'book' }}
                     style={styles.verticallySpaced}
                     placeholder={t('description')}
@@ -172,30 +181,39 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
                     errorStyle={{ color: 'red' }}
                     errorMessage={descriptionErrorMessage}
                 />
+                <Picker
+                mode='dropdown'
+                selectedValue={doctor}
+                onValueChange={(value: any) => setDoctor(value)}
+                placeholder='Médico'
+                enabled={true}
+                itemStyle={styles.pickerStyle }
+                >
+                    {doctorsList.map((item) => (
+                        <Picker.Item key={item.value} label={item.label} value={item.value} />
+                    ))}
+                </Picker>
+
                 <View style={styles.pickerStyle}>
-                    <RNPickerSelect
-                        placeholder={{ label: t('doc'), value: null }}
-                        items={doctorsList}
-                        onValueChange={(value) => setDoctor(value)}
-                        style={{ ...pickerSelectStyles }}
-                        value={doctor}
-                    />
-                </View>
-                <View style={styles.pickerStyle}>
-                    <RNPickerSelect
-                        placeholder={{ label: t('user'), value: null }}
-                        items={userList}
-                        onValueChange={(value) => setUserId(value)}
-                        style={{ ...pickerSelectStyles }}
-                        value={user_id}
-                    />
+                    <Picker
+                        mode='dropdown'
+                        selectedValue={doctor}
+                        onValueChange={(value: any) => setUserId(value)}
+                        placeholder='Médico'
+                        enabled={true}
+                        itemStyle={styles.pickerStyle }
+                    >
+                        {userList.map((item) => (
+                            <Picker.Item key={item.value} label={item.label} value={item.value} />
+                        ))}
+                    </Picker>
                 </View>
                 <StandardGreenButton
                     title={t('confirm')}
                     disabled={loading}
                     onPress={handleAddAppointment}
                 />
-            </SafeAreaView>
+            </View>
         </TouchableWithoutFeedback>
         </View>
       );

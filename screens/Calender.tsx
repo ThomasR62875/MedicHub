@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {Alert, Dimensions, ScrollView, StyleSheet, Text, View} from "react-native";
+import { Dimensions, ScrollView, StyleSheet, Text, View} from "react-native";
 import {Appointment} from "./Appointments";
 import {Calendar} from "react-native-calendars";
 import TurnoContainer from "../components/TurnContainer";
