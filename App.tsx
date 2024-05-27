@@ -17,6 +17,8 @@ import SingleAppointment from "./screens/SingleAppointment";
 import EditAppointment from "./screens/EditAppointment";
 import SingleMedication from "./screens/SingleMedication";
 import EditMedication from "./screens/EditMedication";
+import SingleDependentUser from "./screens/SingleDependentUser";
+import EditDependentUser from "./screens/EditDependentUser";
 import SingleDoctor from "./screens/SingleDoctor";
 import EditDoctor from "./screens/EditDoctor";
 import DependentUsers from "./screens/DependentUsers";
@@ -58,6 +60,8 @@ export type RootStackParamList = {
   EditMedication: {session : Session | null};
   SingleDoctor: {session : Session | null};
   EditDoctor: {session : Session | null};
+  SingleDependentUser: {session : Session | null};
+  EditDependentUser: {session : Session | null};
 };
 
 
@@ -407,6 +411,28 @@ const App = () => {
                                 headerTintColor: '#ABD2A8',
                                 headerBackTitle: 'Usuario Dependiente',
                               }}/>
+                  <Stack.Screen name="SingleDependentUser"
+                                component={SingleDependentUser}
+                                initialParams={{session: session}}
+                                options={{
+                                    title: '',
+                                    headerStyle: {
+                                        backgroundColor: '#2E5829',
+                                    },
+                                    headerTintColor: '#ABD2A8',
+                                    headerBackTitle: 'Volver',
+                                }}/>
+                  <Stack.Screen name="EditDependentUser"
+                                component={EditDependentUser}
+                                initialParams={{session: session}}
+                                options={{
+                                    title: '',
+                                    headerStyle: {
+                                        backgroundColor: '#2E5829',
+                                    },
+                                    headerTintColor: '#ABD2A8',
+                                    headerBackTitle: 'Volver',
+                                }}/>
                 <Stack.Screen name="AddMedication"
                               component={AddMedication}
                               initialParams={{session: session}}
