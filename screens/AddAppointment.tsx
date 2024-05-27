@@ -1,23 +1,28 @@
 import React, {useEffect, useState} from 'react'
-import {addAppointment, getAllDoctorsByUser, getAllUsers, getUserId} from '../lib/supabase'
+import {addAppointment, addDoctor, getAllDoctorsByUser, getAllUsers, getUserId} from '../lib/supabase'
 import {SafeAreaView, StyleSheet, Alert, View, Keyboard, TouchableWithoutFeedback} from 'react-native'
 import {Button, Input} from "react-native-elements";
 import dayjs from 'dayjs';
 import StandardGreenButton from "../components/StandardGreenButton";
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
+import {Appointment} from "./Appointments";
 import {DependentUser} from "./DependentUsers"
 import {Doctor} from "./Doctors";
-// import RNPickerSelect from 'react-native-picker-select';
 import DateTimePicker, {DateTimePickerEvent} from '@react-native-community/datetimepicker';
 import {Picker} from "@react-native-picker/picker";
-// import DatePicker from 'react-native-date-picker';
+import {useTranslation} from "react-i18next";
+//
+import { Button } from 'react-native-paper';
+import { es } from 'date-fns/locale';
+//
 
 type AddAppointmentProps = NativeStackScreenProps<RootStackParamList, 'AddAppointment'>
 
 
 const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) => {
     const {session} = route.params;
+    const [date, setDate] = useState(dayjs())
     const [loading, setLoading] = useState(false)
     const [description, setDescription] = useState('')
     const [doctor, setDoctor] = useState('')
@@ -32,10 +37,12 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
 
 
     const [descriptionErrorMessage, setDescriptionErrorMessage] = useState('')
+    const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(true);
+    const {t} = useTranslation();
 
     const validateDescription = (value: string) => {
         if (value.trim() === '') {
-            setDescriptionErrorMessage('Debe ingresar la descripción del turno.');
+            setDescriptionErrorMessage(t('text7'));
         } else {
             setDescriptionErrorMessage('');
         }
@@ -72,7 +79,7 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
         const result = await addAppointment(appointment);
         if (result.success) {
             Alert.alert(
-                'El turno fue agregado',
+                t('text8'),
                 '',
                 [
                     { text: 'Ok', onPress: () => navigation.navigate('Appointments', { session: session }) }
@@ -112,6 +119,37 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
         showMode('time');
     };
 
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    const [date2, setDate2] = React.useState(new Date());
+    const [open, setOpen] = React.useState(false);
+
+    const onDismissSingle = React.useCallback(() => {
+        setOpen(false);
+    }, [setOpen]);
+
+    const onConfirmSingle = React.useCallback(
+        (params) => {
+            setOpen(false);
+            setDate2(params.date);
+        },
+        [setOpen, setDate2]
+    );
+
+    const [visible, setVisible] = React.useState(false)
+    const onDismiss = React.useCallback(() => {
+        setVisible(false)
+    }, [setVisible])
+
+    const onConfirm = React.useCallback(
+        ({ hours, minutes }) => {
+            setVisible(false);
+            console.log({ hours, minutes });
+        },
+        [setVisible]
+    );
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     return (
         <View style={styles.containerTotal}>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
@@ -136,7 +174,7 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
                 <Input
                     leftIcon={{ type: 'font-awesome', name: 'book' }}
                     style={styles.verticallySpaced}
-                    placeholder="Descripción"
+                    placeholder={t('description')}
                     value={description}
                     onChangeText={(text) => {
                         setDescription(text);
@@ -173,7 +211,7 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
                     </Picker>
                 </View>
                 <StandardGreenButton
-                    title="Confirmar"
+                    title={t('confirm')}
                     disabled={loading}
                     onPress={handleAddAppointment}
                 />
@@ -229,6 +267,6 @@ const pickerSelectStyles = StyleSheet.create({
         borderColor: 'purple',
         borderRadius: 8,
         color: 'black',
-        paddingRight: 30, // to ensure the text is never behind the icon
+        paddingRight: 30,
     },
 });

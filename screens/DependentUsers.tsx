@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { getDependentUsers} from '../lib/supabase'
-import {StyleSheet, View, Alert, ScrollView, Text, Dimensions} from 'react-native'
-import AddButton from "../components/AddButton";
+import {StyleSheet, View, ScrollView, Text, Dimensions} from 'react-native'
 import {Button} from "react-native-elements";
-import {RootStackParamList} from "../App";
-import {createNativeStackNavigator, NativeStackScreenProps} from "@react-navigation/native-stack";
+import {createNativeStackNavigator} from "@react-navigation/native-stack";
+import {useTranslation} from "react-i18next";
 
 const Stack = createNativeStackNavigator();
 
@@ -18,9 +17,6 @@ export type DependentUser = {
     id: string;
 }
 
-type DependentUsersProps = NativeStackScreenProps<RootStackParamList, 'DependentUsers'>;
-
-
 const DependentUsers: React.FC = ({navigation, route} : any) => {
     const {session} = route.params;
     const [loading, setLoading] = useState(true)
@@ -28,6 +24,7 @@ const DependentUsers: React.FC = ({navigation, route} : any) => {
     const [dependent_users,setDependentUsers]= useState<DependentUser[] | undefined>(undefined)
     const screenHeight = Dimensions.get('window').height;
     const percentageMargin = screenHeight * 0.05;
+    const {t} = useTranslation();
 
     useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
@@ -44,9 +41,9 @@ return(
     <View style={styles.container}>
         <View style={styles.window}>
             <View style={styles.topContent}>
-                <Text style={styles.titleText}>Usuarios Dependientes</Text>
+                <Text style={styles.titleText}>{t('depu')}</Text>
                 <Button
-                    title="Agregar"
+                    title={t('add')}
                     buttonStyle={{
                         backgroundColor: '#2E5829',
                         borderColor: 'white',
@@ -63,22 +60,22 @@ return(
                     return (
                         <View key={i} style={[styles.userContainer, {alignItems: 'center', padding: "5%", marginTop: '5%',}]}>
                             <View style={styles.infoRow}>
-                                <Text style={styles.label}>Nombre:</Text>
+                                <Text style={styles.label}>{t('name')}:</Text>
                                 <Text style={styles.value}>{d_user.first_name}</Text>
                             </View>
                             <View style={styles.infoRow}>
-                                <Text style={styles.label}>Apellido:</Text>
+                                <Text style={styles.label}>{t('surname')}:</Text>
                                 <Text style={styles.value}>{d_user.last_name}</Text>
                             </View>
                             <View style={styles.infoRow}>
-                                <Text style={styles.label}>DNI:</Text>
+                                <Text style={styles.label}>{t('id')}:</Text>
                                 <Text style={styles.value}>{d_user.dni}</Text>
                             </View>
                         </View>
                     )
                 })) : (
                     <View style={[styles.userContainer]}>
-                        <Text style={styles.text}>Aún no tienes usuarios dependientes </Text>
+                        <Text style={styles.text}>{t('text18')}</Text>
                     </View>
                 )}
             </ScrollView>
@@ -124,7 +121,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         marginTop: "1%",
         color: "#2E5829FF",
-        width: "60%"
+        width: "70%"
     },
     text: {
         fontSize: 20,
@@ -134,7 +131,7 @@ const styles = StyleSheet.create({
         color: "#215a1b"
     },
     window: {
-        marginTop: "30%",
+        marginTop: "25%",
         marginLeft: "5%",
         marginRight: "5%",
     },

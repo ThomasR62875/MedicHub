@@ -34,6 +34,7 @@ import {Ionicons, MaterialCommunityIcons} from "@expo/vector-icons";
 import {StyleSheet, TouchableOpacity, View} from "react-native";
 import {backgroundColor} from "react-native-calendars/src/style";
 import {Easing} from "react-native-reanimated";
+import {useTranslation} from "react-i18next";
 
 export type RootStackParamList = {
   HomeTabs: { session: Session | null };
@@ -75,9 +76,7 @@ type Props = {
 // https://www.youtube.com/watch?v=XiutL0uLICg&list=PLhRhTJaArVFugDgTSvXTUaqJWY9Kpp-gV  tutorial de la bottomBar todo
 function HomeTabs({route, navigation}: Props) {
   const {session} = route.params;
-  const size = 38;
-  const colorSelected = '#abd2a8';
-  const colorNot = '#000000';
+  const {t} = useTranslation();
 
   //para saber q tab esta seleccionada
   const [selectedTab, setSelectedTab] = useState<number | null>(0);
@@ -132,11 +131,11 @@ function HomeTabs({route, navigation}: Props) {
             tabBarInactiveTintColor: "#0e1e0d",
         }}>
             <Tab.Screen
-                name="Home"
+                name={t('home')}
                 component={Home}
                 initialParams={{session: session}}
                 options={{
-                    title: 'Inicio',
+                    title: t('home'),
                     tabBarIcon: ({ color, size }) => (
                         <Ionicons name="home" color={color} size={size} />
                     ),
@@ -144,11 +143,11 @@ function HomeTabs({route, navigation}: Props) {
                 }}
             />
             <Tab.Screen
-                name="Calender"
+                name={t('calendar')}
                 component={Calender}
                 initialParams={{session: session}}
                 options={{
-                    title: 'Calendario',
+                    title: t('calendar'),
                     tabBarIcon: ({ color, size }) => (
                         <Ionicons name="calendar" color={color} size={size} />
                     ),
@@ -157,22 +156,22 @@ function HomeTabs({route, navigation}: Props) {
                 }
             />
             <Tab.Screen
-                name="DependentUsers"
+                name={t('dusers')}
                 component={DependentUsers}
                 initialParams={{session: session}}
                 options={{
-                    title: 'Usuarios',
+                    title: t('dusers'),
                     tabBarIcon: ({ color, size }) => (
                         <Ionicons name="people" color={color} size={size} />
                     ),
                     headerShown: false
                 }}/>
             <Tab.Screen
-                name="Account"
+                name={t('account')}
                 component={Account}
                 initialParams={{session: session}}
                 options={{
-                    title: 'Perfil',
+                    title: t('account'),
                     tabBarIcon: ({ color, size }) => (
                         <Ionicons name="person" color={color} size={size} />
                     ),

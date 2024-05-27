@@ -1,8 +1,8 @@
 import React from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {Icon} from 'react-native-elements';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import {Appointment} from "../screens/Appointments";
+import {useTranslation} from "react-i18next";
 
 interface AppointmentButtonProps {
     onPress: any;
@@ -14,6 +14,8 @@ interface AppointmentButtonProps {
 const AppointmentButton: React.FC<AppointmentButtonProps> = ( { onPress, styleExterior, turno, date }) => {
     const navigation = useNavigation();
     const otraDate = new Date(date);
+    const {t} = useTranslation();
+
     return (
         <TouchableOpacity style={styles.container} onPress={onPress}>
             <View style={styleExterior}>
@@ -21,10 +23,10 @@ const AppointmentButton: React.FC<AppointmentButtonProps> = ( { onPress, styleEx
                     <Text style={{textAlign: 'center'}}>{turno.description}</Text>
                 </View>
                 <View style={styles.infoRow}>
-                    <Text style={styles.label}>Usuario:</Text>
+                    <Text style={styles.label}>{t('user')}:</Text>
                     <Text>{turno.user_name}</Text>
                     <View style={{ width: 30 }} />
-                    <Text style={styles.label}>Fecha:</Text>
+                    <Text style={styles.label}>{t('date')}:</Text>
                     <Text>{otraDate.getDate()}/{otraDate.getMonth()+1}/{otraDate.getFullYear()}</Text>
                 </View>
             </View>
