@@ -208,9 +208,24 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
                     </View>
                     <View>
                         <View style={[styles.verticallySpaced, {marginTop : "5%"}]}>
-                            <StandardGreenButton
+                            <Button
                                 title={t('add')}
                                 disabled={isButtonDisabled}
+                                buttonStyle={{
+                                    backgroundColor: '#2E5829',
+                                    borderWidth: 2,
+                                    borderColor: 'white',
+                                    borderRadius: 30,
+                                    minHeight: 50
+                                }}
+                                containerStyle={{
+                                    width: 150,
+                                    marginHorizontal: 50,
+                                    marginVertical: 10,
+                                    marginTop: 40,
+                                    alignSelf: 'center',
+                                }}
+                                titleStyle={{ color: '#eef9ed' }}
                                 onPress={() => {
                                     if(dateUntil === null){
                                         Alert.alert(t('warning'), t('warn14') ,

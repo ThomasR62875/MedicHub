@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {View, Alert, StyleSheet, TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView, ScrollView} from 'react-native';
 import {addDoctor, getAllUsers, getSpecialties, getUserId} from "../lib/supabase";
-import {Input} from "react-native-elements";
+import {Button, Input} from "react-native-elements";
 import StandardGreenButton from "../components/StandardGreenButton";
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
@@ -168,13 +168,27 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}) => {
                             value={user_id}
                         />
                     </View>
-                    <View style={styles.verticallySpaced}>
-                        <StandardGreenButton
-                            title={t('add')}
-                            disabled={isButtonDisabled}
-                            onPress={handleAddDoctor}
-                        />
-                    </View>
+                    <Button
+                        title={t('add')}
+                        disabled={isButtonDisabled}
+                        buttonStyle={{
+                            backgroundColor: '#2E5829',
+                            borderWidth: 2,
+                            borderColor: 'white',
+                            borderRadius: 30,
+                            minHeight: 50
+                        }}
+                        containerStyle={{
+                            width: 150,
+                            marginHorizontal: 50,
+                            marginVertical: 10,
+                            marginTop: 40,
+                            alignSelf: 'center',
+                        }}
+                        titleStyle={{ color: '#eef9ed' }}
+
+                        onPress={handleAddDoctor}
+                    />
                 </View>
             </ScrollView>
         </TouchableWithoutFeedback>
