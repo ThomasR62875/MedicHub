@@ -261,7 +261,7 @@ export const deleteAppointment = async (appoint: Appointment) : Promise<{ succes
 }
 
 export const deleteDependentUser = async (doc: Doctor): Promise<{ success: boolean, message: string }> => {
-    const { data, error } = await supabase.rpc('delete_doctor_by_id', { input_id: doc.id });
+    const { data, error } = await supabase.rpc('delete_dependent_user_by_id', { input_id: doc.id });
     if (error) {
         return {
             success: false,
@@ -327,7 +327,7 @@ export const updateAppointment = async (appoint: Appointment): Promise<{ success
 };
 
 export const updateDependentUser = async (depUser: DependentUser): Promise<{ success: boolean, message: string }> => {
-    const { error } = await supabase.rpc("update_doctor", {});
+    const { error } = await supabase.rpc("update_dependent_user", {id_input: depUser.id , first_name_input: depUser.first_name, last_name_input: depUser.last_name, dni_input: depUser.dni});
     if (error) {
         return {
             success: false,

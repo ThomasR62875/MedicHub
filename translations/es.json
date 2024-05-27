@@ -87,5 +87,6 @@
   "deleteAppoint" : "El turno fue eliminado correctamente",
   "deleteMed" : "El medicamento fue eliminado correctamente",
   "deleteDoc" : "El doctor fue eliminado correctamente",
-  "deleteDepUser" : "El usuario dependiente fue eliminado correctamente"
+  "deleteDepUser" : "El usuario dependiente fue eliminado correctamente",
+  "RUsureDU"  : "¿Está seguro de que desea eliminar el usuario dependiente?"
 }

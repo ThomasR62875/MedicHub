@@ -5,6 +5,7 @@ import {Button} from "react-native-elements";
 import {createNativeStackNavigator} from "@react-navigation/native-stack";
 import {useTranslation} from "react-i18next";
 import {cardStyle} from "../styles/global"
+import DependentUserButton from "../components/DependentUsertButton";
 
 const Stack = createNativeStackNavigator();
 
@@ -59,24 +60,13 @@ return(
                 {dependent_users && dependent_users.length >0 ? (
                     dependent_users.map((d_user: DependentUser, i) => {
                     return (
-                        <View key={i} style={cardStyle.container}>
-                            <View style={cardStyle.infoRow}>
-                                <Text style={cardStyle.label}>{t('name')}:</Text>
-                                <Text style={cardStyle.value}>{d_user.first_name}</Text>
-                            </View>
-                            <View style={cardStyle.infoRow}>
-                                <Text style={cardStyle.label}>{t('surname')}:</Text>
-                                <Text style={cardStyle.value}>{d_user.last_name}</Text>
-                            </View>
-                            <View style={cardStyle.infoRow}>
-                                <Text style={cardStyle.label}>{t('id')}:</Text>
-                                <Text style={cardStyle.value}>{d_user.dni}</Text>
-                            </View>
+                        <View key={i}>
+                            <DependentUserButton onPress={() => navigation.navigate({name: 'SingleDependentUser', params: {du: d_user}})} du={d_user}></DependentUserButton>
                         </View>
                     )
                 })) : (
                     <View style={[cardStyle.container]}>
-                        <Text style={cardStyle.text}>{t('text18')}</Text>
+                        <Text style={styles.text}>{t('text18')}</Text>
                     </View>
                 )}
             </ScrollView>
@@ -92,6 +82,11 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: "#e9f4e9",
+    },
+    duserContainer: {
+        marginTop: '5%',
+        alignItems: 'center',
+        borderRadius: 5,
     },
     titleText: {
         fontFamily: 'Roboto-Thin',
