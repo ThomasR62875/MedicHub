@@ -13,4 +13,5 @@ services:
       - ./lib:/app/lib
       - ./screens:/app/screens
       - ./App.tsx:/app/App.tsx
+      - ./styles:/app/styles
     tty: true
