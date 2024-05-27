@@ -18,6 +18,7 @@ import {useTranslation} from "react-i18next";
 import {Picker} from '@react-native-picker/picker'
 import DateTimePicker, {DateTimePickerEvent} from '@react-native-community/datetimepicker';
 import UnderlinedText from '../components/UnderlinedText';
+import Checkbox from 'expo-checkbox';
 
 type AddMedicationProps = NativeStackScreenProps<RootStackParamList, 'AddMedication'>
 
@@ -30,6 +31,7 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
     const [dateSince, setDateSince] = useState(new Date());
     const [dateUntil, setDateUntil] = useState<Date | null>(null);
     const [howOften, setHowOften] = useState<Date | null>(null);
+    const [isForever, setIsForever] = useState<boolean>(false);
     const {t} = useTranslation();
     const times = [
         '02:00:00',
@@ -67,6 +69,7 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
             sinceWhen:dateSince,
             untilWhen:dateUntil,
             howOften:howOften,
+            isForever:isForever,
         }
 
         const result = await addMedication(medication);
@@ -96,7 +99,15 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
     const [mode, setMode] = useState<'date' | 'time'>('date');
 
     const onChange1 = (event: DateTimePickerEvent, selectedDate1?: Date | undefined): void => {
-        const currentDate = selectedDate1 || dateSince;
+        let currentDate;
+        if(selectedDate1){
+            currentDate = new Date(selectedDate1);
+            currentDate.setHours(currentDate.getHours() - 3);
+        }
+        else{
+            currentDate=dateSince;
+        }
+        console.log(currentDate);
         setDateSince(currentDate);
     };
 
@@ -187,7 +198,12 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
                             />
                         </View>
                         <View>
-                            {/*checkbox todo*/}
+                            <Checkbox
+                                style={{margin: 8}}
+                                value={isForever}
+                                onValueChange={setIsForever}
+                                color={'#4630EB'}
+                            />
                         </View>
                     </View>
                     <View>

@@ -73,5 +73,7 @@
   "warn13" : "Si no completas el dato 'Cada cuanto' no podremos notificarte cuando tomarlo",
   "warn14" : "Si no completas el dato 'Hasta cuando' no podremos notificarte cuando tomarlo",
   "text23" : "Cada: ",
-  "text24" : " horas"
+  "text24" : " horas",
+  "text25" : "No especificó una fecha de finalización",
+  "delete" : "Eliminar"
 }
