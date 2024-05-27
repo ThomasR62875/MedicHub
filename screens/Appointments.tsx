@@ -4,6 +4,7 @@ import {StyleSheet,ScrollView ,View, Text} from 'react-native'
 import AppointmentButton from "../components/AppointmentButton";
 import {Button} from "react-native-elements";
 import {useTranslation} from "react-i18next";
+import {cardStyle} from "../styles/global"
 
 export type Appointment = {
     id: string;
@@ -55,15 +56,14 @@ const Appointments: React.FC =  ({navigation, route}: any) =>{
                         {appointments && appointments?.length > 0 ? (
                                 appointments.map((appointment: Appointment, i) => {
                                 return (
-                                     <View key={i} style={styles.appointContainer}>
+                                     <View key={i}>
                                          <AppointmentButton onPress={() => navigation.navigate({name: 'SingleAppointment', params: {appointment: appointment}})}
-                                                            styleExterior={styles.appointContainer} date={appointment.date} turno={appointment}></AppointmentButton>
-                                            <View style={{ marginBottom: 100 }} />
+                                             date={appointment.date} turno={appointment}></AppointmentButton>
                                      </View>
                                 )})
                             ) : (
-                            <View style={[styles.userContainer]}>
-                                <Text style={[styles.text, {textAlign: 'center'}]}>{t('text13')}</Text>
+                            <View style={[cardStyle.container]}>
+                                <Text style={[cardStyle.text]}>{t('text13')}</Text>
                             </View>
                         )}
                </ScrollView>
@@ -80,17 +80,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: "#e9f4e9",
     },
-    userContainer: {
-        backgroundColor: '#cbe4c9',
-        borderRadius: 20,
-        borderColor: '#cbe4c9',
-        borderWidth: 1,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
-        padding: 10,
-    },
     titleText: {
         fontFamily: 'Roboto-Thin',
         fontSize: 25,
@@ -99,11 +88,6 @@ const styles = StyleSheet.create({
         marginTop: "1%",
         color: "#2E5829FF",
         width: "70%"
-    },
-    appointContainer: {
-        marginTop: '5%',
-        alignItems: 'center',
-        borderRadius: 10,
     },
     window: {
         marginTop: "20%",
