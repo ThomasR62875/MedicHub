@@ -4,6 +4,7 @@ import { getMedications } from '../lib/supabase'
 import MedicationButton from "../components/MedicationButton";
 import {Button} from "react-native-elements";
 import {useTranslation} from "react-i18next";
+import {cardStyle} from "../styles/global"
 
 export type Medication = {
     id: string;
@@ -61,7 +62,6 @@ const Medication: React.FC= ({ navigation, route }: any) => {
                                 return (
                                     <View key={i} style={styles.medsContainer}>
                                         <MedicationButton onPress={() => navigation.navigate({name: 'SingleMedication', params: {meds: medic}})} styleExterior={styles.medsContainer} meds={medic}></MedicationButton>
-                                        <View style={{ marginBottom: 100 }} />
                                     </View>
                                 )
                             })

@@ -1,37 +1,33 @@
-import React, {useEffect, useState} from 'react'
-import {addAppointment, getAllDoctorsByUser, getAllUsers, getUserId} from '../lib/supabase'
-import { StyleSheet, Alert, View, Keyboard, TouchableWithoutFeedback} from 'react-native'
+import React, { useEffect, useState } from 'react';
+import { addAppointment, getAllDoctorsByUser, getAllUsers, getUserId } from '../lib/supabase';
+import {StyleSheet, Alert, View, TouchableWithoutFeedback, Text, ScrollView} from 'react-native';
 import {Button, Input} from "react-native-elements";
-import StandardGreenButton from "../components/StandardGreenButton";
-import {NativeStackScreenProps} from "@react-navigation/native-stack";
-import {RootStackParamList} from "../App";
-import {DependentUser} from "./DependentUsers"
-import {Doctor} from "./Doctors";
-import DateTimePicker, {DateTimePickerEvent} from '@react-native-community/datetimepicker';
-import {Picker} from "@react-native-picker/picker";
-import {useTranslation} from "react-i18next";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { RootStackParamList } from "../App";
+import { DependentUser } from "./DependentUsers";
+import { Doctor } from "./Doctors";
+import DateTimePicker from '@react-native-community/datetimepicker';
+import { Picker } from "@react-native-picker/picker";
+import { useTranslation } from "react-i18next";
+import {TextInput} from "react-native-paper";
 
-type AddAppointmentProps = NativeStackScreenProps<RootStackParamList, 'AddAppointment'>
-
+type AddAppointmentProps = NativeStackScreenProps<RootStackParamList, 'AddAppointment'>;
 
 const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) => {
-    const {session} = route.params;
-    const [loading, setLoading] = useState(false)
-    const [description, setDescription] = useState('')
-    const [doctor, setDoctor] = useState('')
-    const [user_id, setUserId] = useState('')
-    const [session_user_id, setSessionUserId] = useState('')
-    const [all_users, setAllUsers] = useState<DependentUser[]>([])
-    const [doctors, setDoctors] = useState<Doctor[]>([])
-    const [selectedUser, setSelectedUser]= useState('')
+    const { session } = route.params;
+    const [loading, setLoading] = useState(false);
+    const [description, setDescription] = useState('');
+    const [doctor, setDoctor] = useState('');
+    const [user_id, setUserId] = useState('');
+    const [session_user_id, setSessionUserId] = useState('');
+    const [all_users, setAllUsers] = useState<DependentUser[] | undefined>([]);
+    const [doctors, setDoctors] = useState<Doctor[] | undefined>([]);
+    const [selectedUser, setSelectedUser] = useState('');
     const [date, setDate] = useState(new Date());
-    const [mode, setMode] = useState<'date' | 'time'>('date');
-    const [show, setShow] = useState(false);
+    const [time, setTime] = useState(new Date());
 
-
-    const [descriptionErrorMessage, setDescriptionErrorMessage] = useState('')
-    const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(true);
-    const {t} = useTranslation();
+    const [descriptionErrorMessage, setDescriptionErrorMessage] = useState('');
+    const { t } = useTranslation();
 
     const validateDescription = (value: string) => {
         if (value.trim() === '') {
@@ -44,201 +40,150 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
     useEffect(() => {
         if (session) {
             async function fetchUserId() {
-                // @ts-ignore
                 setSessionUserId(await getUserId());
-            };
+            }
             fetchUserId();
-
         }
-    }, [session]); // Dependencia de sesión para ejecutar solo cuando la sesión cambie
+    }, [session]);
 
     useEffect(() => {
         if (session_user_id) {
             async function getInfo() {
-                // @ts-ignore
                 setDoctors(await getAllDoctorsByUser(session_user_id));
-                // @ts-ignore
                 setAllUsers(await getAllUsers(session_user_id));
             }
-            getInfo()
+            getInfo();
         }
     }, [session_user_id]);
 
-
     const handleAddAppointment = async () => {
-        const appointment = {
-            date: date, description: description, user_name: '',doctor: doctor, user_id: user_id, id: ''};
+        const appointmentDate = new Date(date);
+        appointmentDate.setHours(time.getHours()-3);
+        appointmentDate.setMinutes(time.getMinutes());
 
+
+
+        const appointment = { date: appointmentDate, description, user_name: '', doctor, user_id, id: '' };
         const result = await addAppointment(appointment);
         if (result.success) {
             Alert.alert(
                 t('text8'),
                 '',
-                [
-                    { text: 'Ok', onPress: () => navigation.navigate('Appointments', { session: session }) }
-                ]
+                [{ text: 'Ok', onPress: () => navigation.navigate('Appointments', { session }) }]
             );
         } else {
             Alert.alert('Error', result.message || 'An unknown error occurred');
         }
     };
 
-    const doctorsList = doctors ? (doctors as Doctor[]).map((doctor: Doctor) => ({
+    const doctorsList = doctors?.map((doctor) => ({
         label: doctor.name,
         value: doctor.id,
-    })): [];
+    }));
 
-    const userList = all_users ? (all_users as DependentUser[]).map((user: DependentUser) => ({
+    const userList = all_users?.map((user) => ({
         label: user.first_name,
         value: user.id,
-    })): [];
+    }));
 
-    const onChange = (event: DateTimePickerEvent, selectedDate?: Date | undefined): void => {
-        const currentDate = date;
-        setShow(false);
+    const onDateChange = (event: any, selectedDate?: Date) => {
+        const currentDate = selectedDate || date;
         setDate(currentDate);
     };
 
-    const showMode = (currentMode: 'date' | 'time'): void => {
-        setShow(true);
-        setMode(currentMode);
+    const onTimeChange = (event: any, selectedTime?: Date) => {
+        const currentTime = selectedTime || time;
+        setTime(currentTime);
     };
-
-    const showDatepicker = (): void => {
-        showMode('date');
-    };
-
-    const showTimepicker = (): void => {
-        showMode('time');
-    };
-
-
-    const setDoctorTest = (doctorId: string): void => {
-        console.log(doctorId)
-        setDoctor(doctorId)
-    }
-
-    const setUserTest = (userId: string): void => {
-        console.log(userId)
-        setUserId(userId)
-    }
-
-
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    const [date2, setDate2] = React.useState(new Date());
-    const [open, setOpen] = React.useState(false);
-
-    const onDismissSingle = React.useCallback(() => {
-        setOpen(false);
-    }, [setOpen]);
-
-    const onConfirmSingle = React.useCallback(
-        (params: any) => {
-            setOpen(false);
-            setDate2(params.date);
-        },
-        [setOpen, setDate2]
-    );
-
-    const [visible, setVisible] = React.useState(false)
-    const onDismiss = React.useCallback(() => {
-        setVisible(false)
-    }, [setVisible])
-
-    const onConfirm = React.useCallback(
-        ({ hours, minutes }: any) => {
-            setVisible(false);
-            console.log({ hours, minutes });
-        },
-        [setVisible]
-    );
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     return (
-        <View style={styles.containerTotal}>
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-            <View>
-                    <Button onPress={showDatepicker} title="Show date picker!" />
-                    <Button onPress={showTimepicker} title="Show time picker!" />
-                <DateTimePicker  testID="dateTimePicker"
-                                 value={date}
-                                 mode={mode}
-                                 is24Hour={true}
-                                 onChange={onChange}
-                    // locale={'ES'}
-                    // options={{
-                    //     mainColor: '#000',
-                    //     textSecondaryColor: '#000',
-                    //     borderColor: '#000',
-                    //     backgroundColor: '#e9f4e9',
-                    // }}
-                    // // date={date}
-                    // // onSelectedChange={(date: React.SetStateAction<dayjs.Dayjs>) => setDate(date)}
-                />
-                <Input
-                    leftIcon={{ type: 'font-awesome', name: 'book' }}
-                    style={styles.verticallySpaced}
-                    placeholder={t('description')}
-                    value={description}
-                    onChangeText={(text) => {
-                        setDescription(text);
-                        validateDescription(text);
-                    }}
-                    errorStyle={{ color: 'red' }}
-                    errorMessage={descriptionErrorMessage}
-                />
-                <Picker
-                mode='dropdown'
-                selectedValue={doctor}
-                onValueChange={(value: string) => setDoctor(value)}
-                placeholder='Médico'
-                enabled={true}
-                itemStyle={styles.pickerStyle }
-                >
-                    {doctorsList.map((item) => (
-                        <Picker.Item key={item.value} label={item.label} value={item.value} />
-                    ))}
-                </Picker>
+        <View style={styles.container}>
+                    <View>
+                    <View style={styles.topContent}>
+                        <Text style={styles.titleText}>{t('mappointments')}</Text>
+                    </View>
+                    <View style={styles.datePicker}>
+                        <DateTimePicker
+                            testID="datePicker"
+                            value={date}
+                            mode="date"
+                            display="default"
+                            onChange={onDateChange}
+                        />
+                        <DateTimePicker
+                            testID="timePicker"
+                            value={time}
+                            mode="time"
+                            display="default"
+                            onChange={onTimeChange}
+                        />
+                    </View>
+                    <TextInput
+                        // leftIcon={{ type: 'font-awesome', name: 'book' }}
+                        style={{backgroundColor: "#e9f4e9", marginTop: "10%"}}
+                        label={t('description')}
+                        value={description}
+                        onChangeText={(text) => {
+                            setDescription(text);
+                            validateDescription(text);
+                        }}
+                        mode='outlined'
+                        outlineStyle={styles.descOutline}
+                        outlineColor='#2E5829FF'
+                        activeOutlineColor='#2E5829FF'
 
-                <View style={styles.pickerStyle}>
+                        // errorStyle={{ color: 'red' }}
+                        // errorMessage={descriptionErrorMessage}
+                    />
                     <Picker
                         mode='dropdown'
-                        selectedValue={selectedUser}
-                        onValueChange={(value: string) => setUserId(value)}
+                        selectedValue={doctor}
+                        onValueChange={(value: string) => setDoctor(value)}
                         placeholder='Médico'
                         enabled={true}
                         itemStyle={styles.pickerStyle}
                     >
-                        {userList.map((item) => (
+                        {doctorsList?.map((item) => (
                             <Picker.Item key={item.value} label={item.label} value={item.value} />
                         ))}
                     </Picker>
-                </View>
-                <StandardGreenButton
-                    title={t('confirm')}
-                    disabled={loading}
-                    onPress={handleAddAppointment}
-                />
-            </View>
-        </TouchableWithoutFeedback>
+
+                        <Picker
+                            mode='dropdown'
+                            selectedValue={user_id}
+                            onValueChange={(value: string) => setUserId(value)}
+                            placeholder='Usuario'
+                            enabled={true}
+                            itemStyle={styles.pickerStyle}
+                        >
+                            {userList?.map((item) => (
+                                <Picker.Item key={item.value} label={item.label} value={item.value} />
+                            ))}
+                        </Picker>
+                    <Button
+                        title={t('confirm')}
+                        buttonStyle={{
+                            backgroundColor: '#2E5829',
+                            borderColor: 'white',
+                            borderRadius: 20,
+                            minHeight: 10,
+                            minWidth: 10,
+                            maxWidth: '40%'
+                        }}
+                        disabled={loading}
+                        titleStyle={{ color: '#E9F4E9',fontSize: 15, margin: 5 }}
+                        onPress={handleAddAppointment}/>
+                    </View>
         </View>
-      );
+    );
 }
 
 export default AddAppointment;
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: 20,
-    },
-    containerTotal:{
+    containerTotal: {
         backgroundColor: '#e9f4e9',
         height: '100%',
-        marginLeft: 10,
-        marginRight: 10,
         alignContent: 'center'
     },
     verticallySpaced: {
@@ -248,29 +193,44 @@ const styles = StyleSheet.create({
     },
     pickerStyle: {
         marginBottom: 20,
-    }
-});
+    },
+    topContent: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        marginBottom: "10%",
 
-// Define pickerSelectStyles at the bottom
-const pickerSelectStyles = StyleSheet.create({
-    inputIOS: {
-        fontSize: 16,
-        paddingVertical: 12,
-        paddingHorizontal: 10,
-        borderWidth: 1,
-        borderColor: 'gray',
-        borderRadius: 4,
-        color: 'black',
-        paddingRight: 30,
     },
-    inputAndroid: {
-        fontSize: 16,
-        paddingHorizontal: 10,
-        paddingVertical: 8,
-        borderWidth: 0.5,
-        borderColor: 'purple',
-        borderRadius: 8,
-        color: 'black',
-        paddingRight: 30,
+    text: {
+        fontFamily: 'Roboto-Thin',
+        fontSize: 14,
+        marginTop: "1%",
+        color: "#2E5829FF",
+        width: "60%"
     },
+    titleText: {
+        fontFamily: 'Roboto-Thin',
+        fontSize: 25,
+        textAlign: 'center',
+        fontWeight: 'bold',
+        marginTop: "1%",
+        color: "#2E5829FF",
+        width: "70%"
+    },
+    container: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: "#e9f4e9",
+        height: '100%'
+    },
+    window: {
+        marginTop: "10%",
+        marginLeft: "5%",
+        marginRight: "5%",
+    },
+    datePicker: {
+        flexDirection: 'row',
+    },
+    descOutline: {
+    }
 });

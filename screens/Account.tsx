@@ -12,7 +12,6 @@ const Account: React.FC = ({ navigation, route } : any) => {
     const [first_name, setFirstName] = useState('')
     const [last_name, setLastName] = useState('')
     const [dni, setDni] = useState(0)
-    const [avatar_url, setAvatarUrl] = useState('')
     const [visible, setVisible] = React.useState(false);
     const {t} = useTranslation();
 
@@ -22,7 +21,13 @@ const Account: React.FC = ({ navigation, route } : any) => {
                 const data : DependentUser= await getUser(await getUserId())
                 setFirstName(data.first_name)
                 setLastName(data.last_name)
-                setDni(parseInt(data.dni.slice(0,8),10))
+                const dniString = String(data.dni);
+                if (dniString && dniString.length === 8) {
+                    const dniNumber = parseInt(dniString.slice(0, 8), 10);
+                    setDni(dniNumber);
+                } else {
+                    console.error('El DNI no es una cadena válida o no tiene al menos 8 caracteres.');
+                }
             }
             fetchData()
         }

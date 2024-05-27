@@ -4,6 +4,7 @@ import {StyleSheet, View, ScrollView, Text, Dimensions} from 'react-native'
 import {Button} from "react-native-elements";
 import {createNativeStackNavigator} from "@react-navigation/native-stack";
 import {useTranslation} from "react-i18next";
+import {cardStyle} from "../styles/global"
 
 const Stack = createNativeStackNavigator();
 
@@ -58,24 +59,24 @@ return(
                 {dependent_users && dependent_users.length >0 ? (
                     dependent_users.map((d_user: DependentUser, i) => {
                     return (
-                        <View key={i} style={[styles.userContainer, {alignItems: 'center', padding: "5%", marginTop: '5%',}]}>
-                            <View style={styles.infoRow}>
-                                <Text style={styles.label}>{t('name')}:</Text>
-                                <Text style={styles.value}>{d_user.first_name}</Text>
+                        <View key={i} style={cardStyle.container}>
+                            <View style={cardStyle.infoRow}>
+                                <Text style={cardStyle.label}>{t('name')}:</Text>
+                                <Text style={cardStyle.value}>{d_user.first_name}</Text>
                             </View>
-                            <View style={styles.infoRow}>
-                                <Text style={styles.label}>{t('surname')}:</Text>
-                                <Text style={styles.value}>{d_user.last_name}</Text>
+                            <View style={cardStyle.infoRow}>
+                                <Text style={cardStyle.label}>{t('surname')}:</Text>
+                                <Text style={cardStyle.value}>{d_user.last_name}</Text>
                             </View>
-                            <View style={styles.infoRow}>
-                                <Text style={styles.label}>{t('id')}:</Text>
-                                <Text style={styles.value}>{d_user.dni}</Text>
+                            <View style={cardStyle.infoRow}>
+                                <Text style={cardStyle.label}>{t('id')}:</Text>
+                                <Text style={cardStyle.value}>{d_user.dni}</Text>
                             </View>
                         </View>
                     )
                 })) : (
-                    <View style={[styles.userContainer]}>
-                        <Text style={styles.text}>{t('text18')}</Text>
+                    <View style={[cardStyle.container]}>
+                        <Text style={cardStyle.text}>{t('text18')}</Text>
                     </View>
                 )}
             </ScrollView>
@@ -91,28 +92,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: "#e9f4e9",
-    },
-    userContainer: {
-        backgroundColor: '#cbe4c9',
-        borderRadius: 20,
-        borderColor: '#cbe4c9',
-        borderWidth: 1,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
-        minWidth: "100%",
-    },
-    infoRow: {
-        flexDirection: 'row',
-        marginBottom: 5,
-    },
-    label: {
-        fontWeight: 'bold',
-        marginRight: 5,
-    },
-    value: {
-        flex: 1,
     },
     titleText: {
         fontFamily: 'Roboto-Thin',
