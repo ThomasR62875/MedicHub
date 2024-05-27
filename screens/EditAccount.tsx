@@ -34,6 +34,13 @@ const EditAccount:React.FC<EditAccountProps> = ({navigation, route }) =>{
             if (data) {
                 setFirstName(data.first_name)
                 setLastName(data.last_name)
+                const dniString = data.dni;
+                if (typeof dniString === 'string' && dniString.length >= 8) {
+                    const dniNumber = parseInt(dniString.slice(0, 8), 10);
+                    setDni(dniNumber);
+                } else {
+                    console.error('El DNI no es una cadena válida o no tiene al menos 8 caracteres.');
+                }
                 setDni(data.dni)
                 setAvatarUrl(data.avatar_url)
             }
