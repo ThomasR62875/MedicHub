@@ -98,7 +98,7 @@ const Home: React.FC = ({navigation, route}: any) => {
             <View style={styles.container}>
                 <View style={styles.centerContent}>
                     <ScrollView style={{width:'85%', marginLeft: "5%",  marginRight: "5%", height: "100%"}}>
-                        <Text style={styles.screenTitle}>{t('welcome nuevo')} {first_name}!</Text>
+                        <Text style={styles.screenTitle}>{t('welcome')} {first_name}!</Text>
                         <Pressable style={{marginTop: "3%"}}
                                    onPress={() => navigation.navigate({name: 'Appointments', params: {session: session}})}>
                             <View style={styles.turnoContainer}>
