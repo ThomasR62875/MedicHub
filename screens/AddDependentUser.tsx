@@ -9,7 +9,7 @@ import {useTranslation} from "react-i18next";
 
 type AddDependentUserProps = NativeStackScreenProps<RootStackParamList, 'AddDependentUser'>
 
-const AddDependentUser:React.FC<AddDependentUserProps> = ({navigation, route}) => {
+const AddDependentUser:React.FC<AddDependentUserProps> = ({navigation, route} : any) => {
     const session = route.params.session;
     const [firstName,setFirstName] = useState('')
     const [lastName,setLastName] = useState('')
@@ -65,7 +65,7 @@ const AddDependentUser:React.FC<AddDependentUserProps> = ({navigation, route}) =
         const result = await addDependentUser(dep_user);
         if (result.success) {
             Alert.alert(t('text9'), '',
-                [{ text: 'Ok', onPress: () => navigation.navigate('DependentUsers', { session: session }) }]
+                [{ text: 'Ok', onPress: () => navigation.navigate('Usuarios', { session: session }) }]
             );
         } else {
             Alert.alert('Error', result.message || 'An unknown error occurred');
