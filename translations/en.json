@@ -88,7 +88,8 @@
   "deleteMed" : "Medication deleted successfully",
   "deleteDoc" : "Doctor deleted successfully",
   "deleteDepUser" : "Dependent User deleted successfully",
-  "RUsureDU"  : "Are you sure you want to delete dependent user?"
+  "RUsureDU"  : "Are you sure you want to delete dependent user?",
+  "RUsureD"  : "Are you sure you want to delete doctor?"
 
 }
 
