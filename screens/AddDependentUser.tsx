@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Alert, StyleSheet, View,} from 'react-native';
 import {addDependentUser} from "../lib/supabase";
 import {Button, Icon, Input, Text} from "react-native-elements";
@@ -15,9 +15,40 @@ const AddDependentUser:React.FC<AddDependentUserProps> = ({navigation, route}) =
     const [lastName,setLastName] = useState('')
     const [dni,setDni]  = useState('')
     const [loading,setLoading]= useState(false)
+    const [firstNameErrorMessage, setFirstNameErrorMessage] = useState('')
+    const [lastNameErrorMessage, setLastNameErrorMessage] = useState('')
     const [DNIErrorMessage, setDNIErrorMessage] = useState<string>('');
     const {t} = useTranslation();
 
+    useEffect(() => {
+        if (
+            firstName.trim() !== '' &&
+            lastName.trim() !== '' &&
+            firstNameErrorMessage === '' &&
+            lastNameErrorMessage === ''
+        ) {
+            setIsButtonDisabled(false);
+        } else {
+            setIsButtonDisabled(true);
+        }
+    }, [firstName, lastName, dni]);
+
+    const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(true);
+
+    const validateFirstName = (value: string) => {
+        if (value.trim() === '') {
+            setFirstNameErrorMessage(t('warn17'));
+        } else {
+            setFirstNameErrorMessage('');
+        }
+    };
+    const validateLastName = (value: string) => {
+        if (value.trim() === '') {
+            setLastNameErrorMessage(t('warn18'));
+        } else {
+            setLastNameErrorMessage('');
+        }
+    };
     const validateDNI = (value: string) => {
         const containsLetterOrSymbol = /([a-zA-Z!@#$%^&*()_+{}\[\]:;<>,.?\/\\|'"`~-])/.test(value);
         if (containsLetterOrSymbol) {
@@ -49,23 +80,33 @@ const AddDependentUser:React.FC<AddDependentUserProps> = ({navigation, route}) =
                     label={t('name')}
                     labelStyle={styles.colorLable}
                     leftIcon={<Icon type="material-icons" name="person" color={styles.colorLable.color}/>}
-                    onChangeText={(text) => setFirstName(text)}
+                    onChangeText={(text) => {
+                        setFirstName(text);
+                        validateFirstName(text)
+                    }}
                     value={firstName}
                     placeholder={t('name')}
                     autoCapitalize={'none'}
                     inputStyle={{color: '#407738', marginLeft: 10}}
                     placeholderTextColor={"#407738"}
+                    errorStyle={{ color: 'red' }}
+                    errorMessage={firstNameErrorMessage}
                 />
                 <Input
                     label={t('surname')}
                     labelStyle={styles.colorLable}
                     leftIcon={<Icon type="material-icons" name="person" color={styles.colorLable.color}/>}
-                    onChangeText={(text) => setLastName(text)}
+                    onChangeText={(text) => {
+                        setLastName(text);
+                        validateLastName(text)
+                    }}
                     value={lastName}
                     placeholder={t('surname')}
                     autoCapitalize={'none'}
                     inputStyle={{color: '#407738', marginLeft: 10}}
                     placeholderTextColor={"#407738"}
+                    errorStyle={{ color: 'red' }}
+                    errorMessage={firstNameErrorMessage}
                 />
                 <Input
                     label={t('id')}
@@ -85,6 +126,7 @@ const AddDependentUser:React.FC<AddDependentUserProps> = ({navigation, route}) =
                 />
                 <Button
                     title={t('add')}
+                    disabled={isButtonDisabled}
                     buttonStyle={{
                         backgroundColor: '#2E5829',
                         borderWidth: 2,
@@ -99,6 +141,7 @@ const AddDependentUser:React.FC<AddDependentUserProps> = ({navigation, route}) =
                         marginTop: 40,
                     }}
                     titleStyle={{ color: '#eef9ed' }}
+
                     onPress={handleAddDependentUser}
                 />
             </View>
