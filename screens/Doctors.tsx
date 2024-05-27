@@ -5,6 +5,7 @@ import {createNativeStackNavigator, NativeStackScreenProps} from '@react-navigat
 import {RootStackParamList} from "../App";
 import {Button} from "react-native-elements";
 import {useTranslation} from "react-i18next";
+import {cardStyle} from "../styles/global"
 
 const Stack = createNativeStackNavigator();
 
@@ -62,33 +63,33 @@ const Doctors: React.FC= ({ navigation, route }: any) => {
                     {doctors && doctors?.length > 0  ? (
                             doctors.map((doc: Doctor, i) => {
                                 return (
-                                    <View key={i} style={styles.doctorContainer}>
-                                        <View style={styles.infoRow}>
-                                            <Text style={styles.label}>{t('name')}:</Text>
-                                            <Text style={styles.value}>{doc.name}</Text>
+                                    <View key={i} style={cardStyle.container}>
+                                        <View style={cardStyle.infoRow}>
+                                            <Text style={cardStyle.label}>{t('name')}:</Text>
+                                            <Text style={cardStyle.value}>{doc.name}</Text>
                                         </View>
-                                        <View style={styles.infoRow}>
-                                            <Text style={styles.label}>{t('specialty')}:</Text>
-                                            <Text style={styles.value}>{doc.specialty}</Text>
+                                        <View style={cardStyle.infoRow}>
+                                            <Text style={cardStyle.label}>{t('specialty')}:</Text>
+                                            <Text style={cardStyle.value}>{doc.specialty}</Text>
                                         </View>
-                                        <View style={styles.infoRow}>
-                                            <Text style={styles.label}>Mail:</Text>
-                                            <Text style={styles.value}>{doc.email}</Text>
+                                        <View style={cardStyle.infoRow}>
+                                            <Text style={cardStyle.label}>Mail:</Text>
+                                            <Text style={cardStyle.value}>{doc.email}</Text>
                                         </View>
-                                        <View style={styles.infoRow}>
-                                            <Text style={styles.label}>{t('phone')}:</Text>
-                                            <Text style={styles.value}>{doc.phone}</Text>
+                                        <View style={cardStyle.infoRow}>
+                                            <Text style={cardStyle.label}>{t('phone')}:</Text>
+                                            <Text style={cardStyle.value}>{doc.phone}</Text>
                                         </View>
-                                        <View style={styles.infoRow}>
-                                            <Text style={styles.label}>{t('address')}:</Text>
-                                            <Text style={styles.value}>{doc.addresses}</Text>
+                                        <View style={cardStyle.infoRow}>
+                                            <Text style={cardStyle.label}>{t('address')}:</Text>
+                                            <Text style={cardStyle.value}>{doc.addresses}</Text>
                                         </View>
                                     </View>
                                 )
                             })
                         ) : (
-                        <View style={[styles.userContainer]}>
-                            <Text style={[styles.text, {textAlign: 'center'}]}>{t('text17')}</Text>
+                        <View style={[cardStyle.container]}>
+                            <Text style={[cardStyle.text, {textAlign: 'center'}]}>{t('text17')}</Text>
                         </View>
                         )
                     }
@@ -107,17 +108,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: "#e9f4e9",
       },
-    userContainer: {
-        backgroundColor: '#cbe4c9',
-        borderRadius: 20,
-        borderColor: '#cbe4c9',
-        borderWidth: 1,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
-        padding: 10,
-    },
+
     titleText: {
         fontFamily: 'Roboto-Thin',
         fontSize: 25,
@@ -126,23 +117,6 @@ const styles = StyleSheet.create({
         marginTop: "1%",
         color: "#2E5829FF",
         width: "70%"
-    },
-    doctorContainer: {
-        marginTop: 10,
-        backgroundColor: '#C2E5D3',
-        marginBottom: 10,
-        borderRadius: 5,
-    },
-    infoRow: {
-        flexDirection: 'row',
-        marginBottom: 5,
-    },
-    label: {
-        fontWeight: 'bold',
-        marginRight: 5,
-    },
-    value: {
-        flex: 1,
     },
     window: {
         marginTop: "20%",

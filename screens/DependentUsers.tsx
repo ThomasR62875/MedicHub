@@ -59,7 +59,7 @@ return(
                 {dependent_users && dependent_users.length >0 ? (
                     dependent_users.map((d_user: DependentUser, i) => {
                     return (
-                        <View key={i} style={[cardStyle.container, {alignItems: 'center', padding: "5%", marginTop: '5%',}]}>
+                        <View key={i} style={cardStyle.container}>
                             <View style={cardStyle.infoRow}>
                                 <Text style={cardStyle.label}>{t('name')}:</Text>
                                 <Text style={cardStyle.value}>{d_user.first_name}</Text>

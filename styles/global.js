@@ -12,6 +12,9 @@ export const cardStyle = StyleSheet.create({
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
         minWidth: "100%",
+        alignItems: 'center', 
+        padding: "5%", 
+        marginTop: '5%',
     },
     infoRow: {
         flexDirection: 'row',
