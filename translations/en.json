@@ -75,6 +75,17 @@
   "text23" : "Every: ",
   "text24" : " hours",
   "text25" : "There was no date completed for this medicine",
-  "delete" : "Delete"
+  "delete" : "Delete",
+  "warn16" : "You must enter user's name.",
+  "warn17" : "You must enter user's surname.",
+  "warn18" : "You must enter user's id.",
+  "editDoc" : "Doctor was modified successfully",
+  "editMed" : "Medication was modified successfully",
+  "editDepUser" : "Dependent User was modified successfully",
+  "editAppoint" : "Appointment was modified successfully",
+  "deleteAppoint" : "Appointment deleted successfully",
+  "deleteMed" : "Medication deleted successfully",
+  "deleteDoc" : "Doctor deleted successfully",
+  "deleteDepUser" : "Dependent User deleted successfully"
 }
 

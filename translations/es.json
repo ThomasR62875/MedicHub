@@ -75,5 +75,16 @@
   "text23" : "Cada: ",
   "text24" : " horas",
   "text25" : "No especificó una fecha de finalización",
-  "delete" : "Eliminar"
+  "delete" : "Eliminar",
+  "warn16" : "Debe ingresar el nombre del usuario.",
+  "warn17" : "Debe ingresar el apellido del usuario.",
+  "warn18" : "Debe ingresar el DNI del usuario.",
+  "editDoc" : "El doctor fue editado",
+  "editMed" : "El medicamento fue editado",
+  "editDepUser" : "El Usuario Dependiente fue editado",
+  "editAppoint" : "El turno fue editado",
+  "deleteAppoint" : "El turno fue eliminado correctamente",
+  "deleteMed" : "El medicamento fue eliminado correctamente",
+  "deleteDoc" : "El doctor fue eliminado correctamente",
+  "deleteDepUser" : "El usuario dependiente fue eliminado correctamente"
 }
