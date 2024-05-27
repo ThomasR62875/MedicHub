@@ -1,20 +1,15 @@
 import React, {useEffect, useState} from 'react'
-import {addAppointment, addDoctor, getAllDoctorsByUser, getAllUsers, getUserId} from '../lib/supabase'
-import {SafeAreaView, StyleSheet, Alert, View, Keyboard, TouchableWithoutFeedback} from 'react-native'
+import {addAppointment, getAllDoctorsByUser, getAllUsers, getUserId} from '../lib/supabase'
+import { StyleSheet, Alert, View, Keyboard, TouchableWithoutFeedback} from 'react-native'
 import {Button, Input} from "react-native-elements";
-import dayjs from 'dayjs';
 import StandardGreenButton from "../components/StandardGreenButton";
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
-import {Appointment} from "./Appointments";
 import {DependentUser} from "./DependentUsers"
 import {Doctor} from "./Doctors";
 import DateTimePicker, {DateTimePickerEvent} from '@react-native-community/datetimepicker';
 import {Picker} from "@react-native-picker/picker";
 import {useTranslation} from "react-i18next";
-//
-import { Button as PaperButton } from 'react-native-paper';
-//
 
 type AddAppointmentProps = NativeStackScreenProps<RootStackParamList, 'AddAppointment'>
 
@@ -28,8 +23,8 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
     const [session_user_id, setSessionUserId] = useState('')
     const [all_users, setAllUsers] = useState<DependentUser[]>([])
     const [doctors, setDoctors] = useState<Doctor[]>([])
-
-    const [date, setDate] = useState(new Date(1598051730000));
+    const [selectedUser, setSelectedUser]= useState('')
+    const [date, setDate] = useState(new Date());
     const [mode, setMode] = useState<'date' | 'time'>('date');
     const [show, setShow] = useState(false);
 
@@ -99,7 +94,7 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
     })): [];
 
     const onChange = (event: DateTimePickerEvent, selectedDate?: Date | undefined): void => {
-        const currentDate = selectedDate || date;
+        const currentDate = date;
         setShow(false);
         setDate(currentDate);
     };
@@ -116,6 +111,17 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
     const showTimepicker = (): void => {
         showMode('time');
     };
+
+
+    const setDoctorTest = (doctorId: string): void => {
+        console.log(doctorId)
+        setDoctor(doctorId)
+    }
+
+    const setUserTest = (userId: string): void => {
+        console.log(userId)
+        setUserId(userId)
+    }
 
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -184,7 +190,7 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
                 <Picker
                 mode='dropdown'
                 selectedValue={doctor}
-                onValueChange={(value: any) => setDoctor(value)}
+                onValueChange={(value: string) => setDoctor(value)}
                 placeholder='Médico'
                 enabled={true}
                 itemStyle={styles.pickerStyle }
@@ -197,11 +203,11 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
                 <View style={styles.pickerStyle}>
                     <Picker
                         mode='dropdown'
-                        selectedValue={doctor}
-                        onValueChange={(value: any) => setUserId(value)}
+                        selectedValue={selectedUser}
+                        onValueChange={(value: string) => setUserId(value)}
                         placeholder='Médico'
                         enabled={true}
-                        itemStyle={styles.pickerStyle }
+                        itemStyle={styles.pickerStyle}
                     >
                         {userList.map((item) => (
                             <Picker.Item key={item.value} label={item.label} value={item.value} />
