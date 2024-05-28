@@ -9,8 +9,8 @@ import {cardStyle} from "../styles/global"
 export type Appointment = {
     id: string;
     date: Date;
-    description:string;
-    user_name:string;
+    description: string;
+    user_name: string;
     doctor: string;
     user_id: string;
 }
@@ -24,8 +24,8 @@ const Appointments: React.FC =  ({navigation, route}: any) =>{
         const unsubscribe = navigation.addListener('focus', () => {
             if (session) {
                 async function fetchData() {
-                    // @ts-ignore
                     setAppointments(await getAppointments())
+                    console.log(appointments)
                 }  
                 fetchData()
             }
@@ -63,7 +63,7 @@ const Appointments: React.FC =  ({navigation, route}: any) =>{
                                 )})
                             ) : (
                             <View style={[cardStyle.container]}>
-                                <Text style={[cardStyle.text]}>{t('text13')}</Text>
+                                <Text style={[styles.text]}>{t('text13')}</Text>
                             </View>
                         )}
                </ScrollView>
