@@ -7,7 +7,6 @@ import {cardStyle} from "../styles/global"
 
 interface AppointmentButtonProps {
     onPress: any;
-    styleExterior: any;
     date : Date;
     turno: Appointment;
 }

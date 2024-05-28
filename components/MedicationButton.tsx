@@ -7,11 +7,10 @@ import {cardStyle} from "../styles/global"
 
 interface MedicationButtonProps {
     onPress: any;
-    styleExterior: any;
     meds: Medication;
 }
 
-const MedicationButton: React.FC<MedicationButtonProps> = ( { onPress, styleExterior, meds }) => {
+const MedicationButton: React.FC<MedicationButtonProps> = ( { onPress, meds }) => {
     const navigation = useNavigation();
     const {t} = useTranslation();
 
