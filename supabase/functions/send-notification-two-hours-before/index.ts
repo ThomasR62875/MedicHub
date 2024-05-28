@@ -55,6 +55,12 @@ Deno.serve(async (req) => {
 })
 
 async function sendNotification(date: Date, description:string, user_name:string, doctor: string, user_id: string, email:string) {
+  const hours: number = date.getHours();
+  const minutes: number = date.getMinutes();
+
+  const formattedHours: string = hours.toString().padStart(2, '0');
+  const formattedMinutes: string = minutes.toString().padStart(2, '0');
+
 
   await novu.trigger('appointment-reminder', {
     to: {
@@ -63,7 +69,7 @@ async function sendNotification(date: Date, description:string, user_name:string
     },
     payload: {
       first_name: user_name,
-      appointmentTime: date.getTime(),
+      appointmentTime: `${formattedHours}:${formattedMinutes}`,
       appointmentDay: date.getDate(),
       appointmentMonth: date.getMonth(),
       appointmentYear: date.getFullYear(),
