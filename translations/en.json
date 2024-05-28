@@ -27,6 +27,7 @@
   "id" : "ID",
   "mdocs" : "My doctors",
   "mappointments" : "My appointments",
+  "adappointment" : "Add appointment",
   "mvaccines" : "My vaccines",
   "mmedicine" : "My medicine",
   "mfiles" : "My files",

@@ -37,6 +37,7 @@ import {StyleSheet, TouchableOpacity, View} from "react-native";
 import {backgroundColor} from "react-native-calendars/src/style";
 import {Easing} from "react-native-reanimated";
 import {useTranslation} from "react-i18next";
+import { Provider } from 'react-native-paper';
 
 export type RootStackParamList = {
   HomeTabs: { session: Session | null };
@@ -308,211 +309,213 @@ const App = () => {
 
 
   return (
-      <NavigationContainer>
-        <Stack.Navigator>
-          {!session ? (
-              <>
-                <Stack.Screen name="Login"
-                              component={LoginScreen}
-                              initialParams={{session: session}}
-                              options={{ headerShown: false }}
-                />
-                <Stack.Screen name="Register"
-                              component={Register}
-                              options={{
-                                title: '',
-                                headerStyle: {
-                                  backgroundColor: '#2E5829',
-                                },
-                                headerTintColor: '#ABD2A8',
-                                headerBackTitle: 'Iniciar Sesión', // Cambia la etiqueta del botón de retroceso
-                                }}/>
-              </>
-          ) : (
-              <>
-                <Stack.Screen name="HomeTabs"
-                              component={HomeTabs}
-                              initialParams={{session: session}}
-                              options={{ headerShown: false }}/>
-                <Stack.Screen name="AddAppointment"
-                              component={AddAppointment}
-                              initialParams={{session: session}}
-                              options={{
-                                title: '',
-                                headerStyle: {
-                                  backgroundColor: '#2E5829',
-                                },
-                                headerTintColor: '#ABD2A8',
-                                headerBackTitle: 'Volver',
-                              }}/>
-                  <Stack.Screen name="SingleAppointment"
-                                component={SingleAppointment}
-                                initialParams={{session: session}}
-                                options={{
+      <Provider>
+          <NavigationContainer>
+            <Stack.Navigator>
+              {!session ? (
+                  <>
+                    <Stack.Screen name="Login"
+                                  component={LoginScreen}
+                                  initialParams={{session: session}}
+                                  options={{ headerShown: false }}
+                    />
+                    <Stack.Screen name="Register"
+                                  component={Register}
+                                  options={{
                                     title: '',
                                     headerStyle: {
-                                        backgroundColor: '#2E5829',
-                                    },
-                                    headerTintColor: '#ABD2A8',
-                                    headerBackTitle: 'Volver',
-                                }}/>
-                  <Stack.Screen name="EditAppointment"
-                                component={EditAppointment}
-                                initialParams={{session: session}}
-                                options={{
-                                    title: '',
-                                    headerStyle: {
-                                        backgroundColor: '#2E5829',
-                                    },
-                                    headerTintColor: '#ABD2A8',
-                                    headerBackTitle: 'Volver',
-                                }}/>
-                <Stack.Screen name="AddDoctor"
-                              component={AddDoctor}
-                              initialParams={{session: session}}
-                              options={{
-                                title: '',
-                                headerStyle: {
-                                    backgroundColor: '#2E5829',
-                                },
-                                headerTintColor: '#ABD2A8',
-                                headerBackTitle: 'Doctores',
-                              }}/>
-                  <Stack.Screen name="SingleDoctor"
-                                component={SingleDoctor}
-                                initialParams={{session: session}}
-                                options={{
-                                    title: '',
-                                    headerStyle: {
-                                        backgroundColor: '#2E5829',
-                                    },
-                                    headerTintColor: '#ABD2A8',
-                                    headerBackTitle: 'Volver',
-                                }}/>
-                  <Stack.Screen name="EditDoctor"
-                                component={EditDoctor}
-                                initialParams={{session: session}}
-                                options={{
-                                    title: '',
-                                    headerStyle: {
-                                        backgroundColor: '#2E5829',
-                                    },
-                                    headerTintColor: '#ABD2A8',
-                                    headerBackTitle: 'Volver',
-                                }}/>
-                <Stack.Screen name="AddDependentUser"
-                              component={AddDependentUser}
-                              initialParams={{session: session}}
-                              options={{
-                                title: '',
-                                  headerStyle: {
                                       backgroundColor: '#2E5829',
-                                  },
-                                headerTintColor: '#ABD2A8',
-                                headerBackTitle: 'Usuario Dependiente',
-                              }}/>
-                  <Stack.Screen name="SingleDependentUser"
-                                component={SingleDependentUser}
-                                initialParams={{session: session}}
-                                options={{
-                                    title: '',
-                                    headerStyle: {
-                                        backgroundColor: '#2E5829',
                                     },
                                     headerTintColor: '#ABD2A8',
-                                    headerBackTitle: 'Volver',
-                                }}/>
-                  <Stack.Screen name="EditDependentUser"
-                                component={EditDependentUser}
-                                initialParams={{session: session}}
-                                options={{
+                                    headerBackTitle: 'Iniciar Sesión', // Cambia la etiqueta del botón de retroceso
+                                    }}/>
+                  </>
+              ) : (
+                  <>
+                    <Stack.Screen name="HomeTabs"
+                                  component={HomeTabs}
+                                  initialParams={{session: session}}
+                                  options={{ headerShown: false }}/>
+                    <Stack.Screen name="AddAppointment"
+                                  component={AddAppointment}
+                                  initialParams={{session: session}}
+                                  options={{
                                     title: '',
                                     headerStyle: {
-                                        backgroundColor: '#2E5829',
-                                    },
-                                    headerTintColor: '#ABD2A8',
-                                    headerBackTitle: 'Volver',
-                                }}/>
-                <Stack.Screen name="AddMedication"
-                              component={AddMedication}
-                              initialParams={{session: session}}
-                              options={{
-                                title: '',
-                                  headerStyle: {
                                       backgroundColor: '#2E5829',
-                                  },
-                                headerTintColor: '#ABD2A8',
-                                headerBackTitle: 'Medicamentos',
-                              }}/>
-                  <Stack.Screen name="SingleMedication"
-                                component={SingleMedication}
-                                initialParams={{session: session}}
-                                options={{
+                                    },
+                                    headerTintColor: '#ABD2A8',
+                                    headerBackTitle: 'Volver',
+                                  }}/>
+                      <Stack.Screen name="SingleAppointment"
+                                    component={SingleAppointment}
+                                    initialParams={{session: session}}
+                                    options={{
+                                        title: '',
+                                        headerStyle: {
+                                            backgroundColor: '#2E5829',
+                                        },
+                                        headerTintColor: '#ABD2A8',
+                                        headerBackTitle: 'Volver',
+                                    }}/>
+                      <Stack.Screen name="EditAppointment"
+                                    component={EditAppointment}
+                                    initialParams={{session: session}}
+                                    options={{
+                                        title: '',
+                                        headerStyle: {
+                                            backgroundColor: '#2E5829',
+                                        },
+                                        headerTintColor: '#ABD2A8',
+                                        headerBackTitle: 'Volver',
+                                    }}/>
+                    <Stack.Screen name="AddDoctor"
+                                  component={AddDoctor}
+                                  initialParams={{session: session}}
+                                  options={{
                                     title: '',
                                     headerStyle: {
                                         backgroundColor: '#2E5829',
                                     },
+                                    headerTintColor: '#ABD2A8',
+                                    headerBackTitle: 'Doctores',
+                                  }}/>
+                      <Stack.Screen name="SingleDoctor"
+                                    component={SingleDoctor}
+                                    initialParams={{session: session}}
+                                    options={{
+                                        title: '',
+                                        headerStyle: {
+                                            backgroundColor: '#2E5829',
+                                        },
+                                        headerTintColor: '#ABD2A8',
+                                        headerBackTitle: 'Volver',
+                                    }}/>
+                      <Stack.Screen name="EditDoctor"
+                                    component={EditDoctor}
+                                    initialParams={{session: session}}
+                                    options={{
+                                        title: '',
+                                        headerStyle: {
+                                            backgroundColor: '#2E5829',
+                                        },
+                                        headerTintColor: '#ABD2A8',
+                                        headerBackTitle: 'Volver',
+                                    }}/>
+                    <Stack.Screen name="AddDependentUser"
+                                  component={AddDependentUser}
+                                  initialParams={{session: session}}
+                                  options={{
+                                    title: '',
+                                      headerStyle: {
+                                          backgroundColor: '#2E5829',
+                                      },
+                                    headerTintColor: '#ABD2A8',
+                                    headerBackTitle: 'Usuario Dependiente',
+                                  }}/>
+                      <Stack.Screen name="SingleDependentUser"
+                                    component={SingleDependentUser}
+                                    initialParams={{session: session}}
+                                    options={{
+                                        title: '',
+                                        headerStyle: {
+                                            backgroundColor: '#2E5829',
+                                        },
+                                        headerTintColor: '#ABD2A8',
+                                        headerBackTitle: 'Volver',
+                                    }}/>
+                      <Stack.Screen name="EditDependentUser"
+                                    component={EditDependentUser}
+                                    initialParams={{session: session}}
+                                    options={{
+                                        title: '',
+                                        headerStyle: {
+                                            backgroundColor: '#2E5829',
+                                        },
+                                        headerTintColor: '#ABD2A8',
+                                        headerBackTitle: 'Volver',
+                                    }}/>
+                    <Stack.Screen name="AddMedication"
+                                  component={AddMedication}
+                                  initialParams={{session: session}}
+                                  options={{
+                                    title: '',
+                                      headerStyle: {
+                                          backgroundColor: '#2E5829',
+                                      },
                                     headerTintColor: '#ABD2A8',
                                     headerBackTitle: 'Medicamentos',
-                                }}/>
-                  <Stack.Screen name="EditMedication"
-                                component={EditMedication}
-                                initialParams={{session: session}}
-                                options={{
+                                  }}/>
+                      <Stack.Screen name="SingleMedication"
+                                    component={SingleMedication}
+                                    initialParams={{session: session}}
+                                    options={{
+                                        title: '',
+                                        headerStyle: {
+                                            backgroundColor: '#2E5829',
+                                        },
+                                        headerTintColor: '#ABD2A8',
+                                        headerBackTitle: 'Medicamentos',
+                                    }}/>
+                      <Stack.Screen name="EditMedication"
+                                    component={EditMedication}
+                                    initialParams={{session: session}}
+                                    options={{
+                                        title: '',
+                                        headerStyle: {
+                                            backgroundColor: '#2E5829',
+                                        },
+                                        headerTintColor: '#ABD2A8',
+                                        headerBackTitle: 'Volver',
+                                    }}/>
+                    <Stack.Screen name="Appointments"
+                                  component={Appointments}
+                                  initialParams={{session: session}}
+                                  options={{
                                     title: '',
-                                    headerStyle: {
-                                        backgroundColor: '#2E5829',
-                                    },
+                                      headerStyle: {
+                                          backgroundColor: '#2E5829',
+                                      },
                                     headerTintColor: '#ABD2A8',
                                     headerBackTitle: 'Volver',
-                                }}/>
-                <Stack.Screen name="Appointments"
-                              component={Appointments}
-                              initialParams={{session: session}}
-                              options={{
-                                title: '',
-                                  headerStyle: {
-                                      backgroundColor: '#2E5829',
-                                  },
-                                headerTintColor: '#ABD2A8',
-                                headerBackTitle: 'Volver',
-                              }}/>
-                 <Stack.Screen name="Doctors"
-                               component={Doctors} initialParams={{session: session}}
-                               options={{
-                                 title: '',
-                                   headerStyle: {
-                                       backgroundColor: '#2E5829',
-                                   },
-                                 headerTintColor: '#ABD2A8',
-                                 headerBackTitle: 'Perfil',
-                               }}/>
-                <Stack.Screen name="EditAccount"
-                                component={EditAccount}
-                                initialParams={{session: session}}
-                                options={{
-                                    title: '',
-                                    headerStyle: {
-                                        backgroundColor: '#2E5829',
-                                    },
-                                    headerTintColor: '#ABD2A8',
-                                    headerBackTitle: 'Perfil',
-                                }}/>
-                  <Stack.Screen name="Medication"
-                                component={Medication}
-                                initialParams={{session: session}}
-                                options={{
-                                  title: '',
-                                    headerStyle: {
-                                        backgroundColor: '#2E5829',
-                                    },
-                                  headerTintColor: '#ABD2A8',
-                                  headerBackTitle: 'Perfil',
-                                }}/>
-              </>
-          )}
-        </Stack.Navigator>
-      </NavigationContainer>
+                                  }}/>
+                     <Stack.Screen name="Doctors"
+                                   component={Doctors} initialParams={{session: session}}
+                                   options={{
+                                     title: '',
+                                       headerStyle: {
+                                           backgroundColor: '#2E5829',
+                                       },
+                                     headerTintColor: '#ABD2A8',
+                                     headerBackTitle: 'Perfil',
+                                   }}/>
+                    <Stack.Screen name="EditAccount"
+                                    component={EditAccount}
+                                    initialParams={{session: session}}
+                                    options={{
+                                        title: '',
+                                        headerStyle: {
+                                            backgroundColor: '#2E5829',
+                                        },
+                                        headerTintColor: '#ABD2A8',
+                                        headerBackTitle: 'Perfil',
+                                    }}/>
+                      <Stack.Screen name="Medication"
+                                    component={Medication}
+                                    initialParams={{session: session}}
+                                    options={{
+                                      title: '',
+                                        headerStyle: {
+                                            backgroundColor: '#2E5829',
+                                        },
+                                      headerTintColor: '#ABD2A8',
+                                      headerBackTitle: 'Perfil',
+                                    }}/>
+                  </>
+              )}
+            </Stack.Navigator>
+          </NavigationContainer>
+      </Provider>
   );
 }
 
