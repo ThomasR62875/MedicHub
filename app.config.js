@@ -17,7 +17,8 @@ export default {
             "**/*"
         ],
         ios: {
-            supportsTablet: true
+            supportsTablet: true,
+            bundleIdentifier: "com.jtechenski.tpingesoft" // Add this line
         },
         android: {
             adaptiveIcon: {
