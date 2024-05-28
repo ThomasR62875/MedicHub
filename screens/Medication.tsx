@@ -11,8 +11,8 @@ export type Medication = {
     name: string;
     prescription: string;
     sinceWhen : Date;
-    untilWhen : Date | null;
-    howOften : Date | null;
+    untilWhen : Date | undefined;
+    howOften : Date | undefined;
     isForever : boolean;
 }
 
