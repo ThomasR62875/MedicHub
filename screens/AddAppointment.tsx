@@ -141,116 +141,120 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
 
 
     return (
-        <SafeAreaView style={styles.container}>
-            <ScrollView >
-                <View>
-                    <View style={styles.topContent}>
-                        <Text style={styles.titleText}>{t('adappointment')}</Text>
-                    </View>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+
+            <SafeAreaView style={styles.container}>
+                <ScrollView >
                     <View>
-                        <TextInput
-                            style={{backgroundColor: "#e9f4e9", marginTop: "10%", textAlign: 'center', marginLeft:'5%' , marginRight: '5%'}}
-                            label={t('Título')}
-                            value={description}
-                            onChangeText={(text) => {
-                                setDescription(text);
-                                validateDescription(text);
-                            }}
-                            mode='flat'
-                            underlineColor='#2E5829FF'
-                            activeUnderlineColor='#2E5829FF'
-                        />
-                        <HelperText type="error" visible={hasErorrs}>
-                            {descriptionErrorMessage}
-                        </HelperText>
+                        <View style={styles.topContent}>
+                            <Text style={styles.titleText}>{t('adappointment')}</Text>
+                        </View>
+                        <View>
+                            <TextInput
+                                style={{backgroundColor: "#e9f4e9", marginTop: "10%", textAlign: 'center', marginLeft:'5%' , marginRight: '5%'}}
+                                label={t('Título')}
+                                value={description}
+                                onChangeText={(text) => {
+                                    setDescription(text);
+                                    validateDescription(text);
+                                }}
+                                mode='flat'
+                                underlineColor='#2E5829FF'
+                                activeUnderlineColor='#2E5829FF'
+                            />
+                            <HelperText type="error" visible={hasErorrs}>
+                                {descriptionErrorMessage}
+                            </HelperText>
+                        </View>
+                        <PaperText style={styles.text}>Horario y fecha</PaperText>
+                        <View style={styles.datePickerContainer}>
+                            <DateTimePicker
+                                testID="datePicker"
+                                value={date}
+                                mode="date"
+                                display="default"
+                                style={{ backgroundColor: 'transparent' }}
+                                onChange={onDateChange}
+                            />
+                            <DateTimePicker
+                                testID="timePicker"
+                                value={time}
+                                mode="time"
+                                display="default"
+                                textColor='#cbe4c9'
+                                onChange={onTimeChange}
+                            />
+                        </View>
+                        <PaperText style={styles.text}>Doctor</PaperText>
+
+                        <PaperButton mode="outlined" style={styles.pickerButton} textColor='#2E5829' labelStyle={{textAlign: 'left', display:'flex'}} onPress={()=> setDoctorDialog(true)}>
+                            {getDoctorName(doctor)}
+                        </PaperButton>
+
+                        <PaperText style={styles.text}>{t('user')}</PaperText>
+
+                        <PaperButton mode="outlined" style={styles.pickerButton} textColor='#2E5829' labelStyle={{textAlign: 'left', display:'flex'}} onPress={()=> setUserDialog(true)}>
+                            {getUserName(user_id)}
+                        </PaperButton>
+
+                        <View style={{alignItems: 'center'}}>
+                            <Button
+                                title={t('add')}
+                                disabled={isButtonDisabled}
+                                buttonStyle={{
+                                    backgroundColor: '#2E5829',
+                                    borderWidth: 2,
+                                    borderColor: 'white',
+                                    borderRadius: 30,
+                                    minHeight: 50
+                                }}
+                                containerStyle={{
+                                    width: 150,
+                                    marginHorizontal: 50,
+                                    marginVertical: 10,
+                                    marginTop: 40,
+                                }}
+                                titleStyle={{ color: '#eef9ed' }}
+
+                                onPress={handleAddAppointment}
+                            />
+                        </View>
                     </View>
-                    <PaperText style={styles.text}>Horario y fecha</PaperText>
-                    <View style={styles.datePickerContainer}>
-                        <DateTimePicker
-                            testID="datePicker"
-                            value={date}
-                            mode="date"
-                            display="default"
-                            style={{ backgroundColor: 'transparent' }}
-                            onChange={onDateChange}
-                        />
-                        <DateTimePicker
-                            testID="timePicker"
-                            value={time}
-                            mode="time"
-                            display="default"
-                            textColor='#cbe4c9'
-                            onChange={onTimeChange}
-                        />
-                    </View>
-                    <PaperText style={styles.text}>Doctor</PaperText>
+                </ScrollView>
+                <Portal>
+                    <Dialog style={styles.dialog} visible={doctorDialog} onDismiss={hideDoctorDialog}>
+                        <Text style={styles.dialogTitle}>{t('Seleccionar médico')}</Text>
+                        <Picker
+                            mode='dropdown'
+                            selectedValue={doctor}
+                            onValueChange={(value: string) => setDoctor(value)}
+                            enabled={true}
+                            itemStyle={styles.pickerStyle}
+                        >
+                            {doctorsList?.map((item) => (
+                                <Picker.Item key={item.value} label={item.label} value={item.value} />
+                            ))}
+                        </Picker>
+                    </Dialog>
+                    <Dialog style={styles.dialog} visible={userDialog} onDismiss={hideUserDialog}>
+                        <Text style={styles.dialogTitle}>{t('Seleccionar usuario')}</Text>
+                        <Picker
+                            mode='dropdown'
+                            selectedValue={user_id}
+                            onValueChange={(value: string) => setUserId(value)}
+                            placeholder='Usuario'
+                            enabled={true}
+                            itemStyle={styles.pickerStyle}
+                        >
+                            {userList?.map((item) => (
+                                <Picker.Item key={item.value} label={item.label} value={item.value} />
+                            ))}
+                        </Picker>
+                    </Dialog>
+                </Portal>
+            </SafeAreaView>
+        </TouchableWithoutFeedback>
 
-                    <PaperButton mode="outlined" style={styles.pickerButton} textColor='#2E5829' labelStyle={{textAlign: 'left', display:'flex'}} onPress={()=> setDoctorDialog(true)}>
-                        {getDoctorName(doctor)}
-                    </PaperButton>
-
-                    <PaperText style={styles.text}>{t('user')}</PaperText>
-
-                    <PaperButton mode="outlined" style={styles.pickerButton} textColor='#2E5829' labelStyle={{textAlign: 'left', display:'flex'}} onPress={()=> setUserDialog(true)}>
-                        {getUserName(user_id)}
-                    </PaperButton>
-
-                    <View style={{alignItems: 'center'}}>
-                        <Button
-                            title={t('add')}
-                            disabled={isButtonDisabled}
-                            buttonStyle={{
-                                backgroundColor: '#2E5829',
-                                borderWidth: 2,
-                                borderColor: 'white',
-                                borderRadius: 30,
-                                minHeight: 50
-                            }}
-                            containerStyle={{
-                                width: 150,
-                                marginHorizontal: 50,
-                                marginVertical: 10,
-                                marginTop: 40,
-                            }}
-                            titleStyle={{ color: '#eef9ed' }}
-
-                            onPress={handleAddAppointment}
-                        />
-                    </View>
-                </View>
-            </ScrollView>
-            <Portal>
-                <Dialog style={styles.dialog} visible={doctorDialog} onDismiss={hideDoctorDialog}>
-                    <Text style={styles.dialogTitle}>{t('Seleccionar médico')}</Text>
-                    <Picker
-                        mode='dropdown'
-                        selectedValue={doctor}
-                        onValueChange={(value: string) => setDoctor(value)}
-                        enabled={true}
-                        itemStyle={styles.pickerStyle}
-                    >
-                        {doctorsList?.map((item) => (
-                            <Picker.Item key={item.value} label={item.label} value={item.value} />
-                        ))}
-                    </Picker>
-                </Dialog>
-                <Dialog style={styles.dialog} visible={userDialog} onDismiss={hideUserDialog}>
-                    <Text style={styles.dialogTitle}>{t('Seleccionar usuario')}</Text>
-                    <Picker
-                        mode='dropdown'
-                        selectedValue={user_id}
-                        onValueChange={(value: string) => setUserId(value)}
-                        placeholder='Usuario'
-                        enabled={true}
-                        itemStyle={styles.pickerStyle}
-                    >
-                        {userList?.map((item) => (
-                            <Picker.Item key={item.value} label={item.label} value={item.value} />
-                        ))}
-                    </Picker>
-                </Dialog>
-            </Portal>
-        </SafeAreaView>
     );
 }
 
