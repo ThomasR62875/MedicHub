@@ -339,8 +339,10 @@ export const updateDependentUser = async (depUser: DependentUser): Promise<{ suc
 };
 
 export const updateDoctor = async (doc: Doctor): Promise<{ success: boolean, message: string }> => {
+    console.log("id: "+ doc.id+"email : "+ doc.email+"name:   "+  doc.name+"phone:  "+ doc.phone+"adresses:   "+  doc.addresses+"specialty:   "+doc.specialty +"user_id:  "+ doc.user_id)
+
     const { error } = await supabase.rpc("update_doctor",
-        {id_input: doc.id, email_input: doc.email, name_input: doc.name, phone_input: doc.phone, addresses_input: doc.addresses, speciality_input: doc.specialty, user_id_input: doc.user_id});
+        {id_input: doc.id, email_input: doc.email, name_input: doc.name, phone_input: doc.phone, addresses_input: doc.addresses, specialty_input: doc.specialty, user_id_input: doc.user_id});
     if (error) {
         return {
             success: false,

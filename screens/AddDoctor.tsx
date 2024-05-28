@@ -121,10 +121,7 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}) => {
 
 
     return (
-        <View>
-        <KeyboardAvoidingView>
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-            <SafeAreaView style={styles.container}>
+        <View style={styles.container}>
                 <ScrollView >
                     <View>
                         <View style={styles.topContent}>
@@ -145,22 +142,11 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}) => {
                         />
 
                         <PaperText style={styles.text}>{t('specialty')}</PaperText>
-
                         <PaperButton mode="outlined" style={styles.pickerButton} textColor='#2E5829' labelStyle={{textAlign: 'left', display:'flex'}} onPress={()=> setSpecialtyDialog(true)}>
                             {specialty}
                         </PaperButton>
-                        {/*<View style={styles.pickerStyle}>*/}
-                        {/*    <RNPickerSelect*/}
-                        {/*        placeholder={{ label: t('specialty'), value: null }}*/}
-                        {/*        items={specialties ? specialties.map(s => ({ label: s.name, value: s.name })) : []}*/}
-                        {/*        onValueChange={(value) =>*/}
-                        {/*            setSpecialty(value)*/}
-                        {/*        }*/}
-                        {/*        style={{ ...pickerSelectStyles }}*/}
-                        {/*        value={specialty}*/}
-                        {/*    />*/}
-                        {/*</View>*/}
-                        <PaperText style={styles.text}>{t('name')}</PaperText>
+
+                        <PaperText style={styles.text}>{t('phone')}</PaperText>
                         <Input
                             leftIcon={{ type: 'font-awesome', name: 'phone' }}
                             onChangeText={(text) => setPhone(text)}
@@ -204,6 +190,7 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}) => {
                                 marginHorizontal: 50,
                                 marginVertical: 10,
                                 marginTop: 40,
+                                marginBottom: '80%',
                                 alignSelf: 'center',
                             }}
                             titleStyle={{ color: '#eef9ed' }}
@@ -243,9 +230,7 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}) => {
                         </Picker>
                     </Dialog>
                 </Portal>
-            </SafeAreaView>
-        </TouchableWithoutFeedback>
-        </KeyboardAvoidingView>
+
         </View>
     );
 };

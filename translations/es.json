@@ -20,6 +20,7 @@
   "text4" : "Detalles del turno",
   "time" : "Hora",
   "selSpec":"Seleccionar especialidad",
+  "modoctor": "Modificar doctor",
   "email":"Email",
   "addoctor": "Agregar doctor",
   "description" : "Descripción",

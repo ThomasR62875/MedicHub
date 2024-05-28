@@ -21,6 +21,7 @@
   "time" : "Time",
   "description" : "Description",
   "addoctor": "Add doctor",
+  "modoctor": "Modify doctor",
   "home" : "Home",
   "calendar" : "Calendar",
   "dusers" : "Users",
