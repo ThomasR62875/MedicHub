@@ -75,6 +75,7 @@ async function sendNotification(date: Date, description:string, user_name:string
 
 async function checkAppointments() {
   const now = new Date();
+  const localTimeArgentina = new Date(now.toLocaleString("en-US", { timeZone: "America/Argentina/Buenos_Aires" }));
 
   const appointments = await getNotificationAppointments();
   if (appointments) {
@@ -88,7 +89,7 @@ async function checkAppointments() {
 
       const appointmentDate = new Date(appointment.date);
 
-      if(daysBetween(now, appointmentDate) == 1){
+      if(daysBetween(localTimeArgentina, appointmentDate) == 1){
         try {
           await sendNotification(appointmentDate, appointment.description, appointment.user_name, appointment.doctor, appointment.user_id, email);
           await updateNotification(appointment.id)
@@ -163,7 +164,7 @@ const getNotificationEmail = async (user_id:String) : Promise<string | undefined
 }
 
 const updateNotification = async (appointment_id: string)  =>{
-  const { error} = await supabase.rpc("update_notification", {appointment_id_input: appointment_id});
+  const { error} = await supabase.rpc('update_notification_day_before', {appointment_id_input: appointment_id});
 
   if (error) {
     console.error('Error getting independent user id:', error.message);
