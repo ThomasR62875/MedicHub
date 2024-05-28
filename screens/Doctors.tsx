@@ -6,6 +6,7 @@ import {RootStackParamList} from "../App";
 import {Button} from "react-native-elements";
 import {useTranslation} from "react-i18next";
 import {cardStyle} from "../styles/global"
+import DoctorButton from "../components/DoctorButton";
 
 const Stack = createNativeStackNavigator();
 
@@ -63,33 +64,14 @@ const Doctors: React.FC= ({ navigation, route }: any) => {
                     {doctors && doctors?.length > 0  ? (
                             doctors.map((doc: Doctor, i) => {
                                 return (
-                                    <View key={i} style={cardStyle.container}>
-                                        <View style={cardStyle.infoRow}>
-                                            <Text style={cardStyle.label}>{t('name')}:</Text>
-                                            <Text style={cardStyle.value}>{doc.name}</Text>
-                                        </View>
-                                        <View style={cardStyle.infoRow}>
-                                            <Text style={cardStyle.label}>{t('specialty')}:</Text>
-                                            <Text style={cardStyle.value}>{doc.specialty}</Text>
-                                        </View>
-                                        <View style={cardStyle.infoRow}>
-                                            <Text style={cardStyle.label}>Mail:</Text>
-                                            <Text style={cardStyle.value}>{doc.email}</Text>
-                                        </View>
-                                        <View style={cardStyle.infoRow}>
-                                            <Text style={cardStyle.label}>{t('phone')}:</Text>
-                                            <Text style={cardStyle.value}>{doc.phone}</Text>
-                                        </View>
-                                        <View style={cardStyle.infoRow}>
-                                            <Text style={cardStyle.label}>{t('address')}:</Text>
-                                            <Text style={cardStyle.value}>{doc.addresses}</Text>
-                                        </View>
+                                    <View key={i}>
+                                        <DoctorButton onPress={() => navigation.navigate({name: 'SingleDoctor', params: {doc: doc}})} doc={doc}></DoctorButton>
                                     </View>
                                 )
                             })
                         ) : (
                         <View style={[cardStyle.container]}>
-                            <Text style={[cardStyle.text, {textAlign: 'center'}]}>{t('text17')}</Text>
+                            <Text style={[styles.text, {textAlign: 'center'}]}>{t('text17')}</Text>
                         </View>
                         )
                     }
