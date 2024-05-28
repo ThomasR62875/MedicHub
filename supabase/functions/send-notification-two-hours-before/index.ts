@@ -106,8 +106,7 @@ async function checkAppointments() {
 const getNotificationAppointments = async () : Promise<Appointment[] | undefined> => {
   const to_return: Appointment[] = [];
 
-
-  const {data, error} = await supabase.rpc('get_notification_appointments')
+  const {data, error} = await supabase.rpc('get_notification_appointments_t_h_b')
   if (error) {
     console.error('Error getting notification appointments data:', error.message);
   } else{
