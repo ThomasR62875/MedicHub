@@ -22,7 +22,7 @@ const DoctorButton: React.FC<DoctorButtonProps> = ( { onPress, doc }) => {
                     <Text>{doc.name}</Text>
                 </View>
                 <View style={cardStyle.infoRow}>
-                    <Text style={cardStyle.label}>{t('prescription')}</Text>
+                    <Text style={cardStyle.label}>{t('specialty')}</Text>
                     <Text>{doc.specialty}</Text>
                     <View style={{ width: 30 }} />
                 </View>
