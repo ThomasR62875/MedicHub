@@ -96,5 +96,6 @@
   "RUsureDU"  : "¿Está seguro de que desea eliminar el usuario dependiente?",
   "RUsureD"  : "¿Está seguro de que desea eliminar el doctor?",
   "RUsureA"  : "¿Está seguro de que desea eliminar el turno?",
+  "RUsureM"  : "¿Está seguro de que desea eliminar el medicamento?",
   "text26" : "No tengo una fecha de finalización:"
 }
