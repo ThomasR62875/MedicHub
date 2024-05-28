@@ -19,6 +19,7 @@ import {Picker} from '@react-native-picker/picker'
 import DateTimePicker, {DateTimePickerEvent} from '@react-native-community/datetimepicker';
 import UnderlinedText from '../components/UnderlinedText';
 import Checkbox from 'expo-checkbox';
+import {cardStyle} from "../styles/global"
 
 type AddMedicationProps = NativeStackScreenProps<RootStackParamList, 'AddMedication'>
 
@@ -102,7 +103,7 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
         let currentDate;
         if(selectedDate1){
             currentDate = new Date(selectedDate1);
-            currentDate.setHours(currentDate.getHours() - 3);
+            currentDate.setHours(currentDate.getHours()); //acomodor por la dif horaria todo
         }
         else{
             currentDate=dateSince;
@@ -116,6 +117,9 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
         setDateUntil(currentDate);
     };
 
+    const onChange3 = (value : boolean) => {
+        setIsForever(!isForever);
+    }
     const resetForm = () => {
         setName('');
         setPrescription('');
@@ -184,7 +188,6 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
                                 <Picker.Item label={item.label} value={item.value}/>
                             ))}
                         </Picker>
-
                     </View>
                     <View>
                         <RNText style={styles.buttons}>
@@ -197,14 +200,20 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
                                              onChange={onChange2}
                             />
                         </View>
-                        <View>
+                        <View style={[cardStyle.infoRow, {marginTop: "5%"}]}>
+                            <RNText style={styles.text}>
+                               {t('text26')}
+                            </RNText>
                             <Checkbox
-                                style={{margin: 8}}
+                                style={{marginLeft: "3%", marginTop: "1.5%"}}
                                 value={isForever}
-                                onValueChange={setIsForever}
-                                color={'#4630EB'}
+                                onValueChange={onChange3}
+                                color={'#2E5829'}
                             />
                         </View>
+                        <RNText style={styles.text}>
+                            {isForever.toString()}
+                        </RNText>
                     </View>
                     <View>
                         <View style={[styles.verticallySpaced, {marginTop : "5%"}]}>
@@ -259,6 +268,12 @@ const styles = StyleSheet.create({
     container: {
         marginTop: 30,
         padding: 12,
+    },
+    text: {
+        fontFamily: 'Roboto-Thin',
+        fontSize: 17,
+        marginTop: "1%",
+        color: "#245e1e"
     },
     containerTotal:{
         backgroundColor: '#e9f4e9',

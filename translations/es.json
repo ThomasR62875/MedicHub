@@ -95,6 +95,6 @@
   "deleteDepUser" : "El usuario dependiente fue eliminado correctamente",
   "RUsureDU"  : "¿Está seguro de que desea eliminar el usuario dependiente?",
   "RUsureD"  : "¿Está seguro de que desea eliminar el doctor?",
-  "RUsureA"  : "¿Está seguro de que desea eliminar el turno?"
-
+  "RUsureA"  : "¿Está seguro de que desea eliminar el turno?",
+  "text26" : "No tengo una fecha de finalización:"
 }

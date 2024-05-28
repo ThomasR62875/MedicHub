@@ -11,8 +11,8 @@ export type Medication = {
     name: string;
     prescription: string;
     sinceWhen : Date;
-    untilWhen : Date | undefined | null;
-    howOften : Date | undefined | null;
+    untilWhen : Date | null;
+    howOften : Date | null;
     isForever : boolean;
 }
 
@@ -61,13 +61,13 @@ const Medication: React.FC= ({ navigation, route }: any) => {
                             medications.map((medic: Medication, i) => {
                                 return (
                                     <View key={i}>
-                                        <MedicationButton onPress={() => navigation.navigate({name: 'SingleMedication', params: {meds: medic}})} styleExterior={styles.medsContainer} meds={medic}></MedicationButton>
+                                        <MedicationButton onPress={() => navigation.navigate({name: 'SingleMedication', params: {meds: medic}})} meds={medic}></MedicationButton>
                                     </View>
                                 )
                             })
                         ) : (
                             <View style={[cardStyle.container]}>
-                                <Text style={cardStyle.text}>{t('text16')}</Text>
+                                <Text style={styles.text}>{t('text16')}</Text>
                             </View>
                         )
                     }
