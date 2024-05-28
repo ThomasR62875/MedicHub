@@ -107,7 +107,7 @@ export const addDependentUser = async (user: DependentUser): Promise<{ success: 
 //Agregar medication
 export const addMedication = async (medication : Medication) : Promise<{success:boolean; message?:string}> => {
     const { error } = await supabase.rpc("add_medication",
-        {name_input: medication.name,prescription_input: medication.prescription, since_input: medication.sinceWhen, until_input:medication.untilWhen, how_often_input:medication.howOften, forever_input:medication.isForever});
+        {name_input: medication.name,prescription_input: medication.prescription, since_input: medication.sinceWhen, until_input:medication.untilWhen, how_often_input:medication.howOften, is_forever_input:medication.isForever});
     if (error) {
         console.error('Error inserting data:', error.message);
         return { success: false, message: error.message };

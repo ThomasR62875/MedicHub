@@ -91,7 +91,7 @@
   "deleteDepUser" : "Dependent User deleted successfully",
   "RUsureDU"  : "Are you sure you want to delete dependent user?",
   "RUsureD"  : "Are you sure you want to delete doctor?",
-  "RUsureA"  : "Are you sure you want to delete appointment?"
-
+  "RUsureA"  : "Are you sure you want to delete appointment?",
+  "text26" : "I don't have an end date for this medication:"
 }
 
