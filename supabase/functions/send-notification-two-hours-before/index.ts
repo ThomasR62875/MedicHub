@@ -88,7 +88,7 @@ async function checkAppointments() {
 
       const appointmentDate = new Date(appointment.date);
 
-      if(hoursBetween(now, appointmentDate) <= 2 && hoursBetween(now, appointmentDate) >= 1.3){
+      if(hoursBetween(now, appointmentDate) <= 2){
         try {
           await sendNotification(appointmentDate, appointment.description, appointment.user_name, appointment.doctor, appointment.user_id, email);
           await updateNotification(appointment.id)
@@ -106,7 +106,7 @@ const getNotificationAppointments = async () : Promise<Appointment[] | undefined
   const to_return: Appointment[] = [];
 
 
-  const {data, error, status} = await supabase.rpc('get_notification_appointments')
+  const {data, error} = await supabase.rpc('get_notification_appointments')
   if (error) {
     console.error('Error getting notification appointments data:', error.message);
   } else{
@@ -138,7 +138,7 @@ const getNotificationAppointments = async () : Promise<Appointment[] | undefined
 
 const getUserRelation = async (user_id:String) : Promise<String | undefined> =>{
 
-  const {data, error} = await supabase.rpc("get_user_relation", {user_id: user_id});
+  const {data, error} = await supabase.rpc('get_authentication_id', {user_id: user_id});
 
   if (error) {
     console.error('Error getting independent user id:', error.message);

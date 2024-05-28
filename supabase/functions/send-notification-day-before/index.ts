@@ -138,7 +138,7 @@ const getNotificationAppointments = async () : Promise<Appointment[] | undefined
 
 const getUserRelation = async (user_id:String) : Promise<String | undefined> =>{
 
-  const {data, error} = await supabase.rpc("get_user_relation", {user_id: user_id});
+  const {data, error} = await supabase.rpc('get_authentication_id', {user_id: user_id});
 
   if (error) {
     console.error('Error getting independent user id:', error.message);
