@@ -228,7 +228,7 @@ export const getAppointments = async () : Promise<Appointment[] | undefined> => 
             description: appoint.description,
             date: appoint.date,
             user_name: user.first_name, // Suponiendo que name es el campo que quieres agregar
-            doctor: doctor && doctor.name ? doctor.name.concat(" (especialidad: ").concat(doctor.specialty).concat(")") : 'Sin datos de doctor',
+            doctor: doctor.id,
             user_id: appoint.user,}
         to_return.push(new_appoint);
 
@@ -308,8 +308,10 @@ export const deleteMedication = async (medication: Medication): Promise<{ succes
 // editar
 
 export const updateAppointment = async (appoint: Appointment): Promise<{ success: boolean, message: string }> => {
-    const { error } = await supabase.rpc("update_appointment", {date_input: appoint.date, description_input: appoint.description,
-        doctor_input: appoint.doctor, user_id: appoint.user_id});
+    console.log("id: "+ appoint.id +"date: "+ appoint.date +"desc:  "+ appoint.description+"doc:   "+  appoint.doctor+"user:   "+appoint.user_id )
+
+    const { error } = await supabase.rpc("update_appointment", {id_input: appoint.id, date_input: appoint.date, description_input: appoint.description,
+        doctor_input: appoint.doctor, user_input: appoint.user_id});
     if (error) {
         return {
             success: false,
@@ -339,8 +341,9 @@ export const updateDependentUser = async (depUser: DependentUser): Promise<{ suc
 };
 
 export const updateDoctor = async (doc: Doctor): Promise<{ success: boolean, message: string }> => {
+
     const { error } = await supabase.rpc("update_doctor",
-        {id_input: doc.id, email_input: doc.email, name_input: doc.name, phone_input: doc.phone, addresses_input: doc.addresses, speciality_input: doc.specialty, user_id_input: doc.user_id});
+        {id_input: doc.id, email_input: doc.email, name_input: doc.name, phone_input: doc.phone, addresses_input: doc.addresses, specialty_input: doc.specialty, user_id_input: doc.user_id});
     if (error) {
         return {
             success: false,

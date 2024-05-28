@@ -1,11 +1,12 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
 import {Button, Icon} from "react-native-elements";
 import {useTranslation} from "react-i18next";
 import {Button as PaperButton, Dialog} from "react-native-paper";
-import {deleteAppointment, deleteDoctor} from "../lib/supabase";
+import {deleteAppointment, deleteDoctor, getDoctor} from "../lib/supabase";
+import {Doctor} from "./Doctors";
 
 type SingleAppointmentProps = NativeStackScreenProps<RootStackParamList, 'SingleAppointment'>
 
@@ -18,6 +19,15 @@ const SingleAppointment: React.FC<SingleAppointmentProps> = ({ navigation, route
     const formattedDate = `${originalDate.getDate()}/${originalDate.getMonth() + 1}/${originalDate.getFullYear()}`;
     const formattedTime = `${(originalDate.getHours() + 3) % 24}:${originalDate.getMinutes().toString().padStart(2, '0')}`;
     const {t} = useTranslation();
+    const [doctor, setDoctor] = useState<Doctor | undefined>()
+
+    useEffect(() => {
+        const fetchDoctor = async () => {
+            const doctorData = await getDoctor(route.params.appointment.doctor);
+            setDoctor(doctorData);
+        };
+        fetchDoctor();
+    }, [route.params.appointment.doctor])
 
     const handleDeleteAppointment = async () => {
         const session =  route.params.session;
@@ -26,6 +36,7 @@ const SingleAppointment: React.FC<SingleAppointmentProps> = ({ navigation, route
         navigation.navigate('Appointments', { session: session })
     };
 
+    // @ts-ignore
     return (
         <View style={styles.container}>
             <View style={styles.titleContainer}>
@@ -38,7 +49,7 @@ const SingleAppointment: React.FC<SingleAppointmentProps> = ({ navigation, route
                     type='ionicon'
                     size={25}
                     style={{margin: "10%"}}
-                    onPress={() => navigation.navigate('EditAppointment')}
+                    onPress={() => navigation.navigate('EditAppointment', {appointment: route.params.appointment})}
                 />
             </View>
             <View style={styles.detailRow}>
@@ -55,7 +66,7 @@ const SingleAppointment: React.FC<SingleAppointmentProps> = ({ navigation, route
             </View>
             <View style={styles.detailRow}>
                 <Text style={styles.label}>{t('doc')}:</Text>
-                <Text style={styles.value}>{route.params.appointment.doctor}</Text>
+                <Text style={styles.value}>{doctor ? `${doctor.name} (especialidad: ${doctor.specialty})` : 'Sin datos de doctor'}</Text>
             </View>
             <View style={styles.detailRow}>
                 <Text style={styles.label}>{t('description')}:</Text>

@@ -233,7 +233,7 @@ const styles = StyleSheet.create({
         borderColor: '#cae4c8',
         borderWidth: 1,
         color: 'black',
-        borderRadius: 10,
+        borderRadius: 17,
         alignSelf: 'center',
         shadowColor: '#000',
         shadowOffset: {
@@ -242,7 +242,6 @@ const styles = StyleSheet.create({
         },
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
-        elevation: 5,
         marginBottom: "2%"
     },
     text2: {
