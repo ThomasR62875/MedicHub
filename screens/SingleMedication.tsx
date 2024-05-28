@@ -2,16 +2,19 @@ import React, {useEffect, useState} from 'react';
 import {StyleSheet, View, Text, Alert} from 'react-native';
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
-import {Icon} from "react-native-elements";
+import {Button, Icon} from "react-native-elements";
 import { deleteMedication } from "../lib/supabase";
 import StandardGreenButton from "../components/StandardGreenButton";
 import {useTranslation} from "react-i18next";
+import {Button as PaperButton, Dialog} from "react-native-paper";
 
 type SingleMedicationProps = NativeStackScreenProps<RootStackParamList, 'SingleMedication'>
 
 
 const SingleMedication: React.FC<SingleMedicationProps> = ({ navigation, route }: any) => {
-
+    const [visible, setVisible] = React.useState(false);
+    const hideDialog = () => setVisible(false);
+    const showDialog = () => setVisible(true);
     const handleDeleteMedication = async () => {
         const session =  route.params.session;
         const medication =  route.params.meds;
@@ -93,12 +96,49 @@ const SingleMedication: React.FC<SingleMedicationProps> = ({ navigation, route }
                     <Text style={styles.value}>{t('text25')}</Text>
                 </View>
             )}
-            <View>
-                <StandardGreenButton
-                    title={t('delete')}
-                    onPress={handleDeleteMedication}
-                />
+            <View style={styles.screen}>
+                <View style={{alignItems: 'center', width: 'auto'}}>
+                    <Button
+                        title="Eliminar"
+                        buttonStyle={{
+                            backgroundColor: '#2E5829',
+                            borderWidth: 2,
+                            borderColor: 'white',
+                            borderRadius: 30,
+                            minHeight: 50,
+                            minWidth: 150,
+                        }}
+                        containerStyle={{
+                            width: 150,
+                            marginHorizontal: 50,
+                            marginVertical: 10,
+                            marginTop: 40,
+                            marginBottom:100
+                        }}
+                        titleStyle={{ color: '#eef9ed' }}
+                        onPress={() => showDialog()}
+                    />
+                </View>
             </View>
+            <Dialog style={styles.dialog}
+                    visible={visible}
+                    onDismiss={hideDialog}>
+                <Dialog.Content>
+                    <Text style={[{textAlign: 'center'}, {fontSize: 18}]}>
+                        {t('RUsureM')}
+                    </Text>
+                </Dialog.Content>
+                <Dialog.Actions style={{ justifyContent: 'space-between' }}>
+                    <PaperButton textColor="#2E5829FF"
+                                 onPress={hideDialog}>
+                        Cancelar
+                    </PaperButton>
+                    <PaperButton textColor="#b6265d"
+                                 onPress={handleDeleteMedication}>
+                        Eliminar
+                    </PaperButton>
+                </Dialog.Actions>
+            </Dialog>
         </View>
     );
 };
@@ -139,5 +179,13 @@ const styles = StyleSheet.create({
         left: 290,
         bottom: 60,
         alignSelf: 'flex-start',
+    },
+    screen: {
+        backgroundColor: "#E9F4E9FF",
+        height: "100%",
+    },
+    dialog:{
+        backgroundColor: '#E9F4E9FF',
+
     }
 });
