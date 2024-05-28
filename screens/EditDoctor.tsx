@@ -1,22 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import {getAllUsers, getSpecialties, getUserId, updateDependentUser, updateDoctor} from '../lib/supabase'
-import {
-    View,
-    StyleSheet,
-    Alert,
-    Keyboard,
-    TouchableWithoutFeedback,
-    KeyboardAvoidingView,
-    SafeAreaView, ScrollView
-} from 'react-native'
+import {View, StyleSheet, Alert, Keyboard, TouchableWithoutFeedback, KeyboardAvoidingView, SafeAreaView, ScrollView} from 'react-native'
 import {Button, Input, Text} from 'react-native-elements'
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
-import StandardGreenButton from "../components/StandardGreenButton";
 import {DependentUser} from "./DependentUsers";
 import {Specialty} from "./AddDoctor";
 import {useTranslation} from "react-i18next";
-import RNPickerSelect from "react-native-picker-select";
 import {Button as PaperButton, Dialog, Portal, Text as PaperText} from "react-native-paper";
 import {Picker} from "@react-native-picker/picker";
 
