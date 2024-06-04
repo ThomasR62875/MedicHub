@@ -25,7 +25,10 @@ export default {
                 foregroundImage: "./assets/adaptive-icon.png",
                 backgroundColor: "#ffffff"
             },
-            package: "com.jtechenski.tpingesoft"
+            package: "com.jtechenski.tpingesoft",
+            permissions: [
+                "INTERNET"
+            ]
         },
         web: {
             favicon: "./assets/favicon.png"
