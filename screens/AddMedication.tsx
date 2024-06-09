@@ -30,8 +30,8 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
     const [nameErrorMessage, setNameErrorMessage] = useState('')
     const [prescriptionErrorMessage, setPrescriptionErrorMessage] = useState('');
     const [dateSince, setDateSince] = useState(new Date());
-    const [dateUntil, setDateUntil] = useState<Date | null>(null);
-    const [howOften, setHowOften] = useState<Date | null>(null);
+    const [dateUntil, setDateUntil] = useState<Date | undefined>(undefined);
+    const [howOften, setHowOften] = useState<Date | undefined>(undefined);
     const [isForever, setIsForever] = useState<boolean>(false);
     const {t} = useTranslation();
     const times = [
@@ -39,8 +39,7 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
         '04:00:00',
         '06:00:00',
         '08:00:00',
-        '12:00:00',
-        '48:00:00',
+        '12:00:00'
     ];
     const timesList = times.map((time) => ({
         label: time,
@@ -124,8 +123,8 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
         setName('');
         setPrescription('');
         setDateSince(new Date());
-        setHowOften(null);
-        setDateUntil(null);
+        setHowOften(undefined);
+        setDateUntil(undefined);
         setNameErrorMessage('');
         setPrescriptionErrorMessage('');
     };
@@ -211,9 +210,6 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
                                 color={'#2E5829'}
                             />
                         </View>
-                        <RNText style={styles.text}>
-                            {isForever.toString()}
-                        </RNText>
                     </View>
                     <View>
                         <View style={[styles.verticallySpaced, {marginTop : "5%"}]}>
@@ -245,9 +241,8 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
                                         Alert.alert(t('warning') , t('warn13'),
                                             [{ text: 'Cancel', onPress: () => {setIsButtonDisabled(true);  resetForm();}},
                                                 { text: 'Ok', onPress: () => [handleAddMedication(), navigation.navigate('Medication', { session: session })]}])
-                                        console.log("howOften")
                                     }
-                                    else{handleAddMedication(); console.log("else");}
+                                    else{handleAddMedication()}
                                     }
                                 }
                             />

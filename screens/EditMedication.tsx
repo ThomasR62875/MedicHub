@@ -10,6 +10,8 @@ import DateTimePicker, {DateTimePickerEvent} from "@react-native-community/datet
 import {Picker} from "@react-native-picker/picker";
 import {cardStyle} from "../styles/global";
 import Checkbox from "expo-checkbox";
+import {Button as PaperButton, Dialog, Portal, Text as PaperText} from "react-native-paper";
+
 
 type EditMedicationProps = NativeStackScreenProps<RootStackParamList, 'EditMedication'>;
 
@@ -18,9 +20,9 @@ const EditMedication:React.FC<EditMedicationProps> = ({navigation, route }: any)
     const [id, setId] = useState(route.params.medication.id)
     const [name, setName] = useState(route.params.medication.name)
     const [prescription, setPrescription] = useState(route.params.medication.prescription);
-    const [dateSince, setDateSince] = useState<Date | null>(route.params.medication.dateSince);
-    const [dateUntil, setDateUntil] = useState<Date | null>(route.params.medication.dateUntil);
-    const [howOften, setHowOften] = useState<Date | null>(route.params.medication.howOften);
+    const [dateSince, setDateSince] = useState<Date>(route.params.medication.dateSince);
+    const [dateUntil, setDateUntil] = useState<Date | undefined>(route.params.medication.dateUntil);
+    const [howOften, setHowOften] = useState<Date | undefined>(route.params.medication.howOften);
     const [isForever, setIsForever] = useState<boolean>(route.params.medication.isForever);
     const {t} = useTranslation();
     const [mode, setMode] = useState<'date' | 'time'>('date');
@@ -29,8 +31,7 @@ const EditMedication:React.FC<EditMedicationProps> = ({navigation, route }: any)
         '04:00:00',
         '06:00:00',
         '08:00:00',
-        '12:00:00',
-        '48:00:00',
+        '12:00:00'
     ];
     const timesList = times.map((time) => ({
         label: time,
@@ -137,7 +138,7 @@ const EditMedication:React.FC<EditMedicationProps> = ({navigation, route }: any)
                         errorStyle={{ color: 'red' }}
                         errorMessage={prescriptionErrorMessage}
                     />
-                    <View>
+                    {/* <View>
                         <RNText style={styles.buttons} >
                             <UnderlinedText>{t('text22')}</UnderlinedText>
                         </RNText>
@@ -170,6 +171,7 @@ const EditMedication:React.FC<EditMedicationProps> = ({navigation, route }: any)
                             <DateTimePicker  testID="dateTimePicker"
                                              value={dateUntil ? dateUntil : new Date()}
                                              mode={mode}
+                                             minimumDate={dateSince}
                                              onChange={onChange2}
                             />
                         </View>
@@ -184,7 +186,7 @@ const EditMedication:React.FC<EditMedicationProps> = ({navigation, route }: any)
                                 color={'#2E5829'}
                             />
                         </View>
-                    </View>
+                    </View> */}
                     <Button
                         title={t('savec')}
                         buttonStyle={{

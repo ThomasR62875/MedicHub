@@ -17,14 +17,18 @@ export default {
             "**/*"
         ],
         ios: {
-            supportsTablet: true
+            supportsTablet: true,
+            bundleIdentifier: "com.jtechenski.tpingesoft" // Add this line
         },
         android: {
             adaptiveIcon: {
                 foregroundImage: "./assets/adaptive-icon.png",
                 backgroundColor: "#ffffff"
             },
-            package: "com.jtechenski.tpingesoft"
+            package: "com.jtechenski.tpingesoft",
+            permissions: [
+                "INTERNET"
+            ]
         },
         web: {
             favicon: "./assets/favicon.png"

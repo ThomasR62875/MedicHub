@@ -30,7 +30,7 @@ const MedicationButton: React.FC<MedicationButtonProps> = ( { onPress, meds }) =
                         <Text style={cardStyle.label}>{t('text23')}:</Text>
                         <Text>{parseInt(meds.howOften.toString().split(':')[0], 10)} {t('text24')}</Text>
                     </View>
-                ) : (<Text> no hay una goma en howOFten porq algo anda mal {meds.howOften} s </Text>)
+                ) : null
                 }
             </View>
         </TouchableOpacity>
