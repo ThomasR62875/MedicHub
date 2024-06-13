@@ -1,16 +1,7 @@
 import 'react-native-url-polyfill/auto';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createClient } from '@supabase/supabase-js';
-import { Session } from '@supabase/supabase-js'
-import { useState, useEffect } from 'react'
-import {Appointment} from "../screens/Appointments";
-import {Doctor} from "../screens/Doctors";
-import {Alert} from 'react-native'
-import { DependentUser } from '../screens/DependentUsers';
-import {Specialty} from "../screens/AddDoctor"
-import {Medication} from "../screens/Medication"
-import {NativeStackScreenProps} from "@react-navigation/native-stack";
-import {RootStackParamList} from "../App";
+import { User, DependentUser, Appointment, Specialty, Doctor, Medication } from './types';
 
 const supabaseUrl = "https://ockjaboenzpwwhzlsvdj.supabase.co";
 const supabaseAnonKey ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9ja2phYm9lbnpwd3doemxzdmRqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTI1MDMwNTgsImV4cCI6MjAyODA3OTA1OH0.hqvQbK0ydgz75DszpuZWjfufpxky9qZi21G5qCtm4eE";
@@ -57,15 +48,35 @@ export const getUserId= async () : Promise<string> => {
     return data;
 }
 
+// Crea el usuario
+
+export const signUp= async (user: User,password:string) : Promise<{success: boolean; message?: string }> => {
+    const {data, error} =await supabase.auth.signUp({
+        email: user.email,
+        password: password,
+        options: {
+            data: {
+                first_name: user.first_name,
+                last_name: user.last_name,
+                dni: user.dni,
+            },
+        },
+    })
+    if (error) {
+        return { success: false, message: error.message };
+    } else {
+        return { success: true };
+    }
+
+}
+
 // Agrega un appointment recibiendo el appointment como parametro
 export const addAppointment = async (appoint: Appointment): Promise<{ success: boolean; message?: string }> => {
     const { error } = await supabase.rpc("add_appointment", {date_input: appoint.date, description_input: appoint.description,
         doctor_input: appoint.doctor, user_id: appoint.user_id});
     if (error) {
-        console.error('Error inserting data:', error.message);
         return { success: false, message: error.message };
     } else {
-        console.log('Appointment added successfully');
         return { success: true };
     }
 };

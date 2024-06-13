@@ -1,11 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import {View, ScrollView, Text, Alert, StyleSheet, TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView, Image} from 'react-native';
-import {supabase} from "../lib/supabase";
+import {signUp, supabase} from "../lib/supabase";
 import {Input, Icon, Button} from "react-native-elements";
 // @ts-ignore
 import Logo from '../assets/icon.png'
 import {useTranslation} from "react-i18next";
 import ScrollableBg from "../components/ScrollableBg";
+import { User } from '../lib/types';
 
 
 const Register: React.FC = ({ navigation }: any) => {
@@ -84,23 +85,10 @@ const Register: React.FC = ({ navigation }: any) => {
 
     async function signUpWithEmail() {
         setLoading(true)
+        const user: User = {id:"",first_name:firstName,last_name:lastName,dni:dni, email:email}
+        const {success,message} = await signUp(user,password);
 
-        const {
-            data: { session },
-            error,
-        } = await supabase.auth.signUp({
-            email: email,
-            password: password,
-            options: {
-                data: {
-                    first_name: firstName,
-                    last_name: lastName,
-                    dni: dni,
-                },
-            },
-        })
-
-        if (!error) Alert.alert('¡Revise su bandeja de entrada para verificar el mail!')
+        if (success) Alert.alert('¡Revise su bandeja de entrada para verificar el mail!',)
         setLoading(false)
     }
 
