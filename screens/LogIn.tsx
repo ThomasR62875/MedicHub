@@ -19,6 +19,7 @@ import {RootStackParamList} from "../App";
 import Logo from '../assets/icon.png'
 import {useTranslation} from "react-i18next";
 import LanguageButton from "../components/LanguageButton";
+import ScrollableBg from "../components/ScrollableBg";
 
 const windowHeight = Dimensions.get('window').height;
 
@@ -77,9 +78,8 @@ const LogIn: React.FC<LogInProps> = ({navigation, route})=> {
     }
 
     return (
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-            <View style={styles.container}>
-                <View style={{marginLeft: "60%", marginTop: "5%", alignSelf: 'center'}}>
+        <ScrollableBg>
+                <View style={{marginLeft: "60%", alignSelf: 'center'}}>
                     <LanguageButton/>
                 </View>
                 <View style={styles.window}>
@@ -145,8 +145,7 @@ const LogIn: React.FC<LogInProps> = ({navigation, route})=> {
                             titleStyle={{color: '#2E5829', textDecorationLine: 'underline'}}
                     />
                 </View>
-            </View>
-        </TouchableWithoutFeedback>
+        </ScrollableBg>
     );
 };
 

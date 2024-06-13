@@ -5,6 +5,7 @@ import {Input, Icon, Button} from "react-native-elements";
 // @ts-ignore
 import Logo from '../assets/icon.png'
 import {useTranslation} from "react-i18next";
+import ScrollableBg from "../components/ScrollableBg";
 
 
 const Register: React.FC = ({ navigation }: any) => {
@@ -104,10 +105,7 @@ const Register: React.FC = ({ navigation }: any) => {
     }
 
     return (
-        <View style={styles.registerW}>
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-                <KeyboardAvoidingView behavior="padding" style={styles.container}>
-                <ScrollView>
+        <ScrollableBg>
                 <View style={{marginBottom: 50, alignItems: 'center'}}>
                     <Image source={Logo} style={styles.logo} />
                 </View>
@@ -226,16 +224,12 @@ const Register: React.FC = ({ navigation }: any) => {
                             onPress={() => signUpWithEmail()}
                         />
                     </View>
-                </ScrollView>
-                </KeyboardAvoidingView>
-        </TouchableWithoutFeedback>
-        </View>
+        </ScrollableBg>
     );
 };
 
 const styles = StyleSheet.create({
     container: {
-        marginTop: 40,
         marginLeft: 20,
         marginRight: 20
     },
