@@ -147,6 +147,16 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
     };
 
 
+    const getDate = () => {
+        return date ? date.toLocaleDateString() : 'Seleccione una fecha';
+    };
+
+
+    const getTime = () => {
+        return time ? time.toLocaleTimeString() : 'Seleccione una hora';
+    };
+
+
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
 
@@ -196,8 +206,24 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
                                 </>
                             ) : (
                                 <>
-                                    <Button onPress={() => setShowDatePicker(true)} title="Select Date" />
-                                    <Button onPress={() => setShowTimePicker(true)} title="Select Time" />
+                                    <PaperButton
+                                        mode="outlined"
+                                        style={styles.pickerButton}
+                                        textColor='#2E5829'
+                                        labelStyle={{ textAlign: 'left', display: 'flex' }}
+                                        onPress={() => setShowDatePicker(true)}
+                                    >
+                                        {getDate()}
+                                    </PaperButton>
+                                    <PaperButton
+                                        mode="outlined"
+                                        style={styles.pickerButton}
+                                        textColor='#2E5829'
+                                        labelStyle={{ textAlign: 'left', display: 'flex' }}
+                                        onPress={() => setShowTimePicker(true)}
+                                    >
+                                        {getTime()}
+                                    </PaperButton>
                                     {showDatePicker && (
                                         <DateTimePicker
                                             testID="datePicker"
