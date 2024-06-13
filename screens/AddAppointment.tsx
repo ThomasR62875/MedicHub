@@ -8,7 +8,7 @@ import {
     Text,
     ScrollView,
     Keyboard,
-    SafeAreaView
+    SafeAreaView, Platform
 } from 'react-native';
 import {Button, Input} from "react-native-elements";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
@@ -37,6 +37,9 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
     const [doctorDialog, setDoctorDialog] = useState(false);
     const [userDialog, setUserDialog] = useState(false);
     const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(true);
+    const [showDatePicker, setShowDatePicker] = useState(false);
+    const [showTimePicker, setShowTimePicker] = useState(false);
+
 
     const [descriptionErrorMessage, setDescriptionErrorMessage] = useState('');
     const { t } = useTranslation();
@@ -117,15 +120,19 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
         value: user.id,
     }));
 
-    const onDateChange = (event: any, selectedDate?: Date) => {
+
+    const onDateChange = (event: any, selectedDate: Date | undefined) => {
         const currentDate = selectedDate || date;
+        setShowDatePicker(Platform.OS === 'ios');
         setDate(currentDate);
     };
 
-    const onTimeChange = (event: any, selectedTime?: Date) => {
+    const onTimeChange = (event: any, selectedTime: Date | undefined) => {
         const currentTime = selectedTime || time;
+        setShowTimePicker(Platform.OS === 'ios');
         setTime(currentTime);
     };
+
     const hideDoctorDialog = () => setDoctorDialog(false);
     const hideUserDialog = () => setUserDialog(false);
 
@@ -168,22 +175,49 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
                         </View>
                         <PaperText style={styles.text}>Horario y fecha</PaperText>
                         <View style={styles.datePickerContainer}>
-                            <DateTimePicker
-                                testID="datePicker"
-                                value={date}
-                                mode="date"
-                                display="default"
-                                style={{ backgroundColor: 'transparent' }}
-                                onChange={onDateChange}
-                            />
-                            <DateTimePicker
-                                testID="timePicker"
-                                value={time}
-                                mode="time"
-                                display="default"
-                                textColor='#cbe4c9'
-                                onChange={onTimeChange}
-                            />
+                            {Platform.OS === 'ios' ? (
+                                <>
+                                    <DateTimePicker
+                                        testID="datePicker"
+                                        value={date}
+                                        mode="date"
+                                        display="default"
+                                        style={{ backgroundColor: 'transparent' }}
+                                        onChange={onDateChange}
+                                    />
+                                    <DateTimePicker
+                                        testID="timePicker"
+                                        value={time}
+                                        mode="time"
+                                        display="default"
+                                        textColor='#cbe4c9'
+                                        onChange={onTimeChange}
+                                    />
+                                </>
+                            ) : (
+                                <>
+                                    <Button onPress={() => setShowDatePicker(true)} title="Select Date" />
+                                    <Button onPress={() => setShowTimePicker(true)} title="Select Time" />
+                                    {showDatePicker && (
+                                        <DateTimePicker
+                                            testID="datePicker"
+                                            value={date}
+                                            mode="date"
+                                            display="default"
+                                            onChange={onDateChange}
+                                        />
+                                    )}
+                                    {showTimePicker && (
+                                        <DateTimePicker
+                                            testID="timePicker"
+                                            value={time}
+                                            mode="time"
+                                            display="default"
+                                            onChange={onTimeChange}
+                                        />
+                                    )}
+                                </>
+                            )}
                         </View>
                         <PaperText style={styles.text}>Doctor</PaperText>
 
