@@ -459,3 +459,11 @@ export const setDependentUser = async (parent_id: string, child_id: string) => {
         }
     }
 }
+
+export const getUserIdByEmail = async (email_input: string) : Promise<string | undefined> => {
+    const {data: user_id ,error: error} = await supabase.rpc('get_independent_user_by_email', {email_input: email_input});
+    if (!error) {
+        return user_id
+    }
+    return undefined
+}

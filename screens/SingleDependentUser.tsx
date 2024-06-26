@@ -5,6 +5,7 @@ import {RootStackParamList} from "../App";
 import {Icon, Button} from "react-native-elements";
 import {useTranslation} from "react-i18next";
 import {Button as PaperButton, Dialog, TextInput} from "react-native-paper";
+import {getUserIdByEmail, setDependentUser} from "../lib/supabase";
 
 type SingleDependentUserProps = NativeStackScreenProps<RootStackParamList, 'SingleDependentUser'>
 
@@ -31,10 +32,19 @@ const SingleDependentUser: React.FC<SingleDependentUserProps> = ({navigation, ro
     let str = t('depu');
     str = lowercaseFirstLetter(str);
 
-    function handleUserSharing() {
-        /*validacin de mail*/
-        /*llamado a funcion para compartir usario set_dependent_user*/
-        /*shareDialog= false*/
+    const handleUserSharing = async () => {
+        const parent_id = await getUserIdByEmail(shareEmail);
+        if (parent_id === undefined) {
+            console.log('Parent user not found');
+            return;
+        }
+
+        const result = await setDependentUser(parent_id, route.params.du.id);
+        if (result) {
+            console.log('User sharing set successfully');
+        } else {
+            console.log('Failed to set user sharing');
+        }
     }
 
     return (
