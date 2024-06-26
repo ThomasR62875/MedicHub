@@ -31,6 +31,11 @@ const SingleDependentUser: React.FC<SingleDependentUserProps> = ({navigation, ro
     let str = t('depu');
     str = lowercaseFirstLetter(str);
 
+    function handleUserSharing() {
+        /*validacin de mail*/
+        /*llamado a funcion para compartir usario*/
+        /*shareDialog= false*/
+    }
 
     return (
         <View style={styles.container}>
@@ -138,8 +143,8 @@ const SingleDependentUser: React.FC<SingleDependentUserProps> = ({navigation, ro
                             onChangeText={text => setShareEmail(text)}
                         />
                         <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                            <PaperButton>{t('cancel')}</PaperButton>
-                            <PaperButton>{t('confirm')}</PaperButton>
+                            <PaperButton onPress={()=> setShareDialog(false)}>{t('cancel')}</PaperButton>
+                            <PaperButton onPress={()=> handleUserSharing()}>{t('confirm')}</PaperButton>
                         </View>
                     </View>
                 </Dialog.Actions>
