@@ -7,8 +7,6 @@ import {
     Dimensions,
     AppState,
     Text,
-    TouchableWithoutFeedback,
-    Keyboard
 } from 'react-native'
 import {supabase} from '../lib/supabase'
 import {Button, Input} from 'react-native-elements'
@@ -35,7 +33,6 @@ type LogInProps = NativeStackScreenProps<RootStackParamList, 'Login'>;
 
 
 const LogIn: React.FC<LogInProps> = ({navigation, route}) => {
-    const {session} = route.params;
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [loading, setLoading] = useState(false)

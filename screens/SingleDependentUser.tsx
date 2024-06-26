@@ -1,32 +1,33 @@
 import React from 'react';
-import {StyleSheet, View, Text, Alert} from 'react-native';
+import {StyleSheet, View, Text} from 'react-native';
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
 import {Icon, Button} from "react-native-elements";
-import { deleteDependentUser } from "../lib/supabase";
 import {useTranslation} from "react-i18next";
-import {Button as PaperButton, Dialog} from "react-native-paper";
+import {Button as PaperButton, Dialog, TextInput} from "react-native-paper";
 
 type SingleDependentUserProps = NativeStackScreenProps<RootStackParamList, 'SingleDependentUser'>
 
 
-const SingleDependentUser: React.FC<SingleDependentUserProps> = ({ navigation, route }: any) => {
+const SingleDependentUser: React.FC<SingleDependentUserProps> = ({navigation, route}: any) => {
     const [visible, setVisible] = React.useState(false);
     const hideDialog = () => setVisible(false);
     const showDialog = () => setVisible(true);
 
+    const [shareDialog, setShareDialog] = React.useState(false);
+    const [shareEmail, setShareEmail] = React.useState("");
     const handleDeleteDependentUser = async () => {
-        const session =  route.params.session;
-        const dependentUser =  route.params.du;
-        const result = await deleteDependentUser(dependentUser);
-        navigation.navigate('Usuarios', { session: session })
+        const session = route.params.session;
+        navigation.navigate('Usuarios', {session: session})
     };
 
     const {t, i18n} = useTranslation();
+
     function lowercaseFirstLetter(str: string) {
         if (!str) return str; // Handle empty strings or null
         return str.charAt(0).toLowerCase() + str.slice(1);
     }
+
     let str = t('depu');
     str = lowercaseFirstLetter(str);
 
@@ -34,7 +35,7 @@ const SingleDependentUser: React.FC<SingleDependentUserProps> = ({ navigation, r
     return (
         <View style={styles.container}>
             <View style={styles.titleContainer}>
-                { i18n.language === 'english' ? (
+                {i18n.language === 'english' ? (
                     <Text style={styles.titleText}>{t('depu')} {t('text2')} </Text>
                 ) : (
                     <View>
@@ -47,7 +48,7 @@ const SingleDependentUser: React.FC<SingleDependentUserProps> = ({ navigation, r
             <View style={styles.addContainer}>
                 <Icon
                     name='pencil'
-                    iconStyle={{ color: '#1E3A1A' }}
+                    iconStyle={{color: '#1E3A1A'}}
                     type='ionicon'
                     size={25}
                     style={{margin: "5%"}}
@@ -68,6 +69,20 @@ const SingleDependentUser: React.FC<SingleDependentUserProps> = ({ navigation, r
             </View>
             <View style={styles.screen}>
                 <View style={{alignItems: 'center', width: 'auto'}}>
+                    {/*<PaperButton*/}
+                    {/*    mode="outlined"*/}
+                    {/*    style={styles.shareUserBotton}*/}
+                    {/*    textColor='#2E5829'*/}
+                    {/*    labelStyle={{ textAlign: 'left', display: 'flex' }}*/}
+                    {/*    onPress={()=>()}*/}
+                    {/*>{t('share_user')}</PaperButton>*/}
+                    <PaperButton
+                        mode="outlined"
+                        style={styles.shareUserBotton}
+                        textColor='#2E5829'
+                        labelStyle={{textAlign: 'left', display: 'flex'}}
+                        onPress={() => setShareDialog(true)}
+                    >{t('share_user')}</PaperButton>
                     <Button
                         title="Eliminar"
                         buttonStyle={{
@@ -82,10 +97,10 @@ const SingleDependentUser: React.FC<SingleDependentUserProps> = ({ navigation, r
                             width: 150,
                             marginHorizontal: 50,
                             marginVertical: 10,
-                            marginTop: 40,
-                            marginBottom:100
+                            marginTop: 20,
+                            marginBottom: 100
                         }}
-                        titleStyle={{ color: '#eef9ed' }}
+                        titleStyle={{color: '#eef9ed'}}
                         onPress={() => showDialog()}
                     />
                 </View>
@@ -98,15 +113,35 @@ const SingleDependentUser: React.FC<SingleDependentUserProps> = ({ navigation, r
                         {t('RUsureDU')}
                     </Text>
                 </Dialog.Content>
-                <Dialog.Actions style={{ justifyContent: 'space-between' }}>
+                <Dialog.Actions style={{justifyContent: 'center'}}>
                     <PaperButton textColor="#2E5829FF"
                                  onPress={hideDialog}>
-                        Cancelar
+                        {t('cancel')}
                     </PaperButton>
                     <PaperButton textColor="#b6265d"
                                  onPress={handleDeleteDependentUser}>
-                        Eliminar
+                        {t('delete')}
                     </PaperButton>
+                </Dialog.Actions>
+            </Dialog>
+            <Dialog style={styles.dialog}
+                    visible={shareDialog}
+                    onDismiss={() => setShareDialog(false)}>
+                <Dialog.Actions>
+                    <View>
+                        <Text>Ingrese el mail del usario con el que desea compartir</Text>
+                        <TextInput
+                            label="Email"
+                            value={shareEmail}
+                            mode={'outlined'}
+                            style={styles.inputStyle}
+                            onChangeText={text => setShareEmail(text)}
+                        />
+                        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                            <PaperButton>{t('cancel')}</PaperButton>
+                            <PaperButton>{t('confirm')}</PaperButton>
+                        </View>
+                    </View>
                 </Dialog.Actions>
             </Dialog>
         </View>
@@ -154,8 +189,18 @@ const styles = StyleSheet.create({
         backgroundColor: "#E9F4E9FF",
         height: "100%",
     },
-    dialog:{
+    dialog: {
         backgroundColor: '#E9F4E9FF',
-
+        alignItems: 'center',
+    },
+    shareUserBotton: {
+        borderRadius: 6,
+        margin: '5%',
+        width: '60%'
+    },
+    inputStyle: {
+        marginTop: '5%',
+        marginBottom: '5%'
     }
+
 });

@@ -7,6 +7,8 @@
   "logIn" : "Log In",
   "text1" : "You don't have an account ?",
   "register" : "Register",
+  "cancel": "Cancel",
+  "confirm": "Confirm",
   "user" : "User",
   "date" : "Date",
   "doc" : "Doctor",
@@ -51,7 +53,6 @@
   "text6" : "Data has been updated",
   "text7" : "You must enter a description to the appointment.",
   "text8" : "The appointment has been added.",
-  "confirm" : "confirm",
   "text9" : "The user has been added",
   "newu" : "New user",
   "add" : "Add",
@@ -97,6 +98,8 @@
   "RUsureD"  : "Are you sure you want to delete doctor?",
   "RUsureA"  : "Are you sure you want to delete appointment?",
   "RUsureM"  : "Are you sure you want to delete medication?",
-  "text26" : "I don't have an end date for this medication:"
+  "text26" : "I don't have an end date for this medication:",
+  "share_user" : "Share user",
+  "make_independent" : "Make user independent"
 }
 
