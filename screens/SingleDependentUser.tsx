@@ -33,7 +33,7 @@ const SingleDependentUser: React.FC<SingleDependentUserProps> = ({navigation, ro
 
     function handleUserSharing() {
         /*validacin de mail*/
-        /*llamado a funcion para compartir usario*/
+        /*llamado a funcion para compartir usario set_dependent_user*/
         /*shareDialog= false*/
     }
 
