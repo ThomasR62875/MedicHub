@@ -33,7 +33,7 @@ import 'react-native-reanimated'
 import * as Animatable from 'react-native-animatable'
 import 'react-native-reanimated'
 import {Ionicons, MaterialCommunityIcons} from "@expo/vector-icons";
-import {StyleSheet, TouchableOpacity, View} from "react-native";
+import {StatusBar, StyleSheet, TouchableOpacity, View} from "react-native";
 import {backgroundColor} from "react-native-calendars/src/style";
 import {Easing} from "react-native-reanimated";
 import {useTranslation} from "react-i18next";
@@ -310,6 +310,7 @@ const App = () => {
 
   return (
       <Provider>
+          <StatusBar barStyle="dark-content" backgroundColor="#e9f4e9" />
           <NavigationContainer>
             <Stack.Navigator>
               {!session ? (
