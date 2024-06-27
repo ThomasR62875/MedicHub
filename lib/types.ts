@@ -13,6 +13,10 @@ export type User = {
     last_name: string;
     dni: string;
     email: string;
+    raw_user_meta_data?: {
+        independent_user_id?: string;
+    };
+
 }
 
 export type Specialty = {
