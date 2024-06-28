@@ -1,8 +1,10 @@
 import OpenAI from 'openai';
 import {UserData} from "./types";
+import getEnvVars, {getOpenAIVars} from "../environment";
+const { OPENAI_API_KEY, OPENAI_API_URL } = getOpenAIVars();
 
 const openai = new OpenAI({
-    apiKey: '',
+    apiKey: OPENAI_API_KEY,
 });
 
 export const recommendQuestionsForAppointment = async (userData: UserData): Promise<string | null> => {
