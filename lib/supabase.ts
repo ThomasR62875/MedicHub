@@ -2,12 +2,10 @@ import 'react-native-url-polyfill/auto';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {createClient} from '@supabase/supabase-js';
 import {Appointment, AppointmentInfo, DependentUser, Doctor, Medication, Specialty, User, UserData} from './types';
+import getEnvVars from "../environment";
 
-const supabaseUrl = "https://ockjaboenzpwwhzlsvdj.supabase.co";
-const supabaseAnonKey ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9ja2phYm9lbnpwd3doemxzdmRqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTI1MDMwNTgsImV4cCI6MjAyODA3OTA1OH0.hqvQbK0ydgz75DszpuZWjfufpxky9qZi21G5qCtm4eE";
-
-
-export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+const { REACT_APP_SUPABASE_URL, REACT_APP_ANON_KEY } = getEnvVars();
+export const supabase = createClient(REACT_APP_SUPABASE_URL, REACT_APP_ANON_KEY, {
     auth: {
         storage: AsyncStorage,
         autoRefreshToken: true,
@@ -15,6 +13,8 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
         detectSessionInUrl: false,
     },
 });
+
+
 //Devuelve usuario por id
 export const getUser = async (session_user_id:String) : Promise<DependentUser> => {
     
@@ -73,7 +73,7 @@ export const signUp= async (user: User,password:string) : Promise<{success: bool
 // Agrega un appointment recibiendo el appointment como parametro
 export const addAppointment = async (appoint: Appointment): Promise<{ success: boolean; message?: string }> => {
     const { error } = await supabase.rpc("add_appointment", {date_input: appoint.date, description_input: appoint.description,
-        doctor_input: appoint.doctor, user_id: appoint.user_id});
+        doctor_input: appoint.doctor, user_id: appoint.user_id, observations_input: appoint.observations});
     if (error) {
         return { success: false, message: error.message };
     } else {
@@ -240,7 +240,9 @@ export const getAppointments = async () : Promise<Appointment[] | undefined> => 
             date: appoint.date,
             user_name: user.first_name, // Suponiendo que name es el campo que quieres agregar
             doctor: doctor.id,
-            user_id: appoint.user,}
+            user_id: appoint.user,
+            observations: appoint.observations
+        }
         to_return.push(new_appoint);
 
     };
@@ -368,9 +370,9 @@ export const deleteMedication = async (medication: Medication): Promise<{ succes
 
 export const updateAppointment = async (appoint: Appointment): Promise<{ success: boolean, message: string }> => {
     console.log("id: "+ appoint.id +"date: "+ appoint.date +"desc:  "+ appoint.description+"doc:   "+  appoint.doctor+"user:   "+appoint.user_id )
-
+    console.log(appoint.date)
     const { error } = await supabase.rpc("update_appointment", {id_input: appoint.id, date_input: appoint.date, description_input: appoint.description,
-        doctor_input: appoint.doctor, user_input: appoint.user_id});
+        doctor_input: appoint.doctor, user_input: appoint.user_id, observations_input: appoint.observations});
     if (error) {
         return {
             success: false,

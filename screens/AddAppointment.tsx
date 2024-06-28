@@ -26,6 +26,7 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
     const { session } = route.params;
     const [loading, setLoading] = useState(false);
     const [description, setDescription] = useState('');
+    const [observations, setObservations] = useState('');
     const [doctor, setDoctor] = useState('Médico');
     const [user_id, setUserId] = useState('');
     const [session_user_id, setSessionUserId] = useState('');
@@ -56,7 +57,6 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
 
         }
     };
-
 
     useEffect(() => {
         if (session) {
@@ -97,7 +97,7 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
 
 
 
-        const appointment = { date: appointmentDate, description, user_name: '', doctor, user_id, id: '' };
+        const appointment = { date: appointmentDate, description, user_name: '', doctor, user_id, id: '' , observations: observations};
         const result = await addAppointment(appointment);
         if (result.success) {
             Alert.alert(
@@ -174,6 +174,17 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
                                 onChangeText={(text) => {
                                     setDescription(text);
                                     validateDescription(text);
+                                }}
+                                mode='flat'
+                                underlineColor='#2E5829FF'
+                                activeUnderlineColor='#2E5829FF'
+                            />
+                            <TextInput
+                                style={{backgroundColor: "#e9f4e9", marginTop: "10%", textAlign: 'center', marginLeft:'5%' , marginRight: '5%'}}
+                                label={t('Observaciones')}
+                                value={observations}
+                                onChangeText={(text) => {
+                                    setObservations(text);
                                 }}
                                 mode='flat'
                                 underlineColor='#2E5829FF'

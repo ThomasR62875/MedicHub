@@ -46,6 +46,7 @@ export type Appointment = {
     user_name: string;
     doctor: string;
     user_id: string;
+    observations: string;
 }
 
 export type AppointmentInfo = {

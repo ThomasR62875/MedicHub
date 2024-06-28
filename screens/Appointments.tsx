@@ -13,6 +13,7 @@ export type Appointment = {
     user_name: string;
     doctor: string;
     user_id: string;
+    observations: string;
 }
 const Appointments: React.FC =  ({navigation, route}: any) =>{
     const session = route.params.session;
