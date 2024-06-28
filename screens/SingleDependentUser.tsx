@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, View, Text, Image, Alert} from 'react-native';
+import { View, Text, Image, Alert} from 'react-native';
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
 import {Icon, Button, Input} from "react-native-elements";
@@ -7,12 +7,13 @@ import {useTranslation} from "react-i18next";
 import {Button as PaperButton, Dialog, Divider, Portal, Text as PaperText, TextInput} from "react-native-paper";
 import {deleteDependentUser, getUserIdByEmail, setDependentUser, signUp} from "../lib/supabase";
 import ScrollableBg from "../components/ScrollableBg";
-import {SexGenderOption, User} from "../lib/types";
+import {User} from "../lib/types";
 import {styles} from "../assets/styles";
 // @ts-ignore
 import Header from "../assets/header_violet.png";
 import DateTimePicker, {DateTimePickerEvent} from "@react-native-community/datetimepicker";
 import {Picker} from "@react-native-picker/picker";
+import {getSexGenderName, sexGenderOptions} from "../lib/ourlibrary";
 
 type SingleDependentUserProps = NativeStackScreenProps<RootStackParamList, 'SingleDependentUser'>
 
@@ -76,19 +77,8 @@ const SingleDependentUser: React.FC<SingleDependentUserProps> = ({navigation, ro
     let str = t('depu');
     str = lowercaseFirstLetter(str);
 
-    const sexGenderOptions: SexGenderOption[] = [
-        { sex_gender_name: t('male'), value: 'male' },
-        { sex_gender_name: t('female'), value: 'female' },
-        { sex_gender_name: t('non-binary'), value: 'non-binary' },
-        { sex_gender_name: t('other'), value: 'other' },
-    ];
-
     const hideSexGenderDialog = () => setSexGenderDialog(false);
 
-    const getSexGenderName = (value: string) => {
-        const option = sexGenderOptions.find(option => option.value === value);
-        return option ? option.sex_gender_name : '';
-    };
     const handleUserSharing = async () => {
         const parent_id = await getUserIdByEmail(shareEmail);
         if (parent_id === undefined) {

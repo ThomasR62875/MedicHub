@@ -25,13 +25,8 @@ export type User = {
 
 export type Specialty = {
     name: string;
-};
-
-export type RecommendationFrequencies = {
-    speciality: string;
-    sex: string;
-    ageGroup: string;
-    frequency: number;
+    spanish:string;
+    english:string;
 };
 
 export type Medication = {
@@ -69,7 +64,7 @@ export type RecommendationAppointment = {
     user_name: string;
     doctor: string;
     user_id: string;
-    speciality: string;
+    specialty: string;
 }
 
 export type AppointmentInfo = {

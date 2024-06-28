@@ -3,11 +3,12 @@ import {getUser, getUserId, supabase} from '../lib/supabase'
 import { View} from 'react-native'
 import {Button, Icon} from 'react-native-elements'
 import LanguageButton from '../components/LanguageButton'
-import {DependentUser, SexGenderOption} from "../lib/types";
+import {DependentUser} from "../lib/types";
 import {Dialog, Text, Button as PaperButton, Divider} from "react-native-paper";
 import {useTranslation} from "react-i18next";
 import ScrollableBg from '../components/ScrollableBg'
 import {styles} from "../assets/styles";
+import { getSexGenderName } from '../lib/ourlibrary'
 
 
 const Account: React.FC = ({ navigation, route } : any) => {
@@ -19,12 +20,6 @@ const Account: React.FC = ({ navigation, route } : any) => {
     const [sexGender,setSexGender]= useState('');
     const [visible, setVisible] = React.useState(false);
     const {t} = useTranslation();
-    const sexGenderOptions: SexGenderOption[] = [
-        { sex_gender_name: t('male'), value: 'male' },
-        { sex_gender_name: t('female'), value: 'female' },
-        { sex_gender_name: t('non-binary'), value: 'non-binary' },
-        { sex_gender_name: t('other'), value: 'other' },
-    ];
 
     useEffect(() => {
         if (session) {
@@ -54,14 +49,6 @@ const Account: React.FC = ({ navigation, route } : any) => {
 
     const hideDialog = () => setVisible(false);
     const showDialog = () => setVisible(true);
-
-    const getSexGenderName = (value: string) => {
-        if(value == null)
-            return ''
-        const option = sexGenderOptions.find(option => option.value === value);
-        return option ? option.sex_gender_name : '';
-    };
-
 
     // @ts-ignore
     return (

@@ -6,16 +6,17 @@ import {
     StyleSheet,
     Image
 } from 'react-native';
-import {signUp, supabase} from "../lib/supabase";
+import {signUp} from "../lib/supabase";
 import {Input, Icon, Button} from "react-native-elements";
 // @ts-ignore
 import Logo from '../assets/icon_black.png'
 import {useTranslation} from "react-i18next";
 import ScrollableBg from "../components/ScrollableBg";
-import {SexGenderOption, User} from '../lib/types';
+import {User} from '../lib/types';
 import {Button as PaperButton, Dialog, Text as PaperText} from "react-native-paper";
 import {Picker} from "@react-native-picker/picker";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import {getSexGenderName, sexGenderOptions} from "../lib/ourlibrary";
 
 
 const Register: React.FC = ({navigation}: any) => {
@@ -38,13 +39,6 @@ const Register: React.FC = ({navigation}: any) => {
     const [passwordErrorMessage, setPasswordErrorMessage] = useState<string>('');
     const [birthDateErrorMessage, setBirthDateErrorMessage] = useState<string>('');
     const [genderErrorMessage, setGenderErrorMessage] = useState<string>('');
-
-    const sexGenderOptions: SexGenderOption[] = [
-        { sex_gender_name: t('male'), value: 'male' },
-        { sex_gender_name: t('female'), value: 'female' },
-        { sex_gender_name: t('non-binary'), value: 'non-binary' },
-        { sex_gender_name: t('other'), value: 'other' },
-    ];
 
     useEffect(() => {
         if (
@@ -139,12 +133,6 @@ const Register: React.FC = ({navigation}: any) => {
     }
 
     const hideSexGenderDialog = () => setSexGenderDialog(false);
-
-    const getSexGenderName = (value: string) => {
-        const option = sexGenderOptions.find(option => option.value === value);
-        return option ? option.sex_gender_name : '';
-    };
-
     const handleDateChange = (event: any, selectedDate?: Date) => {
         const currentDate = selectedDate || date;
         setDate(currentDate);

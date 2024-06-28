@@ -9,8 +9,9 @@ export interface AllSession {   //La idea es pasar este como session asi no tene
 
 La idea es hacer una libreria de nuestras cosas para no repetir código            */
 
-import {Appointment, DependentUser, RecommendationAppointment, Specialty} from "./types";
+import {Appointment, DependentUser, RecommendationAppointment, SexGenderOption, Specialty} from "./types";
 import {getAge, getAppointmentInterval, getDoctor} from "./supabase";
+import {t} from "i18next";
 
 export const getDate = (date: Date) => {
     return date ? date.toLocaleDateString() : 'Seleccione una fecha';
@@ -103,7 +104,7 @@ export const getRecommendations = async (
                                 user_name: user.first_name,
                                 doctor: lastAppointment.doctor,
                                 user_id: user.id,
-                                speciality: speciality.name
+                                specialty: speciality.name
                             });
                         } else {
                             recommendations.push({
@@ -111,7 +112,7 @@ export const getRecommendations = async (
                                 user_name: user.first_name,
                                 doctor: lastAppointment.doctor,
                                 user_id: user.id,
-                                speciality: speciality.name
+                                specialty: speciality.name
                             });
                         }
                     }
@@ -126,7 +127,7 @@ export const getRecommendations = async (
                             user_name: user.first_name,
                             doctor: '',
                             user_id: user.id,
-                            speciality: speciality.name
+                            specialty: speciality.name
                         });
                     }
                 }
@@ -134,4 +135,18 @@ export const getRecommendations = async (
         }
     }
     return recommendations;
+};
+
+export const sexGenderOptions: SexGenderOption[] = [
+    { sex_gender_name: t('male'), value: 'male' },
+    { sex_gender_name: t('female'), value: 'female' },
+    { sex_gender_name: t('non-binary'), value: 'non-binary' },
+    { sex_gender_name: t('other'), value: 'other' },
+];
+
+export const getSexGenderName = (value: string) => {
+    if(value == null)
+        return ''
+    const option = sexGenderOptions.find(option => option.value === value);
+    return option ? option.sex_gender_name : '';
 };
