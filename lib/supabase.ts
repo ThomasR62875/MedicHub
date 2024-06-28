@@ -3,11 +3,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {createClient} from '@supabase/supabase-js';
 import {User, DependentUser, Appointment, Specialty, Doctor, Medication} from './types';
 
-const supabaseUrl = "https://ockjaboenzpwwhzlsvdj.supabase.co";
-const supabaseAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9ja2phYm9lbnpwd3doemxzdmRqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTI1MDMwNTgsImV4cCI6MjAyODA3OTA1OH0.hqvQbK0ydgz75DszpuZWjfufpxky9qZi21G5qCtm4eE";
+import getEnvVars from '../environment';
 
+const { REACT_APP_SUPABASE_URL, REACT_APP_ANON_KEY } = getEnvVars();
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+export const supabase = createClient(REACT_APP_SUPABASE_URL, REACT_APP_ANON_KEY, {
     auth: {
         storage: AsyncStorage,
         autoRefreshToken: true,

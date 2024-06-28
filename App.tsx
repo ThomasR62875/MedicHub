@@ -65,6 +65,8 @@ export type RootStackParamList = {
   EditDependentUser: {session : Session | null};
 };
 
+import { AppRegistry } from 'react-native';
+AppRegistry.registerComponent('main', () => App);
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const Tab = createBottomTabNavigator();
