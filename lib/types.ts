@@ -14,7 +14,7 @@ export type User = {
     dni: string;
     email: string;
     raw_user_meta_data?: {
-        independent_user_id?: string;
+        dependent_user_id?: string;
     };
 
 }

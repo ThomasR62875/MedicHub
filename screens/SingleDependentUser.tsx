@@ -132,7 +132,7 @@ const SingleDependentUser: React.FC<SingleDependentUserProps> = ({navigation, ro
     };
 
 
-    const signUpNewIndependentUser = async (independent_user_id: string) => {
+    const signUpNewIndependentUser = async (dependent_user_id: string) => {
         setLoading(true)
         const user: User = {
             id: "",
@@ -141,11 +141,11 @@ const SingleDependentUser: React.FC<SingleDependentUserProps> = ({navigation, ro
             dni: dni,
             email: email,
             raw_user_meta_data: {
-                independent_user_id: independent_user_id,
+                dependent_user_id: dependent_user_id,
             },
         };
 
-        const {success, message} = await signUp(user, password);
+        const {success} = await signUp(user, password);
         if (success) Alert.alert('¡Revise la bandeja de entrada del mail ingresado para el usuario para verificar el mail!',)
         setLoading(false)
 

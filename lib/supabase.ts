@@ -59,6 +59,7 @@ export const signUp = async (user: User, password: string): Promise<{ success: b
                 first_name: user.first_name,
                 last_name: user.last_name,
                 dni: user.dni,
+                ...user.raw_user_meta_data
             },
         },
     })
