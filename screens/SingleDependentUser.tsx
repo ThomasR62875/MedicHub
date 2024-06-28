@@ -6,6 +6,9 @@ import {Icon, Button} from "react-native-elements";
 import { deleteDependentUser } from "../lib/supabase";
 import {useTranslation} from "react-i18next";
 import {Button as PaperButton, Dialog} from "react-native-paper";
+import {SexGenderOption} from "../lib/types";
+
+
 
 type SingleDependentUserProps = NativeStackScreenProps<RootStackParamList, 'SingleDependentUser'>
 
@@ -30,6 +33,17 @@ const SingleDependentUser: React.FC<SingleDependentUserProps> = ({ navigation, r
     let str = t('depu');
     str = lowercaseFirstLetter(str);
 
+    const sexGenderOptions: SexGenderOption[] = [
+        { sex_gender_name: t('male'), value: 'male' },
+        { sex_gender_name: t('female'), value: 'female' },
+        { sex_gender_name: t('non-binary'), value: 'non-binary' },
+        { sex_gender_name: t('other'), value: 'other' },
+    ];
+
+    const getSexGenderName = (value: string) => {
+        const option = sexGenderOptions.find(option => option.value === value);
+        return option ? option.sex_gender_name : '';
+    };
 
     return (
         <View style={styles.container}>
@@ -65,6 +79,14 @@ const SingleDependentUser: React.FC<SingleDependentUserProps> = ({ navigation, r
             <View style={styles.detailRow}>
                 <Text style={styles.label}>{t('id')}:</Text>
                 <Text style={styles.value}>{route.params.du.dni}</Text>
+            </View>
+            <View style={styles.detailRow}>
+                <Text style={styles.label}>{t('birthdate')}:</Text>
+                <Text style={styles.value}>{route.params.du.birthdate}</Text>
+            </View>
+            <View style={styles.detailRow}>
+                <Text style={styles.label}>{t('sex')}:</Text>
+                <Text style={styles.value}>{getSexGenderName(route.params.du.sex)}</Text>
             </View>
             <View style={styles.screen}>
                 <View style={{alignItems: 'center', width: 'auto'}}>

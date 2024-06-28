@@ -1,24 +1,40 @@
 import React, { useState, useEffect } from 'react'
 import {supabase, updateDependentUser} from '../lib/supabase'
-import {View, StyleSheet, Alert, TouchableWithoutFeedback, Keyboard} from 'react-native'
-import {Button, Icon, Input} from 'react-native-elements'
+import {View, StyleSheet, Alert, TouchableWithoutFeedback, Keyboard, Platform} from 'react-native'
+import {Button, Icon, Input, Text} from 'react-native-elements'
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
 import {useTranslation} from "react-i18next";
+import {Button as PaperButton, Dialog, Text as PaperText} from "react-native-paper";
+import DateTimePicker from "@react-native-community/datetimepicker";
+import {Picker} from "@react-native-picker/picker";
+import {SexGenderOption} from "../lib/types";
+import {getDate} from "date-fns";
 
 type EditDependentUserProps = NativeStackScreenProps<RootStackParamList, 'EditDependentUser'>;
 
 const EditDependentUser:React.FC<EditDependentUserProps> = ({navigation, route }: any) =>{
     const {session} = route.params;
-    const [id, setId] = useState('')
-    const [first_name,setFirstName] = useState('')
-    const [last_name,setLastName] = useState('')
-    const [dni,setDni]  = useState('')
+    const [id, setId] = useState('');
+    const [first_name,setFirstName] = useState('');
+    const [last_name,setLastName] = useState('');
+    const [dni,setDni]  = useState('');
+    const [date, setDate] = useState(new Date());
+    const [showDatePicker, setShowDatePicker] = useState(false);
+    const [sexGender,setSexGender]= useState('');
+    const [sexGenderDialog, setSexGenderDialog] = useState(false);
     const {t} = useTranslation();
 
     const [firstNameErrorMessage, setFirstNameErrorMessage] = useState('')
     const [lastNameErrorMessage, setLastNameErrorMessage] = useState('')
     const [dniErrorMessage, setDniErrorMessage] = useState('')
+
+    const sexGenderOptions: SexGenderOption[] = [
+        { sex_gender_name: t('male'), value: 'male' },
+        { sex_gender_name: t('female'), value: 'female' },
+        { sex_gender_name: t('non-binary'), value: 'non-binary' },
+        { sex_gender_name: t('other'), value: 'other' },
+    ];
 
     useEffect(() => {
         if (
@@ -44,7 +60,7 @@ const EditDependentUser:React.FC<EditDependentUserProps> = ({navigation, route }
     const handleUpdateDependentUser = async () => {
 
         const session =  route.params.session;
-        const du  = {id: id , first_name: first_name, last_name: last_name, dni: dni.toString()}
+        const du  = {id: id , first_name: first_name, last_name: last_name, dni: dni.toString(), birthdate: date, sex: sexGender}
         const result = await updateDependentUser(du);
         if (result.success) {
             Alert.alert(
@@ -63,7 +79,10 @@ const EditDependentUser:React.FC<EditDependentUserProps> = ({navigation, route }
         setId(route.params.du.id)
         setFirstName(route.params.du.first_name);
         setLastName(route.params.du.last_name);
-        setDni(route.params.du.dni)
+        setDni(route.params.du.dni);
+        setDate(route.params.du.birthdate);
+        setSexGender(route.params.du.sex);
+
     }
 
     const validateFirstName = (value: string) => {
@@ -86,6 +105,22 @@ const EditDependentUser:React.FC<EditDependentUserProps> = ({navigation, route }
         } else {
             setDniErrorMessage('');
         }
+    };
+
+    const onDateChange = (event: any, selectedDate: Date | undefined) => {
+        const currentDate = selectedDate || date;
+        setShowDatePicker(Platform.OS === 'ios');
+        setDate(currentDate);
+    };
+
+
+    const hideSexGenderDialog = () => setSexGenderDialog(false);
+
+    const getSexGenderName = (value: string) => {
+        if(value == null)
+            return ''
+        const option = sexGenderOptions.find(option => option.value === value);
+        return option ? option.sex_gender_name : '';
     };
 
     return(
@@ -116,12 +151,67 @@ const EditDependentUser:React.FC<EditDependentUserProps> = ({navigation, route }
                         label={t('id')}
                         value={dni.toString()}
                         onChangeText={(text) => {
-                            setDni(text);
+                            setDni(text)
                             validateDNI(text)
                         }}
                         errorStyle={{ color: 'red' }}
                         errorMessage={dniErrorMessage}
                     />
+                    <PaperText style={styles.text}>{t('sex')}</PaperText>
+                    <PaperButton mode="outlined" style={styles.pickerButton} textColor='#2E5829' labelStyle={{textAlign: 'left', display:'flex'}} onPress={()=> setSexGenderDialog(true)}>
+                        {getSexGenderName(sexGender)}
+                    </PaperButton>
+                    <PaperText style={styles.text}>{t('birthdate')}</PaperText>
+                    <View style={styles.datePickerContainer}>
+                        {Platform.OS === 'ios' ? (
+                            <>
+                                <DateTimePicker
+                                    testID="datePicker"
+                                    value={date}
+                                    mode="date"
+                                    display="default"
+                                    style={{ backgroundColor: 'transparent' }}
+                                    onChange={onDateChange}
+                                />
+                            </>
+                        ) : (
+                            <>
+                                <PaperButton
+                                    mode="outlined"
+                                    style={styles.pickerButton}
+                                    textColor='#2E5829'
+                                    labelStyle={{ textAlign: 'left', display: 'flex' }}
+                                    onPress={() => setShowDatePicker(true)}
+                                >
+                                    {getDate(date)}
+                                </PaperButton>
+                                {showDatePicker && (
+                                    <DateTimePicker
+                                        testID="datePicker"
+                                        value={date}
+                                        mode="date"
+                                        display="default"
+                                        onChange={onDateChange}
+                                    />
+                                )}
+                            </>
+                        )}
+                    </View>
+                    <Dialog style={styles.dialog} visible={sexGenderDialog} onDismiss={hideSexGenderDialog}>
+                        <Text style={styles.dialogTitle}>{t("selSpec")}</Text>
+                        <Picker
+                            mode='dropdown'
+                            selectedValue={sexGender}
+                            onValueChange={(value: string) => setSexGender(value)}
+                            placeholder='sex'
+                            enabled={true}
+                            itemStyle={styles.pickerStyle}
+                        >
+                            {sexGenderOptions?.map((item) => (
+                                <Picker.Item key={item.value} label={item.sex_gender_name} value={item.value} />
+                            ))}
+                        </Picker>
+                    </Dialog>
                     <Button
                         title={t('savec')}
                         buttonStyle={{
@@ -161,5 +251,44 @@ const styles = StyleSheet.create({
         marginTop: '20%',
         marginLeft: '5%',
         marginRight: '5%'
-    }
+    },
+    datePickerContainer: {
+        flexDirection: 'row',
+        display: 'flex',
+        justifyContent: 'center',
+        marginLeft: '10%',
+        marginRight: '15%',
+        marginTop: '10%',
+        marginBottom: '10%'
+    },
+    pickerButton: {
+        borderRadius: 6,
+        marginLeft: '5%',
+        marginRight: '5%',
+    },
+    dialog: {
+        backgroundColor: "#e9f4e9"
+    },
+    dialogTitle: {
+        fontFamily: 'Roboto-Thin',
+        fontSize: 25,
+        textAlign: 'center',
+        fontWeight: 'bold',
+        margin: "5%",
+        marginLeft: '15%',
+        color: "#2E5829FF",
+        width: "70%"
+    },
+    pickerStyle: {
+        marginBottom: 20,
+    },
+    text: {
+        fontFamily: 'Roboto-Thin',
+        fontSize: 14,
+        marginTop: "5%",
+        marginLeft: '4%',
+        marginBottom: '2%',
+        color: "#2E5829FF",
+        width: "60%"
+    },
 })

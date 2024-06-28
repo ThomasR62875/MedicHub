@@ -98,5 +98,12 @@
   "RUsureD"  : "¿Está seguro de que desea eliminar el doctor?",
   "RUsureA"  : "¿Está seguro de que desea eliminar el turno?",
   "RUsureM"  : "¿Está seguro de que desea eliminar el medicamento?",
-  "text26" : "No tengo una fecha de finalización:"
+  "text26" : "No tengo una fecha de finalización:",
+  "sex": "Sexo",
+  "male": "Hombre",
+  "female": "Mujer",
+  "non-binary": "No-binario",
+  "other": "Otro",
+  "birthdate": "Fecha de nacimiento",
+  "dateTime": "Horario y fecha"
 }

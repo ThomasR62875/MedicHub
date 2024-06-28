@@ -98,6 +98,13 @@
   "RUsureD"  : "Are you sure you want to delete doctor?",
   "RUsureA"  : "Are you sure you want to delete appointment?",
   "RUsureM"  : "Are you sure you want to delete medication?",
-  "text26" : "I don't have an end date for this medication:"
+  "text26" : "I don't have an end date for this medication:",
+  "sex": "Sex",
+  "male": "Male",
+  "female": "Female",
+  "non-binary": "Non-binary",
+  "other": "Other",
+  "birthdate": "Birthdate",
+  "dateTime": "Date and Time"
 }
 

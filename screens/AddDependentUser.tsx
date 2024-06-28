@@ -1,11 +1,17 @@
 import React, {useEffect, useState} from 'react';
-import {Alert, StyleSheet, View,} from 'react-native';
+import {Alert, Platform, StyleSheet, View,} from 'react-native';
 import {addDependentUser} from "../lib/supabase";
 import {Button, Icon, Input, Text} from "react-native-elements";
 import {Image} from 'react-native';
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
 import {useTranslation} from "react-i18next";
+import DateTimePicker from "@react-native-community/datetimepicker";
+import {Button as PaperButton, Dialog, Text as PaperText} from "react-native-paper";
+import {Picker} from "@react-native-picker/picker";
+import {Specialty} from "./AddDoctor";
+import {SexGenderOption} from "../lib/types";
+import {getDate} from "date-fns";
 
 type AddDependentUserProps = NativeStackScreenProps<RootStackParamList, 'AddDependentUser'>
 
@@ -18,7 +24,18 @@ const AddDependentUser:React.FC<AddDependentUserProps> = ({navigation, route} : 
     const [firstNameErrorMessage, setFirstNameErrorMessage] = useState('')
     const [lastNameErrorMessage, setLastNameErrorMessage] = useState('')
     const [DNIErrorMessage, setDNIErrorMessage] = useState<string>('');
+    const [date, setDate] = useState(new Date());
+    const [showDatePicker, setShowDatePicker] = useState(false);
+    const [sexGender,setSexGender]= useState('');
+    const [sexGenderDialog, setSexGenderDialog] = useState(false);
     const {t} = useTranslation();
+
+     const sexGenderOptions: SexGenderOption[] = [
+        { sex_gender_name: t('male'), value: 'male' },
+        { sex_gender_name: t('female'), value: 'female' },
+        { sex_gender_name: t('non-binary'), value: 'non-binary' },
+        { sex_gender_name: t('other'), value: 'other' },
+    ];
 
     useEffect(() => {
         if (
@@ -59,8 +76,10 @@ const AddDependentUser:React.FC<AddDependentUserProps> = ({navigation, route} : 
     };
 
     const handleAddDependentUser = async () => {
+        console.log(sexGender)
         const dep_user = {
-            first_name: firstName, last_name :lastName, dni:dni, id: ''};
+            first_name: firstName, last_name :lastName, dni:dni, id: '', sex: sexGender,
+            birthdate: date};
 
         const result = await addDependentUser(dep_user);
         if (result.success) {
@@ -70,6 +89,19 @@ const AddDependentUser:React.FC<AddDependentUserProps> = ({navigation, route} : 
         } else {
             Alert.alert('Error', result.message || 'An unknown error occurred');
         }
+    };
+
+    const onDateChange = (event: any, selectedDate: Date | undefined) => {
+        const currentDate = selectedDate || date;
+        setShowDatePicker(Platform.OS === 'ios');
+        setDate(currentDate);
+    };
+
+    const hideSexGenderDialog = () => setSexGenderDialog(false);
+
+    const getSexGenderName = (value: string) => {
+        const option = sexGenderOptions.find(option => option.value === value);
+        return option ? option.sex_gender_name : '';
     };
 
     return (
@@ -124,6 +156,61 @@ const AddDependentUser:React.FC<AddDependentUserProps> = ({navigation, route} : 
                     errorStyle={{ color: 'red' }}
                     errorMessage={DNIErrorMessage}
                 />
+                <PaperText style={styles.text}>{t('sex')}</PaperText>
+                <PaperButton mode="outlined" style={styles.pickerButton} textColor='#2E5829' labelStyle={{textAlign: 'left', display:'flex'}} onPress={()=> setSexGenderDialog(true)}>
+                    {getSexGenderName(sexGender)}
+                </PaperButton>
+                <PaperText style={styles.text}>{t('birthdate')}</PaperText>
+                <View style={styles.datePickerContainer}>
+                    {Platform.OS === 'ios' ? (
+                        <>
+                            <DateTimePicker
+                                testID="datePicker"
+                                value={date}
+                                mode="date"
+                                display="default"
+                                style={{ backgroundColor: 'transparent' }}
+                                onChange={onDateChange}
+                            />
+                        </>
+                    ) : (
+                        <>
+                            <PaperButton
+                                mode="outlined"
+                                style={styles.pickerButton}
+                                textColor='#2E5829'
+                                labelStyle={{ textAlign: 'left', display: 'flex' }}
+                                onPress={() => setShowDatePicker(true)}
+                            >
+                                {getDate(date)}
+                            </PaperButton>
+                            {showDatePicker && (
+                                <DateTimePicker
+                                    testID="datePicker"
+                                    value={date}
+                                    mode="date"
+                                    display="default"
+                                    onChange={onDateChange}
+                                />
+                            )}
+                        </>
+                    )}
+                </View>
+                <Dialog style={styles.dialog} visible={sexGenderDialog} onDismiss={hideSexGenderDialog}>
+                    <Text style={styles.dialogTitle}>{t("selSpec")}</Text>
+                    <Picker
+                        mode='dropdown'
+                        selectedValue={sexGender}
+                        onValueChange={(value: string) => setSexGender(value)}
+                        placeholder='sex'
+                        enabled={true}
+                        itemStyle={styles.pickerStyle}
+                    >
+                        {sexGenderOptions?.map((item) => (
+                            <Picker.Item key={item.value} label={item.sex_gender_name} value={item.value} />
+                        ))}
+                    </Picker>
+                </Dialog>
                 <Button
                     title={t('add')}
                     disabled={isButtonDisabled}
@@ -176,5 +263,44 @@ const styles = StyleSheet.create({
     },
     colorLable: {
         color: '#2E5829FF',
+    },
+    datePickerContainer: {
+        flexDirection: 'row',
+        display: 'flex',
+        justifyContent: 'center',
+        marginLeft: '10%',
+        marginRight: '15%',
+        marginTop: '10%',
+        marginBottom: '10%'
+    },
+    pickerButton: {
+        borderRadius: 6,
+        marginLeft: '5%',
+        marginRight: '5%',
+    },
+    dialog: {
+        backgroundColor: "#e9f4e9"
+    },
+    dialogTitle: {
+        fontFamily: 'Roboto-Thin',
+        fontSize: 25,
+        textAlign: 'center',
+        fontWeight: 'bold',
+        margin: "5%",
+        marginLeft: '15%',
+        color: "#2E5829FF",
+        width: "70%"
+    },
+    pickerStyle: {
+        marginBottom: 20,
+    },
+    text: {
+        fontFamily: 'Roboto-Thin',
+        fontSize: 14,
+        marginTop: "5%",
+        marginLeft: '4%',
+        marginBottom: '2%',
+        color: "#2E5829FF",
+        width: "60%"
     },
 });

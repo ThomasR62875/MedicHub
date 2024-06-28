@@ -8,3 +8,7 @@ export interface AllSession {   //La idea es pasar este como session asi no tene
 }
 
 La idea es hacer una libreria de nuestras cosas para no repetir código            */
+
+export const getDate = (date: Date) => {
+    return date ? date.toLocaleDateString() : 'Seleccione una fecha';
+};
