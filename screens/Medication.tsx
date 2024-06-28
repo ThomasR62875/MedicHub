@@ -7,7 +7,7 @@ import {useTranslation} from "react-i18next";
 import {cardStyle} from "../styles/global"
 import { Medication } from '../lib/types';
 
-const Medication: React.FC= ({ navigation, route }: any) => {
+const Medications: React.FC= ({ navigation, route }: any) => {
     const session = route.params.session;
     const [loading, setLoading] = useState(true)
     const [medications,setMedications]= useState<Medication[] | undefined>(undefined)
@@ -68,7 +68,7 @@ const Medication: React.FC= ({ navigation, route }: any) => {
     )
 }
 
-export default Medication;
+export default Medications;
 
 const styles = StyleSheet.create({
     container: {

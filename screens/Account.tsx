@@ -145,7 +145,7 @@ const Account: React.FC = ({ navigation, route } : any) => {
                             marginHorizontal: 50,
                             marginVertical: 2,
                         }}
-                        onPress={() => navigation.navigate({name: 'Medication', params: {session: session}})}/>
+                        onPress={() => navigation.navigate({name: 'Medications', params: {session: session}})}/>
                     <Button
                         title={t('mfiles')}
                         icon={{

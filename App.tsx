@@ -22,7 +22,7 @@ import EditDependentUser from "./screens/EditDependentUser";
 import SingleDoctor from "./screens/SingleDoctor";
 import EditDoctor from "./screens/EditDoctor";
 import DependentUsers from "./screens/DependentUsers";
-import Medication from "./screens/Medication";
+import Medications from "./screens/Medication";
 import AddMedication from './screens/AddMedication'
 import Calender from './screens/Calender';
 import {NavigationContainer, RouteProp} from './node_modules/@react-navigation/native';
@@ -52,7 +52,7 @@ export type RootStackParamList = {
   Doctors: {session: Session | null};
   DependentUsers: {session: Session | null};
   AddDependentUser: {session: Session | null};
-  Medication: {session: Session | null};
+  Medications: {session: Session | null};
   AddMedication: {session: Session | null};
   Calendar: {session : Session | null};
   SingleAppointment: {session : Session | null};
@@ -501,8 +501,8 @@ const App = () => {
                                         headerTintColor: '#ABD2A8',
                                         headerBackTitle: 'Perfil',
                                     }}/>
-                      <Stack.Screen name="Medication"
-                                    component={Medication}
+                      <Stack.Screen name="Medications"
+                                    component={Medications}
                                     initialParams={{session: session}}
                                     options={{
                                       title: '',
