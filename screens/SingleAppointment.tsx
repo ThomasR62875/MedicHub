@@ -5,8 +5,10 @@ import {RootStackParamList} from "../App";
 import {Button, Icon} from "react-native-elements";
 import {useTranslation} from "react-i18next";
 import {Button as PaperButton, Dialog} from "react-native-paper";
-import {deleteAppointment, deleteDoctor, getDoctor} from "../lib/supabase";
+import {deleteAppointment, deleteDoctor, getDoctor, getUserData} from "../lib/supabase";
 import {Doctor} from "./Doctors";
+import {UserData} from "../lib/types";
+import {recommendQuestionsForAppointment} from "../lib/openai";
 
 type SingleAppointmentProps = NativeStackScreenProps<RootStackParamList, 'SingleAppointment'>
 
@@ -20,6 +22,7 @@ const SingleAppointment: React.FC<SingleAppointmentProps> = ({ navigation, route
     const formattedTime = `${(originalDate.getHours() + 3) % 24}:${originalDate.getMinutes().toString().padStart(2, '0')}`;
     const {t} = useTranslation();
     const [doctor, setDoctor] = useState<Doctor | undefined>()
+    const [userData, setUserData] = useState<UserData | null>(null);
 
     useEffect(() => {
         const fetchDoctor = async () => {
@@ -29,6 +32,7 @@ const SingleAppointment: React.FC<SingleAppointmentProps> = ({ navigation, route
         fetchDoctor();
     }, [route.params.appointment.doctor])
 
+
     const handleDeleteAppointment = async () => {
         const session =  route.params.session;
         const appointment =  route.params.appointment;
@@ -36,6 +40,17 @@ const SingleAppointment: React.FC<SingleAppointmentProps> = ({ navigation, route
         navigation.navigate('Appointments', { session: session })
     };
 
+    const handlePressRecommendQuestionsForAppointment = async () => {
+        const data = await getUserData(route.params.appointment);
+        if (data) {
+            setUserData(data);
+            await recommendQuestionsForAppointment(data);
+        } else {
+            console.error('Failed to get user data.');
+        }
+    };
+
+    // @ts-ignore
     // @ts-ignore
     return (
         <View style={styles.container}>
@@ -74,6 +89,26 @@ const SingleAppointment: React.FC<SingleAppointmentProps> = ({ navigation, route
             </View>
             <View style={styles.screen}>
                 <View style={{alignItems: 'center', width: 'auto'}}>
+                    <Button
+                        title="Preguntar IA"
+                        buttonStyle={{
+                            backgroundColor: '#2E5829',
+                            borderWidth: 2,
+                            borderColor: 'white',
+                            borderRadius: 30,
+                            minHeight: 50,
+                            minWidth: 150,
+                        }}
+                        containerStyle={{
+                            width: 150,
+                            marginHorizontal: 50,
+                            marginVertical: 10,
+                            marginTop: 40,
+                            marginBottom:100
+                        }}
+                        titleStyle={{ color: '#eef9ed' }}
+                        onPress={() => handlePressRecommendQuestionsForAppointment()}
+                    />
                     <Button
                         title="Eliminar"
                         buttonStyle={{

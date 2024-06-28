@@ -1,7 +1,7 @@
 import 'react-native-url-polyfill/auto';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { createClient } from '@supabase/supabase-js';
-import { User, DependentUser, Appointment, Specialty, Doctor, Medication } from './types';
+import {createClient} from '@supabase/supabase-js';
+import {Appointment, AppointmentInfo, DependentUser, Doctor, Medication, Specialty, User, UserData} from './types';
 
 const supabaseUrl = "https://ockjaboenzpwwhzlsvdj.supabase.co";
 const supabaseAnonKey ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9ja2phYm9lbnpwd3doemxzdmRqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTI1MDMwNTgsImV4cCI6MjAyODA3OTA1OH0.hqvQbK0ydgz75DszpuZWjfufpxky9qZi21G5qCtm4eE";
@@ -251,6 +251,54 @@ export const getAppointments = async () : Promise<Appointment[] | undefined> => 
     }
     return to_return
 }
+
+function getAge(birthdate: Date) {
+    const today = new Date();
+    let age = today.getFullYear() - birthdate.getFullYear();
+    const monthDiff = today.getMonth() - birthdate.getMonth();
+
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthdate.getDate())) {
+        age--;
+    }
+
+    return age;
+}
+
+// Obtiene la informacion para las preguntas
+export const getUserData = async (appointment: Appointment): Promise<UserData | null> => {
+
+    const { data: lastAppointmentData, error: lastAppointmentError } = await supabase
+        .rpc('get_last_appointment_info', { user_id: appointment.user_id, doctor_id: appointment.doctor });
+    if (lastAppointmentError) {
+        console.error('Error getting last appointment data:', lastAppointmentError.message);
+        return null;
+    }
+    console.log('Last appointment data got successfully');
+
+    const appointmentInfo: AppointmentInfo = {
+        specialty: lastAppointmentData.doctor,
+        observations: lastAppointmentData.observations,
+        date: lastAppointmentData.date,
+    };
+
+
+    const { data: medicalInfoData, error: medicalInfoError } = await supabase
+        .rpc('get_medical_info', { user_id: appointment.user_id });
+    if (medicalInfoError) {
+        console.error('Error getting medical info:', medicalInfoError.message);
+        return null;
+    }
+    console.log('Medical info got successfully');
+
+    return {
+        lastAppointment: appointmentInfo,
+        medicalInfo: {
+            medicalConditions: medicalInfoData.medicalConditions,
+            sex: medicalInfoData.sex,
+            age: getAge(new Date(medicalInfoData.birthdate)),
+        },
+    };
+};
 
 
 // borrar
