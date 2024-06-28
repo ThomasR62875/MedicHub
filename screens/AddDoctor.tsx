@@ -13,16 +13,13 @@ import {addDoctor, getAllUsers, getSpecialties, getUserId} from "../lib/supabase
 import {Button, Input} from "react-native-elements";
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
-import {DependentUser} from "./DependentUsers";
+import {DependentUser} from "../lib/types";
 import {useTranslation} from "react-i18next";
 import {Button as PaperButton, Dialog, Portal, Text as PaperText} from "react-native-paper";
 import {Picker} from "@react-native-picker/picker";
-
+import { Specialty } from '../lib/types';
 type AddDoctorProps = NativeStackScreenProps<RootStackParamList, 'AddDoctor'>
 
-export type Specialty = {
-    name: string;
-};
 
 const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}) => {
     const session = route.params.session;

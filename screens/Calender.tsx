@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import { Dimensions, ScrollView, StyleSheet, Text, View} from "react-native";
-import {Appointment} from "./Appointments";
+import {Appointment} from "../lib/types";
 import {Calendar} from "react-native-calendars";
 import TurnoContainer from "../components/TurnContainer";
 import {getAppointments} from "../lib/supabase";

@@ -5,17 +5,7 @@ import MedicationButton from "../components/MedicationButton";
 import {Button} from "react-native-elements";
 import {useTranslation} from "react-i18next";
 import {cardStyle} from "../styles/global"
-
-export type Medication = {
-    id: string;
-    name: string;
-    prescription: string;
-    sinceWhen : Date;
-    untilWhen : Date | undefined;
-    howOften : Date | undefined;
-    isForever : boolean;
-}
-
+import { Medication } from '../lib/types';
 
 const Medication: React.FC= ({ navigation, route }: any) => {
     const session = route.params.session;

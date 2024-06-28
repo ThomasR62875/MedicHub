@@ -13,8 +13,8 @@ import {
 import {Button, Input} from "react-native-elements";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../App";
-import { DependentUser } from "./DependentUsers";
-import { Doctor } from "./Doctors";
+import { DependentUser } from "../lib/types";
+import { Doctor } from "../lib/types";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Picker } from "@react-native-picker/picker";
 import { useTranslation } from "react-i18next";

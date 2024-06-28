@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import {supabase, updateDependentUser} from '../lib/supabase'
+import {updateDependentUser} from '../lib/supabase'
 import {View, StyleSheet, Alert, TouchableWithoutFeedback, Keyboard} from 'react-native'
 import {Button, Icon, Input} from 'react-native-elements'
 import {NativeStackScreenProps} from "@react-navigation/native-stack";

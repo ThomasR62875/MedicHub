@@ -4,8 +4,8 @@ import {SafeAreaView, StyleSheet, View, Keyboard, TouchableWithoutFeedback, Scro
 import {Button, Input} from 'react-native-elements';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../App';
-import { DependentUser } from './DependentUsers';
-import { Doctor } from './Doctors';
+import { DependentUser } from '../lib/types';
+import { Doctor } from '../lib/types';
 import {useTranslation} from "react-i18next";
 import {Button as PaperButton, Dialog, HelperText, Portal, Text as PaperText, TextInput} from "react-native-paper";
 import DateTimePicker from "@react-native-community/datetimepicker";

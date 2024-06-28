@@ -13,7 +13,7 @@ import {Button, Input} from "react-native-elements";
 import StandardGreenButton from "../components/StandardGreenButton";
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
-import {Medication} from './Medication';
+import {Medication} from '../lib/types';
 import {useTranslation} from "react-i18next";
 import {Picker} from '@react-native-picker/picker'
 import DateTimePicker, {DateTimePickerEvent} from '@react-native-community/datetimepicker';

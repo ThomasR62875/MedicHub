@@ -6,7 +6,7 @@ import {Button, Icon} from "react-native-elements";
 import {useTranslation} from "react-i18next";
 import {Button as PaperButton, Dialog} from "react-native-paper";
 import {deleteAppointment, deleteDoctor, getDoctor} from "../lib/supabase";
-import {Doctor} from "./Doctors";
+import {Doctor} from "../lib/types";
 
 type SingleAppointmentProps = NativeStackScreenProps<RootStackParamList, 'SingleAppointment'>
 

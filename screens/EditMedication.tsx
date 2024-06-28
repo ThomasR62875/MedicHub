@@ -5,13 +5,6 @@ import {Button, Input} from 'react-native-elements'
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
 import {useTranslation} from "react-i18next";
-import UnderlinedText from "../components/UnderlinedText";
-import DateTimePicker, {DateTimePickerEvent} from "@react-native-community/datetimepicker";
-import {Picker} from "@react-native-picker/picker";
-import {cardStyle} from "../styles/global";
-import Checkbox from "expo-checkbox";
-import {Button as PaperButton, Dialog, Portal, Text as PaperText} from "react-native-paper";
-
 
 type EditMedicationProps = NativeStackScreenProps<RootStackParamList, 'EditMedication'>;
 

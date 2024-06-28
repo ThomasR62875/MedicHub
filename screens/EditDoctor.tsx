@@ -4,8 +4,8 @@ import {View, StyleSheet, Alert, Keyboard, TouchableWithoutFeedback, KeyboardAvo
 import {Button, Input, Text} from 'react-native-elements'
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
-import {DependentUser} from "./DependentUsers";
-import {Specialty} from "./AddDoctor";
+import {DependentUser} from "../lib/types";
+import {Specialty} from "../lib/types";
 import {useTranslation} from "react-i18next";
 import {Button as PaperButton, Dialog, Portal, Text as PaperText} from "react-native-paper";
 import {Picker} from "@react-native-picker/picker";

@@ -1,8 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {View, Text, StyleSheet, Alert, Image, Pressable, Dimensions, ScrollView} from 'react-native';
-import {Button, Icon} from "react-native-elements";
 import {supabase} from "../lib/supabase";
-import {Appointment} from "./Appointments";
+import {Appointment} from "../lib/types";
 import TurnoContainer from "../components/TurnContainer";
 // @ts-ignore
 import {useTranslation} from "react-i18next";
