@@ -47,3 +47,18 @@ export type Appointment = {
     doctor: string;
     user_id: string;
 }
+
+export type AppointmentInfo = {
+    specialty: string;
+    observations: string,
+    date: string;
+}
+
+export type UserData = {
+    lastAppointment: AppointmentInfo;
+    medicalInfo: {
+        medicalConditions: string[];
+        sex: string;
+        age: number;
+    };
+}
