@@ -24,6 +24,7 @@
   "email":"Email",
   "addoctor": "Agregar doctor",
   "description" : "Descripción",
+  "observations" : "Observaciones",
   "home" : "Inicio",
   "calendar" : "Calendario",
   "dusers" : "Usuarios",

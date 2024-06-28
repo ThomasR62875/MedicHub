@@ -87,6 +87,10 @@ const SingleAppointment: React.FC<SingleAppointmentProps> = ({ navigation, route
                 <Text style={styles.label}>{t('description')}:</Text>
                 <Text style={styles.value}>{route.params.appointment.description}</Text>
             </View>
+            <View style={styles.detailRow}>
+                <Text style={styles.label}>{t('observations')}:</Text>
+                <Text style={styles.value}>{route.params.appointment.observations}</Text>
+            </View>
             <View style={styles.screen}>
                 <View style={{alignItems: 'center', width: 'auto'}}>
                     <Button

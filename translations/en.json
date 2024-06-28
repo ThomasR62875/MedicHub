@@ -20,6 +20,7 @@
   "text4" : "Appointment details",
   "time" : "Time",
   "description" : "Description",
+  "observations" : "Observations",
   "addoctor": "Add doctor",
   "modoctor": "Modify doctor",
   "home" : "Home",
