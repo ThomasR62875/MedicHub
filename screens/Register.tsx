@@ -6,7 +6,10 @@ import {Input, Icon, Button} from "react-native-elements";
 import Logo from '../assets/icon.png'
 import {useTranslation} from "react-i18next";
 import ScrollableBg from "../components/ScrollableBg";
-import { User } from '../lib/types';
+import {SexGenderOption, User} from '../lib/types';
+import {Button as PaperButton, Dialog, Text as PaperText} from "react-native-paper";
+import {Calendar, DateData} from "react-native-calendars";
+import {Picker} from "@react-native-picker/picker";
 
 
 const Register: React.FC = ({ navigation }: any) => {
@@ -21,9 +24,37 @@ const Register: React.FC = ({ navigation }: any) => {
     const [nameErrorMessage, setNameErrorMessage] = useState<string>('');
     const [lastNameErrorMessage, setLastNameErrorMessage] = useState<string>('');
     const [DNIErrorMessage, setDNIErrorMessage] = useState<string>('');
+    const [date, setDate] = useState(new Date());
+    const [sexGender,setSexGender]= useState('');
+    const [sexGenderDialog, setSexGenderDialog] = useState(false);
     const [mailErrorMessage, setMailErrorMessage] = useState<string>('');
     const [passwordErrorMessage, setPasswordErrorMessage] = useState<string>('');
     const {t} = useTranslation();
+
+
+    const sexGenderOptions: SexGenderOption[] = [
+        { sex_gender_name: t('male'), value: 'male' },
+        { sex_gender_name: t('female'), value: 'female' },
+        { sex_gender_name: t('non-binary'), value: 'non-binary' },
+        { sex_gender_name: t('other'), value: 'other' },
+    ];
+
+
+    const getCurrentDate = () => {
+        const date = new Date();
+        const year = date.getFullYear();
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const day = date.getDate().toString().padStart(2, '0');
+        const stringDay = day.toString();
+        return `${year}-${month}-${stringDay}`;
+    };
+    const currentDate = getCurrentDate();
+    const [selectedDate, setSelectedDate] = useState(currentDate);
+    const handleDayPress = (date: DateData) => {
+        // @ts-ignore
+        setSelectedDate(date.dateString)
+        setDate(new Date(date.dateString));
+    };
 
     useEffect(() => {
         if (
@@ -85,11 +116,31 @@ const Register: React.FC = ({ navigation }: any) => {
 
     async function signUpWithEmail() {
         setLoading(true)
-        const user: User = {id:"",first_name:firstName,last_name:lastName,dni:dni, email:email}
+        const user: User = {id:"",first_name:firstName,last_name:lastName,dni:dni, email:email, sex: sexGender,
+            birthdate: date}
         const {success,message} = await signUp(user,password);
 
         if (success) Alert.alert('¡Revise su bandeja de entrada para verificar el mail!',)
         setLoading(false)
+    }
+
+    const hideSexGenderDialog = () => setSexGenderDialog(false);
+
+    const getSexGenderName = (value: string) => {
+        const option = sexGenderOptions.find(option => option.value === value);
+        return option ? option.sex_gender_name : '';
+    };
+
+    const markedDatesString = {
+        [selectedDate]: {
+            selected: true,
+            selectedColor: '#073A29',
+        },
+    };
+
+    const customTheme = {
+        arrowColor: '#00A36C',
+        todayTextColor: '#00A36C',
     }
 
     return (
@@ -146,6 +197,34 @@ const Register: React.FC = ({ navigation }: any) => {
                         errorStyle={{ color: 'red' }}
                         errorMessage={DNIErrorMessage}
                     />
+            <PaperText style={styles.text}>{t('sex')}</PaperText>
+            <PaperButton mode="outlined" style={styles.pickerButton} textColor='#2E5829' labelStyle={{textAlign: 'left', display:'flex'}} onPress={()=> setSexGenderDialog(true)}>
+                {getSexGenderName(sexGender)}
+            </PaperButton>
+            <PaperText style={styles.text}>{t('birthdate')}</PaperText>
+            <View style={styles.calendarContainer}>
+                <Calendar style={{borderRadius: 10}}
+                          markingType={'custom'}
+                          onDayPress={handleDayPress}
+                          markedDates={markedDatesString}
+                          theme={customTheme}
+                />
+            </View>
+            <Dialog style={styles.dialog} visible={sexGenderDialog} onDismiss={hideSexGenderDialog}>
+                <Text style={styles.dialogTitle}>{t("selSex")}</Text>
+                <Picker
+                    mode='dropdown'
+                    selectedValue={sexGender}
+                    onValueChange={(value: string) => setSexGender(value)}
+                    placeholder='sex'
+                    enabled={true}
+                    itemStyle={styles.pickerStyle}
+                >
+                    {sexGenderOptions?.map((item) => (
+                        <Picker.Item key={item.value} label={item.sex_gender_name} value={item.value} />
+                    ))}
+                </Picker>
+            </Dialog>
                     <Input
                         label="Mail"
                         labelStyle={styles.colorLable}
@@ -258,7 +337,41 @@ const styles = StyleSheet.create({
         height: 50,
         width: 50,
         marginBottom: 0
-    }
+    },
+    pickerButton: {
+        borderRadius: 6,
+        marginLeft: '5%',
+        marginRight: '5%',
+    },
+    dialog: {
+        backgroundColor: "#e9f4e9"
+    },
+    dialogTitle: {
+        fontFamily: 'Roboto-Thin',
+        fontSize: 25,
+        textAlign: 'center',
+        fontWeight: 'bold',
+        margin: "5%",
+        marginLeft: '15%',
+        color: "#2E5829FF",
+        width: "70%"
+    },
+    pickerStyle: {
+        marginBottom: 20,
+    },
+    text: {
+        fontFamily: 'Roboto-Thin',
+        fontSize: 14,
+        marginTop: "5%",
+        marginLeft: '4%',
+        marginBottom: '2%',
+        color: "#2E5829FF",
+        width: "60%"
+    },
+    calendarContainer: {
+        margin: '5%',
+        backgroundColor: "#E9F4E9FF"
+    },
 });
 
 export default Register;

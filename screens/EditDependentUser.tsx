@@ -10,6 +10,8 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import {Picker} from "@react-native-picker/picker";
 import {SexGenderOption} from "../lib/types";
 import {getDate} from "date-fns";
+import {Calendar, DateData} from "react-native-calendars";
+import ScrollableBg from '../components/ScrollableBg';
 
 type EditDependentUserProps = NativeStackScreenProps<RootStackParamList, 'EditDependentUser'>;
 
@@ -35,6 +37,22 @@ const EditDependentUser:React.FC<EditDependentUserProps> = ({navigation, route }
         { sex_gender_name: t('non-binary'), value: 'non-binary' },
         { sex_gender_name: t('other'), value: 'other' },
     ];
+
+    const getCurrentDate = () => {
+        const date = new Date();
+        const year = date.getFullYear();
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const day = date.getDate().toString().padStart(2, '0');
+        const stringDay = day.toString();
+        return `${year}-${month}-${stringDay}`;
+    };
+    const [selectedDate, setSelectedDate] = useState(route.params.du.birthdate.dateString);
+    const handleDayPress = (date: DateData) => {
+        // @ts-ignore
+        setSelectedDate(date.dateString)
+        setDate(new Date(date.dateString));
+        console.log('Fecha seleccionada:', date);
+    };
 
     useEffect(() => {
         if (
@@ -80,6 +98,7 @@ const EditDependentUser:React.FC<EditDependentUserProps> = ({navigation, route }
         setFirstName(route.params.du.first_name);
         setLastName(route.params.du.last_name);
         setDni(route.params.du.dni);
+        setSelectedDate(route.params.du.birthdate);
         setDate(route.params.du.birthdate);
         setSexGender(route.params.du.sex);
 
@@ -123,118 +142,105 @@ const EditDependentUser:React.FC<EditDependentUserProps> = ({navigation, route }
         return option ? option.sex_gender_name : '';
     };
 
+    const markedDatesString = {
+        [selectedDate]: {
+            selected: true,
+            selectedColor: '#073A29',
+        },
+    };
+
+    const customTheme = {
+        arrowColor: '#00A36C',
+        todayTextColor: '#00A36C',
+    }
+
     return(
-        <View style={styles.container} >
-            <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-                <View style={styles.window}>
-                    <Input
-                        label={t('name')}
-                        value={first_name}
-                        onChangeText={(text) => {
-                            setFirstName(text);
-                            validateFirstName(text)
-                        }}
-                        errorStyle={{ color: 'red' }}
-                        errorMessage={firstNameErrorMessage}
-                    />
-                    <Input
-                        label={t('surname')}
-                        value={last_name}
-                        onChangeText={(text) => {
-                            setLastName(text);
-                            validateLastName(text)
-                        }}
-                        errorStyle={{ color: 'red' }}
-                        errorMessage={firstNameErrorMessage}
-                    />
-                    <Input
-                        label={t('id')}
-                        value={dni.toString()}
-                        onChangeText={(text) => {
-                            setDni(text)
-                            validateDNI(text)
-                        }}
-                        errorStyle={{ color: 'red' }}
-                        errorMessage={dniErrorMessage}
-                    />
-                    <PaperText style={styles.text}>{t('sex')}</PaperText>
-                    <PaperButton mode="outlined" style={styles.pickerButton} textColor='#2E5829' labelStyle={{textAlign: 'left', display:'flex'}} onPress={()=> setSexGenderDialog(true)}>
-                        {getSexGenderName(sexGender)}
-                    </PaperButton>
-                    <PaperText style={styles.text}>{t('birthdate')}</PaperText>
-                    <View style={styles.datePickerContainer}>
-                        {Platform.OS === 'ios' ? (
-                            <>
-                                <DateTimePicker
-                                    testID="datePicker"
-                                    value={date}
-                                    mode="date"
-                                    display="default"
-                                    style={{ backgroundColor: 'transparent' }}
-                                    onChange={onDateChange}
-                                />
-                            </>
-                        ) : (
-                            <>
-                                <PaperButton
-                                    mode="outlined"
-                                    style={styles.pickerButton}
-                                    textColor='#2E5829'
-                                    labelStyle={{ textAlign: 'left', display: 'flex' }}
-                                    onPress={() => setShowDatePicker(true)}
-                                >
-                                    {getDate(date)}
-                                </PaperButton>
-                                {showDatePicker && (
-                                    <DateTimePicker
-                                        testID="datePicker"
-                                        value={date}
-                                        mode="date"
-                                        display="default"
-                                        onChange={onDateChange}
-                                    />
-                                )}
-                            </>
-                        )}
+        <ScrollableBg>
+            <View style={styles.container} >
+                <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+                    <View style={styles.window}>
+                        <Input
+                            label={t('name')}
+                            value={first_name}
+                            onChangeText={(text) => {
+                                setFirstName(text);
+                                validateFirstName(text)
+                            }}
+                            errorStyle={{ color: 'red' }}
+                            errorMessage={firstNameErrorMessage}
+                        />
+                        <Input
+                            label={t('surname')}
+                            value={last_name}
+                            onChangeText={(text) => {
+                                setLastName(text);
+                                validateLastName(text)
+                            }}
+                            errorStyle={{ color: 'red' }}
+                            errorMessage={firstNameErrorMessage}
+                        />
+                        <Input
+                            label={t('id')}
+                            value={dni.toString()}
+                            onChangeText={(text) => {
+                                setDni(text)
+                                validateDNI(text)
+                            }}
+                            errorStyle={{ color: 'red' }}
+                            errorMessage={dniErrorMessage}
+                        />
+                        <PaperText style={styles.text}>{t('sex')}</PaperText>
+                        <PaperButton mode="outlined" style={styles.pickerButton} textColor='#2E5829' labelStyle={{textAlign: 'left', display:'flex'}} onPress={()=> setSexGenderDialog(true)}>
+                            {getSexGenderName(sexGender)}
+                        </PaperButton>
+                        <PaperText style={styles.text}>{t('birthdate')}</PaperText>
+                        <View style={styles.calendarContainer}>
+                            <Calendar style={{borderRadius: 10}}
+                                      markingType={'custom'}
+                                      onDayPress={handleDayPress}
+                                      markedDates={markedDatesString}
+                                      theme={customTheme}
+                            />
+                        </View>
+                        <Dialog style={styles.dialog} visible={sexGenderDialog} onDismiss={hideSexGenderDialog}>
+                            <Text style={styles.dialogTitle}>{t("selSex")}</Text>
+                            <Picker
+                                mode='dropdown'
+                                selectedValue={sexGender}
+                                onValueChange={(value: string) => setSexGender(value)}
+                                placeholder='sex'
+                                enabled={true}
+                                itemStyle={styles.pickerStyle}
+                            >
+                                {sexGenderOptions?.map((item) => (
+                                    <Picker.Item key={item.value} label={item.sex_gender_name} value={item.value} />
+                                ))}
+                            </Picker>
+                        </Dialog>
+                        <Button
+                            title={t('savec')}
+                            buttonStyle={{
+                                backgroundColor: '#2E5829',
+                                borderWidth: 2,
+                                borderColor: 'white',
+                                borderRadius: 30,
+                                minHeight: 50
+                            }}
+                            containerStyle={{
+                                width: 200,
+                                marginHorizontal: 50,
+                                marginVertical: 10,
+                                marginTop: 40,
+                                alignContent: 'center'
+                            }}
+                            titleStyle={{ color: '#EEF9ED' }}
+                            disabled={isButtonDisabled}
+                            onPress={handleUpdateDependentUser}
+                        />
                     </View>
-                    <Dialog style={styles.dialog} visible={sexGenderDialog} onDismiss={hideSexGenderDialog}>
-                        <Text style={styles.dialogTitle}>{t("selSpec")}</Text>
-                        <Picker
-                            mode='dropdown'
-                            selectedValue={sexGender}
-                            onValueChange={(value: string) => setSexGender(value)}
-                            placeholder='sex'
-                            enabled={true}
-                            itemStyle={styles.pickerStyle}
-                        >
-                            {sexGenderOptions?.map((item) => (
-                                <Picker.Item key={item.value} label={item.sex_gender_name} value={item.value} />
-                            ))}
-                        </Picker>
-                    </Dialog>
-                    <Button
-                        title={t('savec')}
-                        buttonStyle={{
-                            backgroundColor: '#2E5829',
-                            borderWidth: 2,
-                            borderColor: 'white',
-                            borderRadius: 30,
-                            minHeight: 50
-                        }}
-                        containerStyle={{
-                            width: 200,
-                            marginHorizontal: 50,
-                            marginVertical: 10,
-                            marginTop: 40,
-                            alignContent: 'center'
-                        }}
-                        titleStyle={{ color: '#EEF9ED' }}
-                        disabled={isButtonDisabled}
-                        onPress={handleUpdateDependentUser}
-                    />
-                </View>
-            </TouchableWithoutFeedback>
-        </View>
+                </TouchableWithoutFeedback>
+            </View>
+        </ScrollableBg>
     )
 }
 
@@ -290,5 +296,9 @@ const styles = StyleSheet.create({
         marginBottom: '2%',
         color: "#2E5829FF",
         width: "60%"
+    },
+    calendarContainer: {
+        margin: '5%',
+        backgroundColor: "#E9F4E9FF"
     },
 })

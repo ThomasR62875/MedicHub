@@ -105,6 +105,7 @@
   "non-binary": "Non-binary",
   "other": "Other",
   "birthdate": "Birthdate",
-  "dateTime": "Date and Time"
+  "dateTime": "Date and Time",
+  "selSex":"Select sex"
 }
 

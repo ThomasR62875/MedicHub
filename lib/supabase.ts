@@ -51,6 +51,7 @@ export const getUserId= async () : Promise<string> => {
 // Crea el usuario
 
 export const signUp= async (user: User,password:string) : Promise<{success: boolean; message?: string }> => {
+    console.log(user)
     const {data, error} =await supabase.auth.signUp({
         email: user.email,
         password: password,
@@ -59,12 +60,16 @@ export const signUp= async (user: User,password:string) : Promise<{success: bool
                 first_name: user.first_name,
                 last_name: user.last_name,
                 dni: user.dni,
+                sex: user.sex,
+                birthdate: user.birthdate
             },
         },
     })
     if (error) {
+        console.log(error.message)
         return { success: false, message: error.message };
     } else {
+        console.log("SUCCESS")
         return { success: true };
     }
 
