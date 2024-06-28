@@ -42,6 +42,7 @@ const SingleAppointment: React.FC<SingleAppointmentProps> = ({ navigation, route
 
     const handlePressRecommendQuestionsForAppointment = async () => {
         const data = await getUserData(route.params.appointment);
+        console.log(data);
         if (data) {
             setUserData(data);
             await recommendQuestionsForAppointment(data);

@@ -257,6 +257,9 @@ export const getAppointments = async () : Promise<Appointment[] | undefined> => 
 }
 
 function getAge(birthdate: Date) {
+    if (birthdate == null) {
+        return null;
+    }
     const today = new Date();
     let age = today.getFullYear() - birthdate.getFullYear();
     const monthDiff = today.getMonth() - birthdate.getMonth();
@@ -270,43 +273,36 @@ function getAge(birthdate: Date) {
 
 // Obtiene la informacion para las preguntas
 export const getUserData = async (appointment: Appointment): Promise<UserData | null> => {
+    const doctor: (Doctor) = await getDoctor(appointment.doctor);
 
     const { data: lastAppointmentData, error: lastAppointmentError } = await supabase
-        .rpc('get_last_appointment_info', { user_id: appointment.user_id, doctor_id: appointment.doctor });
+        .rpc('get_last_appointment_info', { doctor_id_input: appointment.doctor, user_id: appointment.user_id });
     if (lastAppointmentError) {
         console.error('Error getting last appointment data:', lastAppointmentError.message);
         return null;
     }
-    console.log('Last appointment data got successfully');
 
     const appointmentInfo: AppointmentInfo = {
-        specialty: lastAppointmentData.doctor,
+        specialty: doctor.specialty,
         observations: lastAppointmentData.observations,
         date: lastAppointmentData.date,
+        description: lastAppointmentData.description,
     };
 
 
-    const { data: medicalInfoData, error: medicalInfoError } = await supabase
-        .rpc('get_medical_info', { user_id: appointment.user_id });
-    if (medicalInfoError) {
-        console.error('Error getting medical info:', medicalInfoError.message);
-        return null;
-    }
-    console.log('Medical info got successfully');
+    const user: (DependentUser) = await getUser(appointment.user_id);
 
     return {
         lastAppointment: appointmentInfo,
         medicalInfo: {
-            medicalConditions: medicalInfoData.medicalConditions,
-            sex: medicalInfoData.sex,
-            age: getAge(new Date(medicalInfoData.birthdate)),
+            sex: user.sex,
+            age: getAge(user.birthdate),
         },
     };
 };
 
 
 // borrar
-
 export const deleteAppointment = async (appoint: Appointment) : Promise<{ success: boolean, message: string }> => {
     const { data, error } = await supabase.rpc('delete_appointment_by_id', { input_id: appoint.id });
     if (error) {

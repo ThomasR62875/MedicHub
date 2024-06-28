@@ -55,14 +55,14 @@ export type AppointmentInfo = {
     specialty: string;
     observations: string,
     date: string;
+    description: string;
 }
 
 export type UserData = {
     lastAppointment: AppointmentInfo;
     medicalInfo: {
-        medicalConditions: string[];
         sex: string;
-        age: number;
+        age: number | null;
     };
 }
 
