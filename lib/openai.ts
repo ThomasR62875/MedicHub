@@ -1,32 +1,19 @@
 import OpenAI from 'openai';
-
-
-export type AppointmentInfo = {
-    specialty: string;
-    date: string;
-}
-
-export type UserData = {
-    lastAppointment: AppointmentInfo;
-    medicalInfo: {
-        medicalConditions: string[];
-        sex: string;
-        age: number;
-    };
-}
+import {UserData} from "./types";
 
 const openai = new OpenAI({
     apiKey: '',
 });
 
-export const recommendAppointment = async (userData: UserData): Promise<string | null> => {
+export const recommendQuestionsForAppointment = async (userData: UserData): Promise<string | null> => {
     try {
         const { lastAppointment, medicalInfo } = userData;
         const { medicalConditions, sex, age } = medicalInfo;
 
-        const prompt = `Given my medical information, what is your recommendation for my next dentist appointment (respond with the date in this format Date)?:\n`;
-        const lastAppointmentText = `Appointment with ${lastAppointment.specialty} (last appointment on ${lastAppointment.date})`;
-        const demographicInfo = `Sex: ${sex}, Age: ${age}`;
+        const prompt = `Given my medical information and the information about past appointments with this doctor, which questions do you recommend i should ask my doctor? (the answer should have maximum 150 words):\n`;
+
+        const lastAppointmentText = `The appointment with ${lastAppointment.specialty} (last appointment on ${lastAppointment.date} and the observations were:  ${lastAppointment.observations})`;
+        const demographicInfo = `Some information about me: Sex: ${sex}, Age: ${age}`;
         console.log(`${prompt}${lastAppointmentText}\n${demographicInfo}`);
         const completion = await openai.chat.completions.create({
             model: 'gpt-3.5-turbo-16k',
