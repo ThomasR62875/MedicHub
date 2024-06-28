@@ -105,7 +105,7 @@ export const addDoctor = async (doctor: Doctor): Promise<{ success: boolean; mes
 //Agrega un dependent user
 export const addDependentUser = async (user: DependentUser): Promise<{ success: boolean; message?: string }> =>{
     const { error } = await supabase.rpc("add_dependent_user",{first_name_input: user.first_name,
-        last_name_input : user.last_name, dni_input:user.dni});
+        last_name_input : user.last_name, dni_input:user.dni, birthdate_input: user.birthdate, sex_input: user.sex});
     if (error) {
         console.error('Error inserting data:', error.message);
         return { success: false, message: error.message };
@@ -214,7 +214,9 @@ export const getDependentUsers = async (session_user_id:String) : Promise<Depend
                 first_name: dependent_user.first_name,
                 last_name: dependent_user.last_name,
                 dni: dependent_user.dni,
-                id: dependent_user.id
+                id: dependent_user.id,
+                birthdate: dependent_user.birthdate,
+                sex: dependent_user.sex
             })
         });
     }
@@ -387,7 +389,7 @@ export const updateAppointment = async (appoint: Appointment): Promise<{ success
 };
 
 export const updateDependentUser = async (depUser: DependentUser): Promise<{ success: boolean, message: string }> => {
-    const { error } = await supabase.rpc("update_dependent_user", {id_input: depUser.id , first_name_input: depUser.first_name, last_name_input: depUser.last_name, dni_input: depUser.dni});
+    const { error } = await supabase.rpc("update_dependent_user", {id_input: depUser.id , first_name_input: depUser.first_name, last_name_input: depUser.last_name, dni_input: depUser.dni, birthdate_input: depUser.birthdate, sex_input: depUser.sex});
     if (error) {
         return {
             success: false,

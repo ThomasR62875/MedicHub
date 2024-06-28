@@ -13,12 +13,13 @@ import {
 import {Button, Input} from "react-native-elements";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../App";
-import { DependentUser } from "./DependentUsers";
+import {DependentUser} from "../lib/types";
 import { Doctor } from "./Doctors";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Picker } from "@react-native-picker/picker";
 import { useTranslation } from "react-i18next";
 import {TextInput, Text as PaperText, HelperText, Button as PaperButton, Dialog, Portal} from "react-native-paper";
+
 
 type AddAppointmentProps = NativeStackScreenProps<RootStackParamList, 'AddAppointment'>;
 
@@ -194,7 +195,7 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
                                 {descriptionErrorMessage}
                             </HelperText>
                         </View>
-                        <PaperText style={styles.text}>Horario y fecha</PaperText>
+                        <PaperText style={styles.text}>{t('dateTime')}</PaperText>
                         <View style={styles.datePickerContainer}>
                             {Platform.OS === 'ios' ? (
                                 <>

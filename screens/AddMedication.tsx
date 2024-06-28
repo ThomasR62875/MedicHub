@@ -13,7 +13,7 @@ import {Button, Input} from "react-native-elements";
 import StandardGreenButton from "../components/StandardGreenButton";
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
-import {Medication} from './Medication';
+import {Medication} from '../lib/types';
 import {useTranslation} from "react-i18next";
 import {Picker} from '@react-native-picker/picker'
 import DateTimePicker, {DateTimePickerEvent} from '@react-native-community/datetimepicker';
@@ -30,8 +30,8 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
     const [nameErrorMessage, setNameErrorMessage] = useState('')
     const [prescriptionErrorMessage, setPrescriptionErrorMessage] = useState('');
     const [dateSince, setDateSince] = useState(new Date());
-    const [dateUntil, setDateUntil] = useState<Date | undefined>(undefined);
-    const [howOften, setHowOften] = useState<Date | undefined>(undefined);
+    const [dateUntil, setDateUntil] = useState<Date | null>(null);
+    const [howOften, setHowOften] = useState<Date | null>(null);
     const [isForever, setIsForever] = useState<boolean>(false);
     const {t} = useTranslation();
     const times = [
@@ -123,8 +123,8 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
         setName('');
         setPrescription('');
         setDateSince(new Date());
-        setHowOften(undefined);
-        setDateUntil(undefined);
+        setHowOften(null);
+        setDateUntil(null);
         setNameErrorMessage('');
         setPrescriptionErrorMessage('');
     };

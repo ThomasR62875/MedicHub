@@ -5,6 +5,8 @@ export type DependentUser = {
     last_name: string;
     dni: string;
     id: string;
+    sex: string;
+    birthdate: Date;
 }
 
 export type User = {
@@ -63,3 +65,9 @@ export type UserData = {
         age: number;
     };
 }
+
+export type SexGenderOption = {
+    sex_gender_name: string;
+    value: string;
+}
+
