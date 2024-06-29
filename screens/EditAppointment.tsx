@@ -81,13 +81,7 @@ const EditAppointment: React.FC<EditAppointmentProps> = ({navigation, route }: a
             user_name: '', doctor: doctor, user_id: user_id}
         const result = await updateAppointment(appointment);
         if (result.success) {
-            Alert.alert(
-                t('editAppoint'),
-                '',
-                [
-                    { text: 'Ok', onPress: () => navigation.navigate('Appointments', { session: session }) }
-                ]
-            );
+            navigation.navigate('AlertPublicity', { session, msg: 'editAppoint', screen: 'SingleAppointment', appointment: appointment});
         } else {
             Alert.alert('Error', result.message || 'An unknown error occurred');
         }

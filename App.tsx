@@ -64,10 +64,11 @@ export type RootStackParamList = {
   EditDoctor: {session : Session | null};
   SingleDependentUser: {session : Session | null};
   EditDependentUser: {session : Session | null};
-  AlertPublicity: {session : Session | null, msg: string, screen: string};
+  AlertPublicity: {session : Session | null, msg: string, screen: string, appointment: Appointment | null , du: DependentUser | null, doc: Doctor | null, meds: Medication | null};
 };
 
 import { AppRegistry } from 'react-native';
+import {Appointment, DependentUser, Doctor, Medication} from "./lib/types";
 AppRegistry.registerComponent('main', () => App);
 
 const Stack = createNativeStackNavigator<RootStackParamList>();

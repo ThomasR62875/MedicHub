@@ -81,13 +81,7 @@ const EditDoctor:React.FC<EditDoctorProps> = ({navigation, route }: any) =>{
         const doc  = {id: id , name: name, specialty: specialty, phone: phone, email: email, addresses: addresses, user_id: user_id}
         const result = await updateDoctor(doc);
         if (result.success) {
-            Alert.alert(
-                t('editDoc'),
-                '',
-                [
-                    { text: 'Ok', onPress: () => navigation.navigate('Doctors', { session: session }) }
-                ]
-            );
+            navigation.navigate('AlertPublicity', { session, msg: 'editDoc', screen: 'SingleDoctor', doc: doc});
         } else {
             Alert.alert('Error', result.message || 'An unknown error occurred');
         }

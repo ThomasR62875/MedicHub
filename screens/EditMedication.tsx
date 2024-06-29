@@ -61,13 +61,7 @@ const EditMedication:React.FC<EditMedicationProps> = ({navigation, route }: any)
         }
         const result = await updateMedication(medication);
         if (result.success) {
-            Alert.alert(
-                'El Medicamento fue editado',
-                '',
-                [
-                    { text: 'Ok', onPress: () => navigation.navigate('Medication', { session: session }) }
-                ]
-            );
+            navigation.navigate('AlertPublicity', { session, msg: 'editMed', screen: 'SingleMedication', meds: medication});
         } else {
             Alert.alert('Error', result.message || 'An unknown error occurred');
         }

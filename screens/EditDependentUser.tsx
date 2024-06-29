@@ -47,13 +47,7 @@ const EditDependentUser:React.FC<EditDependentUserProps> = ({navigation, route }
         const du  = {id: id , first_name: first_name, last_name: last_name, dni: dni.toString()}
         const result = await updateDependentUser(du);
         if (result.success) {
-            Alert.alert(
-                t('editDepUser'),
-                '',
-                [
-                    { text: 'Ok', onPress: () => navigation.navigate('Usuarios', { session: session }) }
-                ]
-            );
+            navigation.navigate('AlertPublicity', { session, msg: 'editDepUser', screen: 'SingleDependentUser', du: du});
         } else {
             Alert.alert('Error', result.message || 'An unknown error occurred');
         }

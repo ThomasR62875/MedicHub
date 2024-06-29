@@ -10,7 +10,19 @@ type AlertPublicityProps = NativeStackScreenProps<RootStackParamList, 'AlertPubl
 
 const AlertPublicity: React.FC<AlertPublicityProps> = ({navigation, route} ) => {
     const {t} = useTranslation();
-    const { session, msg, screen } = route.params;
+    const { session, msg, screen, appointment , du, doc, meds } = route.params;
+
+    const handleNavigateBack = () => {
+        const params: any = { session: session };
+
+        if (appointment) params.appointment = appointment;
+        if (du) params.du = du;
+        if (doc) params.doc = doc;
+        if (meds) params.meds = meds;
+
+        // @ts-ignore
+        navigation.navigate(screen, params);
+    };
 
     return (
         <View style={styles.container}>
@@ -34,8 +46,7 @@ const AlertPublicity: React.FC<AlertPublicityProps> = ({navigation, route} ) => 
                         marginTop: 40,
                     }}
                     titleStyle={{ color: '#eef9ed' }}
-                    // @ts-ignore
-                    onPress={() => navigation.navigate(screen, {session: session})}
+                    onPress={handleNavigateBack}
                 />
             </View>
         </View>
