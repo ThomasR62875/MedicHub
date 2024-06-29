@@ -3,17 +3,31 @@ import { getUser, getUserId, supabase } from '../lib/supabase'
 import {StyleSheet, View, ScrollView} from 'react-native'
 import {Button, Icon} from 'react-native-elements'
 import LanguageButton from '../components/LanguageButton'
-import { DependentUser } from './DependentUsers';
-import {Dialog, Text, Button as PaperButton} from "react-native-paper";
+import {DependentUser, SexGenderOption} from "../lib/types";
+import {Dialog, Text, Button as PaperButton, Text as PaperText} from "react-native-paper";
 import {useTranslation} from "react-i18next";
+import {Calendar, DateData} from "react-native-calendars";
+import {Picker} from "@react-native-picker/picker";
+
 
 const Account: React.FC = ({ navigation, route } : any) => {
     const {session} = route.params;
-    const [first_name, setFirstName] = useState('')
-    const [last_name, setLastName] = useState('')
-    const [dni, setDni] = useState(0)
+    const [first_name, setFirstName] = useState('');
+    const [last_name, setLastName] = useState('');
+    const [dni, setDni] = useState(0);
+    const [date, setDate] = useState('');
+    const [sexGender,setSexGender]= useState('');
+    const [sexGenderDialog, setSexGenderDialog] = useState(false);
     const [visible, setVisible] = React.useState(false);
     const {t} = useTranslation();
+
+    const sexGenderOptions: SexGenderOption[] = [
+        { sex_gender_name: t('male'), value: 'male' },
+        { sex_gender_name: t('female'), value: 'female' },
+        { sex_gender_name: t('non-binary'), value: 'non-binary' },
+        { sex_gender_name: t('other'), value: 'other' },
+    ];
+
 
     useEffect(() => {
         if (session) {
@@ -21,6 +35,12 @@ const Account: React.FC = ({ navigation, route } : any) => {
                 const data : DependentUser= await getUser(await getUserId())
                 setFirstName(data.first_name)
                 setLastName(data.last_name)
+                if(data.birthdate){
+                    setDate(data.birthdate.toDateString)
+                } else {
+                    setDate('')
+                }
+                setSexGender(data.sex)
                 const dniString = String(data.dni);
                 if (dniString && dniString.length === 8) {
                     const dniNumber = parseInt(dniString.slice(0, 8), 10);
@@ -35,6 +55,14 @@ const Account: React.FC = ({ navigation, route } : any) => {
 
     const hideDialog = () => setVisible(false);
     const showDialog = () => setVisible(true);
+
+    const getSexGenderName = (value: string) => {
+        if(value == null)
+            return ''
+        const option = sexGenderOptions.find(option => option.value === value);
+        return option ? option.sex_gender_name : '';
+    };
+
 
     return (
         <View style={styles.screen}>
@@ -67,11 +95,21 @@ const Account: React.FC = ({ navigation, route } : any) => {
                     </View>
                 </View>
                 <View style={{marginTop: 5, marginLeft: "10%", marginBottom: "5%"}}>
-                    <Text style={styles.title}>Mail:</Text>
-                    <Text style={styles.text2}>{session?.user.email}</Text>
+                        <Text style={styles.title}>Mail:</Text>
+                        <Text style={styles.text2}>{session?.user.email}</Text>
                     <View style={{marginTop: 5}}/>
-                    <Text style={styles.title}>{t('id')}:</Text>
-                    <Text style={styles.text2}>{dni}</Text>
+                        <Text style={styles.title}>{t('id')}:</Text>
+                        <Text style={styles.text2}>{dni}</Text>
+
+                    <View style={{marginTop: 5}}/>
+                        <Text style={styles.title}>{t('birthdate')}:</Text>
+                        <Text style={styles.text2}>{date}</Text>
+
+                    <View style={{marginTop: 5}}/>
+                    <Text style={styles.title}>{t('sex')}:</Text>
+                    <Text style={styles.text2}>{getSexGenderName(sexGender)}</Text>
+
+
                     <View style={{marginTop: 5, alignSelf: 'center'}}>
                         <LanguageButton/>
                     </View>
@@ -324,5 +362,39 @@ const styles = StyleSheet.create({
     buttonContainer: {
         width: 225, // Ancho deseado para todos los botones
         marginVertical: 10,
-    }
+    },
+    pickerButton: {
+        borderRadius: 6,
+        marginLeft: '5%',
+        marginRight: '5%',
+    },
+    dialog: {
+        backgroundColor: "#e9f4e9"
+    },
+    dialogTitle: {
+        fontFamily: 'Roboto-Thin',
+        fontSize: 25,
+        textAlign: 'center',
+        fontWeight: 'bold',
+        margin: "5%",
+        marginLeft: '15%',
+        color: "#2E5829FF",
+        width: "70%"
+    },
+    pickerStyle: {
+        marginBottom: 20,
+    },
+    text: {
+        fontFamily: 'Roboto-Thin',
+        fontSize: 14,
+        marginTop: "5%",
+        marginLeft: '4%',
+        marginBottom: '2%',
+        color: "#2E5829FF",
+        width: "60%"
+    },
+    calendarContainer: {
+        margin: '5%',
+        backgroundColor: "#E9F4E9FF"
+    },
 })

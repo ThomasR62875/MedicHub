@@ -79,6 +79,7 @@ const Home: React.FC = ({navigation, route}: any) => {
                             user_name: user_data.first_name, // Suponiendo que name es el campo que quieres agregar
                             doctor: doctor_data && doctor_data.name ? doctor_data.name.concat(" (especialidad: ").concat(doctor_data.specialty).concat(")") : 'Sin datos de doctor',
                             user_id: appoint.user,
+                            observations: appoint.observaions
                         });
                     } catch (error) {
                         console.error('Error al obtener el usuario:', error);

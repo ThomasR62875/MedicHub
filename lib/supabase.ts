@@ -3,6 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {createClient} from '@supabase/supabase-js';
 import {Appointment, AppointmentInfo, DependentUser, Doctor, Medication, Specialty, User, UserData} from './types';
 import getEnvVars from "../environment";
+import {Alert} from "react-native";
 
 const { REACT_APP_SUPABASE_URL, REACT_APP_ANON_KEY } = getEnvVars();
 export const supabase = createClient(REACT_APP_SUPABASE_URL, REACT_APP_ANON_KEY, {
@@ -17,7 +18,6 @@ export const supabase = createClient(REACT_APP_SUPABASE_URL, REACT_APP_ANON_KEY,
 
 //Devuelve usuario por id
 export const getUser = async (session_user_id:String) : Promise<DependentUser> => {
-    
     const { data, error } = await supabase.rpc('get_user', { user_id: session_user_id });
     if (error) {
         console.error('Error inserting users data:', error.message);
@@ -390,7 +390,8 @@ export const updateAppointment = async (appoint: Appointment): Promise<{ success
 };
 
 export const updateDependentUser = async (depUser: DependentUser): Promise<{ success: boolean, message: string }> => {
-    const { error } = await supabase.rpc("update_dependent_user", {id_input: depUser.id , first_name_input: depUser.first_name, last_name_input: depUser.last_name, dni_input: depUser.dni, birthdate_input: depUser.birthdate, sex_input: depUser.sex});
+    const { error } = await supabase.rpc("update_user", {id_input: depUser.id , first_name_input: depUser.first_name, last_name_input: depUser.last_name, dni_input: depUser.dni, birthdate_input: depUser.birthdate, sex_input: depUser.sex});
+    console.log(depUser);
     if (error) {
         return {
             success: false,

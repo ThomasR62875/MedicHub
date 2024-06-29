@@ -6,10 +6,8 @@ import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
 import {useTranslation} from "react-i18next";
 import {Button as PaperButton, Dialog, Text as PaperText} from "react-native-paper";
-import DateTimePicker from "@react-native-community/datetimepicker";
 import {Picker} from "@react-native-picker/picker";
 import {SexGenderOption} from "../lib/types";
-import {getDate} from "date-fns";
 import {Calendar, DateData} from "react-native-calendars";
 import ScrollableBg from '../components/ScrollableBg';
 
@@ -22,7 +20,6 @@ const EditDependentUser:React.FC<EditDependentUserProps> = ({navigation, route }
     const [last_name,setLastName] = useState('');
     const [dni,setDni]  = useState('');
     const [date, setDate] = useState(new Date());
-    const [showDatePicker, setShowDatePicker] = useState(false);
     const [sexGender,setSexGender]= useState('');
     const [sexGenderDialog, setSexGenderDialog] = useState(false);
     const {t} = useTranslation();
@@ -38,20 +35,11 @@ const EditDependentUser:React.FC<EditDependentUserProps> = ({navigation, route }
         { sex_gender_name: t('other'), value: 'other' },
     ];
 
-    const getCurrentDate = () => {
-        const date = new Date();
-        const year = date.getFullYear();
-        const month = (date.getMonth() + 1).toString().padStart(2, '0');
-        const day = date.getDate().toString().padStart(2, '0');
-        const stringDay = day.toString();
-        return `${year}-${month}-${stringDay}`;
-    };
     const [selectedDate, setSelectedDate] = useState(route.params.du.birthdate.dateString);
     const handleDayPress = (date: DateData) => {
         // @ts-ignore
         setSelectedDate(date.dateString)
         setDate(new Date(date.dateString));
-        console.log('Fecha seleccionada:', date);
     };
 
     useEffect(() => {
@@ -76,7 +64,6 @@ const EditDependentUser:React.FC<EditDependentUserProps> = ({navigation, route }
 
 
     const handleUpdateDependentUser = async () => {
-
         const session =  route.params.session;
         const du  = {id: id , first_name: first_name, last_name: last_name, dni: dni.toString(), birthdate: date, sex: sexGender}
         const result = await updateDependentUser(du);
@@ -124,12 +111,6 @@ const EditDependentUser:React.FC<EditDependentUserProps> = ({navigation, route }
         } else {
             setDniErrorMessage('');
         }
-    };
-
-    const onDateChange = (event: any, selectedDate: Date | undefined) => {
-        const currentDate = selectedDate || date;
-        setShowDatePicker(Platform.OS === 'ios');
-        setDate(currentDate);
     };
 
 
