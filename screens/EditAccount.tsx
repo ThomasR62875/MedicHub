@@ -5,12 +5,13 @@ import {Button, Icon, Input, Text} from 'react-native-elements'
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
 import {useTranslation} from "react-i18next";
-import {Button as PaperButton, Dialog, Text as PaperText} from "react-native-paper";
+import {Button as PaperButton, Dialog, Portal, Text as PaperText} from "react-native-paper";
 import {Calendar, DateData} from "react-native-calendars";
 import {DependentUser, SexGenderOption, User} from "../lib/types";
 import {Picker} from "@react-native-picker/picker";
 import ScrollableBg from '../components/ScrollableBg';
 import {navigate} from "expo-router/build/global-state/routing";
+import DateTimePicker, {DateTimePickerEvent} from "@react-native-community/datetimepicker";
 
 
 
@@ -28,34 +29,17 @@ const EditAccount:React.FC<EditAccountProps> = ({navigation, route }: any) =>{
     const [user, setUser] = useState<DependentUser>();
     const [sexGenderDialog, setSexGenderDialog] = useState(false);
     const {t} = useTranslation();
-
     const [firstNameErrorMessage, setFirstNameErrorMessage] = useState('')
     const [lastNameErrorMessage, setLastNameErrorMessage] = useState('')
     const [dniErrorMessage, setDniErrorMessage] = useState('')
-
     const sexGenderOptions: SexGenderOption[] = [
         { sex_gender_name: t('male'), value: 'male' },
         { sex_gender_name: t('female'), value: 'female' },
         { sex_gender_name: t('non-binary'), value: 'non-binary' },
         { sex_gender_name: t('other'), value: 'other' },
     ];
+    const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(true);
 
-
-    const getCurrentDate = () => {
-        const date = new Date();
-        const year = date.getFullYear();
-        const month = (date.getMonth() + 1).toString().padStart(2, '0');
-        const day = date.getDate().toString().padStart(2, '0');
-        const stringDay = day.toString();
-        return `${year}-${month}-${stringDay}`;
-    };
-    const currentDate = getCurrentDate();
-    const [selectedDate, setSelectedDate] = useState(currentDate);
-    const handleDayPress = (date: DateData) => {
-        // @ts-ignore
-        setSelectedDate(date.dateString)
-        setDate(new Date(date.dateString));
-    };
 
     useEffect(() => {
         if (
@@ -69,8 +53,6 @@ const EditAccount:React.FC<EditAccountProps> = ({navigation, route }: any) =>{
             setIsButtonDisabled(true);
         }
     }, [first_name, last_name, dni]);
-
-    const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(true);
 
 
     useEffect(() => {
@@ -130,8 +112,6 @@ const EditAccount:React.FC<EditAccountProps> = ({navigation, route }: any) =>{
         }
     };
 
-
-
     const hideSexGenderDialog = () => setSexGenderDialog(false);
 
     const getSexGenderName = (value: string) => {
@@ -139,22 +119,16 @@ const EditAccount:React.FC<EditAccountProps> = ({navigation, route }: any) =>{
         return option ? option.sex_gender_name : '';
     };
 
-    const markedDatesString = {
-        [selectedDate]: {
-            selected: true,
-            selectedColor: '#073A29',
-        },
+    const handleDayPress = (event: DateTimePickerEvent, selectedDate?: Date) => {
+        if (event.type === "set" && selectedDate) {
+            setDate(date);
+            console.log(date)
+        }
     };
-
-    const customTheme = {
-        arrowColor: '#00A36C',
-        todayTextColor: '#00A36C',
-    }
 
     return(
         <ScrollableBg>
             <View style={styles.container} >
-                <View style={styles.window}>
                     <Icon name='person-circle-outline' iconStyle={{color: '#12230f', marginBottom: '10%'}} type='ionicon' size={90}/>
                     {/* aca iria una carga de archivo/imagen q tdv no sabemos hacer todo*/}
                         <Input
@@ -166,6 +140,7 @@ const EditAccount:React.FC<EditAccountProps> = ({navigation, route }: any) =>{
                             }}
                             errorStyle={{ color: 'red' }}
                             errorMessage={firstNameErrorMessage}
+                            labelStyle={styles.text}
                         />
                         <Input
                             label={t('surname')}
@@ -176,6 +151,7 @@ const EditAccount:React.FC<EditAccountProps> = ({navigation, route }: any) =>{
                             }}
                             errorStyle={{ color: 'red' }}
                             errorMessage={firstNameErrorMessage}
+                            labelStyle={styles.text}
                         />
                     <Input
                         label={t('id')}
@@ -186,36 +162,45 @@ const EditAccount:React.FC<EditAccountProps> = ({navigation, route }: any) =>{
                         }}
                         errorStyle={{ color: 'red' }}
                         errorMessage={dniErrorMessage}
+                        labelStyle={styles.text}
                     />
-                    <PaperText style={styles.text}>{t('sex')}</PaperText>
+                    <PaperText style={[styles.text, {marginLeft: "2%"}]}>{t('sex')}</PaperText>
                     <PaperButton mode="outlined" style={styles.pickerButton} textColor='#2E5829' labelStyle={{textAlign: 'left', display:'flex'}} onPress={()=> setSexGenderDialog(true)}>
                         {getSexGenderName(sexGender)}
                     </PaperButton>
-                    <PaperText style={styles.text}>{t('birthdate')}</PaperText>
-                    <View style={styles.calendarContainer}>
-                        <Calendar style={{borderRadius: 10}}
-                                  markingType={'custom'}
-                                  onDayPress={handleDayPress}
-                                  markedDates={markedDatesString}
-                                  theme={customTheme}
+                    <PaperText style={[styles.text, {marginLeft: "2%"}]}>{t('birthdate')}</PaperText>
+                    <View style={styles.datePicker}>
+                        <DateTimePicker  testID="dateTimePicker"
+                                         value={date ? date : new Date()}
+                                         mode="date"
+                                         display="default"
+                                         onChange={(event, selectedDate) => handleDayPress(event, selectedDate)}
                         />
                     </View>
-                    <Dialog style={styles.dialog} visible={sexGenderDialog} onDismiss={hideSexGenderDialog}>
-                        <Text style={styles.dialogTitle}>{t("selSex")}</Text>
-                        <Picker
-                            mode='dropdown'
-                            selectedValue={sexGender}
-                            onValueChange={(value: string) => setSexGender(value)}
-                            placeholder='sex'
-                            enabled={true}
-                            itemStyle={styles.pickerStyle}
-                        >
-                            {sexGenderOptions?.map((item) => (
-                                <Picker.Item key={item.value} label={item.sex_gender_name} value={item.value} />
-                            ))}
-                        </Picker>
-                    </Dialog>
-
+                    <Portal>
+                        <Dialog style={{ backgroundColor: '#E9F4E9FF' }}
+                                visible={sexGenderDialog}
+                                onDismiss={hideSexGenderDialog}>
+                            <Picker
+                                mode='dropdown'
+                                selectedValue={sexGender}
+                                onValueChange={(value: string) => setSexGender(value)}
+                                placeholder='sex'
+                                enabled={true}
+                                itemStyle={styles.pickerStyle}
+                            >
+                                {sexGenderOptions?.map((item) => (
+                                    <Picker.Item key={item.value} label={item.sex_gender_name} value={item.value} />
+                                ))}
+                            </Picker>
+                            <Dialog.Actions style={{ justifyContent: 'space-between' }}>
+                                <PaperButton textColor="#2E5829FF"
+                                             onPress={hideSexGenderDialog}>
+                                    {t("close")}
+                                </PaperButton>
+                            </Dialog.Actions>
+                        </Dialog>
+                    </Portal>
                     <Button
                         title={t('savec')}
                         buttonStyle={{
@@ -227,16 +212,13 @@ const EditAccount:React.FC<EditAccountProps> = ({navigation, route }: any) =>{
                         }}
                         containerStyle={{
                             width: 200,
-                            marginHorizontal: 50,
-                            marginVertical: 10,
-                            marginTop: 40,
-                            alignContent: 'center'
+                            marginVertical: 20,
+                            alignSelf: 'center',
                         }}
                         titleStyle={{ color: '#eef9ed' }}
                         disabled={isButtonDisabled}
                         onPress={handleUpdateUser}
                     />
-                </View>
             </View>
         </ScrollableBg>
     )
@@ -250,11 +232,9 @@ const styles = StyleSheet.create({
         height: '100%',
         alignContent: 'center'
     },
-    window: {
-        alignItems: 'center',
-        marginTop: '20%',
-        marginLeft: '5%',
-        marginRight: '5%'
+    datePicker: {
+        alignSelf: 'center',
+        marginTop: "5%",
     },
     pickerButton: {
         borderRadius: 6,
@@ -264,30 +244,15 @@ const styles = StyleSheet.create({
     dialog: {
         backgroundColor: "#e9f4e9"
     },
-    dialogTitle: {
-        fontFamily: 'Roboto-Thin',
-        fontSize: 25,
-        textAlign: 'center',
-        fontWeight: 'bold',
-        margin: "5%",
-        marginLeft: '15%',
-        color: "#2E5829FF",
-        width: "70%"
-    },
     pickerStyle: {
         marginBottom: 20,
     },
     text: {
         fontFamily: 'Roboto-Thin',
-        fontSize: 14,
+        fontSize: 16,
         marginTop: "5%",
-        marginLeft: '4%',
         marginBottom: '2%',
-        color: "#2E5829FF",
+        color: "#808080",
         width: "60%"
-    },
-    calendarContainer: {
-        margin: '5%',
-        backgroundColor: "#E9F4E9FF"
     },
 })
