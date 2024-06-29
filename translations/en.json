@@ -100,6 +100,10 @@
   "RUsureM"  : "Are you sure you want to delete medication?",
   "text26" : "I don't have an end date for this medication:",
   "share_user" : "Share user",
-  "make_independent" : "Make user independent"
+  "make_independent" : "Make user independent",
+  "ok" : "Ok",
+  "select_user" : "Select a user",
+  "select_doc" : "Select a doctor",
+  "select_specialty" : "Select a specialty"
 }
 

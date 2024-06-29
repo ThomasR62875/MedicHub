@@ -100,11 +100,7 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
         const appointment = { date: appointmentDate, description, user_name: '', doctor, user_id, id: '' };
         const result = await addAppointment(appointment);
         if (result.success) {
-            Alert.alert(
-                t('text8'),
-                '',
-                [{ text: 'Ok', onPress: () => navigation.navigate('Appointments', { session }) }]
-            );
+            navigation.navigate('AlertPublicity', { session, msg: 'text8', screen: 'Appointments' });
         } else {
             Alert.alert('Error', result.message || 'An unknown error occurred');
         }
@@ -138,12 +134,12 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
 
     const getDoctorName = (id: string) => {
         const selectedDoctor = doctors?.find(doc => doc.id === id);
-        return selectedDoctor ? selectedDoctor.name : 'Seleccione un médico';
+        return selectedDoctor ? selectedDoctor.name : t('select_doc');
     };
 
     const getUserName = (id: string) => {
         const selectedUser = all_users?.find(user => user.id === id);
-        return selectedUser ? selectedUser.first_name : 'Seleccione un usuario';
+        return selectedUser ? selectedUser.first_name : t('select_user');
     };
 
 

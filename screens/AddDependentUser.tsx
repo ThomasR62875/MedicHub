@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Alert, StyleSheet, View,} from 'react-native';
+import {Alert, Keyboard, StyleSheet, TouchableWithoutFeedback, View,} from 'react-native';
 import {addDependentUser} from "../lib/supabase";
 import {Button, Icon, Input, Text} from "react-native-elements";
 import {Image} from 'react-native';
@@ -64,15 +64,14 @@ const AddDependentUser:React.FC<AddDependentUserProps> = ({navigation, route} : 
 
         const result = await addDependentUser(dep_user);
         if (result.success) {
-            Alert.alert(t('text9'), '',
-                [{ text: 'Ok', onPress: () => navigation.navigate('Usuarios', { session: session }) }]
-            );
+            navigation.navigate('AlertPublicity', { session, msg: 'text9', screen: 'Usuarios' });
         } else {
             Alert.alert('Error', result.message || 'An unknown error occurred');
         }
     };
 
     return (
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
         <View style={styles.container}>
             <View style={styles.window}>
             <Text style={styles.screenTitle}>{t('newu')}</Text>
@@ -146,7 +145,9 @@ const AddDependentUser:React.FC<AddDependentUserProps> = ({navigation, route} : 
                 />
             </View>
         </View>
-      );
+        </TouchableWithoutFeedback>
+
+    );
 }
 
 export default AddDependentUser;

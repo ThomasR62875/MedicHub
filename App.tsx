@@ -25,6 +25,7 @@ import DependentUsers from "./screens/DependentUsers";
 import Medications from "./screens/Medication";
 import AddMedication from './screens/AddMedication'
 import Calender from './screens/Calender';
+import AlertPublicity from "./screens/AlertPublicity";
 import {NavigationContainer, RouteProp} from './node_modules/@react-navigation/native';
 import {createNativeStackNavigator} from "@react-navigation/native-stack";
 import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
@@ -63,6 +64,7 @@ export type RootStackParamList = {
   EditDoctor: {session : Session | null};
   SingleDependentUser: {session : Session | null};
   EditDependentUser: {session : Session | null};
+  AlertPublicity: {session : Session | null, msg: string, screen: string};
 };
 
 import { AppRegistry } from 'react-native';
@@ -339,6 +341,16 @@ const App = () => {
                                   component={HomeTabs}
                                   initialParams={{session: session}}
                                   options={{ headerShown: false }}/>
+                    <Stack.Screen name="AlertPublicity"
+                                component={AlertPublicity}
+                                initialParams={{session: session, msg: 'successful addition', screen: 'Home'}}
+                                options={{
+                                    title: '',
+                                    headerStyle: {
+                                        backgroundColor: '#2E5829',
+                                    },
+                                    headerTintColor: '#2E5829',
+                                }}/>
                     <Stack.Screen name="AddAppointment"
                                   component={AddAppointment}
                                   initialParams={{session: session}}
@@ -348,7 +360,6 @@ const App = () => {
                                       backgroundColor: '#2E5829',
                                     },
                                     headerTintColor: '#ABD2A8',
-                                    headerBackTitle: 'Volver',
                                   }}/>
                       <Stack.Screen name="SingleAppointment"
                                     component={SingleAppointment}

@@ -100,5 +100,9 @@
   "RUsureM"  : "¿Está seguro de que desea eliminar el medicamento?",
   "text26" : "No tengo una fecha de finalización:",
   "share_user" : "Compartir usuario",
-  "make_independent" : "Generar como usuario independiente"
+  "make_independent" : "Generar como usuario independiente",
+  "ok" : "Ok",
+  "select_user" : "Seleccione un usuario",
+  "select_doc" : "Seleccione un médico",
+  "select_specialty" : "Seleccione una especialidad"
 }
