@@ -45,7 +45,8 @@ const SingleAppointment: React.FC<SingleAppointmentProps> = ({ navigation, route
         console.log(data);
         if (data) {
             setUserData(data);
-            await recommendQuestionsForAppointment(data);
+            const response = await recommendQuestionsForAppointment(data);
+            console.log(response);
         } else {
             console.error('Failed to get user data.');
         }
