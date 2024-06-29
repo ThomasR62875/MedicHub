@@ -133,6 +133,7 @@ const LogIn: React.FC<LogInProps> = ({navigation, route})=> {
                         marginHorizontal: 50,
                         marginVertical: 10,
                         marginTop: 40,
+                        alignSelf: 'center'
                     }}
                     titleStyle={{ color: '#eef9ed' }}
                     onPress={() => signInWithEmail()}
