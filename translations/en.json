@@ -106,6 +106,9 @@
   "other": "Other",
   "birthdate": "Birthdate",
   "dateTime": "Date and Time",
-  "selSex":"Select sex"
+  "selSex":"Select sex",
+  "questionPromptP1": "  Given my medical information and the information about past appointments with this doctor, which questions do you recommend i should ask my doctor? (the answer should have maximum 150 words):\n",
+  "lastAppointmentText": "The appointment with {{specialty}} (last appointment on {{date}} and the observations were: {{observations}})",
+  "demographicInfo": "Some information about me: Sex: {{sex}}, Age: {{age}}"
 }
 

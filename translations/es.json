@@ -105,5 +105,8 @@
   "non-binary": "No-binario",
   "other": "Otro",
   "birthdate": "Fecha de nacimiento",
-  "selSex":"Seleccionar sexo"
+  "selSex":"Seleccionar sexo",
+  "questionPromptP1": "Dada mi información médica y la información sobre citas anteriores con este doctor, ¿qué preguntas me recomiendan que le haga a mi doctor? (la respuesta debe tener un máximo de 150 palabras):\n",
+  "lastAppointmentText": "La cita con {{specialty}} (última cita el {{date}} y las observaciones fueron: {{observations}})",
+  "demographicInfo": "Algo de información sobre mí: Sexo: {{sex}}, Edad: {{age}}"
 }

@@ -1,6 +1,7 @@
 import OpenAI from 'openai';
 import {UserData} from "./types";
 import getEnvVars, {getOpenAIVars} from "../environment";
+import {useTranslation} from "react-i18next";
 const { OPENAI_API_KEY, OPENAI_API_URL } = getOpenAIVars();
 
 const openai = new OpenAI({
@@ -8,17 +9,25 @@ const openai = new OpenAI({
 });
 
 export const recommendQuestionsForAppointment = async (userData: UserData): Promise<string | null> => {
+    const {t} = useTranslation();
     try {
         const { lastAppointment, medicalInfo } = userData;
-        const { medicalConditions, sex, age } = medicalInfo;
+        const { sex, age } = medicalInfo;
 
-        const prompt = `Given my medical information and the information about past appointments with this doctor, which questions do you recommend i should ask my doctor? (the answer should have maximum 150 words):\n`;
+        const prompt = t('questionPromptP1');
+        const lastAppointmentText = t('lastAppointmentText', {
+            specialty: lastAppointment.specialty,
+            date: lastAppointment.date,
+            observations: lastAppointment.observations
+        });
+        const demographicInfo = t('demographicInfo', {
+            sex: sex,
+            age: age?? null
+        });
 
-        const lastAppointmentText = `The appointment with ${lastAppointment.specialty} (last appointment on ${lastAppointment.date} and the observations were:  ${lastAppointment.observations})`;
-        const demographicInfo = `Some information about me: Sex: ${sex}, Age: ${age}`;
         console.log(`${prompt}${lastAppointmentText}\n${demographicInfo}`);
         const completion = await openai.chat.completions.create({
-            model: 'gpt-3.5-turbo-16k',
+            model: 'gpt-3.5-turbo',
             messages: [
                 { role: 'user', content: `${prompt}${lastAppointmentText}\n${demographicInfo}` },
             ],
