@@ -22,7 +22,7 @@ const SingleAppointment: React.FC<SingleAppointmentProps> = ({ navigation, route
     const formattedTime = `${(originalDate.getHours() + 3) % 24}:${originalDate.getMinutes().toString().padStart(2, '0')}`;
     const {t} = useTranslation();
     const [doctor, setDoctor] = useState<Doctor | undefined>()
-    const [userData, setUserData] = useState<UserData | null>(null);
+    const [recommendation, setRecommendation] = useState<string>('');
 
     useEffect(() => {
         const fetchDoctor = async () => {
@@ -44,8 +44,18 @@ const SingleAppointment: React.FC<SingleAppointmentProps> = ({ navigation, route
         const data = await getUserData(route.params.appointment);
         console.log(data);
         if (data) {
-            setUserData(data);
-            const response = await recommendQuestionsForAppointment(data);
+            const prompt = t('questionPromptP1');
+            const lastAppointmentText = t('lastAppointmentText', {
+                specialty: data.lastAppointment.specialty,
+                date: data.lastAppointment.date,
+                observations: data.lastAppointment.observations
+            });
+            const demographicInfo = t('demographicInfo', {
+                sex: data.medicalInfo.sex,
+                age: data.medicalInfo.age ?? null
+            });
+            const response = await recommendQuestionsForAppointment(prompt, lastAppointmentText, demographicInfo);
+            setRecommendation(response ?? '');
             console.log(response);
         } else {
             console.error('Failed to get user data.');
