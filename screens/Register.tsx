@@ -10,6 +10,7 @@ import {SexGenderOption, User} from '../lib/types';
 import {Button as PaperButton, Dialog, Text as PaperText} from "react-native-paper";
 import {Calendar, DateData} from "react-native-calendars";
 import {Picker} from "@react-native-picker/picker";
+import DateTimePicker, {DateTimePickerEvent} from "@react-native-community/datetimepicker";
 
 
 const Register: React.FC = ({ navigation }: any) => {
@@ -38,23 +39,6 @@ const Register: React.FC = ({ navigation }: any) => {
         { sex_gender_name: t('non-binary'), value: 'non-binary' },
         { sex_gender_name: t('other'), value: 'other' },
     ];
-
-
-    const getCurrentDate = () => {
-        const date = new Date();
-        const year = date.getFullYear();
-        const month = (date.getMonth() + 1).toString().padStart(2, '0');
-        const day = date.getDate().toString().padStart(2, '0');
-        const stringDay = day.toString();
-        return `${year}-${month}-${stringDay}`;
-    };
-    const currentDate = getCurrentDate();
-    const [selectedDate, setSelectedDate] = useState(currentDate);
-    const handleDayPress = (date: DateData) => {
-        // @ts-ignore
-        setSelectedDate(date.dateString)
-        setDate(new Date(date.dateString));
-    };
 
     useEffect(() => {
         if (
@@ -131,17 +115,10 @@ const Register: React.FC = ({ navigation }: any) => {
         return option ? option.sex_gender_name : '';
     };
 
-    const markedDatesString = {
-        [selectedDate]: {
-            selected: true,
-            selectedColor: '#073A29',
-        },
+    const handleDateChange = (event: any, selectedDate?: Date) => {
+        const currentDate = selectedDate || date;
+        setDate(currentDate);
     };
-
-    const customTheme = {
-        arrowColor: '#00A36C',
-        todayTextColor: '#00A36C',
-    }
 
     return (
         <ScrollableBg>
@@ -202,12 +179,12 @@ const Register: React.FC = ({ navigation }: any) => {
                 {getSexGenderName(sexGender)}
             </PaperButton>
             <PaperText style={styles.text}>{t('birthdate')}</PaperText>
-            <View style={styles.calendarContainer}>
-                <Calendar style={{borderRadius: 10}}
-                          markingType={'custom'}
-                          onDayPress={handleDayPress}
-                          markedDates={markedDatesString}
-                          theme={customTheme}
+            <View style={styles.datePicker}>
+                <DateTimePicker testID="dateTimePicker"
+                                value={date || undefined}
+                                mode="date"
+                                display="default"
+                                onChange={handleDateChange}
                 />
             </View>
             <Dialog style={styles.dialog} visible={sexGenderDialog} onDismiss={hideSexGenderDialog}>
@@ -303,6 +280,10 @@ const styles = StyleSheet.create({
     buttonSignInContainer: {
         width: '50%',
         justifyContent: 'center',
+    },
+    datePicker: {
+        alignSelf: 'center',
+        marginTop: "5%",
     },
     buttonSignIn: {
         backgroundColor: '#B5DCCA',

@@ -109,6 +109,8 @@
   "selSex":"Select sex",
   "questionPromptP1": "  Given my medical information and the information about past appointments with this doctor, which questions do you recommend i should ask my doctor? (the answer should have maximum 150 words):\n",
   "lastAppointmentText": "The appointment with {{specialty}} (last appointment on {{date}} and the observations were: {{observations}})",
-  "demographicInfo": "Some information about me: Sex: {{sex}}, Age: {{age}}"
+  "demographicInfo": "Some information about me: Sex: {{sex}}, Age: {{age}}",
+  "closeSes": "Are you sure you want to close your session ?",
+  "close": "Close"
 }
 

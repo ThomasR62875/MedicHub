@@ -100,20 +100,16 @@ const Account: React.FC = ({ navigation, route } : any) => {
                     <View style={{marginTop: 5}}/>
                         <Text style={styles.title}>{t('id')}:</Text>
                         <Text style={styles.text2}>{dni}</Text>
-
                     <View style={{marginTop: 5}}/>
                         <Text style={styles.title}>{t('birthdate')}:</Text>
                         <Text style={styles.text2}>{date}</Text>
-
                     <View style={{marginTop: 5}}/>
-                    <Text style={styles.title}>{t('sex')}:</Text>
-                    <Text style={styles.text2}>{getSexGenderName(sexGender)}</Text>
-
-
-                    <View style={{marginTop: 5, alignSelf: 'center'}}>
+                        <Text style={styles.title}>{t('sex')}:</Text>
+                        <Text style={styles.text2}>{getSexGenderName(sexGender)}</Text>
+                </View>
+                    <View style={{marginTop: 5, alignItems: 'center', marginBottom: 5}}>
                         <LanguageButton/>
                     </View>
-                </View>
                 <View style={{alignItems: 'center', width: 'auto', alignSelf: 'center'}}>
                     <Button
                         title={t('mdocs')}
@@ -225,7 +221,7 @@ const Account: React.FC = ({ navigation, route } : any) => {
                     onDismiss={hideDialog}>
                     <Dialog.Content>
                         <Text variant="bodyMedium" style={[{textAlign: 'center'}, {fontSize: 18}]}>
-                            ¿Está seguro de que desea cerrar sesión?
+                            {t("closeSes")}
                         </Text>
                     </Dialog.Content>
                     <Dialog.Actions style={{ justifyContent: 'space-between' }}>
