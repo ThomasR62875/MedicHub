@@ -2,13 +2,11 @@ import React, { useState, useEffect } from 'react'
 import { getDependentUsers} from '../lib/supabase'
 import {StyleSheet, View, ScrollView, Text, Dimensions} from 'react-native'
 import {Button} from "react-native-elements";
-import {createNativeStackNavigator} from "@react-navigation/native-stack";
 import {useTranslation} from "react-i18next";
 import {cardStyle} from "../styles/global"
 import DependentUserButton from "../components/DependentUsertButton";
 import {DependentUser} from "../lib/types";
 
-const Stack = createNativeStackNavigator();
 
 // UNA IDEA DE DEPENDENT USERS SERIA PODER VER CADA USUARIO Y EDITARLO DESDE AHI (por ej eliminarlo, lo de migrar info etc)
 // TAMBIEN QUE CUANDO ABRIMOS UN USUARIO DEPENDEDIENTE, NOS DESPIEGLUE SU INFO (doctores, appointments, etc) todo

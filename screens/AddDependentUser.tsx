@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Alert, Platform, StyleSheet, View,} from 'react-native';
+import {Alert, StyleSheet, View,} from 'react-native';
 import {addDependentUser} from "../lib/supabase";
 import {Button, Icon, Input, Text} from "react-native-elements";
 import {Image} from 'react-native';
@@ -10,7 +10,6 @@ import DateTimePicker, {DateTimePickerEvent} from "@react-native-community/datet
 import {Button as PaperButton, Dialog, Portal, Text as PaperText} from "react-native-paper";
 import {Picker} from "@react-native-picker/picker";
 import {SexGenderOption} from "../lib/types";
-import {Calendar, DateData} from "react-native-calendars";
 import ScrollableBg from "../components/ScrollableBg";
 
 type AddDependentUserProps = NativeStackScreenProps<RootStackParamList, 'AddDependentUser'>
@@ -36,24 +35,12 @@ const AddDependentUser:React.FC<AddDependentUserProps> = ({navigation, route} : 
         { sex_gender_name: t('other'), value: 'other' },
     ];
 
-
-    const getCurrentDate = () => {
-        const date = new Date();
-        const year = date.getFullYear();
-        const month = (date.getMonth() + 1).toString().padStart(2, '0');
-        const day = date.getDate().toString().padStart(2, '0');
-        const stringDay = day.toString();
-        return `${year}-${month}-${stringDay}`;
-    };
-
     const handleDayPress = (event: DateTimePickerEvent, selectedDate?: Date) => {
         if (event.type === "set" && selectedDate) {
             const birthdateWithTime = new Date(selectedDate);
-            birthdateWithTime.setUTCHours(1, 0, 0, 0);
             setDate(birthdateWithTime);
         }
     };
-
 
     useEffect(() => {
         if (

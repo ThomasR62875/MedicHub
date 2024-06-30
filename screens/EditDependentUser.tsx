@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import {supabase, updateDependentUser} from '../lib/supabase'
-import {View, StyleSheet, Alert, TouchableWithoutFeedback, Keyboard, Platform} from 'react-native'
-import {Button, Icon, Input, Text} from 'react-native-elements'
+import {View, StyleSheet, Alert, TouchableWithoutFeedback, Keyboard} from 'react-native'
+import {Button, Input, Text} from 'react-native-elements'
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
 import {useTranslation} from "react-i18next";
-import {Button as PaperButton, Dialog, Text as PaperText} from "react-native-paper";
+import {Button as PaperButton, Dialog, Portal, Text as PaperText} from "react-native-paper";
 import {Picker} from "@react-native-picker/picker";
 import {SexGenderOption} from "../lib/types";
-import {Calendar, DateData} from "react-native-calendars";
 import ScrollableBg from '../components/ScrollableBg';
+import DateTimePicker from "@react-native-community/datetimepicker";
 
 type EditDependentUserProps = NativeStackScreenProps<RootStackParamList, 'EditDependentUser'>;
 
@@ -23,11 +23,9 @@ const EditDependentUser:React.FC<EditDependentUserProps> = ({navigation, route }
     const [sexGender,setSexGender]= useState('');
     const [sexGenderDialog, setSexGenderDialog] = useState(false);
     const {t} = useTranslation();
-
     const [firstNameErrorMessage, setFirstNameErrorMessage] = useState('')
     const [lastNameErrorMessage, setLastNameErrorMessage] = useState('')
     const [dniErrorMessage, setDniErrorMessage] = useState('')
-
     const sexGenderOptions: SexGenderOption[] = [
         { sex_gender_name: t('male'), value: 'male' },
         { sex_gender_name: t('female'), value: 'female' },
@@ -35,11 +33,10 @@ const EditDependentUser:React.FC<EditDependentUserProps> = ({navigation, route }
         { sex_gender_name: t('other'), value: 'other' },
     ];
 
-    const [selectedDate, setSelectedDate] = useState(route.params.du.birthdate.dateString);
-    const handleDayPress = (date: DateData) => {
-        // @ts-ignore
-        setSelectedDate(date.dateString)
-        setDate(new Date(date.dateString));
+    const handleDateChange = (event: any, selectedDate?: Date) => {
+        const currentDate = selectedDate || date;
+
+        setDate(currentDate);
     };
 
     useEffect(() => {
@@ -85,8 +82,10 @@ const EditDependentUser:React.FC<EditDependentUserProps> = ({navigation, route }
         setFirstName(route.params.du.first_name);
         setLastName(route.params.du.last_name);
         setDni(route.params.du.dni);
-        setSelectedDate(route.params.du.birthdate);
-        setDate(route.params.du.birthdate);
+        const birthdate = new Date(route.params.du.birthdate);
+        console.log("recibe:");
+        console.log(birthdate)
+        setDate(birthdate);
         setSexGender(route.params.du.sex);
 
     }
@@ -113,7 +112,6 @@ const EditDependentUser:React.FC<EditDependentUserProps> = ({navigation, route }
         }
     };
 
-
     const hideSexGenderDialog = () => setSexGenderDialog(false);
 
     const getSexGenderName = (value: string) => {
@@ -122,18 +120,6 @@ const EditDependentUser:React.FC<EditDependentUserProps> = ({navigation, route }
         const option = sexGenderOptions.find(option => option.value === value);
         return option ? option.sex_gender_name : '';
     };
-
-    const markedDatesString = {
-        [selectedDate]: {
-            selected: true,
-            selectedColor: '#073A29',
-        },
-    };
-
-    const customTheme = {
-        arrowColor: '#00A36C',
-        todayTextColor: '#00A36C',
-    }
 
     return(
         <ScrollableBg>
@@ -175,29 +161,37 @@ const EditDependentUser:React.FC<EditDependentUserProps> = ({navigation, route }
                             {getSexGenderName(sexGender)}
                         </PaperButton>
                         <PaperText style={styles.text}>{t('birthdate')}</PaperText>
-                        <View style={styles.calendarContainer}>
-                            <Calendar style={{borderRadius: 10}}
-                                      markingType={'custom'}
-                                      onDayPress={handleDayPress}
-                                      markedDates={markedDatesString}
-                                      theme={customTheme}
+                        <View style={styles.datePicker}>
+                            <DateTimePicker testID="dateTimePicker"
+                                            value= {date}
+                                            mode="date"
+                                            display="default"
+                                            onChange={(event, selectedDate) => handleDateChange(event, selectedDate)}
                             />
                         </View>
-                        <Dialog style={styles.dialog} visible={sexGenderDialog} onDismiss={hideSexGenderDialog}>
-                            <Text style={styles.dialogTitle}>{t("selSex")}</Text>
-                            <Picker
-                                mode='dropdown'
-                                selectedValue={sexGender}
-                                onValueChange={(value: string) => setSexGender(value)}
-                                placeholder='sex'
-                                enabled={true}
-                                itemStyle={styles.pickerStyle}
-                            >
-                                {sexGenderOptions?.map((item) => (
-                                    <Picker.Item key={item.value} label={item.sex_gender_name} value={item.value} />
-                                ))}
-                            </Picker>
-                        </Dialog>
+                        <Portal>
+                            <Dialog style={styles.dialog} visible={sexGenderDialog} onDismiss={hideSexGenderDialog}>
+                                <Text style={styles.dialogTitle}>{t("selSex")}</Text>
+                                <Picker
+                                    mode='dropdown'
+                                    selectedValue={sexGender}
+                                    onValueChange={(value: string) => setSexGender(value)}
+                                    placeholder='sex'
+                                    enabled={true}
+                                    itemStyle={styles.pickerStyle}
+                                >
+                                    {sexGenderOptions?.map((item) => (
+                                        <Picker.Item key={item.value} label={item.sex_gender_name} value={item.value} />
+                                    ))}
+                                </Picker>
+                                <Dialog.Actions style={{ justifyContent: 'space-between' }}>
+                                    <PaperButton textColor="#2E5829FF"
+                                                 onPress={hideSexGenderDialog}>
+                                        {t("close")}
+                                    </PaperButton>
+                                </Dialog.Actions>
+                            </Dialog>
+                        </Portal>
                         <Button
                             title={t('savec')}
                             buttonStyle={{
@@ -238,6 +232,10 @@ const styles = StyleSheet.create({
         marginTop: '20%',
         marginLeft: '5%',
         marginRight: '5%'
+    },
+    datePicker: {
+        alignSelf: 'center',
+        marginTop: "5%",
     },
     datePickerContainer: {
         flexDirection: 'row',
