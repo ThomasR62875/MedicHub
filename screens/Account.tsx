@@ -20,7 +20,6 @@ const Account: React.FC = ({ navigation, route } : any) => {
     const [sexGenderDialog, setSexGenderDialog] = useState(false);
     const [visible, setVisible] = React.useState(false);
     const {t} = useTranslation();
-
     const sexGenderOptions: SexGenderOption[] = [
         { sex_gender_name: t('male'), value: 'male' },
         { sex_gender_name: t('female'), value: 'female' },

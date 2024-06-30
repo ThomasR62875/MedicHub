@@ -1,16 +1,14 @@
 import React, { useState, useEffect } from 'react'
-import {getDoctor, getUserSession, supabase, updateDependentUser} from '../lib/supabase'
+import {getUserSession, supabase, updateDependentUser} from '../lib/supabase'
 import {View, Alert, StyleSheet} from 'react-native'
 import {Button, Icon, Input, Text} from 'react-native-elements'
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
 import {useTranslation} from "react-i18next";
 import {Button as PaperButton, Dialog, Portal, Text as PaperText} from "react-native-paper";
-import {Calendar, DateData} from "react-native-calendars";
 import {DependentUser, SexGenderOption, User} from "../lib/types";
 import {Picker} from "@react-native-picker/picker";
 import ScrollableBg from '../components/ScrollableBg';
-import {navigate} from "expo-router/build/global-state/routing";
 import DateTimePicker, {DateTimePickerEvent} from "@react-native-community/datetimepicker";
 
 
@@ -65,10 +63,9 @@ const EditAccount:React.FC<EditAccountProps> = ({navigation, route }: any) =>{
                 setDni(userData.dni);
 
                 const birthdateWithTime = new Date(userData.birthdate);
-                birthdateWithTime.setUTCHours(1, 0, 0, 0);
                 setDate(birthdateWithTime);
-
                 setSexGender(userData.sex);
+                console.log(birthdateWithTime)
             };
             fetchUser();
         }
@@ -76,8 +73,6 @@ const EditAccount:React.FC<EditAccountProps> = ({navigation, route }: any) =>{
 
 
     const handleUpdateUser = async () => {
-        console.log(sexGender)
-        console.log(date)
         const us  = {id: id , first_name: first_name, last_name: last_name, dni: dni, birthdate: date, sex: sexGender}
         const result = await updateDependentUser(us);
         if (result.success) {
@@ -125,9 +120,11 @@ const EditAccount:React.FC<EditAccountProps> = ({navigation, route }: any) =>{
 
     const handleDayPress = (event: DateTimePickerEvent, selectedDate?: Date) => {
         if (event.type === "set" && selectedDate) {
-            const birthdateWithTime = new Date(selectedDate);
-            birthdateWithTime.setUTCHours(1, 0, 0, 0);
+            let birthdateWithTime = new Date(selectedDate);
+            birthdateWithTime.setHours(0, 0, 1, 0);
+            console.log(birthdateWithTime)
             setDate(birthdateWithTime);
+            console.log(birthdateWithTime);
         }
     };
 
@@ -176,7 +173,7 @@ const EditAccount:React.FC<EditAccountProps> = ({navigation, route }: any) =>{
                     <PaperText style={[styles.text, {marginLeft: "2%"}]}>{t('birthdate')}</PaperText>
                     <View style={styles.datePicker}>
                         <DateTimePicker  testID="dateTimePicker"
-                                         value={date ? date : new Date()}
+                                         value={new Date(date.getTime() + (date.getTimezoneOffset() * 60000))}
                                          mode="date"
                                          display="default"
                                          onChange={(event, selectedDate) => handleDayPress(event, selectedDate)}

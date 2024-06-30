@@ -6,12 +6,10 @@ import {Image} from 'react-native';
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
 import {useTranslation} from "react-i18next";
-import DateTimePicker from "@react-native-community/datetimepicker";
-import {Button as PaperButton, Dialog, Text as PaperText} from "react-native-paper";
+import DateTimePicker, {DateTimePickerEvent} from "@react-native-community/datetimepicker";
+import {Button as PaperButton, Dialog, Portal, Text as PaperText} from "react-native-paper";
 import {Picker} from "@react-native-picker/picker";
-import {Specialty} from "./AddDoctor";
 import {SexGenderOption} from "../lib/types";
-import {getDate} from "date-fns";
 import {Calendar, DateData} from "react-native-calendars";
 import ScrollableBg from "../components/ScrollableBg";
 
@@ -47,12 +45,13 @@ const AddDependentUser:React.FC<AddDependentUserProps> = ({navigation, route} : 
         const stringDay = day.toString();
         return `${year}-${month}-${stringDay}`;
     };
-    const currentDate = getCurrentDate();
-    const [selectedDate, setSelectedDate] = useState(currentDate);
-    const handleDayPress = (date: DateData) => {
-        // @ts-ignore
-        setSelectedDate(date.dateString)
-        setDate(new Date(date.dateString));
+
+    const handleDayPress = (event: DateTimePickerEvent, selectedDate?: Date) => {
+        if (event.type === "set" && selectedDate) {
+            const birthdateWithTime = new Date(selectedDate);
+            birthdateWithTime.setUTCHours(1, 0, 0, 0);
+            setDate(birthdateWithTime);
+        }
     };
 
 
@@ -117,23 +116,9 @@ const AddDependentUser:React.FC<AddDependentUserProps> = ({navigation, route} : 
         return option ? option.sex_gender_name : '';
     };
 
-    const markedDatesString = {
-        [selectedDate]: {
-            selected: true,
-            selectedColor: '#073A29',
-        },
-    };
-
-    const customTheme = {
-        arrowColor: '#00A36C',
-        todayTextColor: '#00A36C',
-    }
-
-
     return (
         <ScrollableBg>
             <View style={styles.container}>
-                <View style={styles.window}>
                 <Text style={styles.screenTitle}>{t('newu')}</Text>
                     <Input
                         label={t('name')}
@@ -188,29 +173,37 @@ const AddDependentUser:React.FC<AddDependentUserProps> = ({navigation, route} : 
                         {getSexGenderName(sexGender)}
                     </PaperButton>
                     <PaperText style={styles.text}>{t('birthdate')}</PaperText>
-                    <View style={styles.calendarContainer}>
-                        <Calendar style={{borderRadius: 10}}
-                                  markingType={'custom'}
-                                  onDayPress={handleDayPress}
-                                  markedDates={markedDatesString}
-                                  theme={customTheme}
+                    <View style={styles.datePicker}>
+                        <DateTimePicker  testID="dateTimePicker"
+                                         value={date ? date : new Date()}
+                                         mode="date"
+                                         display="default"
+                                         onChange={(event, selectedDate) => handleDayPress(event, selectedDate)}
                         />
                     </View>
-                    <Dialog style={styles.dialog} visible={sexGenderDialog} onDismiss={hideSexGenderDialog}>
-                        <Text style={styles.dialogTitle}>{t("selSex")}</Text>
-                        <Picker
-                            mode='dropdown'
-                            selectedValue={sexGender}
-                            onValueChange={(value: string) => setSexGender(value)}
-                            placeholder='sex'
-                            enabled={true}
-                            itemStyle={styles.pickerStyle}
-                        >
-                            {sexGenderOptions?.map((item) => (
-                                <Picker.Item key={item.value} label={item.sex_gender_name} value={item.value} />
-                            ))}
-                        </Picker>
-                    </Dialog>
+                    <Portal>
+                        <Dialog style={styles.dialog} visible={sexGenderDialog} onDismiss={hideSexGenderDialog}>
+                            <Text style={styles.dialogTitle}>{t("selSex")}</Text>
+                            <Picker
+                                mode='dropdown'
+                                selectedValue={sexGender}
+                                onValueChange={(value: string) => setSexGender(value)}
+                                placeholder='sex'
+                                enabled={true}
+                                itemStyle={styles.pickerStyle}
+                            >
+                                {sexGenderOptions?.map((item) => (
+                                    <Picker.Item key={item.value} label={item.sex_gender_name} value={item.value} />
+                                ))}
+                            </Picker>
+                            <Dialog.Actions style={{ justifyContent: 'space-between' }}>
+                                <PaperButton textColor="#2E5829FF"
+                                             onPress={hideSexGenderDialog}>
+                                    {t("close")}
+                                </PaperButton>
+                            </Dialog.Actions>
+                        </Dialog>
+                    </Portal>
                     <Button
                         title={t('add')}
                         disabled={isButtonDisabled}
@@ -232,7 +225,6 @@ const AddDependentUser:React.FC<AddDependentUserProps> = ({navigation, route} : 
                         onPress={handleAddDependentUser}
                     />
                 </View>
-            </View>
         </ScrollableBg>
       );
 }
@@ -247,6 +239,10 @@ const styles = StyleSheet.create({
     icon: {
         width: 24,
         height: 24,
+    },
+    datePicker: {
+        alignSelf: 'center',
+        marginTop: "5%",
     },
     screenTitle: {
         fontFamily: 'Roboto-Thin',
