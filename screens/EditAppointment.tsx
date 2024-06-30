@@ -4,12 +4,13 @@ import {SafeAreaView, StyleSheet, View, Keyboard, TouchableWithoutFeedback, Scro
 import {Button, Input} from 'react-native-elements';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../App';
-import { DependentUser } from './DependentUsers';
+import {DependentUser} from "../lib/types";
 import { Doctor } from './Doctors';
 import {useTranslation} from "react-i18next";
 import {Button as PaperButton, Dialog, HelperText, Portal, Text as PaperText, TextInput} from "react-native-paper";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import {Picker} from "@react-native-picker/picker";
+
 
 type EditAppointmentProps = NativeStackScreenProps<RootStackParamList, 'EditAppointment'>;
 
