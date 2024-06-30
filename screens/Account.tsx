@@ -15,7 +15,7 @@ const Account: React.FC = ({ navigation, route } : any) => {
     const [first_name, setFirstName] = useState('');
     const [last_name, setLastName] = useState('');
     const [dni, setDni] = useState(0);
-    const [date, setDate] = useState('');
+    const [date, setDate] = useState<Date>();
     const [sexGender,setSexGender]= useState('');
     const [sexGenderDialog, setSexGenderDialog] = useState(false);
     const [visible, setVisible] = React.useState(false);
@@ -35,14 +35,15 @@ const Account: React.FC = ({ navigation, route } : any) => {
                 const data : DependentUser= await getUser(await getUserId())
                 setFirstName(data.first_name)
                 setLastName(data.last_name)
-                if(data.birthdate){
-                    setDate(data.birthdate.toDateString)
+                if (data.birthdate) {
+                    const birthdate = new Date(data.birthdate);
+                    setDate(birthdate);
                 } else {
-                    setDate('')
+                    setDate(undefined);
                 }
                 setSexGender(data.sex)
                 const dniString = String(data.dni);
-                if (dniString && dniString.length === 8) {
+                if (dniString && dniString.length >= 8) {
                     const dniNumber = parseInt(dniString.slice(0, 8), 10);
                     setDni(dniNumber);
                 } else {
@@ -102,7 +103,7 @@ const Account: React.FC = ({ navigation, route } : any) => {
                         <Text style={styles.text2}>{dni}</Text>
                     <View style={{marginTop: 5}}/>
                         <Text style={styles.title}>{t('birthdate')}:</Text>
-                        <Text style={styles.text2}>{date}</Text>
+                        <Text style={styles.text2}>{date ? date.toISOString().split('T')[0] : ' '}</Text>
                     <View style={{marginTop: 5}}/>
                         <Text style={styles.title}>{t('sex')}:</Text>
                         <Text style={styles.text2}>{getSexGenderName(sexGender)}</Text>

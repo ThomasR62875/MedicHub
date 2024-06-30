@@ -63,7 +63,11 @@ const EditAccount:React.FC<EditAccountProps> = ({navigation, route }: any) =>{
                 setFirstName(userData.first_name);
                 setLastName(userData.last_name);
                 setDni(userData.dni);
-                setDate(userData.birthdate);
+
+                const birthdateWithTime = new Date(userData.birthdate);
+                birthdateWithTime.setUTCHours(1, 0, 0, 0);
+                setDate(birthdateWithTime);
+
                 setSexGender(userData.sex);
             };
             fetchUser();
@@ -121,8 +125,9 @@ const EditAccount:React.FC<EditAccountProps> = ({navigation, route }: any) =>{
 
     const handleDayPress = (event: DateTimePickerEvent, selectedDate?: Date) => {
         if (event.type === "set" && selectedDate) {
-            setDate(date);
-            console.log(date)
+            const birthdateWithTime = new Date(selectedDate);
+            birthdateWithTime.setUTCHours(1, 0, 0, 0);
+            setDate(birthdateWithTime);
         }
     };
 
