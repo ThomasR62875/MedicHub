@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { getUser, getUserId, supabase } from '../lib/supabase'
+import {getUser, getUserId, getUserSession, supabase} from '../lib/supabase'
 import {StyleSheet, View, ScrollView} from 'react-native'
 import {Button, Icon} from 'react-native-elements'
 import LanguageButton from '../components/LanguageButton'
@@ -15,6 +15,7 @@ const Account: React.FC = ({ navigation, route } : any) => {
     const [first_name, setFirstName] = useState('');
     const [last_name, setLastName] = useState('');
     const [dni, setDni] = useState(0);
+    const [id, setId] = useState('');
     const [date, setDate] = useState<Date>();
     const [sexGender,setSexGender]= useState('');
     const [sexGenderDialog, setSexGenderDialog] = useState(false);
@@ -26,7 +27,6 @@ const Account: React.FC = ({ navigation, route } : any) => {
         { sex_gender_name: t('non-binary'), value: 'non-binary' },
         { sex_gender_name: t('other'), value: 'other' },
     ];
-
 
     useEffect(() => {
         if (session) {
@@ -51,7 +51,7 @@ const Account: React.FC = ({ navigation, route } : any) => {
             }
             fetchData()
         }
-    }, [session])
+    }, [session , dni, first_name, last_name, date, sexGender])
 
     const hideDialog = () => setVisible(false);
     const showDialog = () => setVisible(true);
