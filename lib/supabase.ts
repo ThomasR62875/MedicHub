@@ -261,15 +261,18 @@ export const getAppointments = async () : Promise<Appointment[] | undefined> => 
     return to_return
 }
 
+
 function getAge(birthdate: Date | null): number | null {
     if (!birthdate) {
         return null;
     }
 
+    const parsedBirthdate = new Date(birthdate);
+
     const today = new Date();
-    let age = today.getFullYear() - birthdate.getFullYear();
-    const monthDiff = today.getMonth() - birthdate.getMonth();
-    const dayDiff = today.getDate() - birthdate.getDate();
+    let age = today.getFullYear() - parsedBirthdate.getFullYear();
+    const monthDiff = today.getMonth() - parsedBirthdate.getMonth();
+    const dayDiff = today.getDate() - parsedBirthdate.getDate();
 
     if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
         age--;
