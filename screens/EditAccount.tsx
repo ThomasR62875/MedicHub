@@ -37,6 +37,8 @@ const EditAccount:React.FC<EditAccountProps> = ({navigation, route }: any) =>{
         { sex_gender_name: t('other'), value: 'other' },
     ];
     const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(true);
+    const [birthDateErrorMessage, setBirthDateErrorMessage] = useState<string>('');
+    const [genderErrorMessage, setGenderErrorMessage] = useState<string>('');
 
 
     useEffect(() => {
@@ -44,13 +46,15 @@ const EditAccount:React.FC<EditAccountProps> = ({navigation, route }: any) =>{
             first_name.trim() !== '' &&
             last_name.trim() !== '' &&
             firstNameErrorMessage === '' &&
-            lastNameErrorMessage === ''
+            lastNameErrorMessage === '' &&
+            birthDateErrorMessage === '' &&
+            genderErrorMessage === ''
         ) {
             setIsButtonDisabled(false);
         } else {
             setIsButtonDisabled(true);
         }
-    }, [first_name, last_name, dni]);
+    }, [first_name, last_name, dni, sexGender, date, birthDateErrorMessage]);
 
 
     useEffect(() => {
@@ -65,7 +69,6 @@ const EditAccount:React.FC<EditAccountProps> = ({navigation, route }: any) =>{
                 const birthdateWithTime = new Date(userData.birthdate);
                 setDate(birthdateWithTime);
                 setSexGender(userData.sex);
-                console.log(birthdateWithTime)
             };
             fetchUser();
         }
@@ -91,26 +94,48 @@ const EditAccount:React.FC<EditAccountProps> = ({navigation, route }: any) =>{
 
     const validateFirstName = (value: string) => {
         if (value.trim() === '') {
-            setFirstNameErrorMessage(t('warn17'));
+            setFirstNameErrorMessage(t('warn16'));
         } else {
             setFirstNameErrorMessage('');
         }
     };
     const validateLastName = (value: string) => {
         if (value.trim() === '') {
-            setLastNameErrorMessage(t('warn18'));
+            setLastNameErrorMessage(t('warn17'));
         } else {
             setLastNameErrorMessage('');
         }
     };
     const validateDNI = (value: string) => {
         if (value.trim() === '') {
-            setDniErrorMessage(t('warn19'));
+            setDniErrorMessage(t('warn18'));
         } else {
             setDniErrorMessage('');
         }
     };
 
+    const validateBirthDate = (value : Date) => { // vamos a pedir q tenga minimo un día de vida
+        const yesterday = new Date();
+        yesterday.setDate(yesterday.getDate() - 1);
+        yesterday.setHours(0, 0, 0, 0);
+
+        const birthdate = new Date(value);
+        birthdate.setHours(0, 0, 0, 0);
+
+        if(birthdate >= yesterday){
+            setBirthDateErrorMessage(t('warn19'));
+        } else {
+            setBirthDateErrorMessage('');
+        }
+    };
+
+    const validateGender = (value: string) => {
+        if (value.trim() === '') {
+            setGenderErrorMessage(t('warn20'));
+        } else {
+            setGenderErrorMessage('');
+        }
+    };
     const hideSexGenderDialog = () => setSexGenderDialog(false);
 
     const getSexGenderName = (value: string) => {
@@ -122,9 +147,7 @@ const EditAccount:React.FC<EditAccountProps> = ({navigation, route }: any) =>{
         if (event.type === "set" && selectedDate) {
             let birthdateWithTime = new Date(selectedDate);
             birthdateWithTime.setHours(0, 0, 1, 0);
-            console.log(birthdateWithTime)
             setDate(birthdateWithTime);
-            console.log(birthdateWithTime);
         }
     };
 
@@ -152,7 +175,7 @@ const EditAccount:React.FC<EditAccountProps> = ({navigation, route }: any) =>{
                                 validateLastName(text)
                             }}
                             errorStyle={{ color: 'red' }}
-                            errorMessage={firstNameErrorMessage}
+                            errorMessage={lastNameErrorMessage}
                             labelStyle={styles.text}
                         />
                     <Input
@@ -176,7 +199,10 @@ const EditAccount:React.FC<EditAccountProps> = ({navigation, route }: any) =>{
                                          value={new Date(date.getTime() + (date.getTimezoneOffset() * 60000))}
                                          mode="date"
                                          display="default"
-                                         onChange={(event, selectedDate) => handleDayPress(event, selectedDate)}
+                                         onChange={(event, selectedDate) => {
+                                             handleDayPress(event, selectedDate)
+                                             validateBirthDate(date)
+                                         }}
                         />
                     </View>
                     <Portal>
@@ -186,7 +212,10 @@ const EditAccount:React.FC<EditAccountProps> = ({navigation, route }: any) =>{
                             <Picker
                                 mode='dropdown'
                                 selectedValue={sexGender}
-                                onValueChange={(value: string) => setSexGender(value)}
+                                onValueChange={(value: string) => {
+                                    setSexGender(value)
+                                    validateGender(value)
+                                }}
                                 placeholder='sex'
                                 enabled={true}
                                 itemStyle={styles.pickerStyle}

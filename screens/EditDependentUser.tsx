@@ -32,6 +32,8 @@ const EditDependentUser:React.FC<EditDependentUserProps> = ({navigation, route }
         { sex_gender_name: t('non-binary'), value: 'non-binary' },
         { sex_gender_name: t('other'), value: 'other' },
     ];
+    const [birthDateErrorMessage, setBirthDateErrorMessage] = useState<string>('');
+    const [genderErrorMessage, setGenderErrorMessage] = useState<string>('');
 
     const handleDateChange = (event: any, selectedDate?: Date) => {
         const currentDate = selectedDate || date;
@@ -44,13 +46,15 @@ const EditDependentUser:React.FC<EditDependentUserProps> = ({navigation, route }
             first_name.trim() !== '' &&
             last_name.trim() !== '' &&
             firstNameErrorMessage === '' &&
-            lastNameErrorMessage === ''
+            lastNameErrorMessage === '' &&
+            birthDateErrorMessage === '' &&
+            genderErrorMessage === ''
         ) {
             setIsButtonDisabled(false);
         } else {
             setIsButtonDisabled(true);
         }
-    }, [first_name, last_name, dni]);
+    }, [first_name, last_name, dni, date, sexGender]);
 
     const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(true);
 
@@ -112,6 +116,31 @@ const EditDependentUser:React.FC<EditDependentUserProps> = ({navigation, route }
         }
     };
 
+    const validateBirthDate = (value : Date | undefined) => { // vamos a pedir q tenga minimo un día de vida
+        const yesterday = new Date();
+        yesterday.setDate(yesterday.getDate() - 1);
+        yesterday.setHours(0, 0, 0, 0);
+        let birthdate = new Date();
+        if(value){
+            birthdate = new Date(value);
+        }
+        birthdate.setHours(0, 0, 0, 0);
+
+        if(birthdate >= yesterday){
+            setBirthDateErrorMessage(t('warn19'));
+        } else {
+            setBirthDateErrorMessage('');
+        }
+    };
+
+
+    const validateGender = (value: string) => {
+        if (value.trim() === '') {
+            setGenderErrorMessage(t('warn20'));
+        } else {
+            setGenderErrorMessage('');
+        }
+    };
     const hideSexGenderDialog = () => setSexGenderDialog(false);
 
     const getSexGenderName = (value: string) => {
@@ -166,7 +195,10 @@ const EditDependentUser:React.FC<EditDependentUserProps> = ({navigation, route }
                                             value= {date}
                                             mode="date"
                                             display="default"
-                                            onChange={(event, selectedDate) => handleDateChange(event, selectedDate)}
+                                            onChange={(event, selectedDate) => {
+                                                handleDateChange(event, selectedDate)
+                                                validateBirthDate(selectedDate);
+                                            }}
                             />
                         </View>
                         <Portal>
@@ -175,7 +207,10 @@ const EditDependentUser:React.FC<EditDependentUserProps> = ({navigation, route }
                                 <Picker
                                     mode='dropdown'
                                     selectedValue={sexGender}
-                                    onValueChange={(value: string) => setSexGender(value)}
+                                    onValueChange={(value) => {
+                                        setSexGender(value)
+                                        validateGender(value)
+                                    }}
                                     placeholder='sex'
                                     enabled={true}
                                     itemStyle={styles.pickerStyle}

@@ -27,6 +27,9 @@ const AddDependentUser:React.FC<AddDependentUserProps> = ({navigation, route} : 
     const [sexGender,setSexGender]= useState('');
     const [sexGenderDialog, setSexGenderDialog] = useState(false);
     const {t} = useTranslation();
+    const [birthDateErrorMessage, setBirthDateErrorMessage] = useState<string>('');
+    const [genderErrorMessage, setGenderErrorMessage] = useState<string>('');
+
 
     const sexGenderOptions: SexGenderOption[] = [
         { sex_gender_name: t('male'), value: 'male' },
@@ -47,13 +50,15 @@ const AddDependentUser:React.FC<AddDependentUserProps> = ({navigation, route} : 
             firstName.trim() !== '' &&
             lastName.trim() !== '' &&
             firstNameErrorMessage === '' &&
-            lastNameErrorMessage === ''
+            lastNameErrorMessage === '' &&
+            birthDateErrorMessage === '' &&
+            genderErrorMessage === ''
         ) {
             setIsButtonDisabled(false);
         } else {
             setIsButtonDisabled(true);
         }
-    }, [firstName, lastName, dni]);
+    }, [firstName, lastName, dni, date, birthDateErrorMessage, sexGender, genderErrorMessage]);
 
     const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(true);
 
@@ -80,6 +85,31 @@ const AddDependentUser:React.FC<AddDependentUserProps> = ({navigation, route} : 
         }
     };
 
+    const validateBirthDate = (value : Date | undefined) => { // vamos a pedir q tenga minimo un día de vida
+        const yesterday = new Date();
+        yesterday.setDate(yesterday.getDate() - 1);
+        yesterday.setHours(0, 0, 0, 0);
+        let birthdate = new Date();
+        if(value){
+            birthdate = new Date(value);
+        }
+        birthdate.setHours(0, 0, 0, 0);
+
+        if(birthdate >= yesterday){
+            setBirthDateErrorMessage(t('warn19'));
+        } else {
+            setBirthDateErrorMessage('');
+        }
+    };
+
+    const validateGender = (value: string) => {
+        if (value == null || value.trim() === '') {
+            setGenderErrorMessage(t('warn20'));
+        } else {
+            setGenderErrorMessage('');
+        }
+
+    };
     const handleAddDependentUser = async () => {
         console.log(sexGender)
         const dep_user = {
@@ -165,7 +195,10 @@ const AddDependentUser:React.FC<AddDependentUserProps> = ({navigation, route} : 
                                          value={date ? date : new Date()}
                                          mode="date"
                                          display="default"
-                                         onChange={(event, selectedDate) => handleDayPress(event, selectedDate)}
+                                         onChange={(event, selectedDate) => {
+                                             handleDayPress(event, selectedDate)
+                                             validateBirthDate(selectedDate);
+                                         }}
                         />
                     </View>
                     <Portal>
@@ -174,7 +207,10 @@ const AddDependentUser:React.FC<AddDependentUserProps> = ({navigation, route} : 
                             <Picker
                                 mode='dropdown'
                                 selectedValue={sexGender}
-                                onValueChange={(value: string) => setSexGender(value)}
+                                onValueChange={(value) => {
+                                    setSexGender(value)
+                                    validateGender(sexGender)
+                                }}
                                 placeholder='sex'
                                 enabled={true}
                                 itemStyle={styles.pickerStyle}

@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {View, ScrollView, Text, Alert, StyleSheet, TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView, Image} from 'react-native';
+import {View, Text, Alert, StyleSheet, Image} from 'react-native';
 import {signUp, supabase} from "../lib/supabase";
 import {Input, Icon, Button} from "react-native-elements";
 // @ts-ignore
@@ -8,9 +8,8 @@ import {useTranslation} from "react-i18next";
 import ScrollableBg from "../components/ScrollableBg";
 import {SexGenderOption, User} from '../lib/types';
 import {Button as PaperButton, Dialog, Text as PaperText} from "react-native-paper";
-import {Calendar, DateData} from "react-native-calendars";
 import {Picker} from "@react-native-picker/picker";
-import DateTimePicker, {DateTimePickerEvent} from "@react-native-community/datetimepicker";
+import DateTimePicker from "@react-native-community/datetimepicker";
 
 
 const Register: React.FC = ({ navigation }: any) => {
@@ -21,17 +20,18 @@ const Register: React.FC = ({ navigation }: any) => {
     const [firstName, setFirstName] = useState('')
     const [lastName, setLastName] = useState('')
     const [dni, setDni] = useState('')
+    const [date, setDate] = useState(new Date());
+    const [sexGender,setSexGender]= useState('');
+    const {t} = useTranslation();
 
     const [nameErrorMessage, setNameErrorMessage] = useState<string>('');
     const [lastNameErrorMessage, setLastNameErrorMessage] = useState<string>('');
     const [DNIErrorMessage, setDNIErrorMessage] = useState<string>('');
-    const [date, setDate] = useState(new Date());
-    const [sexGender,setSexGender]= useState('');
     const [sexGenderDialog, setSexGenderDialog] = useState(false);
     const [mailErrorMessage, setMailErrorMessage] = useState<string>('');
     const [passwordErrorMessage, setPasswordErrorMessage] = useState<string>('');
-    const {t} = useTranslation();
-
+    const [birthDateErrorMessage, setBirthDateErrorMessage] = useState<string>('');
+    const [genderErrorMessage, setGenderErrorMessage] = useState<string>('');
 
     const sexGenderOptions: SexGenderOption[] = [
         { sex_gender_name: t('male'), value: 'male' },
@@ -52,13 +52,15 @@ const Register: React.FC = ({ navigation }: any) => {
             lastNameErrorMessage === '' &&
             DNIErrorMessage === '' &&
             mailErrorMessage === '' &&
-            passwordErrorMessage === ''
+            passwordErrorMessage === '' &&
+            birthDateErrorMessage === '' &&
+            genderErrorMessage === ''
         ) {
             setIsButtonDisabled(false);
         } else {
             setIsButtonDisabled(true);
         }
-    }, [firstName, lastName, dni, email, password, confirmed_password]);
+    }, [firstName, lastName, dni, email, password, confirmed_password, date, sexGender, birthDateErrorMessage]);
 
     const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(true);
     const validateName = (value: string) => {
@@ -95,6 +97,30 @@ const Register: React.FC = ({ navigation }: any) => {
             setPasswordErrorMessage(t('warn5'));
         } else {
             setPasswordErrorMessage('');
+        }
+    };
+
+    const validateBirthDate = (value : Date) => { // vamos a pedir q tenga minimo un día de vida
+        const yesterday = new Date();
+        yesterday.setDate(yesterday.getDate() - 1);
+        yesterday.setHours(0, 0, 0, 0);
+
+        const birthdate = new Date(value);
+        birthdate.setHours(0, 0, 0, 0);
+
+        if(birthdate >= yesterday){
+            setBirthDateErrorMessage(t('warn19'));
+        } else {
+            setBirthDateErrorMessage('');
+        }
+    };
+
+
+    const validateGender = (value: string) => {
+        if (value.trim() === '') {
+            setGenderErrorMessage(t('warn20'));
+        } else {
+            setGenderErrorMessage('');
         }
     };
 
@@ -184,7 +210,10 @@ const Register: React.FC = ({ navigation }: any) => {
                                 value={date || undefined}
                                 mode="date"
                                 display="default"
-                                onChange={handleDateChange}
+                                onChange={() => {
+                                    handleDateChange;
+                                    validateBirthDate(date)
+                                }}
                 />
             </View>
             <Dialog style={styles.dialog} visible={sexGenderDialog} onDismiss={hideSexGenderDialog}>
@@ -192,7 +221,10 @@ const Register: React.FC = ({ navigation }: any) => {
                 <Picker
                     mode='dropdown'
                     selectedValue={sexGender}
-                    onValueChange={(value: string) => setSexGender(value)}
+                    onValueChange={(value: string) => {
+                        setSexGender(value);
+                        validateGender(value);
+                    }}
                     placeholder='sex'
                     enabled={true}
                     itemStyle={styles.pickerStyle}

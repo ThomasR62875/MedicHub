@@ -111,6 +111,8 @@
   "lastAppointmentText": "The appointment with {{specialty}} (last appointment on {{date}} and the observations were: {{observations}})",
   "demographicInfo": "Some information about me: Sex: {{sex}}, Age: {{age}}",
   "closeSes": "Are you sure you want to close your session ?",
-  "close": "Close"
+  "close": "Close",
+  "warn19": "Invalid birth date",
+  "warn20": "You must enter your sex"
 }
 
