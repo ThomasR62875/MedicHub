@@ -47,7 +47,7 @@ const Medications: React.FC= ({ navigation, route }: any) => {
             <ScrollView>
                 <View>
                     {
-                        medications ? (
+                        medications && medications.length > 0 ? (
                             medications.map((medic: Medication, i) => {
                                 return (
                                     <View key={i}>

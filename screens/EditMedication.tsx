@@ -5,6 +5,7 @@ import {Button, Input} from 'react-native-elements'
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
 import {useTranslation} from "react-i18next";
+import {DateTimePickerEvent} from "@react-native-community/datetimepicker";
 
 type EditMedicationProps = NativeStackScreenProps<RootStackParamList, 'EditMedication'>;
 
@@ -59,7 +60,7 @@ const EditMedication:React.FC<EditMedicationProps> = ({navigation, route }: any)
             howOften:howOften,
             isForever:isForever,
         }
-        const result = await updateMedication(medication);
+        const result = await updateMedication(medication); // huhh??? literlamente son el mismo Type
         if (result.success) {
             navigation.navigate('AlertPublicity', { session, msg: 'editMed', screen: 'SingleMedication', meds: medication});
         } else {

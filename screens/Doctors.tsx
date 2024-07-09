@@ -61,7 +61,7 @@ const Doctors: React.FC= ({ navigation, route }: any) => {
                             })
                         ) : (
                         <View style={[cardStyle.container]}>
-                            <Text style={[styles.text, {textAlign: 'center'}]}>{t('text17')}</Text>
+                            <Text style={styles.text}>{t('text17')}</Text>
                         </View>
                         )
                     }
