@@ -118,7 +118,7 @@ const LogIn: React.FC<LogInProps> = ({navigation, route}) => {
 
                 <Input
                     label={t('email')}
-                    labelStyle={{color: '#000000', paddingBottom: 10}}
+                    labelStyle={{color: '#000000', paddingBottom: 10, paddingLeft: 5}}
                     leftIcon={{type: 'font-awesome', name: 'envelope', color: '#000000'}}
                     onChangeText={(text) => {
                         setEmail(text);
@@ -136,7 +136,7 @@ const LogIn: React.FC<LogInProps> = ({navigation, route}) => {
 
                 <Input
                     label={t('password')}
-                    labelStyle={{color: '#000000', paddingBottom: 10}}
+                    labelStyle={{color: '#000000', paddingBottom: 10, paddingLeft: 5}}
                     leftIcon={{type: 'font-awesome', name: 'lock', color: '#000000'}}
                     onChangeText={(text) => setPassword(text)}
                     value={password}
@@ -183,10 +183,6 @@ const LogIn: React.FC<LogInProps> = ({navigation, route}) => {
 
     );
 };
-
-interface BubbleProps {
-    size: number;
-}
 
 
 export default LogIn;

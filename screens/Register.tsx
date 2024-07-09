@@ -1,15 +1,25 @@
 import React, {useEffect, useState} from 'react';
-import {View, ScrollView, Text, Alert, StyleSheet, TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView, Image} from 'react-native';
+import {
+    View,
+    ScrollView,
+    Text,
+    Alert,
+    StyleSheet,
+    TouchableWithoutFeedback,
+    Keyboard,
+    KeyboardAvoidingView,
+    Image
+} from 'react-native';
 import {signUp} from "../lib/supabase";
 import {Input, Icon, Button} from "react-native-elements";
 // @ts-ignore
-import Logo from '../assets/icon.png'
+import Logo from '../assets/icon_black.png'
 import {useTranslation} from "react-i18next";
 import ScrollableBg from "../components/ScrollableBg";
-import { User } from '../lib/types';
+import {User} from '../lib/types';
 
 
-const Register: React.FC = ({ navigation }: any) => {
+const Register: React.FC = ({navigation}: any) => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [confirmed_password, setConfirmedPassword] = useState('')
@@ -39,13 +49,11 @@ const Register: React.FC = ({ navigation }: any) => {
             mailErrorMessage === '' &&
             passwordErrorMessage === ''
         ) {
-            setIsButtonDisabled(false);
         } else {
-            setIsButtonDisabled(true);
         }
     }, [firstName, lastName, dni, email, password, confirmed_password]);
 
-    const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(true);
+    const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(false);
     const validateName = (value: string) => {
         if (value.trim() === '') {
             setNameErrorMessage(t('warn1'));
@@ -85,134 +93,185 @@ const Register: React.FC = ({ navigation }: any) => {
 
     async function signUpWithEmail() {
         setLoading(true)
-        const user: User = {id:"",first_name:firstName,last_name:lastName,dni:dni, email:email}
-        const {success,message} = await signUp(user,password);
+        const user: User = {id: "", first_name: firstName, last_name: lastName, dni: dni, email: email}
+        const {success, message} = await signUp(user, password);
 
         if (success) Alert.alert('¡Revise su bandeja de entrada para verificar el mail!',)
         setLoading(false)
     }
 
     return (
-        <ScrollableBg>
+        <View style={{flex: 1, backgroundColor: '#fff', marginBottom: 0}}>
+            {/* Burbuja 1 */}
+            <View
+                style={[
+                    styles.bubble,
+                    {
+                        width: 250,
+                        height: 250,
+                        borderRadius: 125,
+                        left: 200,
+                        top: -50,
+                        backgroundColor: 'rgba(236,183,97,0.2)',
+                    },
+                ]}
+            />
+            {/* Burbuja 2 */}
+            <View
+                style={[
+                    styles.bubble,
+                    {
+                        width: 400,
+                        height: 400,
+                        borderRadius: 200,
+                        left: -60,
+                        top: -200,
+                        backgroundColor: 'rgba(236,183,97,0.2)',
+                    },
+                ]}
+            />
+
+            <Button
+                disabled={isButtonDisabled}
+                loading={loading}
+                buttonStyle={{
+                    backgroundColor: 'transparent'
+                }}
+                containerStyle={{marginTop: '15%', alignItems: 'flex-start', marginLeft: '5%'}}
+                icon={{name: 'arrow-left', type: 'material-community', color: '#000000', size: 25}}
+                titleStyle={{color: '#000000'}}
+                onPress={() => navigation.navigate('Login')}
+            />
+            <ScrollableBg>
                 <View style={{marginBottom: 50, alignItems: 'center'}}>
-                    <Image source={Logo} style={styles.logo} />
+                    <Image source={Logo} style={styles.logo}/>
                 </View>
                 <Text style={styles.Ptitle}>{t('text5')}</Text>
-                    <Input
-                        label={t('name')}
-                        labelStyle={styles.colorLable}
-                        leftIcon={<Icon type= "font-awesome" name="user" color={styles.colorIcon.color}/>}
-                        onChangeText={(text) => {
-                            setFirstName(text);
-                            validateName(text)
+                <Input
+                    label={t('name')}
+                    labelStyle={{color: '#000000', paddingBottom: 10, paddingLeft: 5}}
+                    leftIcon={<Icon type="font-awesome" name="user" color={styles.colorIcon.color}/>}
+                    onChangeText={(text) => {
+                        setFirstName(text);
+                        validateName(text)
+                    }}
+                    value={firstName}
+                    placeholder={t('name')}
+                    placeholderTextColor={"#000000"}
+                    inputContainerStyle={[{paddingLeft: 10}, styles.input]}
+                    autoCapitalize={'none'}
+                    inputStyle={{color: '#000000', marginLeft: 10}}
+                    errorStyle={{color: 'red'}}
+                    errorMessage={nameErrorMessage}
+                />
+                <Input
+                    label={t('surname')}
+                    labelStyle={{color: '#000000', paddingBottom: 10, paddingLeft: 5}}
+                    leftIcon={<Icon type="font-awesome" name="user" color={styles.colorIcon.color}/>}
+                    onChangeText={(text) => {
+                        setLastName(text);
+                        validateLastName(text)
+                    }}
+                    value={lastName}
+                    placeholder={t('surname')}
+                    autoCapitalize={'none'}
+                    placeholderTextColor={"#000000"}
+                    inputStyle={{color: '#000000', marginLeft: 10}}
+                    inputContainerStyle={[{paddingLeft: 10}, styles.input]}
+                    errorStyle={{color: 'red'}}
+                    errorMessage={lastNameErrorMessage}
+                />
+                <Input
+                    label={t('id')}
+                    labelStyle={{color: '#000000', paddingBottom: 10, paddingLeft: 5}}
+                    leftIcon={<Image source={require('../assets/fingerprint.png')} style={styles.icon}/>}
+                    onChangeText={(text) => {
+                        setDni(text);
+                        validateDNI(text);
+                    }}
+                    value={dni}
+                    placeholder={t('id')}
+                    autoCapitalize={'none'}
+                    inputContainerStyle={[{paddingLeft: 10}, styles.input]}
+                    placeholderTextColor={"#000000"}
+                    inputStyle={{color: '#000000', marginLeft: 10}}
+                    errorStyle={{color: 'red'}}
+                    errorMessage={DNIErrorMessage}
+                />
+                <Input
+                    label="Mail"
+                    labelStyle={{color: '#000000', paddingBottom: 10, paddingLeft: 5}}
+                    leftIcon={<Icon type="font-awesome" name="envelope" color={styles.colorIcon.color}/>}
+                    onChangeText={(text) => {
+                        setEmail(text);
+                        validateEmail(text)
+                    }}
+                    value={email}
+                    placeholder="email@address.com"
+                    autoCapitalize={'none'}
+                    inputContainerStyle={[{paddingLeft: 10}, styles.input]}
+                    placeholderTextColor={"#000000"}
+                    inputStyle={{color: '#000000', marginLeft: 10}}
+                    errorStyle={{color: 'red'}}
+                    errorMessage={mailErrorMessage}
+                />
+                <Input
+                    label={t('password')}
+                    labelStyle={{color: '#000000', paddingBottom: 10, paddingLeft: 5}}
+                    leftIcon={<Icon type="font-awesome" name="lock" color={styles.colorIcon.color}/>}
+                    onChangeText={(text) => setPassword(text)}
+                    value={password}
+                    secureTextEntry={true}
+                    placeholder={t('password')}
+                    inputContainerStyle={[{paddingLeft: 10}, styles.input]}
+                    autoCapitalize={'none'}
+                    inputStyle={{color: '#000000', marginLeft: 10}}
+                    placeholderTextColor={"#000000"}
+                />
+                <Input
+                    label={t('confirmp')}
+                    labelStyle={{color: '#000000', paddingBottom: 10, paddingLeft: 5}}
+                    leftIcon={<Icon type="font-awesome" name="lock" color={styles.colorIcon.color}/>}
+                    onChangeText={(text1) => {
+                        setConfirmedPassword(text1);
+                        validatePassword(text1);
+                    }}
+                    value={confirmed_password}
+                    secureTextEntry={true}
+                    placeholder={t('password')}
+                    autoCapitalize={'none'}
+                    inputStyle={{color: '#000000', marginLeft: 10}}
+                    inputContainerStyle={[{paddingLeft: 10}, styles.input]}
+                    placeholderTextColor={"#000000"}
+                    errorStyle={{color: 'red'}}
+                    errorMessage={passwordErrorMessage}
+                />
+                <View style={{alignItems: 'center'}}>
+                    <Button
+                        title={t('register')}
+                        disabled={isButtonDisabled}
+                        loading={loading}
+                        buttonStyle={{
+                            backgroundColor: '#ecb761',
+                            borderWidth: 2,
+                            borderColor: 'white',
+                            borderRadius: 30,
+                            minHeight: 50,
+                            minWidth: 150,
                         }}
-                        value={firstName}
-                        placeholder={t('name')}
-                        placeholderTextColor={"#407738"}
-                        autoCapitalize={'none'}
-                        inputStyle={{color: '#407738', marginLeft: 10}}
-                        errorStyle={{ color: 'red' }}
-                        errorMessage={nameErrorMessage}
-                    />
-                    <Input
-                        label={t('surname')}
-                        labelStyle={styles.colorLable}
-                        leftIcon={<Icon type= "font-awesome" name="user" color={styles.colorIcon.color}/>}
-                        onChangeText={(text) => {
-                            setLastName(text);
-                            validateLastName(text)
+                        containerStyle={{
+                            width: 150,
+                            marginHorizontal: 50,
+                            marginVertical: 10,
+                            marginTop: 40,
+                            marginBottom: 100
                         }}
-                        value={lastName}
-                        placeholder={t('surname')}
-                        autoCapitalize={'none'}
-                        placeholderTextColor={"#407738"}
-                        inputStyle={{color: '#407738', marginLeft: 10}}
-                        errorStyle={{ color: 'red' }}
-                        errorMessage={lastNameErrorMessage}
+                        titleStyle={{color: '#000000'}}
+                        onPress={() => signUpWithEmail()}
                     />
-                    <Input
-                        label={t('id')}
-                        labelStyle={styles.colorLable}
-                        leftIcon={<Image source={require('../assets/fingerprint.png')} style={styles.icon} />}
-                        onChangeText={(text) => {
-                            setDni(text);
-                            validateDNI(text);
-                        }}
-                        value={dni}
-                        placeholder={t('id')}
-                        autoCapitalize={'none'}
-                        placeholderTextColor={"#407738"}
-                        inputStyle={{color: '#407738', marginLeft: 10}}
-                        errorStyle={{ color: 'red' }}
-                        errorMessage={DNIErrorMessage}
-                    />
-                    <Input
-                        label="Mail"
-                        labelStyle={styles.colorLable}
-                        leftIcon={<Icon type= "font-awesome" name="envelope" color={styles.colorIcon.color}/>}
-                        onChangeText={(text) => {setEmail(text); validateEmail(text)}}
-                        value={email}
-                        placeholder="email@address.com"
-                        autoCapitalize={'none'}
-                        placeholderTextColor={"#407738"}
-                        inputStyle={{color: '#407738', marginLeft: 10}}
-                        errorStyle={{ color: 'red' }}
-                        errorMessage={mailErrorMessage}
-                    />
-                    <Input
-                        label={t('password')}
-                        labelStyle={styles.colorLable}
-                        leftIcon={<Icon type="font-awesome" name="lock" color={styles.colorIcon.color}/>}
-                        onChangeText={(text) => setPassword(text)}
-                        value={password}
-                        secureTextEntry={true}
-                        placeholder={t('password')}
-                        autoCapitalize={'none'}
-                        inputStyle={{color: '#407738', marginLeft: 10}}
-                        placeholderTextColor={"#407738"}
-                    />
-                    <Input
-                        label={t('confirmp')}
-                        labelStyle={styles.colorLable}
-                        leftIcon={<Icon type="font-awesome"  name="lock" color={styles.colorIcon.color}/>}
-                        onChangeText={(text1) => {
-                            setConfirmedPassword(text1);
-                            validatePassword(text1);
-                        }}
-                        value={confirmed_password}
-                        secureTextEntry={true}
-                        placeholder={t('password')}
-                        autoCapitalize={'none'}
-                        inputStyle={{color: '#407738', marginLeft: 10}}
-                        placeholderTextColor={"#407738"}
-                        errorStyle={{ color: 'red' }}
-                        errorMessage={passwordErrorMessage}
-                    />
-                    <View style={{alignItems: 'center'}}>
-                        <Button
-                            title={t('register')}
-                            disabled={isButtonDisabled}
-                            loading={loading}
-                            buttonStyle={{
-                                backgroundColor: '#2E5829',
-                                borderWidth: 2,
-                                borderColor: 'white',
-                                borderRadius: 30,
-                                minHeight: 50,
-                                minWidth: 150,
-                            }}
-                            containerStyle={{
-                                width: 150,
-                                marginHorizontal: 50,
-                                marginVertical: 10,
-                                marginTop: 40,
-                                marginBottom:100
-                            }}
-                            titleStyle={{ color: '#eef9ed' }}
-                            onPress={() => signUpWithEmail()}
-                        />
-                    </View>
-        </ScrollableBg>
+                </View>
+            </ScrollableBg>
+        </View>
     );
 };
 
@@ -226,28 +285,28 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     buttonSignIn: {
-        backgroundColor: '#B5DCCA',
+        backgroundColor: '#ffffff',
         borderRadius: 10,
         justifyContent: 'center',
     },
     colorIcon: {
-        color: '#2E5829FF'
+        color: '#000000'
     },
     colorLable: {
-        color: '#2E5829FF',
+        color: '#000000',
     },
     icon: {
         width: 24,
         height: 24,
     }, registerW: {
-        backgroundColor: '#e9f4e9',
+        backgroundColor: '#ffffff',
         height: '100%',
         marginLeft: 10,
         marginRight: 10,
         alignContent: 'center'
     },
     Ptitle: {
-        color: '#2E5829FF',
+        color: '#000000',
         textAlign: 'center',
         marginBottom: 80,
         marginTop: 0,
@@ -258,7 +317,16 @@ const styles = StyleSheet.create({
         height: 50,
         width: 50,
         marginBottom: 0
-    }
+    }, bubble: {
+        position: 'absolute',
+    },
+    input: {
+        backgroundColor: '#ffffff',
+        borderBottomWidth:2,
+        borderWidth: 2,
+        borderRadius: 15
+    },
+
 });
 
 export default Register;

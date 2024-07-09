@@ -328,12 +328,12 @@ const App = () => {
                     <Stack.Screen name="Register"
                                   component={Register}
                                   options={{
-                                    title: '',
-                                    headerStyle: {
-                                      backgroundColor: '#2E5829',
-                                    },
-                                    headerTintColor: '#ABD2A8',
-                                    headerBackTitle: 'Iniciar Sesión', // Cambia la etiqueta del botón de retroceso
+                                    title: '',headerShown: false
+                                    // headerStyle: {
+                                    //   backgroundColor: '#2E5829',
+                                    // },
+                                    // headerTintColor: '#ABD2A8',
+                                    // headerBackTitle: 'Iniciar Sesión', // Cambia la etiqueta del botón de retroceso
                                     }}/>
                   </>
               ) : (
