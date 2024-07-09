@@ -13,11 +13,14 @@ import {Button, Input} from 'react-native-elements'
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 // import StandardGreenButton from "../components/StandardGreenButton";
 import {RootStackParamList} from "../App";
+
 // @ts-ignore
-import Logo from '../assets/icon.png'
+import Logo from '../assets/icon_black.png'
+
 import {useTranslation} from "react-i18next";
 import LanguageButton from "../components/LanguageButton";
 import ScrollableBg from "../components/ScrollableBg";
+
 
 const windowHeight = Dimensions.get('window').height;
 
@@ -47,13 +50,11 @@ const LogIn: React.FC<LogInProps> = ({navigation, route}) => {
             errorMessage === ''
 
         ) {
-            setIsButtonDisabled(false);
         } else {
-            setIsButtonDisabled(true);
         }
     }, [email, password]);
 
-    const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(true);
+    const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(false);
 
     const validateInput = (value: string) => {
         if (value.trim() === '' || !value.includes("@") || !(value.includes(".edu") || value.includes(".com") || value.includes(".ar"))) {
@@ -75,100 +76,127 @@ const LogIn: React.FC<LogInProps> = ({navigation, route}) => {
     }
 
     return (
-        <ScrollableBg>
-            <View style={{marginLeft: "60%", alignSelf: 'center'}}>
-                <LanguageButton/>
-            </View>
-            <View style={styles.window}>
-                <Image source={Logo} style={styles.logo}/>
-                <Text style={{textAlign: 'center', color: '#2E5829', fontWeight: 'bold', fontSize: 20}}>MedicHub</Text>
-            </View>
-            <View style={[styles.inputContainer, {height: windowHeight * 0.08}]}>
+        <View style={{flex: 1, backgroundColor: '#fff', marginBottom: 0}}>
+            {/* Burbuja 1 */}
+            <View
+                style={[
+                    styles.bubble,
+                    {
+                        width: 250,
+                        height: 250,
+                        borderRadius: 125,
+                        left: 200,
+                        top: -50,
+                        backgroundColor: 'rgba(139,134,190,0.2)',
+                    },
+                ]}
+            />
+            {/* Burbuja 2 */}
+            <View
+                style={[
+                    styles.bubble,
+                    {
+                        width: 400,
+                        height: 400,
+                        borderRadius: 200,
+                        left: -60,
+                        top: -200,
+                        backgroundColor: 'rgba(139,134,190,0.2)',
+                    },
+                ]}
+            />
+
+            <ScrollableBg>
+                <View style={{paddingTop: 40, paddingLeft: 20}}>
+                    <LanguageButton/>
+                </View>
+                <View style={styles.window}>
+                    <Image source={Logo} style={styles.logo}/>
+                    <Text style={{textAlign: 'center', color: '#000', fontWeight: 'bold', fontSize: 20}}>MedicHub</Text>
+                </View>
+
+
                 <Input
-                    label="Mail"
-                    labelStyle={{color: '#2E5829'}}
-                    leftIcon={{type: 'font-awesome', name: 'envelope', color: '#2E5829'}}
+                    label={t('email')}
+                    labelStyle={{color: '#000000', paddingBottom: 10}}
+                    leftIcon={{type: 'font-awesome', name: 'envelope', color: '#000000'}}
                     onChangeText={(text) => {
                         setEmail(text);
                         validateInput(text)
                     }}
                     value={email}
-                    inputStyle={{marginLeft: 10, color: '#407738'}}
+                    inputStyle={{marginLeft: 10, color: '#000000'}}
                     placeholder='email@address.com'
-                    placeholderTextColor={'#407738'}
+                    placeholderTextColor={'#000000'}
                     autoCapitalize={'none'}
                     inputContainerStyle={[{paddingLeft: 10}, styles.input]}
                     errorStyle={{color: 'red'}}
                     errorMessage={errorMessage}
                 />
-            </View>
-            <View style={[styles.inputContainer, {height: windowHeight * 0.08}]}>
+
                 <Input
                     label={t('password')}
-                    labelStyle={{color: '#2E5829FF'}}
-                    leftIcon={{type: 'font-awesome', name: 'lock', color: '#2E5829FF'}}
+                    labelStyle={{color: '#000000', paddingBottom: 10}}
+                    leftIcon={{type: 'font-awesome', name: 'lock', color: '#000000'}}
                     onChangeText={(text) => setPassword(text)}
                     value={password}
                     secureTextEntry={true}
                     placeholder={t('password')}
-                    placeholderTextColor={'#407738'}
+                    placeholderTextColor={'#000000'}
                     autoCapitalize={'none'}
                     inputContainerStyle={[{paddingLeft: 10}, styles.input]}
-                    inputStyle={{marginLeft: 10, color: '#407738'}}
+                    inputStyle={{marginLeft: 10, color: '#000000'}}
                 />
-            </View>
-            <View style={[styles.logInContainer]}>
-                <Button
-                    title={t('logIn')}
-                    disabled={isButtonDisabled}
-                    loading={loading}
-                    buttonStyle={{
-                        backgroundColor: '#2E5829',
-                        borderWidth: 2,
-                        borderColor: 'white',
-                        borderRadius: 30,
-                        minHeight: 50
-                    }}
-                    containerStyle={{
-                        width: 150,
-                        marginHorizontal: 50,
-                        marginVertical: 10,
-                        marginTop: 40,
-                    }}
-                    titleStyle={{color: '#eef9ed'}}
-                    onPress={() => signInWithEmail()}
-                />
-            </View>
-            <View style={[styles.buttonRegisterContainer, {marginTop: 80, height: windowHeight * 0.08}]}>
-                <Text style={{color: '#2E5829', textAlign: 'center', fontSize: 18}}>{t('text1')}</Text>
-                <Button title={t('register')}
-                        onPress={() => navigation.navigate('Register')}
-                        buttonStyle={[styles.buttonRegister]}
-                        titleStyle={{color: '#2E5829', textDecorationLine: 'underline'}}
-                />
-            </View>
-        </ScrollableBg>
+
+                <View style={[styles.logInContainer]}>
+                    <Button
+                        title={t('logIn')}
+                        disabled={isButtonDisabled}
+                        loading={loading}
+                        buttonStyle={{
+                            backgroundColor: '#86abba',
+                            borderWidth: 2,
+                            borderColor: 'white',
+                            borderRadius: 30,
+                            minHeight: 50
+                        }}
+                        containerStyle={{
+                            width: 150,
+                            marginHorizontal: 50,
+                            marginVertical: 10,
+                            marginTop: 40,
+                        }}
+                        titleStyle={{color: '#ffffff'}}
+                        onPress={() => signInWithEmail()}
+                    />
+                </View>
+                <View style={[styles.buttonRegisterContainer, {marginTop: 80, height: windowHeight * 0.08}]}>
+                    <Text style={{color: '#000000', textAlign: 'center', fontSize: 18}}>{t('text1')}</Text>
+                    <Button title={t('register')}
+                            onPress={() => navigation.navigate('Register')}
+                            buttonStyle={[styles.buttonRegister]}
+                            titleStyle={{color: '#000000', textDecorationLine: 'underline'}}
+                    />
+                </View>
+            </ScrollableBg>
+        </View>
+
     );
 };
+
+interface BubbleProps {
+    size: number;
+}
+
 
 export default LogIn;
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#e9f4e9',
-        paddingHorizontal: 20,
-        height: '100%'
-    },
-    inputContainer: {
-        width: '100%',
-        marginBottom: 40,
-    },
     input: {
-        backgroundColor: '#e9f4e9',
-        borderRadius: 10,
+        backgroundColor: '#ffffff',
+        borderBottomWidth:2,
+        borderWidth: 2,
+        borderRadius: 15
     },
     buttonSignInContainer: {
         width: '50%',
@@ -177,13 +205,13 @@ const styles = StyleSheet.create({
         width: '100%',
     },
     buttonRegister: {
-        backgroundColor: '#e9f4e9',
+        backgroundColor: '#ffffff',
         width: 'auto',
     },
     logo: {
-        color: '#407738',
-        width: 125,
-        height: 125
+        color: '#86ABBA',
+        width: 100,
+        height: 100
     },
     iconContainer: {
         textAlign: "center",
@@ -194,11 +222,21 @@ const styles = StyleSheet.create({
     window: {
         marginBottom: 50,
         alignItems: 'center',
-        marginTop: 30,
+        marginTop: "25%",
     },
     logInContainer: {
         alignItems: 'center'
-    }
+    },
+    bubble: {
+        position: 'absolute',
+    },
+    bubbleContainer: {
+        width: '200%',
+        height: '200%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        position: 'absolute',
+    },
 
 
 });

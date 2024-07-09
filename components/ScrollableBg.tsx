@@ -9,7 +9,7 @@ interface ScrollableBackgroundViewProps extends ViewProps {
 const ScrollableBackgroundView: React.FC<ScrollableBackgroundViewProps> = ({ children, style, ...props }) => {
     return (
         <View style={styles.container}>
-            <ScrollView contentContainerStyle={[styles.contentContainer, style]} {...props}>
+            <ScrollView contentContainerStyle={[styles.contentContainer]} {...props}>
                 {children}
             </ScrollView>
         </View>
@@ -19,11 +19,9 @@ const ScrollableBackgroundView: React.FC<ScrollableBackgroundViewProps> = ({ chi
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#e9f4e9', // Color de fondo del contenedor
     },
     contentContainer: {
         flexGrow: 1,
-        backgroundColor: '#e9f4e9', // Color de fondo del contenido
         padding: 16, // Espacio entre los bordes y el contenido
     },
 });
