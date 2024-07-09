@@ -33,10 +33,8 @@ import {StackNavigationProp} from "@react-navigation/stack";
 import 'react-native-reanimated'
 import * as Animatable from 'react-native-animatable'
 import 'react-native-reanimated'
-import {Ionicons, MaterialCommunityIcons} from "@expo/vector-icons";
-import {StatusBar, StyleSheet, TouchableOpacity, View} from "react-native";
-import {backgroundColor} from "react-native-calendars/src/style";
-import {Easing} from "react-native-reanimated";
+import {Ionicons} from "@expo/vector-icons";
+import {StatusBar, StyleSheet, TouchableOpacity} from "react-native";
 import {useTranslation} from "react-i18next";
 import { Provider } from 'react-native-paper';
 
@@ -71,7 +69,6 @@ import { AppRegistry } from 'react-native';
 import {Appointment, DependentUser, Doctor, Medication} from "./lib/types";
 AppRegistry.registerComponent('main', () => App);
 
-const Stack = createNativeStackNavigator<RootStackParamList>();
 const Tab = createBottomTabNavigator();
 
 type HomeTabsRouteProp = RouteProp<RootStackParamList, 'HomeTabs'>;
@@ -90,15 +87,12 @@ function HomeTabs({route, navigation}: Props) {
 
   //para saber q tab esta seleccionada
   const [selectedTab, setSelectedTab] = useState<number | null>(0);
-  const tabRefs = useRef<Array<TouchableOpacity | null>>([]);
   useEffect(() => {
     if (selectedTab !== null) {
       console.log('Selected tab:', selectedTab);
     }
   }, [selectedTab]);
-  const handleTabPress = (index : number) => {
-    setSelectedTab(index);
-  };
+
 
   //cosas de animation
     const viewRef0 = useRef<Animatable.View | null>(null);
@@ -535,11 +529,3 @@ const App = () => {
 }
 
 export default App;
-
-const styles = StyleSheet.create({
-  container: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-  }
-})
