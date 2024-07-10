@@ -107,76 +107,83 @@ const LogIn: React.FC<LogInProps> = ({navigation, route}) => {
             />
 
             <ScrollableBg>
-                <View style={{paddingTop: 40, paddingLeft: 20}}>
-                    <LanguageButton/>
-                </View>
-                <View style={styles.window}>
-                    <Image source={Logo} style={styles.logo}/>
-                    <Text style={{textAlign: 'center', color: '#000', fontWeight: 'bold', fontSize: 20}}>MedicHub</Text>
-                </View>
+                <View style={{padding: 16}}>
+                    <View style={{paddingTop: 40, paddingLeft: 20}}>
+                        <LanguageButton/>
+                    </View>
+                    <View style={styles.window}>
+                        <Image source={Logo} style={styles.logo}/>
+                        <Text style={{
+                            textAlign: 'center',
+                            color: '#000',
+                            fontWeight: 'bold',
+                            fontSize: 20
+                        }}>MedicHub</Text>
+                    </View>
 
 
-                <Input
-                    label={t('email')}
-                    labelStyle={{color: '#000000', paddingBottom: 10, paddingLeft: 5}}
-                    leftIcon={{type: 'font-awesome', name: 'envelope', color: '#000000'}}
-                    onChangeText={(text) => {
-                        setEmail(text);
-                        validateInput(text)
-                    }}
-                    value={email}
-                    inputStyle={{marginLeft: 10, color: '#000000'}}
-                    placeholder='email@address.com'
-                    placeholderTextColor={'#000000'}
-                    autoCapitalize={'none'}
-                    inputContainerStyle={[{paddingLeft: 10}, styles.input]}
-                    errorStyle={{color: 'red'}}
-                    errorMessage={errorMessage}
-                />
-
-                <Input
-                    label={t('password')}
-                    labelStyle={{color: '#000000', paddingBottom: 10, paddingLeft: 5}}
-                    leftIcon={{type: 'font-awesome', name: 'lock', color: '#000000'}}
-                    onChangeText={(text) => setPassword(text)}
-                    value={password}
-                    secureTextEntry={true}
-                    placeholder={t('password')}
-                    placeholderTextColor={'#000000'}
-                    autoCapitalize={'none'}
-                    inputContainerStyle={[{paddingLeft: 10}, styles.input]}
-                    inputStyle={{marginLeft: 10, color: '#000000'}}
-                />
-
-                <View style={[styles.logInContainer]}>
-                    <Button
-                        title={t('logIn')}
-                        disabled={isButtonDisabled}
-                        loading={loading}
-                        buttonStyle={{
-                            backgroundColor: '#86abba',
-                            borderWidth: 2,
-                            borderColor: 'white',
-                            borderRadius: 30,
-                            minHeight: 50
+                    <Input
+                        label={t('email')}
+                        labelStyle={{color: '#000000', paddingBottom: 10, paddingLeft: 5}}
+                        leftIcon={{type: 'font-awesome', name: 'envelope', color: '#000000'}}
+                        onChangeText={(text) => {
+                            setEmail(text);
+                            validateInput(text)
                         }}
-                        containerStyle={{
-                            width: 150,
-                            marginHorizontal: 50,
-                            marginVertical: 10,
-                            marginTop: 40,
-                        }}
-                        titleStyle={{color: '#ffffff'}}
-                        onPress={() => signInWithEmail()}
+                        value={email}
+                        inputStyle={{marginLeft: 10, color: '#000000'}}
+                        placeholder='email@address.com'
+                        placeholderTextColor={'#000000'}
+                        autoCapitalize={'none'}
+                        inputContainerStyle={[{paddingLeft: 10}, styles.input]}
+                        errorStyle={{color: 'red'}}
+                        errorMessage={errorMessage}
                     />
-                </View>
-                <View style={[styles.buttonRegisterContainer, {marginTop: 80, height: windowHeight * 0.08}]}>
-                    <Text style={{color: '#000000', textAlign: 'center', fontSize: 18}}>{t('text1')}</Text>
-                    <Button title={t('register')}
-                            onPress={() => navigation.navigate('Register')}
-                            buttonStyle={[styles.buttonRegister]}
-                            titleStyle={{color: '#000000', textDecorationLine: 'underline'}}
+
+                    <Input
+                        label={t('password')}
+                        labelStyle={{color: '#000000', paddingBottom: 10, paddingLeft: 5}}
+                        leftIcon={{type: 'font-awesome', name: 'lock', color: '#000000'}}
+                        onChangeText={(text) => setPassword(text)}
+                        value={password}
+                        secureTextEntry={true}
+                        placeholder={t('password')}
+                        placeholderTextColor={'#000000'}
+                        autoCapitalize={'none'}
+                        inputContainerStyle={[{paddingLeft: 10}, styles.input]}
+                        inputStyle={{marginLeft: 10, color: '#000000'}}
                     />
+
+                    <View style={[styles.logInContainer]}>
+                        <Button
+                            title={t('logIn')}
+                            disabled={isButtonDisabled}
+                            loading={loading}
+                            buttonStyle={{
+                                backgroundColor: '#86abba',
+                                borderWidth: 2,
+                                borderColor: 'white',
+                                borderRadius: 30,
+                                minHeight: 50
+                            }}
+                            containerStyle={{
+                                width: 150,
+                                marginHorizontal: 50,
+                                marginVertical: 10,
+                                marginTop: 40,
+                            }}
+                            titleStyle={{color: '#ffffff', fontWeight: 'semibold'}}
+                            onPress={() => signInWithEmail()}
+                        />
+                    </View>
+                    <View style={[styles.buttonRegisterContainer, {marginTop: 80, height: windowHeight * 0.08}]}>
+                        <Text style={{color: '#000000', textAlign: 'center', fontSize: 18}}>{t('text1')}</Text>
+                        <Button title={t('register')}
+                                onPress={() => navigation.navigate('Register')}
+                                buttonStyle={[styles.buttonRegister]}
+                                titleStyle={{color: '#000000', textDecorationLine: 'underline'}}
+                        />
+                    </View>
                 </View>
             </ScrollableBg>
         </View>
@@ -190,7 +197,7 @@ export default LogIn;
 const styles = StyleSheet.create({
     input: {
         backgroundColor: '#ffffff',
-        borderBottomWidth:2,
+        borderBottomWidth: 2,
         borderWidth: 2,
         borderRadius: 15
     },

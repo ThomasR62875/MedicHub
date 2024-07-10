@@ -22,7 +22,6 @@ const styles = StyleSheet.create({
     },
     contentContainer: {
         flexGrow: 1,
-        padding: 16, // Espacio entre los bordes y el contenido
     },
 });
 

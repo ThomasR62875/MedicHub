@@ -1,13 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import {
     View,
-    ScrollView,
     Text,
     Alert,
     StyleSheet,
-    TouchableWithoutFeedback,
-    Keyboard,
-    KeyboardAvoidingView,
     Image
 } from 'react-native';
 import {signUp} from "../lib/supabase";
@@ -253,8 +249,6 @@ const Register: React.FC = ({navigation}: any) => {
                         loading={loading}
                         buttonStyle={{
                             backgroundColor: '#ecb761',
-                            borderWidth: 2,
-                            borderColor: 'white',
                             borderRadius: 30,
                             minHeight: 50,
                             minWidth: 150,
@@ -266,7 +260,7 @@ const Register: React.FC = ({navigation}: any) => {
                             marginTop: 40,
                             marginBottom: 100
                         }}
-                        titleStyle={{color: '#000000'}}
+                        titleStyle={{color: '#fff'}}
                         onPress={() => signUpWithEmail()}
                     />
                 </View>

@@ -1,0 +1,112 @@
+import { StyleSheet } from 'react-native';
+
+export const styles = StyleSheet.create({
+    tab: {
+        flex: 1,
+        backgroundColor: "#fff",
+        height: '100%',
+        paddingLeft: 16
+    },
+    tabTitle: {
+        color: 'black',
+        fontSize: 24,
+        fontFamily: 'Roboto-Thin',
+        paddingLeft: 25
+    },
+    buttonText: {
+        color: '#fff',
+        fontSize: 14,
+        padding: 15
+    },
+    container: {
+
+    },
+    col: {
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'center',
+    },
+    titleText: {
+        fontFamily: 'Roboto-Thin',
+        fontSize: 20,
+        textAlign: 'center',
+        fontWeight: 'bold',
+        marginTop: "1%",
+        color: "#2E5829",
+    },
+    text: {
+        fontSize: 20,
+        textAlign: 'left',
+        color: "#2E5829",
+        fontFamily: 'Roboto-Thin',
+        margin: "4%"
+    },
+    card: {
+        backgroundColor: '#ffffff',
+        padding: 10,
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20,
+        elevation: 3,
+        height: 45
+    },
+    img: {
+        height: 150,
+        borderTopRightRadius: 10,
+        borderTopLeftRadius: 10,
+    },
+    turnoContainer: {
+        backgroundColor: '#CBE4C9',
+        borderRadius: 20,
+        borderColor: '#CBE4C9',
+        borderWidth: 1,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.85,
+    },
+    logo:{
+        color: '#407738',
+        width: 50,
+        height: 50,
+
+    },
+    topContent: {
+        alignItems: 'flex-start',
+        marginTop: "8%",
+        marginLeft: "6%"
+    },
+    centerContent: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: '15%'
+    },
+    screenTitle: {
+        fontFamily: 'Roboto-Thin',
+        fontSize: 16,
+        color: "#807d7d",
+        paddingLeft: 25,
+        paddingTop: 10
+    },
+    squiggle: {
+        position: 'absolute',
+        top: -20,
+        left: 225,
+    },
+    buttons: {
+        backgroundColor: '#8B86BE',
+        borderRadius: 15,
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: '100%',
+        width: '35%',
+        marginRight: '2%'
+    },
+    subtitles: {
+        fontFamily: 'Roboto-Thin',
+        fontSize: 16,
+        color: "#807d7d",
+        paddingLeft: 25,
+        marginTop: 20
+    }
+});
