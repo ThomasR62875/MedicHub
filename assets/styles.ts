@@ -108,5 +108,28 @@ export const styles = StyleSheet.create({
         color: "#807d7d",
         paddingLeft: 25,
         marginTop: 20
+    },
+    calendarContainer: {
+        marginTop: '5%',
+        marginRight: '4%',
+        backgroundColor: "#ffffff"
+    },
+    divider: {
+        borderBottomColor: '#e1dfdf',
+        borderBottomWidth: 2,
+        marginRight: '15%',
+        marginLeft: '10%',
+        marginTop: '5%'
+    },
+    turno: {
+        backgroundColor: '#CBE4C9',
+        borderRadius: 20,
+        borderColor: '#CBE4C9',
+        borderWidth: 1,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.85,
+        padding: "2%",
     }
 });

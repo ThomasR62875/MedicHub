@@ -1,11 +1,16 @@
 import React, {useEffect, useState} from "react";
-import { Dimensions, ScrollView, StyleSheet, Text, View} from "react-native";
+import {Dimensions, Image, ScrollView, StyleSheet, Text, View} from "react-native";
 import {Appointment} from "../lib/types";
 import {Calendar} from "react-native-calendars";
 import TurnoContainer from "../components/TurnContainer";
 import {getAppointments} from "../lib/supabase";
 import {Button} from "react-native-elements";
 import {useTranslation} from "react-i18next";
+import {styles} from "../assets/styles";
+// @ts-ignore
+import Squiggle from "../assets/tabAsset.png";
+import ScrollableBg from "../components/ScrollableBg";
+import {Divider} from "react-native-paper";
 
 const Calender: React.FC = ({ navigation, route } : any) => {
     const {session} = route.params;
@@ -50,7 +55,7 @@ const Calender: React.FC = ({ navigation, route } : any) => {
     }
     const markedDatesString = markedDates.reduce<{ [key: string]:
             { marked: boolean, dotColor: string } }>((acc, date) => {
-        acc[date] = { marked: true, dotColor: '#48B445' };
+        acc[date] = { marked: true, dotColor: '#ecb761' };
         return acc;
     }, {});
 
@@ -60,128 +65,179 @@ const Calender: React.FC = ({ navigation, route } : any) => {
         },
         [selectedDate]: {
             selected: true,
-            selectedColor: '#073A29',
+            selectedColor: '#cbd690',
             ...(markedDatesString[selectedDate] || {})
         },
         //acá faltaria agregar para que se marquen los días de toma de medicamentos, esto lo hariamos con "period"s todo
     }
 
     const customTheme = {
-        arrowColor: '#00A36C',
-        todayTextColor: '#00A36C',
+        arrowColor: '#8b86be',
+        todayTextColor: '#8b86be',
     }
 
     return (
-        <View style={styles.container}>
-            <View style={styles.window}>
-                <Text style={styles.screenTitle}>{t('calendar')}</Text>
-            </View >
+        <View style={styles.tab}>
+            <Image source={Squiggle} style={styles.squiggle}/>
+            <Text style={[styles.tabTitle, {paddingTop: 70}]}>
+                {t('calendar')}
+            </Text>
+            <Text style={styles.screenTitle}>{t('subtitle_calendar')}</Text>
             <View style={styles.calendarContainer}>
                 <Calendar style={{borderRadius: 10}}
-                markingType={'custom'}
-                markedDates={AllMarkedDays}
-                onDayPress={handleDayPress}
-                theme={customTheme}
+                          markingType={'custom'}
+                          markedDates={AllMarkedDays}
+                          onDayPress={handleDayPress}
+                          theme={customTheme}
                 />
             </View>
-            <ScrollView centerContent={true} >
+            <Divider style={styles.divider}/>
+            <ScrollableBg>
                 {filteredData && filteredData.length > 0 ? (
-                    filteredData.map((turno: Appointment, i: number) => {
+                                filteredData.map((turno: Appointment, i: number) => {
 
-                        return(
-                            <View key={i} style={{alignItems: 'center', marginTop: 10}}>
-                                <TurnoContainer
-                                    date={turno.date}
-                                    turno={turno}
-                                    styleExterior={styles.turno}
-                                />
+                                    return(
+                                        <View key={i} style={{alignItems: 'center', marginTop: 10}}>
+                                            <TurnoContainer
+                                                date={turno.date}
+                                                turno={turno}
+                                                styleExterior={styles.turno}
+                                            />
+                                        </View>
+                                    )
+                                    })) :  (
+                                        <View style={{alignItems: 'center', marginTop: 10}}>
+                                            <View style={[styles.turnoContainer]}>
+                                                <Text style={styles.text}>{t('text19')} {dateNormal}</Text>
+                                            </View>
+                                        </View>
+                                    )}
+                            <View style={{marginTop: 10, marginBottom: "20%", alignContent: 'center'}}>
+                                <Button
+                                    title={t('add')+t('appo')}
+                                    buttonStyle={{
+                                        backgroundColor: '#2E5829',
+                                        borderColor: 'white',
+                                        borderRadius: 20,
+                                        minHeight: 10,
+                                        width: "auto",
+                                        alignSelf: 'center',
+                                    }}
+                                    titleStyle={{ color: '#E9F4E9FF',fontSize: 15, margin: 5 }}
+                                    onPress={() => navigation.navigate('AddAppointment', {session: session})}/>
                             </View>
-                        )
-                        })) :  (
-                            <View style={{alignItems: 'center', marginTop: 10}}>
-                                <View style={[styles.turnoContainer]}>
-                                    <Text style={styles.text}>{t('text19')} {dateNormal}</Text>
-                                </View>
-                            </View>
-                        )}
-                <View style={{marginTop: 10, marginBottom: "20%", alignContent: 'center'}}>
-                    <Button
-                        title={t('add')+t('appo')}
-                        buttonStyle={{
-                            backgroundColor: '#2E5829',
-                            borderColor: 'white',
-                            borderRadius: 20,
-                            minHeight: 10,
-                            width: "auto",
-                            alignSelf: 'center',
-                        }}
-                        titleStyle={{ color: '#E9F4E9FF',fontSize: 15, margin: 5 }}
-                        onPress={() => navigation.navigate('AddAppointment', {session: session})}/>
-                </View>
-            </ScrollView>
+            </ScrollableBg>
         </View>
+        // <View style={styles.container}>
+        //     <View style={styles.window}>
+        //         <Text style={styles.screenTitle}>{t('calendar')}</Text>
+        //     </View >
+        //     <View style={styles.calendarContainer}>
+        //         <Calendar style={{borderRadius: 10}}
+        //         markingType={'custom'}
+        //         markedDates={AllMarkedDays}
+        //         onDayPress={handleDayPress}
+        //         theme={customTheme}
+        //         />
+        //     </View>
+        //     <ScrollView centerContent={true} >
+        //         {filteredData && filteredData.length > 0 ? (
+        //             filteredData.map((turno: Appointment, i: number) => {
+        //
+        //                 return(
+        //                     <View key={i} style={{alignItems: 'center', marginTop: 10}}>
+        //                         <TurnoContainer
+        //                             date={turno.date}
+        //                             turno={turno}
+        //                             styleExterior={styles.turno}
+        //                         />
+        //                     </View>
+        //                 )
+        //                 })) :  (
+        //                     <View style={{alignItems: 'center', marginTop: 10}}>
+        //                         <View style={[styles.turnoContainer]}>
+        //                             <Text style={styles.text}>{t('text19')} {dateNormal}</Text>
+        //                         </View>
+        //                     </View>
+        //                 )}
+        //         <View style={{marginTop: 10, marginBottom: "20%", alignContent: 'center'}}>
+        //             <Button
+        //                 title={t('add')+t('appo')}
+        //                 buttonStyle={{
+        //                     backgroundColor: '#2E5829',
+        //                     borderColor: 'white',
+        //                     borderRadius: 20,
+        //                     minHeight: 10,
+        //                     width: "auto",
+        //                     alignSelf: 'center',
+        //                 }}
+        //                 titleStyle={{ color: '#E9F4E9FF',fontSize: 15, margin: 5 }}
+        //                 onPress={() => navigation.navigate('AddAppointment', {session: session})}/>
+        //         </View>
+        //     </ScrollView>
+        // </View>
     )
 }
-
-const styles = StyleSheet.create({
-    titleText: {
-        fontSize: 25,
-        textAlign: 'center',
-        justifyContent: 'center',
-        fontWeight: 'bold',
-    },
-    text: {
-        fontSize: 20,
-        textAlign: 'center',
-        marginTop: '5%',
-        color: "#2E5829",
-    },
-    turnoContainer: {
-        backgroundColor: '#CBE4C9FF',
-        borderRadius: 5,
-        width: '90%',
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
-        minHeight: 60
-    },
-    container: {
-        height: '100%',
-        backgroundColor: '#e9f4e9',
-    },
-    window: {
-        alignItems: 'center',
-        marginTop: '20%',
-        marginLeft: '5%',
-        marginRight: '5%'
-    },
-    calendarContainer: {
-        margin: '5%',
-        backgroundColor: "#E9F4E9FF"
-    },
-    screenTitle: {
-        fontFamily: 'Roboto-Thin',
-        fontSize: 25,
-        textAlign: 'center',
-        fontWeight: 'bold',
-        marginTop: "1%",
-        marginBottom: "5%",
-        color: "#2E5829FF",
-        width: "60%"
-    },
-    turno: {
-        backgroundColor: '#CBE4C9',
-        borderRadius: 20,
-        borderColor: '#CBE4C9',
-        borderWidth: 1,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.85,
-        padding: "2%",
-    }
-});
+//
+// const styles = StyleSheet.create({
+//     titleText: {
+//         fontSize: 25,
+//         textAlign: 'center',
+//         justifyContent: 'center',
+//         fontWeight: 'bold',
+//     },
+//     text: {
+//         fontSize: 20,
+//         textAlign: 'center',
+//         marginTop: '5%',
+//         color: "#2E5829",
+//     },
+//     turnoContainer: {
+//         backgroundColor: '#CBE4C9FF',
+//         borderRadius: 5,
+//         width: '90%',
+//         shadowColor: '#000',
+//         shadowOffset: { width: 0, height: 2 },
+//         shadowOpacity: 0.25,
+//         shadowRadius: 3.84,
+//         minHeight: 60
+//     },
+//     container: {
+//         height: '100%',
+//         backgroundColor: '#e9f4e9',
+//     },
+//     window: {
+//         alignItems: 'center',
+//         marginTop: '20%',
+//         marginLeft: '5%',
+//         marginRight: '5%'
+//     },
+//     calendarContainer: {
+//         margin: '5%',
+//         backgroundColor: "#E9F4E9FF"
+//     },
+//     screenTitle: {
+//         fontFamily: 'Roboto-Thin',
+//         fontSize: 25,
+//         textAlign: 'center',
+//         fontWeight: 'bold',
+//         marginTop: "1%",
+//         marginBottom: "5%",
+//         color: "#2E5829FF",
+//         width: "60%"
+//     },
+//     turno: {
+//         backgroundColor: '#CBE4C9',
+//         borderRadius: 20,
+//         borderColor: '#CBE4C9',
+//         borderWidth: 1,
+//         shadowColor: '#000',
+//         shadowOffset: { width: 0, height: 2 },
+//         shadowOpacity: 0.25,
+//         shadowRadius: 3.85,
+//         padding: "2%",
+//     }
+// });
 
 export default Calender;
 
