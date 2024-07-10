@@ -109,5 +109,6 @@
   "ok" : "Ok",
   "select_user" : "Seleccione un usuario",
   "select_doc" : "Seleccione un médico",
-  "select_specialty" : "Seleccione una especialidad"
+  "select_specialty" : "Seleccione una especialidad",
+  "confirm_logout_message": "¿Está seguro de que desea cerrar sesión?"
 }

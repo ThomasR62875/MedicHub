@@ -39,9 +39,8 @@ export const styles = StyleSheet.create({
     text: {
         fontSize: 20,
         textAlign: 'left',
-        color: "#2E5829",
+        color: '#000',
         fontFamily: 'Roboto-Thin',
-        margin: "4%"
     },
     card: {
         backgroundColor: '#ffffff',
@@ -121,7 +120,7 @@ export const styles = StyleSheet.create({
         borderBottomColor: '#e1dfdf',
         borderBottomWidth: 2,
         marginRight: '15%',
-        marginLeft: '10%',
+        marginLeft: '15%',
         marginTop: '5%'
     },
     turno: {
@@ -147,7 +146,7 @@ export const styles = StyleSheet.create({
         alignItems: 'center',
     },
     cards:{
-        borderWidth: 2,
+        borderWidth: 1,
         borderColor: '#A8A8A8',
         padding: 10,
         borderRadius: 20,
@@ -174,5 +173,95 @@ export const styles = StyleSheet.create({
         fontSize: 14,
         padding: 15,
         paddingLeft: 20
+    },
+    cerrarSesion:{
+        width: '50%',
+        alignSelf: 'center',
+        backgroundColor: '#073A29',
+        borderRadius: 10,
+    },
+    grid: {
+        flexDirection: 'row',
+        alignItems: 'flex-start',
+        width: '100%',
+    },
+    misCosas: {
+        width: 225,
+        backgroundColor: '#cae4c8',
+        borderColor: '#cae4c8',
+        borderWidth: 1,
+        color: 'black',
+        borderRadius: 17,
+        alignSelf: 'center',
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        marginBottom: "2%"
+    },
+    text2: {
+        fontFamily: 'Roboto-Thin',
+        fontSize: 16,
+        marginTop: "1%",
+        color: "#A8A8A8",
+        width: "60%"
+    },
+    title: {
+        fontFamily: 'Roboto-Thin',
+        fontSize: 16,
+        marginTop: "1%",
+        color: "#000000",
+        width: "60%"
+    },
+    modalBackground: {
+        flex: 1,
+        backgroundColor: 'rgba(0, 0, 0, 0.9)',
+        justifyContent: 'flex-end',
+    },
+    modalContainer: {
+        padding: 20,
+        borderRadius: 15,
+        alignSelf: 'center',
+        marginBottom: 20,
+    },
+    modalInfoContainer: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    modalText: {
+        fontSize: 20,
+        color: 'white',
+    },
+    screen: {
+        backgroundColor: "#E9F4E9FF",
+        height: "100%",
+    },
+    main: {
+        flexDirection: 'row',
+        alignContent: 'flex-start',
+        alignItems: 'flex-start',
+        display: 'flex',
+        marginLeft: '5%'
+    },
+    iconContainer: {
+        alignItems: 'flex-start',
+    },
+    name: {
+        color: "#2E5829FF",
+        fontSize: 20,
+    },
+    namesContainer: {
+        marginLeft: "2%",
+        marginTop: '10%'
+    }, icons: {
+        color: '#2E5829FF',
+    },
+    buttonContainer: {
+        width: 225, // Ancho deseado para todos los botones
+        marginVertical: 10,
     }
 });

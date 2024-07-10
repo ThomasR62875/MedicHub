@@ -109,6 +109,7 @@
   "ok" : "Ok",
   "select_user" : "Select a user",
   "select_doc" : "Select a doctor",
-  "select_specialty" : "Select a specialty"
+  "select_specialty" : "Select a specialty",
+  "confirm_logout_message": "Are you sure you want to log out?"
 }
 

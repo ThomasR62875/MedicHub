@@ -116,22 +116,22 @@ const Home: React.FC = ({navigation, route}: any) => {
                     marginLeft: '5%',
                 }}>
                     <ScrollView horizontal={true} contentContainerStyle={{paddingRight: 190, flexDirection: 'row'}}>
-                        <TouchableOpacity style={styles.buttons} onPress={() => console.log('Doctores')}>
+                        <TouchableOpacity style={styles.buttons} onPress={() => navigation.navigate({name: 'Doctors', params: {session: session}})}>
                             <Icon name={'stethoscope'} type={'material-community'} size={25} color={'#fff'}/>
                             <Text style={styles.buttonText}>{t('doctors')}</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={[styles.buttons, {backgroundColor: '#DEB0BD'}]}
-                                          onPress={() => console.log('Doctores')}>
+                                          onPress={() => console.log('Vacunas')}>
                             <Icon name={'needle'} type={'material-community'} size={25} color={'#fff'}/>
                             <Text style={styles.buttonText}>{t('vaccines')}</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={[styles.buttons, {backgroundColor: '#ECB761'}]}
-                                          onPress={() => console.log('Doctores')}>
+                                          onPress={() => navigation.navigate({name: 'Medications', params: {session: session}})}>
                             <Icon name={'pill'} type={'material-community'} size={25} color={'#fff'}/>
                             <Text style={styles.buttonText}>{t('medication')}</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={[styles.buttons, {backgroundColor: '#86ABBA'}]}
-                                          onPress={() => console.log('Doctores')}>
+                                          onPress={() => console.log('Archivos')}>
                             <Icon name={'archive'} type={'material-community'} size={25} color={'#fff'}/>
                             <Text style={styles.buttonText}>{t('files')}</Text>
                         </TouchableOpacity>
@@ -164,45 +164,6 @@ const Home: React.FC = ({navigation, route}: any) => {
 
                 <Text style={styles.subtitles}>{t('text15')}</Text>
             </ScrollableBg>
-            {/*<ScrollView style={{width:'85%', marginLeft: "5%",  marginRight: "5%", height: "100%"}}>*/}
-            {/*    <Pressable style={{marginTop: "3%"}}*/}
-            {/*               onPress={() => navigation.navigate({name: 'Appointments', params: {session: session}})}>*/}
-            {/*        <View style={styles.turnoContainer}>*/}
-            {/*            <View style={styles.card}>*/}
-            {/*                <Text style={[styles.titleText, {justifyContent:'center'}]}>{t('text12')}</Text>*/}
-            {/*            </View>*/}
-            {/*            {turno1 && date1 ? (*/}
-            {/*                    <View style={{padding: "2%"}}>*/}
-            {/*                        <TurnoContainer*/}
-            {/*                            turno={turno1}*/}
-            {/*                            date={date1}*/}
-            {/*                            styleExterior={[styles.turnoContainer, {backgroundColor: '#dcf1d8', padding: "2%"}]}*/}
-            {/*                        />*/}
-            {/*                        {turno2 && date2 ? (*/}
-            {/*                            <TurnoContainer*/}
-            {/*                                styleExterior={[styles.turnoContainer, {marginTop: "2%", backgroundColor: '#dcf1d8', padding: "2%"}]}*/}
-            {/*                                date={date2}*/}
-            {/*                                turno={turno2}*/}
-            {/*                            />*/}
-            {/*                        ) : (<View/>) }*/}
-            {/*                    </View>*/}
-            {/*                    ) : (*/}
-            {/*                    <View style={styles.turnoContainer}>*/}
-            {/*                        <Text style={styles.text}>{t('text13')}</Text>*/}
-            {/*                        <Text style={[styles.text, {fontStyle: 'italic'}]}>{t('text14')}</Text>*/}
-            {/*                    </View>*/}
-            {/*            )}*/}
-            {/*        </View>*/}
-            {/*    </Pressable>*/}
-            {/*    <Pressable style={{marginTop: "5%"}}>*/}
-            {/*        <View style={styles.turnoContainer}>*/}
-            {/*            <View style={styles.card}>*/}
-            {/*                <Text style={[styles.titleText, {justifyContent:'center'}]}>{t('text15')}</Text>*/}
-            {/*            </View>*/}
-            {/*            <Text style={[styles.text]}>Esperar la aplicación de la IA porfavor :)</Text>*/}
-            {/*        </View>*/}
-            {/*    </Pressable>*/}
-            {/*</ScrollView>*/}
         </View>
     )
         ;
