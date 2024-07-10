@@ -11,12 +11,14 @@ export const styles = StyleSheet.create({
         color: 'black',
         fontSize: 24,
         fontFamily: 'Roboto-Thin',
-        paddingLeft: 25
+        paddingLeft: 25,
+        paddingTop: 100
     },
     buttonText: {
         color: '#fff',
         fontSize: 14,
-        padding: 15
+        padding: 15,
+        fontWeight: 'bold'
     },
     container: {
 
@@ -107,6 +109,7 @@ export const styles = StyleSheet.create({
         fontSize: 16,
         color: "#807d7d",
         paddingLeft: 25,
+        padding: 15,
         marginTop: 20
     },
     calendarContainer: {
@@ -131,5 +134,45 @@ export const styles = StyleSheet.create({
         shadowOpacity: 0.25,
         shadowRadius: 3.85,
         padding: "2%",
+    },
+    addButton: {
+        backgroundColor: '#86abba',
+        borderColor: 'white',
+        borderRadius: 15,
+        width: '40%',
+        maxHeight: '90%',
+        justifyContent: 'center',
+        alignContent: 'center',
+        textAlign: 'center',
+        alignItems: 'center',
+    },
+    cards:{
+        borderWidth: 2,
+        borderColor: '#A8A8A8',
+        padding: 10,
+        borderRadius: 20,
+        shadowRadius:2.5,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        backgroundColor: 'white',
+        marginBottom: '2%',
+    },
+    listCards: {
+        paddingRight: 20,
+        paddingLeft: 20,
+        backgroundColor: '#ffffff',
+        borderRadius: 20,
+    },
+    circleCard:{
+        borderRadius: 30,
+        height: 45,
+        width: 45,
+        padding: 10,
+    },
+    cardText: {
+        fontSize: 14,
+        padding: 15,
+        paddingLeft: 20
     }
 });

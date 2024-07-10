@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, Alert, Image,  ScrollView, TouchableOpacity} from 'react-native';
+import {View, Text, Alert, Image, ScrollView, TouchableOpacity} from 'react-native';
 import {supabase} from "../lib/supabase";
 import {Appointment} from "../lib/types";
 import TurnoContainer from "../components/TurnContainer";
@@ -105,7 +105,7 @@ const Home: React.FC = ({navigation, route}: any) => {
     return (
         <View style={styles.tab}>
             <Image source={Squiggle} style={styles.squiggle}/>
-            <Text style={[styles.tabTitle, {paddingTop: 70}]}>
+            <Text style={[styles.tabTitle]}>
                 {t('home')}
             </Text>
             <ScrollableBg>
@@ -114,9 +114,8 @@ const Home: React.FC = ({navigation, route}: any) => {
                     height: 125,
                     marginTop: '5%',
                     marginLeft: '5%',
-                    marginRight: '5%'
                 }}>
-                    <ScrollView horizontal={true} contentContainerStyle={{paddingRight: 175, flexDirection: 'row'}}>
+                    <ScrollView horizontal={true} contentContainerStyle={{paddingRight: 190, flexDirection: 'row'}}>
                         <TouchableOpacity style={styles.buttons} onPress={() => console.log('Doctores')}>
                             <Icon name={'stethoscope'} type={'material-community'} size={25} color={'#fff'}/>
                             <Text style={styles.buttonText}>{t('doctors')}</Text>
@@ -138,8 +137,32 @@ const Home: React.FC = ({navigation, route}: any) => {
                         </TouchableOpacity>
                     </ScrollView>
                 </View>
-                <Text style={styles.subtitles}>{t('appointments')}</Text>
-                <Text style={styles.subtitles}>{t('turnos recomendados')}</Text>
+                <Text style={styles.subtitles}>{t('text12')}</Text>
+                <View style={styles.listCards}>
+                    {turno1 && date1 ? (
+                        <View >
+                            <TurnoContainer
+                                turno={turno1}
+                                date={date1}
+                                styleExterior={[styles.cards]}
+                            />
+                            {turno2 && date2 ? (
+                                <TurnoContainer
+                                    styleExterior={[styles.cards]}
+                                    date={date2}
+                                    turno={turno2}
+                                />
+                            ) : (<View/>)}
+                        </View>
+                    ) : (
+                        <View style={styles.cards}>
+                            <Text style={styles.text}>{t('text13')}</Text>
+                            <Text style={[styles.text, {fontStyle: 'italic'}]}>{t('text14')}</Text>
+                        </View>
+                    )}
+                </View>
+
+                <Text style={styles.subtitles}>{t('text15')}</Text>
             </ScrollableBg>
             {/*<ScrollView style={{width:'85%', marginLeft: "5%",  marginRight: "5%", height: "100%"}}>*/}
             {/*    <Pressable style={{marginTop: "3%"}}*/}
@@ -184,79 +207,5 @@ const Home: React.FC = ({navigation, route}: any) => {
     )
         ;
 }
-//
-// const styles = StyleSheet.create({
-//     container: {
-//         backgroundColor: "#E9F4E9",
-//         height: '100%',
-//     },
-//     col: {
-//         flex: 1,
-//         flexDirection: 'column',
-//         justifyContent: 'center',
-//     },
-//     titleText: {
-//         fontFamily: 'Roboto-Thin',
-//         fontSize: 20,
-//         textAlign: 'center',
-//         fontWeight: 'bold',
-//         marginTop: "1%",
-//         color: "#2E5829",
-//     },
-//     text: {
-//         fontSize: 20,
-//         textAlign: 'left',
-//         color: "#2E5829",
-//         fontFamily: 'Roboto-Thin',
-//         margin: "4%"
-//     },
-//     card: {
-//         backgroundColor: '#B7DAB1',
-//         padding: 10,
-//         borderTopLeftRadius: 20,
-//         borderTopRightRadius: 20,
-//         elevation: 3,
-//         height: 45
-//     },
-//     img: {
-//         height: 150,
-//         borderTopRightRadius: 10,
-//         borderTopLeftRadius: 10,
-//     },
-//     turnoContainer: {
-//         backgroundColor: '#CBE4C9',
-//         borderRadius: 20,
-//         borderColor: '#CBE4C9',
-//         borderWidth: 1,
-//         shadowColor: '#000',
-//         shadowOffset: { width: 0, height: 2 },
-//         shadowOpacity: 0.25,
-//         shadowRadius: 3.85,
-//     },
-//     logo:{
-//         color: '#407738',
-//         width: 50,
-//         height: 50,
-//
-//     },
-//     topContent: {
-//         alignItems: 'flex-start',
-//         marginTop: "8%",
-//         marginLeft: "6%"
-//     },
-//     centerContent: {
-//         justifyContent: 'center',
-//         alignItems: 'center',
-//         marginTop: "30%"
-//     },
-//     screenTitle: {
-//         fontFamily: 'Roboto-Thin',
-//         fontSize: 25,
-//         textAlign: 'center',
-//         fontWeight: 'bold',
-//         marginTop: "1%",
-//         color: "#2E5829FF",
-//     }
-// });
 
 export default Home;

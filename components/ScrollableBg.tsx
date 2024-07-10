@@ -8,7 +8,7 @@ interface ScrollableBackgroundViewProps extends ViewProps {
 
 const ScrollableBackgroundView: React.FC<ScrollableBackgroundViewProps> = ({ children, style, ...props }) => {
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, style]}>
             <ScrollView contentContainerStyle={[styles.contentContainer]} {...props}>
                 {children}
             </ScrollView>

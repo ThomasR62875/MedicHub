@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {Dimensions, Image, ScrollView, StyleSheet, Text, View} from "react-native";
+import { Image,   Text, View} from "react-native";
 import {Appointment} from "../lib/types";
 import {Calendar} from "react-native-calendars";
 import TurnoContainer from "../components/TurnContainer";
@@ -15,7 +15,6 @@ import {Divider} from "react-native-paper";
 const Calender: React.FC = ({ navigation, route } : any) => {
     const {session} = route.params;
     const [appointments,setAppointments]= useState<Appointment[] | undefined>(undefined)
-    const [loading, setLoading] = useState(true)
     const monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
     const {t} = useTranslation();
 
@@ -79,7 +78,7 @@ const Calender: React.FC = ({ navigation, route } : any) => {
     return (
         <View style={styles.tab}>
             <Image source={Squiggle} style={styles.squiggle}/>
-            <Text style={[styles.tabTitle, {paddingTop: 70}]}>
+            <Text style={[styles.tabTitle]}>
                 {t('calendar')}
             </Text>
             <Text style={styles.screenTitle}>{t('subtitle_calendar')}</Text>
