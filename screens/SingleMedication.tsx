@@ -16,15 +16,15 @@ const SingleMedication: React.FC<SingleMedicationProps> = ({ navigation, route }
     const hideDialog = () => setVisible(false);
     const showDialog = () => setVisible(true);
     const handleDeleteMedication = async () => {
-        const session =  route.params.session;
-        const medication =  route.params.meds;
+        const session = route.params.session;
+        const medication = route.params.meds;
         const result = await deleteMedication(medication);
         if (result.success) {
             Alert.alert(
                 'El Medicamento fue eliminado correctamente',
                 '',
                 [
-                    { text: 'Ok', onPress: () => navigation.navigate('Medication', { session: session }) }
+                    {text: 'Ok', onPress: () => navigation.navigate('Medications', {session: session})}
                 ]
             );
         } else {
@@ -33,13 +33,17 @@ const SingleMedication: React.FC<SingleMedicationProps> = ({ navigation, route }
     };
 
     const {t, i18n} = useTranslation();
+
     function lowercaseFirstLetter(str: string) {
         if (!str) return str; // Handle empty strings or null
         return str.charAt(0).toLowerCase() + str.slice(1);
     }
+
     let str = t('medicine');
     str = lowercaseFirstLetter(str);
 
+    let sinceD = new Date(route.params.meds.sinceWhen)
+    let since = sinceD.toISOString().split('T')[0]
 
     return (
         <View style={styles.container}>
@@ -75,23 +79,29 @@ const SingleMedication: React.FC<SingleMedicationProps> = ({ navigation, route }
             {route.params.meds.sinceWhen  && (
                 <View style={styles.detailRow}>
                     <Text style={styles.label}>{t('text22').slice(2, -2)}:</Text>
-                    <Text style={styles.value}>{route.params.meds.sinceWhen}</Text>
+                    <Text style={styles.value}>{since}</Text>
                 </View>
             )}
             {route.params.meds.howOften && (
                 <View style={styles.detailRow}>
                     <Text style={styles.label}>{t('text23')}</Text>
-                    <Text>{parseInt(route.params.meds.howOften.toString().split(':')[0]+t('text24'), 10)}</Text>
+                    <Text>{parseInt(route.params.meds.howOften.toString().split(':')[0], 10)}{t('text24')} </Text>
                 </View>
             )}
-            {route.params.meds.untilWhen && (
+            {route.params.meds.untilWhen && route.params.meds.isForever===false && (
                 <View style={styles.detailRow}>
                     <Text style={styles.label}>{t('text21').slice(2, -2)}:</Text>
+                    {route.params.meds.isForever===true && (
+                        <View style={[styles.detailRow]}>
+                            <Text style={styles.label}>{t('text21').slice(2, -2)}:</Text>
+                            <Text style={styles.value}>{t('text25')}</Text>
+                        </View>
+                    )}
                     <Text style={styles.value}>{route.params.meds.untilWhen}</Text>
                 </View>
             )}
             {route.params.meds.isForever===true && (
-                <View style={styles.detailRow}>
+                <View style={[styles.detailRow]}>
                     <Text style={styles.label}>{t('text21').slice(2, -2)}:</Text>
                     <Text style={styles.value}>{t('text25')}</Text>
                 </View>
@@ -99,7 +109,7 @@ const SingleMedication: React.FC<SingleMedicationProps> = ({ navigation, route }
             <View style={styles.screen}>
                 <View style={{alignItems: 'center', width: 'auto'}}>
                     <Button
-                        title="Eliminar"
+                        title={t('delete')}
                         buttonStyle={{
                             backgroundColor: '#2E5829',
                             borderWidth: 2,

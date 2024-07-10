@@ -1,7 +1,7 @@
 import React from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import {Medication} from "../screens/Medication";
+import {Medication} from '../lib/types';
 import {useTranslation} from "react-i18next";
 import {cardStyle} from "../styles/global"
 

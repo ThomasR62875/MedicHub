@@ -47,8 +47,11 @@ const Medications: React.FC= ({ navigation, route }: any) => {
             <ScrollView>
                 <View>
                     {
-                        medications ? (
+                        medications && medications.length > 0 ? (
                             medications.map((medic: Medication, i) => {
+                                //console.log("segundos-------------------------------------")
+                                console.log("how often : ",medic.howOften)
+                                console.log("name : ",medic.name)
                                 return (
                                     <View key={i}>
                                         <MedicationButton onPress={() => navigation.navigate({name: 'SingleMedication', params: {meds: medic}})} meds={medic}></MedicationButton>

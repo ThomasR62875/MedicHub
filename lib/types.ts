@@ -51,3 +51,8 @@ export type Appointment = {
     doctor: string;
     user_id: string;
 }
+
+export type Advertisement = {
+    client: string;
+    image_url: string;
+}

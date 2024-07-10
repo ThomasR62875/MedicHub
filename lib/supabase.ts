@@ -1,7 +1,7 @@
 import 'react-native-url-polyfill/auto';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {createClient} from '@supabase/supabase-js';
-import {User, DependentUser, Appointment, Specialty, Doctor, Medication} from './types';
+import {User, DependentUser, Appointment, Specialty, Doctor, Medication, Advertisement} from './types';
 
 import getEnvVars from '../environment';
 
@@ -250,7 +250,7 @@ export const getAppointments = async (): Promise<Appointment[] | undefined> => {
             id: appoint.id,
             description: appoint.description,
             date: appoint.date,
-            user_name: user.first_name, // Suponiendo que name es el campo que quieres agregar
+            user_name: user.first_name,
             doctor: doctor.id,
             user_id: appoint.user,
         }
@@ -439,7 +439,11 @@ export async function getMedications(): Promise<Medication[] | undefined> {
         to_return.push({
             id: medication.id,
             name: medication.name,
-            prescription: medication.prescription
+            prescription: medication.prescription,
+            sinceWhen: medication.sinceWhen,
+            untilWhen: medication.untilWhen,
+            howOften: medication.howOften,
+            isForever: medication.isForever
         });
     });
     return to_return;
@@ -467,4 +471,15 @@ export const getUserIdByEmail = async (email_input: string) : Promise<string | u
         return user_id
     }
     return undefined
+}
+
+//Obtiene la informacion necesaria para la publicidad 
+
+export const getAdvertisement = async(banner_type: string) : Promise<Advertisement | undefined> =>{
+    const{data,error} = await supabase.rpc('get_advertisement',{banner_input: banner_type})
+
+    if(!error){
+        return data;
+    }
+    return undefined;
 }

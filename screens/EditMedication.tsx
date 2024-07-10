@@ -5,6 +5,11 @@ import {Button, Input} from 'react-native-elements'
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
 import {useTranslation} from "react-i18next";
+import DateTimePicker, {DateTimePickerEvent} from "@react-native-community/datetimepicker";
+import Checkbox from "expo-checkbox";
+import {cardStyle} from "../styles/global";
+import UnderlinedText from "../components/UnderlinedText";
+import { Picker } from '@react-native-picker/picker';
 
 type EditMedicationProps = NativeStackScreenProps<RootStackParamList, 'EditMedication'>;
 
@@ -14,8 +19,8 @@ const EditMedication:React.FC<EditMedicationProps> = ({navigation, route }: any)
     const [name, setName] = useState(route.params.medication.name)
     const [prescription, setPrescription] = useState(route.params.medication.prescription);
     const [dateSince, setDateSince] = useState<Date>(route.params.medication.dateSince);
-    const [dateUntil, setDateUntil] = useState<Date | undefined>(route.params.medication.dateUntil);
-    const [howOften, setHowOften] = useState<Date | undefined>(route.params.medication.howOften);
+    const [dateUntil, setDateUntil] = useState<Date | null>(route.params.medication.dateUntil);
+    const [howOften, setHowOften] = useState<Date | null>(route.params.medication.howOften);
     const [isForever, setIsForever] = useState<boolean>(route.params.medication.isForever);
     const {t} = useTranslation();
     const [mode, setMode] = useState<'date' | 'time'>('date');
@@ -50,7 +55,7 @@ const EditMedication:React.FC<EditMedicationProps> = ({navigation, route }: any)
 
     const handleUpdateMedication = async () => {
         const session =  route.params.session;
-        const medication  = {
+        const medication   = {
             id: id,
             name: name,
             prescription: prescription,
@@ -59,7 +64,7 @@ const EditMedication:React.FC<EditMedicationProps> = ({navigation, route }: any)
             howOften:howOften,
             isForever:isForever,
         }
-        const result = await updateMedication(medication);
+        const result = await updateMedication(medication); // huhh??? literlamente son el mismo Type
         if (result.success) {
             navigation.navigate('AlertPublicity', { session, msg: 'editMed', screen: 'SingleMedication', meds: medication});
         } else {
@@ -125,7 +130,7 @@ const EditMedication:React.FC<EditMedicationProps> = ({navigation, route }: any)
                         errorStyle={{ color: 'red' }}
                         errorMessage={prescriptionErrorMessage}
                     />
-                    {/* <View>
+                    <View>
                         <RNText style={styles.buttons} >
                             <UnderlinedText>{t('text22')}</UnderlinedText>
                         </RNText>
@@ -173,7 +178,7 @@ const EditMedication:React.FC<EditMedicationProps> = ({navigation, route }: any)
                                 color={'#2E5829'}
                             />
                         </View>
-                    </View> */}
+                    </View>
                     <Button
                         title={t('savec')}
                         buttonStyle={{
