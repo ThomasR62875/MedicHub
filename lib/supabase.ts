@@ -250,7 +250,7 @@ export const getAppointments = async (): Promise<Appointment[] | undefined> => {
             id: appoint.id,
             description: appoint.description,
             date: appoint.date,
-            user_name: user.first_name, // Suponiendo que name es el campo que quieres agregar
+            user_name: user.first_name,
             doctor: doctor.id,
             user_id: appoint.user,
         }
@@ -439,7 +439,11 @@ export async function getMedications(): Promise<Medication[] | undefined> {
         to_return.push({
             id: medication.id,
             name: medication.name,
-            prescription: medication.prescription
+            prescription: medication.prescription,
+            sinceWhen: medication.sinceWhen,
+            untilWhen: medication.untilWhen,
+            howOften: medication.howOften,
+            isForever: medication.isForever
         });
     });
     return to_return;
