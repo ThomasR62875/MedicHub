@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { getDependentUsers} from '../lib/supabase'
-import {View, ScrollView, Text, Dimensions, Image, TouchableOpacity} from 'react-native'
-import {Button, Icon} from "react-native-elements";
+import {View,  Text, Dimensions, Image, TouchableOpacity} from 'react-native'
+import { Icon} from "react-native-elements";
 import {useTranslation} from "react-i18next";
 import {cardStyle} from "../styles/global"
 import DependentUserButton from "../components/DependentUsertButton";
@@ -14,8 +14,6 @@ import ScrollableBg from "../components/ScrollableBg";
 const DependentUsers: React.FC = ({navigation, route} : any) => {
     const {session} = route.params;
     const [dependent_users,setDependentUsers]= useState<DependentUser[] | undefined>(undefined)
-    const screenHeight = Dimensions.get('window').height;
-    const percentageMargin = screenHeight * 0.05;
     const {t} = useTranslation();
     const colors = [ 'rgba(139,134,190,0.6)','rgba(222,176,189,0.6)','rgba(236,183,97,0.6)','rgba(203,214,144,0.6)']
 
