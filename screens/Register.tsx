@@ -138,7 +138,7 @@ const Register: React.FC = ({navigation}: any) => {
                 titleStyle={{color: '#000000'}}
                 onPress={() => navigation.navigate('Login')}
             />
-            <ScrollableBg>
+            <ScrollableBg style={{margin: '5%'}}>
                 <View style={{marginBottom: 50, alignItems: 'center'}}>
                     <Image source={Logo} style={styles.logo}/>
                 </View>
