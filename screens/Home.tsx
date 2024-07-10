@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, StyleSheet, Alert, Image, Pressable, Dimensions, ScrollView, TouchableOpacity} from 'react-native';
+import {View, Text, Alert, Image,  ScrollView, TouchableOpacity} from 'react-native';
 import {supabase} from "../lib/supabase";
 import {Appointment} from "../lib/types";
 import TurnoContainer from "../components/TurnContainer";
@@ -10,7 +10,6 @@ import {styles} from '../assets/styles'
 import ScrollableBg from "../components/ScrollableBg";
 // @ts-ignore
 import Squiggle from "../assets/tabAsset.png";
-import {Button} from "react-native-elements"
 import {Icon} from "react-native-elements";
 
 const Home: React.FC = ({navigation, route}: any) => {

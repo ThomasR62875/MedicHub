@@ -33,7 +33,7 @@ import 'react-native-reanimated'
 import * as Animatable from 'react-native-animatable'
 import 'react-native-reanimated'
 import {Ionicons} from "@expo/vector-icons";
-import {StatusBar, StyleSheet, TouchableOpacity} from "react-native";
+import {StatusBar} from "react-native";
 import {useTranslation} from "react-i18next";
 import { Provider } from 'react-native-paper';
 
