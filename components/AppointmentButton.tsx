@@ -1,6 +1,5 @@
 import React from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
 import {useTranslation} from "react-i18next";
 import {cardStyle} from "../styles/global"
 import {Appointment} from "../lib/types";
