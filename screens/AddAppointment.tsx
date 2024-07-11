@@ -100,7 +100,7 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
         const result = await addAppointment(appointment);
         if (result.success) {
             // @ts-ignore
-            navigation.navigate('AlertPublicity', { session, msg: 'text8', screen: 'Appointments' });
+            navigation.navigate('AlertPublicity', { session, msg: 'text8', screen: 'Appointments', appointment: null, du: null, doc: null, meds: null  });
         } else {
             Alert.alert('Error', result.message || 'An unknown error occurred');
         }
