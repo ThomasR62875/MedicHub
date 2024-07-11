@@ -15,7 +15,7 @@ const turnoContainer: React.FC<turnoContainerProps> = ({styleExterior, turno, da
     const otraDate = new Date(date);
 
     return (
-        <TouchableOpacity style={[styleExterior, {flexDirection: 'row'}]} {...props}>
+        <TouchableOpacity style={[styleExterior, {flexDirection: 'row'}]} {...props} onPress={onPress}>
             <View style={{flexDirection: 'column', padding: 10}}>
                 <Text style={[styles.text]}>{otraDate.getHours()}:{otraDate.getMinutes() > 10 ? otraDate.getMinutes() : '0' + otraDate.getMinutes()}</Text>
                 <Text style={[styles.text2, {fontSize: 12, width: '150%'}]}>{formatDate(date)}</Text>
