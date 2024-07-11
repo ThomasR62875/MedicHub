@@ -1,24 +1,29 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, StyleSheet, Alert, Image, Pressable, Dimensions, ScrollView} from 'react-native';
-import {Button, Icon} from "react-native-elements";
+import {View, Text, Alert, Image, ScrollView, TouchableOpacity} from 'react-native';
 import {supabase} from "../lib/supabase";
-import {Appointment} from "./Appointments";
+import {Appointment} from "../lib/types";
 import TurnoContainer from "../components/TurnContainer";
 // @ts-ignore
 import {useTranslation} from "react-i18next";
+
+import {styles} from '../assets/styles'
+import ScrollableBg from "../components/ScrollableBg";
+// @ts-ignore
+import Squiggle from "../assets/tabAsset.png";
+import {Icon} from "react-native-elements";
 
 const Home: React.FC = ({navigation, route}: any) => {
     const session = route.params.session;
     const [first_name, setFirstName] = useState('')
     const [loading, setLoading] = useState(true)
-    const [appointments,setAppointments]= useState<Appointment[] | undefined>(undefined)
-    let turno1, turno2 : Appointment | null = null;
-    let date1, date2 : Date | null = null;
+    const [appointments, setAppointments] = useState<Appointment[] | undefined>(undefined)
+    let turno1, turno2: Appointment | null = null;
+    let date1, date2: Date | null = null;
     const {t} = useTranslation();
 
     //se tiene q orderna por fecha appointments todo
 
-    if (appointments && appointments.length==1) {
+    if (appointments && appointments.length == 1) {
         turno1 = appointments[0];
         date1 = new Date(turno1.date);
     }
@@ -55,8 +60,8 @@ const Home: React.FC = ({navigation, route}: any) => {
             setLoading(true)
             if (!session?.user) throw new Error('No user on the session!')
 
-            const {data: user_id,error: user_data_error} = await supabase.rpc('get_independent_user_id')
-            if(user_data_error)
+            const {data: user_id, error: user_data_error} = await supabase.rpc('get_independent_user_id')
+            if (user_data_error)
                 throw new Error(user_data_error.message);
 
             const {data, error, status} = await supabase.rpc('get_appointments', {user_id: user_id})
@@ -67,8 +72,11 @@ const Home: React.FC = ({navigation, route}: any) => {
             if (data) {
                 for (const appoint of data) {
                     try {
-                        const { data: user_data, error: user_error } = await supabase.rpc('get_user', {user_id: appoint.user})
-                        const { data: doctor_data} = await supabase.rpc('get_doctor', {doctor_id: appoint.doctor})
+                        const {
+                            data: user_data,
+                            error: user_error
+                        } = await supabase.rpc('get_user', {user_id: appoint.user})
+                        const {data: doctor_data} = await supabase.rpc('get_doctor', {doctor_id: appoint.doctor})
                         if (user_error) {
                             throw user_error;
                         }
@@ -96,125 +104,70 @@ const Home: React.FC = ({navigation, route}: any) => {
     }
 
     return (
-            <View style={styles.container}>
-                <View style={styles.centerContent}>
-                    <ScrollView style={{width:'85%', marginLeft: "5%",  marginRight: "5%", height: "100%"}}>
-                        <Text style={styles.screenTitle}>{t('welcome')} {first_name}!</Text>
-                        <Pressable style={{marginTop: "3%"}}
-                                   onPress={() => navigation.navigate({name: 'Appointments', params: {session: session}})}>
-                            <View style={styles.turnoContainer}>
-                                <View style={styles.card}>
-                                    <Text style={[styles.titleText, {justifyContent:'center'}]}>{t('text12')}</Text>
-                                </View>
-                                {turno1 && date1 ? (
-                                        <View style={{padding: "2%"}}>
-                                            <TurnoContainer
-                                                turno={turno1}
-                                                date={date1}
-                                                styleExterior={[styles.turnoContainer, {backgroundColor: '#dcf1d8', padding: "2%"}]}
-                                            />
-                                            {turno2 && date2 ? (
-                                                <TurnoContainer
-                                                    styleExterior={[styles.turnoContainer, {marginTop: "2%", backgroundColor: '#dcf1d8', padding: "2%"}]}
-                                                    date={date2}
-                                                    turno={turno2}
-                                                />
-                                            ) : (<View/>) }
-                                        </View>
-                                        ) : (
-                                        <View style={styles.turnoContainer}>
-                                            <Text style={styles.text}>{t('text13')}</Text>
-                                            <Text style={[styles.text, {fontStyle: 'italic'}]}>{t('text14')}</Text>
-                                        </View>
-                                )}
-                            </View>
-                        </Pressable>
-                        <Pressable style={{marginTop: "5%"}}>
-                            <View style={styles.turnoContainer}>
-                                <View style={styles.card}>
-                                    <Text style={[styles.titleText, {justifyContent:'center'}]}>{t('text15')}</Text>
-                                </View>
-                                <Text style={[styles.text]}>Esperar la aplicación de la IA porfavor :)</Text>
-                            </View>
-                        </Pressable>
+        <View style={styles.tab}>
+            <Image source={Squiggle} style={styles.squiggle}/>
+            <Text style={[styles.tabTitle]}>
+                {t('home')}
+            </Text>
+            <ScrollableBg>
+                <Text style={styles.screenTitle}>{t('welcome')} {first_name}!</Text>
+                <View style={{
+                    height: 125,
+                    marginTop: '5%',
+                    marginLeft: '5%',
+                }}>
+                    <ScrollView horizontal={true} contentContainerStyle={{paddingRight: 190, flexDirection: 'row'}}>
+                        <TouchableOpacity style={styles.buttons} onPress={() => navigation.navigate({name: 'Doctors', params: {session: session}})}>
+                            <Icon name={'stethoscope'} type={'material-community'} size={25} color={'#fff'}/>
+                            <Text style={styles.buttonText}>{t('doctors')}</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={[styles.buttons, {backgroundColor: '#DEB0BD'}]}
+                                          onPress={() => console.log('Vacunas')}>
+                            <Icon name={'needle'} type={'material-community'} size={25} color={'#fff'}/>
+                            <Text style={styles.buttonText}>{t('vaccines')}</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={[styles.buttons, {backgroundColor: '#ECB761'}]}
+                                          onPress={() => navigation.navigate({name: 'Medications', params: {session: session}})}>
+                            <Icon name={'pill'} type={'material-community'} size={25} color={'#fff'}/>
+                            <Text style={styles.buttonText}>{t('medication')}</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={[styles.buttons, {backgroundColor: '#86ABBA'}]}
+                                          onPress={() => console.log('Archivos')}>
+                            <Icon name={'archive'} type={'material-community'} size={25} color={'#fff'}/>
+                            <Text style={styles.buttonText}>{t('files')}</Text>
+                        </TouchableOpacity>
                     </ScrollView>
                 </View>
-            </View>
-    );
+                <Text style={styles.subtitles}>{t('text12')}</Text>
+                <View style={styles.listCards}>
+                    {turno1 && date1 ? (
+                        <View >
+                            <TurnoContainer
+                                turno={turno1}
+                                date={date1}
+                                styleExterior={[styles.cards]}
+                            />
+                            {turno2 && date2 ? (
+                                <TurnoContainer
+                                    styleExterior={[styles.cards]}
+                                    date={date2}
+                                    turno={turno2}
+                                />
+                            ) : (<View/>)}
+                        </View>
+                    ) : (
+                        <View style={styles.cards}>
+                            <Text style={styles.text}>{t('text13')}</Text>
+                            <Text style={[styles.text, {fontStyle: 'italic'}]}>{t('text14')}</Text>
+                        </View>
+                    )}
+                </View>
+
+                <Text style={styles.subtitles}>{t('text15')}</Text>
+            </ScrollableBg>
+        </View>
+    )
+        ;
 }
-
-const styles = StyleSheet.create({
-    container: {
-        backgroundColor: "#E9F4E9",
-        height: '100%',
-    },
-    col: {
-        flex: 1,
-        flexDirection: 'column',
-        justifyContent: 'center',
-    },
-    titleText: {
-        fontFamily: 'Roboto-Thin',
-        fontSize: 20,
-        textAlign: 'center',
-        fontWeight: 'bold',
-        marginTop: "1%",
-        color: "#2E5829",
-    },
-    text: {
-        fontSize: 20,
-        textAlign: 'left',
-        color: "#2E5829",
-        fontFamily: 'Roboto-Thin',
-        margin: "4%"
-    },
-    card: {
-        backgroundColor: '#B7DAB1',
-        padding: 10,
-        borderTopLeftRadius: 20,
-        borderTopRightRadius: 20,
-        elevation: 3,
-        height: 45
-    },
-    img: {
-        height: 150,
-        borderTopRightRadius: 10,
-        borderTopLeftRadius: 10,
-    },
-    turnoContainer: {
-        backgroundColor: '#CBE4C9',
-        borderRadius: 20,
-        borderColor: '#CBE4C9',
-        borderWidth: 1,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.85,
-    },
-    logo:{
-        color: '#407738',
-        width: 50,
-        height: 50,
-
-    },
-    topContent: {
-        alignItems: 'flex-start',
-        marginTop: "8%",
-        marginLeft: "6%"
-    },
-    centerContent: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginTop: "30%"
-    },
-    screenTitle: {
-        fontFamily: 'Roboto-Thin',
-        fontSize: 25,
-        textAlign: 'center',
-        fontWeight: 'bold',
-        marginTop: "1%",
-        color: "#2E5829FF",
-    }
-});
 
 export default Home;

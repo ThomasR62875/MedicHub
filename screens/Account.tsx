@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react'
-import {getUser, getUserId, getUserSession, supabase} from '../lib/supabase'
-import {StyleSheet, View, ScrollView} from 'react-native'
+import React, {useState, useEffect} from 'react'
+import {getUser, getUserId, supabase} from '../lib/supabase'
+import { View} from 'react-native'
 import {Button, Icon} from 'react-native-elements'
 import LanguageButton from '../components/LanguageButton'
 import {DependentUser, SexGenderOption} from "../lib/types";
@@ -8,7 +8,12 @@ import {Dialog, Text, Button as PaperButton, Text as PaperText} from "react-nati
 import {useTranslation} from "react-i18next";
 import {Calendar, DateData} from "react-native-calendars";
 import {Picker} from "@react-native-picker/picker";
+import ScrollableBg from '../components/ScrollableBg'
 
+
+function Divider(props: { style: string }) {
+    return null;
+}
 
 const Account: React.FC = ({ navigation, route } : any) => {
     const {session} = route.params;
@@ -31,7 +36,7 @@ const Account: React.FC = ({ navigation, route } : any) => {
     useEffect(() => {
         if (session) {
             async function fetchData() {
-                const data : DependentUser= await getUser(await getUserId())
+                const data: DependentUser = await getUser(await getUserId())
                 setFirstName(data.first_name)
                 setLastName(data.last_name)
                 if (data.birthdate) {
@@ -49,6 +54,7 @@ const Account: React.FC = ({ navigation, route } : any) => {
                     console.error('El DNI no es una cadena válida o no tiene al menos 8 caracteres.');
                 }
             }
+
             fetchData()
         }
     }, [session , dni, first_name, last_name, date, sexGender])
@@ -65,141 +71,81 @@ const Account: React.FC = ({ navigation, route } : any) => {
 
 
     return (
-        <View style={styles.screen}>
-            <ScrollView>
-                <View style={styles.topContent}>
-                    <Text style={styles.screenTitle}>{t('account')}</Text>
-                </View>
-                <View style={styles.main}>
-                    <View style={styles.iconContainer}>
-                        <Icon
-                            name='person-circle-outline'
-                            iconStyle={{ color: '#1e3a1a' }}
-                            type='ionicon'
-                            size={125}
-                        />
-                    </View>
-                    <View style={styles.namesContainer}>
-                        <Text style={styles.name}>{first_name}</Text>
-                        <Text style={styles.name}>{last_name}</Text>
-                    </View>
-                    <View style={{marginTop: "12%", marginLeft: '20%'}}>
-                        <Icon
-                            name='pencil'
-                            iconStyle={{ color: '#1E3A1AFF' }}
-                            type='ionicon'
-                            size={25}
-                            style={{margin: "5%"}}
-                            onPress={() => navigation.navigate('EditAccount', {session: session})}
-                        />
-                    </View>
-                </View>
-                <View style={{marginTop: 5, marginLeft: "10%", marginBottom: "5%"}}>
-                        <Text style={styles.title}>Mail:</Text>
-                        <Text style={styles.text2}>{session?.user.email}</Text>
-                    <View style={{marginTop: 5}}/>
-                        <Text style={styles.title}>{t('id')}:</Text>
-                        <Text style={styles.text2}>{dni}</Text>
-                    <View style={{marginTop: 5}}/>
-                        <Text style={styles.title}>{t('birthdate')}:</Text>
-                        <Text style={styles.text2}>{date ? date.toISOString().split('T')[0] : ' '}</Text>
-                    <View style={{marginTop: 5}}/>
-                        <Text style={styles.title}>{t('sex')}:</Text>
-                        <Text style={styles.text2}>{getSexGenderName(sexGender)}</Text>
-                </View>
-                    <View style={{marginTop: 5, alignItems: 'center', marginBottom: 5}}>
+        <View style={{flex: 1, backgroundColor: '#fff', marginBottom: 0}}>
+            <View
+                style={[
+
+                    {
+                        width: 500,
+                        height: 500,
+                        borderRadius: 250,
+                        left: 50,
+                        top: -250,
+                        backgroundColor: 'rgba(203,214,144,0.2)',
+                        position: 'absolute',
+                    },
+                ]}
+            />
+            <View
+                style={[
+
+                    {
+                        width: 400,
+                        height: 400,
+                        borderRadius: 200,
+                        left: -150,
+                        top: -200,
+                        backgroundColor: 'rgba(203,214,144,0.2)',
+                        position: 'absolute',
+                    },
+                ]}
+            />
+            <Text style={[styles.tabTitle, {paddingLeft: 60}]}>
+                {t('account')}
+            </Text>
+            <ScrollableBg>
+                <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                    <Icon
+                        name='person-circle-outline'
+                        iconStyle={{color: '#000', alignSelf: 'flex-start', paddingHorizontal: 50, paddingVertical: 25}}
+                        type='ionicon'
+                        size={100}
+                    />
+                    <Icon
+                        name='pencil'
+                        iconStyle={{color: '#807d7d'}}
+                        type='ionicon'
+                        size={25}
+                        style={{margin: "5%"}}
+                        onPress={() => navigation.navigate('EditAccount', {session: session})}
+                    />
+                    <View style={{marginLeft: '5%', alignSelf: 'center'}}>
                         <LanguageButton/>
                     </View>
+                </View>
+                <View style={{marginHorizontal: '15%', padding: 0, flexDirection: 'row'}}>
+                    <Text style={styles.text}>{first_name} </Text>
+                    <Text style={styles.text}>{last_name}</Text>
+                </View>
+                <Divider style={styles.divider}/>
+
+
+                <View style={{marginVertical: '5%', marginHorizontal: '15%'}}>
+                    <Text style={styles.title}>Mail:</Text>
+                    <Text style={styles.text2}>{session?.user.email}</Text>
+                    <View style={{marginTop: 5}}/>
+                    <Text style={styles.title}>{t('id')}:</Text>
+                    <Text style={styles.text2}>{dni}</Text>
+                    <Text style={styles.title}>{t('birthdate')}:</Text>
+                    <Text style={styles.text2}>{date ? date.toISOString().split('T')[0] : ' '}</Text>
+                    <Text style={styles.title}>{t('sex')}:</Text>
+                    <Text style={styles.text2}>{getSexGenderName(sexGender)}</Text>
+                </View>
                 <View style={{alignItems: 'center', width: 'auto', alignSelf: 'center'}}>
-                    <Button
-                        title={t('mdocs')}
-                        icon={{
-                            name: 'doctor',
-                            type: 'material-community',
-                            size: 20,
-                            color: '#12210f',
-                        }}
-                        iconContainerStyle={{ marginRight: 10}}
-                        titleStyle={styles.buttonText}
-                        buttonStyle={styles.misCosas}
-                        containerStyle={{
-                            width: '80%',
-                            marginHorizontal: 50,
-                            marginVertical: 2,
-
-                        }}
-                        onPress={() => navigation.navigate({name: 'Doctors', params: {session: session}})}/>
-                    <Button
-                        title={t('mappointments')}
-                        icon={{
-                            name: 'archive-clock',
-                            type: 'material-community',
-                            size: 20,
-                            color: '#1e3a1a',
-                        }}
-                        iconContainerStyle={{ marginRight: 10}}
-                        titleStyle={styles.buttonText}
-                        buttonStyle={styles.misCosas}
-                        containerStyle={{
-                            width: '80%',
-                            marginHorizontal: 50,
-                            marginVertical: 2,
-
-                        }}
-                        onPress={() => navigation.navigate({name: 'Appointments', params: {session: session}})}/>
-                    <Button
-                        title={t('mvaccines')}
-                        icon={{
-                            name: 'needle',
-                            type: 'material-community',
-                            size: 20,
-                            color: '#1e3a1a',
-                        }}
-                        iconContainerStyle={{ marginRight: 10}}
-                        titleStyle={styles.buttonText}
-                        buttonStyle={styles.misCosas}
-                        containerStyle={{
-                            width: '80%',
-                            marginHorizontal: 50,
-                            marginVertical: 2,
-                        }}/>
-                    <Button
-                        title={t('mmedicine')}
-                        icon={{
-                            name: 'pill',
-                            type: 'material-community',
-                            size: 20,
-                            color: '#1e3a1a',
-                        }}
-                        iconContainerStyle={{ marginRight: 10}}
-                        titleStyle={styles.buttonText}
-                        buttonStyle={styles.misCosas}
-                        containerStyle={{
-                            width: '80%',
-                            marginHorizontal: 50,
-                            marginVertical: 2,
-                        }}
-                        onPress={() => navigation.navigate({name: 'Medication', params: {session: session}})}/>
-                    <Button
-                        title={t('mfiles')}
-                        icon={{
-                            name: 'archive',
-                            type: 'material-community',
-                            size: 20,
-                            color: '#1e3a1a',
-                        }}
-                        iconContainerStyle={{ marginRight: 10}}
-                        titleStyle={styles.buttonText}
-                        buttonStyle={styles.misCosas}
-                        containerStyle={{
-                            width: '80%',
-                            marginHorizontal: 50,
-                            marginVertical: 2,
-                        }}/>
                     <Button
                         title={t('logout')}
                         buttonStyle={{
-                            backgroundColor: '#2E5829',
+                            backgroundColor: '#ecb761',
                             borderWidth: 2,
                             borderColor: 'white',
                             borderRadius: 30,
@@ -211,186 +157,34 @@ const Account: React.FC = ({ navigation, route } : any) => {
                             marginHorizontal: 50,
                             marginVertical: 10,
                             marginTop: 40,
-                            marginBottom:100
+                            marginBottom: 100
                         }}
-                        titleStyle={{ color: '#eef9ed' }}
-                        onPress={()=>showDialog()}/>
+                        titleStyle={{color: '#ffffff', fontWeight: 'bold', fontSize: 16}}
+                        onPress={() => showDialog()}/>
                 </View>
-                <Dialog style={{ backgroundColor: '#E9F4E9FF' }}
+            </ScrollableBg>
+            <Dialog style={{backgroundColor: '#E9F4E9FF'}}
                     visible={visible}
                     onDismiss={hideDialog}>
-                    <Dialog.Content>
-                        <Text variant="bodyMedium" style={[{textAlign: 'center'}, {fontSize: 18}]}>
-                            {t("closeSes")}
-                        </Text>
-                    </Dialog.Content>
-                    <Dialog.Actions style={{ justifyContent: 'space-between' }}>
-                        <PaperButton textColor="#2E5829FF"
-                            onPress={hideDialog}>
-                            Cancelar
-                        </PaperButton>
-                        <PaperButton textColor="#b6265d"
-                            onPress={() => supabase.auth.signOut()}>
-                            Cerrar sesión
-                        </PaperButton>
-                    </Dialog.Actions>
-                </Dialog>
-            </ScrollView>
+                <Dialog.Content>
+                    <Text variant="bodyMedium" style={[{textAlign: 'center'}, {fontSize: 18}]}>
+                        {t('confirm_logout_message')}
+                    </Text>
+                </Dialog.Content>
+                <Dialog.Actions style={{justifyContent: 'space-between'}}>
+                    <PaperButton textColor="#2E5829FF"
+                                 onPress={hideDialog}>
+                        {t('cancel')}
+                    </PaperButton>
+                    <PaperButton textColor="#b6265d"
+                                 onPress={() => supabase.auth.signOut()}>
+                        {t('logout')}
+                    </PaperButton>
+                </Dialog.Actions>
+            </Dialog>
         </View>
     )
 }
 
 
 export default Account
-
-const styles = StyleSheet.create({
-    cerrarSesion:{
-        width: '50%',
-        alignSelf: 'center',
-        backgroundColor: '#073A29',
-        borderRadius: 10,
-    },
-    col: {
-        flex: 1,
-        flexDirection: 'column',
-        alignSelf: 'center',
-        marginLeft: 10,
-    },
-    grid: {
-        flexDirection: 'row',
-        alignItems: 'flex-start',
-        width: '100%',
-    },
-    misCosas: {
-        width: 225,
-        backgroundColor: '#cae4c8',
-        borderColor: '#cae4c8',
-        borderWidth: 1,
-        color: 'black',
-        borderRadius: 17,
-        alignSelf: 'center',
-        shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
-        marginBottom: "2%"
-    },
-    text2: {
-        fontFamily: 'Roboto-Thin',
-        fontSize: 20,
-        marginTop: "1%",
-        color: "#1a4212",
-        width: "60%"
-    },
-    title: {
-        fontFamily: 'Roboto-Thin',
-        fontSize: 20,
-        marginTop: "1%",
-        color: "#245e1e",
-        width: "60%"
-    },
-    buttonText: {
-        alignSelf: 'center',
-        color: '#12210f',
-        fontSize: 20,
-    },
-    modalBackground: {
-        flex: 1,
-        backgroundColor: 'rgba(0, 0, 0, 0.9)',
-        justifyContent: 'flex-end',
-    },
-    modalContainer: {
-        padding: 20,
-        borderRadius: 15,
-        alignSelf: 'center',
-        marginBottom: 20,
-    },
-    modalInfoContainer: {
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    modalText: {
-        fontSize: 20,
-        color: 'white',
-    },
-    screen: {
-        backgroundColor: "#E9F4E9FF",
-        height: "100%",
-    },
-    topContent: {
-        alignItems: "center",
-        marginTop: "25%",
-    },
-    screenTitle: {
-        fontFamily: 'Roboto-Thin',
-        fontSize: 25,
-        textAlign: 'center',
-        fontWeight: 'bold',
-        marginTop: "1%",
-        marginBottom: "5%",
-        color: "#2E5829FF",
-        width: "60%"
-    },
-    main: {
-        flexDirection: 'row',
-        alignContent: 'flex-start',
-        alignItems: 'flex-start',
-        display: 'flex',
-        marginLeft: '5%'
-    },
-    iconContainer: {
-        alignItems: 'flex-start',
-    },
-    name: {
-        color: "#2E5829FF",
-        fontSize: 20,
-    },
-    namesContainer: {
-        marginLeft: "2%",
-        marginTop: '10%'
-    }, icons: {
-        color: '#2E5829FF',
-    },
-    buttonContainer: {
-        width: 225, // Ancho deseado para todos los botones
-        marginVertical: 10,
-    },
-    pickerButton: {
-        borderRadius: 6,
-        marginLeft: '5%',
-        marginRight: '5%',
-    },
-    dialog: {
-        backgroundColor: "#e9f4e9"
-    },
-    dialogTitle: {
-        fontFamily: 'Roboto-Thin',
-        fontSize: 25,
-        textAlign: 'center',
-        fontWeight: 'bold',
-        margin: "5%",
-        marginLeft: '15%',
-        color: "#2E5829FF",
-        width: "70%"
-    },
-    pickerStyle: {
-        marginBottom: 20,
-    },
-    text: {
-        fontFamily: 'Roboto-Thin',
-        fontSize: 14,
-        marginTop: "5%",
-        marginLeft: '4%',
-        marginBottom: '2%',
-        color: "#2E5829FF",
-        width: "60%"
-    },
-    calendarContainer: {
-        margin: '5%',
-        backgroundColor: "#E9F4E9FF"
-    },
-})

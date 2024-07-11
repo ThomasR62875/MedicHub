@@ -17,6 +17,10 @@ export type User = {
     sex: string;
     birthdate: Date;
     email: string;
+    raw_user_meta_data?: {
+        dependent_user_id?: string;
+    };
+
 }
 
 export type Specialty = {
@@ -58,6 +62,11 @@ export type AppointmentInfo = {
     observations: string,
     date: string;
     description: string;
+}
+
+export type Advertisement = {
+    client: string;
+    image_url: string;
 }
 
 export type UserData = {

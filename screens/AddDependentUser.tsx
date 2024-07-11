@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Alert, StyleSheet, View,} from 'react-native';
+import {Alert, Keyboard, StyleSheet, TouchableWithoutFeedback, View,} from 'react-native';
 import {addDependentUser} from "../lib/supabase";
 import {Button, Icon, Input, Text} from "react-native-elements";
 import {Image} from 'react-native';
@@ -111,16 +111,13 @@ const AddDependentUser:React.FC<AddDependentUserProps> = ({navigation, route} : 
 
     };
     const handleAddDependentUser = async () => {
-        console.log(sexGender)
         const dep_user = {
             first_name: firstName, last_name :lastName, dni:dni, id: '', sex: sexGender,
             birthdate: date};
 
         const result = await addDependentUser(dep_user);
         if (result.success) {
-            Alert.alert(t('text9'), '',
-                [{ text: 'Ok', onPress: () => navigation.navigate('Usuarios', { session: session }) }]
-            );
+            navigation.navigate('AlertPublicity', { session, msg: 'text9', screen: 'Usuarios' });
         } else {
             Alert.alert('Error', result.message || 'An unknown error occurred');
         }
@@ -134,122 +131,125 @@ const AddDependentUser:React.FC<AddDependentUserProps> = ({navigation, route} : 
     };
 
     return (
-        <ScrollableBg>
-            <View style={styles.container}>
-                <Text style={styles.screenTitle}>{t('newu')}</Text>
-                    <Input
-                        label={t('name')}
-                        labelStyle={styles.colorLable}
-                        leftIcon={<Icon type="material-icons" name="person" color={styles.colorLable.color}/>}
-                        onChangeText={(text) => {
-                            setFirstName(text);
-                            validateFirstName(text)
-                        }}
-                        value={firstName}
-                        placeholder={t('name')}
-                        autoCapitalize={'none'}
-                        inputStyle={{color: '#407738', marginLeft: 10}}
-                        placeholderTextColor={"#407738"}
-                        errorStyle={{ color: 'red' }}
-                        errorMessage={firstNameErrorMessage}
-                    />
-                    <Input
-                        label={t('surname')}
-                        labelStyle={styles.colorLable}
-                        leftIcon={<Icon type="material-icons" name="person" color={styles.colorLable.color}/>}
-                        onChangeText={(text) => {
-                            setLastName(text);
-                            validateLastName(text)
-                        }}
-                        value={lastName}
-                        placeholder={t('surname')}
-                        autoCapitalize={'none'}
-                        inputStyle={{color: '#407738', marginLeft: 10}}
-                        placeholderTextColor={"#407738"}
-                        errorStyle={{ color: 'red' }}
-                        errorMessage={firstNameErrorMessage}
-                    />
-                    <Input
-                        label={t('id')}
-                        labelStyle={styles.colorLable}
-                        leftIcon={<Image source={require('../assets/fingerprint.png')} style={styles.icon} />}
-                        onChangeText={(text) => {
-                            setDni(text);
-                            validateDNI(text);
-                        }}
-                        value={dni}
-                        placeholder={t('id')}
-                        autoCapitalize={'none'}
-                        placeholderTextColor={"#407738"}
-                        inputStyle={{color: '#407738', marginLeft: 10}}
-                        errorStyle={{ color: 'red' }}
-                        errorMessage={DNIErrorMessage}
-                    />
-                    <PaperText style={styles.text}>{t('sex')}</PaperText>
-                    <PaperButton mode="outlined" style={styles.pickerButton} textColor='#2E5829' labelStyle={{textAlign: 'left', display:'flex'}} onPress={()=> setSexGenderDialog(true)}>
-                        {getSexGenderName(sexGender)}
-                    </PaperButton>
-                    <PaperText style={styles.text}>{t('birthdate')}</PaperText>
-                    <View style={styles.datePicker}>
-                        <DateTimePicker  testID="dateTimePicker"
-                                         value={date ? date : new Date()}
-                                         mode="date"
-                                         display="default"
-                                         onChange={(event, selectedDate) => {
-                                             handleDayPress(event, selectedDate)
-                                             validateBirthDate(selectedDate);
-                                         }}
-                        />
-                    </View>
-                    <Portal>
-                        <Dialog style={styles.dialog} visible={sexGenderDialog} onDismiss={hideSexGenderDialog}>
-                            <Text style={styles.dialogTitle}>{t("selSex")}</Text>
-                            <Picker
-                                mode='dropdown'
-                                selectedValue={sexGender}
-                                onValueChange={(value) => {
-                                    setSexGender(value)
-                                    validateGender(sexGender)
-                                }}
-                                placeholder='sex'
-                                enabled={true}
-                                itemStyle={styles.pickerStyle}
-                            >
-                                {sexGenderOptions?.map((item) => (
-                                    <Picker.Item key={item.value} label={item.sex_gender_name} value={item.value} />
-                                ))}
-                            </Picker>
-                            <Dialog.Actions style={{ justifyContent: 'space-between' }}>
-                                <PaperButton textColor="#2E5829FF"
-                                             onPress={hideSexGenderDialog}>
-                                    {t("close")}
-                                </PaperButton>
-                            </Dialog.Actions>
-                        </Dialog>
-                    </Portal>
-                    <Button
-                        title={t('add')}
-                        disabled={isButtonDisabled}
-                        buttonStyle={{
-                            backgroundColor: '#2E5829',
-                            borderWidth: 2,
-                            borderColor: 'white',
-                            borderRadius: 30,
-                            minHeight: 50
-                        }}
-                        containerStyle={{
-                            width: 150,
-                            marginHorizontal: 50,
-                            marginVertical: 10,
-                            marginTop: 40,
-                        }}
-                        titleStyle={{ color: '#eef9ed' }}
-
-                        onPress={handleAddDependentUser}
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+        <View style={styles.container}>
+            <View style={styles.window}>
+            <Text style={styles.screenTitle}>{t('newu')}</Text>
+                <Input
+                    label={t('name')}
+                    labelStyle={styles.colorLable}
+                    leftIcon={<Icon type="material-icons" name="person" color={styles.colorLable.color}/>}
+                    onChangeText={(text) => {
+                        setFirstName(text);
+                        validateFirstName(text)
+                    }}
+                    value={firstName}
+                    placeholder={t('name')}
+                    autoCapitalize={'none'}
+                    inputStyle={{color: '#407738', marginLeft: 10}}
+                    placeholderTextColor={"#407738"}
+                    errorStyle={{ color: 'red' }}
+                    errorMessage={firstNameErrorMessage}
+                />
+                <Input
+                    label={t('surname')}
+                    labelStyle={styles.colorLable}
+                    leftIcon={<Icon type="material-icons" name="person" color={styles.colorLable.color}/>}
+                    onChangeText={(text) => {
+                        setLastName(text);
+                        validateLastName(text)
+                    }}
+                    value={lastName}
+                    placeholder={t('surname')}
+                    autoCapitalize={'none'}
+                    inputStyle={{color: '#407738', marginLeft: 10}}
+                    placeholderTextColor={"#407738"}
+                    errorStyle={{ color: 'red' }}
+                    errorMessage={firstNameErrorMessage}
+                />
+                <Input
+                    label={t('id')}
+                    labelStyle={styles.colorLable}
+                    leftIcon={<Image source={require('../assets/fingerprint.png')} style={styles.icon} />}
+                    onChangeText={(text) => {
+                        setDni(text);
+                        validateDNI(text);
+                    }}
+                    value={dni}
+                    placeholder={t('id')}
+                    autoCapitalize={'none'}
+                    placeholderTextColor={"#407738"}
+                    inputStyle={{color: '#407738', marginLeft: 10}}
+                    errorStyle={{ color: 'red' }}
+                    errorMessage={DNIErrorMessage}
+                />
+                <PaperText style={styles.text}>{t('sex')}</PaperText>
+                <PaperButton mode="outlined" style={styles.pickerButton} textColor='#2E5829' labelStyle={{textAlign: 'left', display:'flex'}} onPress={()=> setSexGenderDialog(true)}>
+                    {getSexGenderName(sexGender)}
+                </PaperButton>
+                <PaperText style={styles.text}>{t('birthdate')}</PaperText>
+                <View style={styles.datePicker}>
+                    <DateTimePicker  testID="dateTimePicker"
+                                     value={date ? date : new Date()}
+                                     mode="date"
+                                     display="default"
+                                     onChange={(event, selectedDate) => {
+                                         handleDayPress(event, selectedDate)
+                                         validateBirthDate(selectedDate);
+                                     }}
                     />
                 </View>
-        </ScrollableBg>
-      );
+                <Portal>
+                    <Dialog style={styles.dialog} visible={sexGenderDialog} onDismiss={hideSexGenderDialog}>
+                        <Text style={styles.dialogTitle}>{t("selSex")}</Text>
+                        <Picker
+                            mode='dropdown'
+                            selectedValue={sexGender}
+                            onValueChange={(value) => {
+                                setSexGender(value)
+                                validateGender(sexGender)
+                            }}
+                            placeholder='sex'
+                            enabled={true}
+                            itemStyle={styles.pickerStyle}
+                        >
+                            {sexGenderOptions?.map((item) => (
+                                <Picker.Item key={item.value} label={item.sex_gender_name} value={item.value} />
+                            ))}
+                        </Picker>
+                        <Dialog.Actions style={{ justifyContent: 'space-between' }}>
+                            <PaperButton textColor="#2E5829FF"
+                                         onPress={hideSexGenderDialog}>
+                                {t("close")}
+                            </PaperButton>
+                        </Dialog.Actions>
+                    </Dialog>
+                </Portal>
+                <Button
+                    title={t('add')}
+                    disabled={isButtonDisabled}
+                    buttonStyle={{
+                        backgroundColor: '#2E5829',
+                        borderWidth: 2,
+                        borderColor: 'white',
+                        borderRadius: 30,
+                        minHeight: 50
+                    }}
+                    containerStyle={{
+                        width: 150,
+                        marginHorizontal: 50,
+                        marginVertical: 10,
+                        marginTop: 40,
+                    }}
+                    titleStyle={{ color: '#eef9ed' }}
+
+                    onPress={handleAddDependentUser}
+                />
+            </View>
+        </View>
+        </TouchableWithoutFeedback>
+
+    );
 }
 
 export default AddDependentUser;

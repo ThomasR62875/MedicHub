@@ -7,18 +7,8 @@ import {Button} from "react-native-elements";
 import {useTranslation} from "react-i18next";
 import {cardStyle} from "../styles/global"
 import DoctorButton from "../components/DoctorButton";
-
+import { Doctor } from '../lib/types';
 const Stack = createNativeStackNavigator();
-
-export type Doctor = {
-    id:string;
-    name: string;
-    specialty: string;
-    phone: string;
-    email: string;
-    addresses: string[];
-    user_id:string;
-}
 
 type DoctorProps = NativeStackScreenProps<RootStackParamList, 'Doctors'>;
 
@@ -71,7 +61,7 @@ const Doctors: React.FC= ({ navigation, route }: any) => {
                             })
                         ) : (
                         <View style={[cardStyle.container]}>
-                            <Text style={[styles.text, {textAlign: 'center'}]}>{t('text17')}</Text>
+                            <Text style={styles.text}>{t('text17')}</Text>
                         </View>
                         )
                     }

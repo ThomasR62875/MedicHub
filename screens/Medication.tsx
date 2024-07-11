@@ -5,19 +5,9 @@ import MedicationButton from "../components/MedicationButton";
 import {Button} from "react-native-elements";
 import {useTranslation} from "react-i18next";
 import {cardStyle} from "../styles/global"
+import { Medication } from '../lib/types';
 
-export type Medication = {
-    id: string;
-    name: string;
-    prescription: string;
-    sinceWhen : Date;
-    untilWhen : Date | undefined;
-    howOften : Date | undefined;
-    isForever : boolean;
-}
-
-
-const Medication: React.FC= ({ navigation, route }: any) => {
+const Medications: React.FC= ({ navigation, route }: any) => {
     const session = route.params.session;
     const [loading, setLoading] = useState(true)
     const [medications,setMedications]= useState<Medication[] | undefined>(undefined)
@@ -57,8 +47,11 @@ const Medication: React.FC= ({ navigation, route }: any) => {
             <ScrollView>
                 <View>
                     {
-                        medications ? (
+                        medications && medications.length > 0 ? (
                             medications.map((medic: Medication, i) => {
+                                //console.log("segundos-------------------------------------")
+                                console.log("how often : ",medic.howOften)
+                                console.log("name : ",medic.name)
                                 return (
                                     <View key={i}>
                                         <MedicationButton onPress={() => navigation.navigate({name: 'SingleMedication', params: {meds: medic}})} meds={medic}></MedicationButton>
@@ -78,7 +71,7 @@ const Medication: React.FC= ({ navigation, route }: any) => {
     )
 }
 
-export default Medication;
+export default Medications;
 
 const styles = StyleSheet.create({
     container: {

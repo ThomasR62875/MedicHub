@@ -10,7 +10,6 @@ import {
 } from 'react-native';
 import {addMedication} from "../lib/supabase";
 import {Button, Input} from "react-native-elements";
-import StandardGreenButton from "../components/StandardGreenButton";
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
 import {Medication} from '../lib/types';
@@ -74,8 +73,7 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
 
         const result = await addMedication(medication);
         if (result.success) {
-            Alert.alert(t('text11'), '',
-                [{ text: 'Ok', onPress: () => navigation.navigate('Medication', { session: session })}]);
+            navigation.navigate('AlertPublicity', { session, msg: 'text11', screen: 'Medications' });
         } else {
             Alert.alert('Error', result.message || 'An unknown error occurred');
         }
@@ -235,12 +233,12 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
                                     if(dateUntil === null){
                                         Alert.alert(t('warning'), t('warn14') ,
                                             [{ text: 'Cancel', onPress: () => {setIsButtonDisabled(true);  resetForm();}},
-                                                { text: 'Ok', onPress: () => [handleAddMedication(), navigation.navigate('Medication', { session: session })]}])
+                                                { text: 'Ok', onPress: () => [handleAddMedication(), navigation.navigate('Medications', { session: session })]}])
                                     }
                                     else if(howOften === null){
                                         Alert.alert(t('warning') , t('warn13'),
                                             [{ text: 'Cancel', onPress: () => {setIsButtonDisabled(true);  resetForm();}},
-                                                { text: 'Ok', onPress: () => [handleAddMedication(), navigation.navigate('Medication', { session: session })]}])
+                                                { text: 'Ok', onPress: () => [handleAddMedication(), navigation.navigate('Medications', { session: session })]}])
                                     }
                                     else{handleAddMedication()}
                                     }
@@ -294,26 +292,3 @@ const styles = StyleSheet.create({
         fontSize: 18,
     },
  });
-
-const pickerSelectStyles = StyleSheet.create({
-    inputIOS: {
-        fontSize: 16,
-        paddingVertical: 12,
-        paddingHorizontal: 10,
-        borderWidth: 1,
-        borderColor: 'gray',
-        borderRadius: 4,
-        color: 'black',
-        paddingRight: 30,
-    },
-    inputAndroid: {
-        fontSize: 16,
-        paddingHorizontal: 10,
-        paddingVertical: 8,
-        borderWidth: 0.5,
-        borderColor: 'purple',
-        borderRadius: 8,
-        color: 'black',
-        paddingRight: 30,
-    },
-});

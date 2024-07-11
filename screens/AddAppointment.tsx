@@ -13,8 +13,8 @@ import {
 import {Button, Input} from "react-native-elements";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../App";
-import {DependentUser} from "../lib/types";
-import { Doctor } from "./Doctors";
+import { DependentUser } from "../lib/types";
+import { Doctor } from "../lib/types";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Picker } from "@react-native-picker/picker";
 import { useTranslation } from "react-i18next";
@@ -101,11 +101,7 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
         const appointment = { date: appointmentDate, description, user_name: '', doctor, user_id, id: '' , observations: observations};
         const result = await addAppointment(appointment);
         if (result.success) {
-            Alert.alert(
-                t('text8'),
-                '',
-                [{ text: 'Ok', onPress: () => navigation.navigate('Appointments', { session }) }]
-            );
+            navigation.navigate('AlertPublicity', { session, msg: 'text8', screen: 'Appointments' });
         } else {
             Alert.alert('Error', result.message || 'An unknown error occurred');
         }
@@ -139,12 +135,12 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
 
     const getDoctorName = (id: string) => {
         const selectedDoctor = doctors?.find(doc => doc.id === id);
-        return selectedDoctor ? selectedDoctor.name : 'Seleccione un médico';
+        return selectedDoctor ? selectedDoctor.name : t('select_doc');
     };
 
     const getUserName = (id: string) => {
         const selectedUser = all_users?.find(user => user.id === id);
-        return selectedUser ? selectedUser.first_name : 'Seleccione un usuario';
+        return selectedUser ? selectedUser.first_name : t('select_user');
     };
 
 

@@ -5,16 +5,8 @@ import AppointmentButton from "../components/AppointmentButton";
 import {Button} from "react-native-elements";
 import {useTranslation} from "react-i18next";
 import {cardStyle} from "../styles/global"
+import { Appointment } from '../lib/types';
 
-export type Appointment = {
-    id: string;
-    date: Date;
-    description: string;
-    user_name: string;
-    doctor: string;
-    user_id: string;
-    observations: string;
-}
 const Appointments: React.FC =  ({navigation, route}: any) =>{
     const session = route.params.session;
     const [loading, setLoading] = useState(true)

@@ -7,22 +7,19 @@ import {
     Keyboard,
     KeyboardAvoidingView,
     ScrollView,
-    SafeAreaView, Text
+    SafeAreaView, Text, Platform
 } from 'react-native';
 import {addDoctor, getAllUsers, getSpecialties, getUserId} from "../lib/supabase";
 import {Button, Input} from "react-native-elements";
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
+import {DependentUser} from "../lib/types";
 import {useTranslation} from "react-i18next";
 import {Button as PaperButton, Dialog, Portal, Text as PaperText} from "react-native-paper";
 import {Picker} from "@react-native-picker/picker";
-import {DependentUser} from "../lib/types";
-
+import { Specialty } from '../lib/types';
 type AddDoctorProps = NativeStackScreenProps<RootStackParamList, 'AddDoctor'>
 
-export type Specialty = {
-    name: string;
-};
 
 const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}) => {
     const session = route.params.session;
@@ -98,13 +95,7 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}) => {
 
             const result = await addDoctor(doctor);
             if (result.success) {
-                Alert.alert(
-                    t('text10'),
-                    '',
-                    [
-                        { text: 'Ok', onPress: () => navigation.navigate('Doctors', { session: session }) }
-                    ]
-                );
+                navigation.navigate('AlertPublicity', { session, msg: 'text10', screen: 'Doctors' });
             } else {
                 Alert.alert('Error', result.message || 'An unknown error occurred');
             }
@@ -114,15 +105,26 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}) => {
     const hideUserDialog = () => setUserDialog(false);
 
 
+    const getSpecialtyName = (special: string) => {
+        const selectedSpecialty = specialties?.find(specialty => specialty.name === special);
+        return selectedSpecialty ? selectedSpecialty : t('select_specialty');
+    };
+
     const getUserName = (id: string) => {
         const selectedUser = all_users?.find(user => user.id === id);
-        return selectedUser ? selectedUser.first_name : '';
+        return selectedUser ? selectedUser.first_name : t('select_user');
     };
 
 
     return (
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+            <KeyboardAvoidingView
+                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+                style={{ flex: 1 }}
+            >
+                <SafeAreaView style={{ flex: 1 }}>
         <View style={styles.container}>
-                <ScrollView >
+            <ScrollView keyboardShouldPersistTaps='handled'>
                     <View>
                         <View style={styles.topContent}>
                             <Text style={styles.titleText}>{t('addoctor')}</Text>
@@ -231,7 +233,11 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}) => {
                     </Dialog>
                 </Portal>
 
-        </View>
+            </View>
+                </SafeAreaView>
+            </KeyboardAvoidingView>
+        </TouchableWithoutFeedback>
+
     );
 };
 
