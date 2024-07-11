@@ -3,7 +3,6 @@ import {getDoctors} from '../lib/supabase'
 import { View, Text, Image, TouchableOpacity} from 'react-native'
 import { Icon} from "react-native-elements";
 import {useTranslation} from "react-i18next";
-import {cardStyle} from "../styles/global"
 import DoctorButton from "../components/DoctorButton";
 import {Doctor} from '../lib/types';
 import {styles} from "../assets/styles";

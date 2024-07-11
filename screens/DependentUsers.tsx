@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { getDependentUsers} from '../lib/supabase'
-import {View,  Text, Dimensions, Image, TouchableOpacity} from 'react-native'
+import {View,  Text, Image, TouchableOpacity} from 'react-native'
 import { Icon} from "react-native-elements";
 import {useTranslation} from "react-i18next";
-import {cardStyle} from "../styles/global"
 import DependentUserButton from "../components/DependentUsertButton";
 import { DependentUser } from '../lib/types';
 import {styles} from '../assets/styles'
@@ -18,14 +17,13 @@ const DependentUsers: React.FC = ({navigation, route} : any) => {
     const colors = [ 'rgba(139,134,190,0.6)','rgba(222,176,189,0.6)','rgba(236,183,97,0.6)','rgba(203,214,144,0.6)']
 
     useEffect(() => {
-        const unsubscribe = navigation.addListener('focus', () => {
+        navigation.addListener('focus', () => {
             async function fetchData() {
                 setDependentUsers(await getDependentUsers(session.id))
             }  
             fetchData()
         });
 
-        return unsubscribe;
     }, [navigation, session]);
 
 return(
