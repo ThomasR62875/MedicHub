@@ -1,11 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, View, Text, Image} from 'react-native';
+import {StyleSheet, View, Text, Image, Alert} from 'react-native';
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
 import {Icon, Button, Input} from "react-native-elements";
 import {useTranslation} from "react-i18next";
 import {Button as PaperButton, Dialog, TextInput} from "react-native-paper";
-import {getUserIdByEmail, setDependentUser} from "../lib/supabase";
+import {deleteDependentUser, getUserIdByEmail, setDependentUser} from "../lib/supabase";
 import ScrollableBg from "../components/ScrollableBg";
 import {SexGenderOption} from "../lib/types";
 
@@ -68,7 +68,8 @@ const SingleDependentUser: React.FC<SingleDependentUserProps> = ({navigation, ro
 
     const handleDeleteDependentUser = async () => {
         const session = route.params.session;
-        navigation.navigate('Usuarios', {session: session})
+        const {success,message} = await deleteDependentUser(route.params.du);
+        Alert.alert(message,'',[{text: 'Ok', onPress: () => navigation.navigate('Usuarios', {session: session})}])
     };
 
     const {t, i18n} = useTranslation();
