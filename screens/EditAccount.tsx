@@ -79,13 +79,7 @@ const EditAccount:React.FC<EditAccountProps> = ({navigation, route }: any) =>{
         const us  = {id: id , first_name: first_name, last_name: last_name, dni: dni, birthdate: date, sex: sexGender}
         const result = await updateDependentUser(us);
         if (result.success) {
-            Alert.alert(
-                t('editDepUser'),
-                '',
-                [
-                    { text: 'Ok', onPress: () => navigation.navigate('Perfil', { session: session })}
-                ]
-            );
+            navigation.navigate('AlertPublicity', { session, msg: 'editUser', screen: 'Perfil', appointment: null, du: null, doc: null, meds: null });
         } else {
             Alert.alert('Error', result.message || 'An unknown error occurred');
         }

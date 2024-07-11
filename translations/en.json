@@ -95,6 +95,7 @@
   "editDoc" : "Doctor was modified successfully",
   "editMed" : "Medication was modified successfully",
   "editDepUser" : "Dependent User was modified successfully",
+  "editUser" : "User was modified successfully",
   "editAppoint" : "Appointment was modified successfully",
   "deleteAppoint" : "Appointment deleted successfully",
   "deleteMed" : "Medication deleted successfully",
