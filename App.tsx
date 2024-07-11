@@ -80,12 +80,12 @@ type Props = {
 
 
 // https://www.youtube.com/watch?v=XiutL0uLICg&list=PLhRhTJaArVFugDgTSvXTUaqJWY9Kpp-gV  tutorial de la bottomBar todo
-function HomeTabs({route, navigation}: Props) {
+function HomeTabs({route}: Props) {
   const {session} = route.params;
   const {t} = useTranslation();
 
   //para saber q tab esta seleccionada
-  const [selectedTab, setSelectedTab] = useState<number | null>(0);
+  const [selectedTab] = useState<number | null>(0);
   useEffect(() => {
     if (selectedTab !== null) {
       console.log('Selected tab:', selectedTab);

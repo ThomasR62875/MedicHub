@@ -1,8 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import {getDoctors} from '../lib/supabase'
 import { View, Text, Image, TouchableOpacity} from 'react-native'
-import {createNativeStackNavigator, NativeStackScreenProps} from '@react-navigation/native-stack';
-import {RootStackParamList} from "../App";
 import { Icon} from "react-native-elements";
 import {useTranslation} from "react-i18next";
 import {cardStyle} from "../styles/global"
