@@ -1,6 +1,5 @@
 import React from 'react';
 import {TouchableOpacity, View} from 'react-native';
-import {Medication} from '../lib/types';
 import {styles} from "../assets/styles";
 
 interface MedicationButtonProps {
@@ -8,7 +7,7 @@ interface MedicationButtonProps {
     onPress: any;
 }
 
-const MedicationButton: React.FC<MedicationButtonProps> = ( { children, onPress }) => {
+const MedicationButton: React.FC<MedicationButtonProps> = ({children, onPress}) => {
     return (
         <TouchableOpacity onPress={onPress}>
             <View style={[styles.cards]}>
