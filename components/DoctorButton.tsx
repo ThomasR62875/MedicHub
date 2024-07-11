@@ -1,7 +1,6 @@
 import React from 'react';
 import {TouchableOpacity, View} from 'react-native';
 import {styles} from "../assets/styles";
-import {Doctor} from "../lib/types";
 
 interface DoctorButtonProps {
     children: React.ReactNode;
