@@ -112,9 +112,10 @@ const Calender: React.FC = ({ navigation, route } : any) => {
                 </View>
                 <View style={{flexDirection: 'column'}}>
                     {filteredData && filteredData.length > 0 ? (
-                        filteredData.map((turno: Appointment) => {
+                        filteredData.map((turno: Appointment, index) => {
                             return(
                                 <TurnoContainer
+                                    key={index}
                                     date={turno.date}
                                     turno={turno}
                                     styleExterior={[styles.cards,{width: "85%", marginHorizontal: '5%'}]}
