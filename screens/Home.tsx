@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {View, Text, Alert, Image, ScrollView, TouchableOpacity} from 'react-native';
 import {supabase} from "../lib/supabase";
 import {Appointment} from "../lib/types";
-import TurnoContainer from "../components/TurnContainer";
+import TurnoContainer from "../components/TurnoContainer";
 // @ts-ignore
 import {useTranslation} from "react-i18next";
 
@@ -15,7 +15,6 @@ import {Icon} from "react-native-elements";
 const Home: React.FC = ({navigation, route}: any) => {
     const session = route.params.session;
     const [first_name, setFirstName] = useState('')
-    const [loading, setLoading] = useState(true)
     const [appointments, setAppointments] = useState<Appointment[] | undefined>(undefined)
     const [turno1, setTurno1] = useState<Appointment | null>(null);
     const [turno2, setTurno2] = useState<Appointment | null>(null);
@@ -58,7 +57,6 @@ const Home: React.FC = ({navigation, route}: any) => {
     async function getAppointments() {
         const to_return: Appointment[] = [];
         try {
-            setLoading(true)
             if (!session?.user) throw new Error('No user on the session!')
 
             const {data: user_id, error: user_data_error} = await supabase.rpc('get_independent_user_id')
@@ -100,7 +98,6 @@ const Home: React.FC = ({navigation, route}: any) => {
                 Alert.alert(error.message)
             }
         }
-        setLoading(false)
         setAppointments(to_return)
     }
 
@@ -170,8 +167,8 @@ const Home: React.FC = ({navigation, route}: any) => {
                 <Text style={styles.subtitles}>{t('text15')}</Text>
             </ScrollableBg>
         </View>
-    )
-        ;
+    );
 }
+
 
 export default Home;
