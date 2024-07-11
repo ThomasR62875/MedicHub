@@ -6,10 +6,9 @@ import {styles} from "../assets/styles";
 interface MedicationButtonProps {
     children: React.ReactNode;
     onPress: any;
-    meds: Medication;
 }
 
-const MedicationButton: React.FC<MedicationButtonProps> = ( { children, onPress, meds }) => {
+const MedicationButton: React.FC<MedicationButtonProps> = ( { children, onPress }) => {
     return (
         <TouchableOpacity onPress={onPress}>
             <View style={[styles.cards]}>

@@ -54,7 +54,7 @@ const Medications: React.FC= ({ navigation, route }: any) => {
                             medications.map((medic: Medication, i) => {
                                 return (
                                     <View key={i}>
-                                        <MedicationButton onPress={() => navigation.navigate({name: 'SingleMedication', params: {meds: medic}})} meds={medic}>
+                                        <MedicationButton onPress={() => navigation.navigate({name: 'SingleMedication', params: {meds: medic}})} >
                                             <View style={{flexDirection: 'row'}}>
                                                 <Icon iconStyle={{color: 'white', fontSize: 16, padding: 5}} containerStyle={[styles.circleCard, {backgroundColor: colors[i%4]}]} name={'pill'} type={'material-community'}/>
                                                 <View style={{flexDirection: 'column', paddingHorizontal: 14}}>
