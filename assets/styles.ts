@@ -93,6 +93,23 @@ export const styles = StyleSheet.create({
         top: -20,
         left: 225,
     },
+    squiggle_left: {
+        position: 'absolute',
+        top: -20,
+        left: -20,
+    },
+    back_arrow: {
+        padding: 15,
+        marginTop: '10%',
+        alignSelf: 'flex-start'
+    },
+    stackTitle: {
+        color: 'black',
+        fontSize: 24,
+        fontFamily: 'Roboto-Thin',
+        paddingLeft: 25,
+        paddingTop: 50
+    },
     buttons: {
         backgroundColor: '#8B86BE',
         borderRadius: 15,

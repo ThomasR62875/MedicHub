@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, Alert, Image, ScrollView, TouchableOpacity} from 'react-native';
-import {getAppointments, getUserSession, supabase} from "../lib/supabase";
+import {View, Text, Image, ScrollView, TouchableOpacity} from 'react-native';
+import {getAppointments, getUserSession} from "../lib/supabase";
 import {Appointment} from "../lib/types";
 import TurnoContainer from "../components/TurnoContainer";
 // @ts-ignore
@@ -126,8 +126,6 @@ const Home: React.FC = ({navigation, route}: any) => {
   }
    */
 
-    // @ts-ignore
-    // @ts-ignore
     return (
         <View style={styles.tab}>
             <Image source={Squiggle} style={styles.squiggle}/>

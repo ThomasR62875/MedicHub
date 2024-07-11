@@ -218,11 +218,6 @@ const App = () => {
                                   component={Register}
                                   options={{
                                     title: '',headerShown: false
-                                    // headerStyle: {
-                                    //   backgroundColor: '#2E5829',
-                                    // },
-                                    // headerTintColor: '#ABD2A8',
-                                    // headerBackTitle: 'Iniciar Sesión', // Cambia la etiqueta del botón de retroceso
                                     }}/>
                   </>
               ) : (
@@ -385,14 +380,7 @@ const App = () => {
                                   }}/>
                      <Stack.Screen name="Doctors"
                                    component={Doctors} initialParams={{session: session}}
-                                   options={{
-                                     title: '',
-                                       headerStyle: {
-                                           backgroundColor: '#2E5829',
-                                       },
-                                     headerTintColor: '#ABD2A8',
-                                     headerBackTitle: 'Perfil',
-                                   }}/>
+                                   options={{ headerShown: false }}/>
                     <Stack.Screen name="EditAccount"
                                     component={EditAccount}
                                     initialParams={{session: session}}
