@@ -1,13 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, View, Text, Image, Alert} from 'react-native';
+import {StyleSheet, View, Text, Image} from 'react-native';
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
 import {Icon, Button, Input} from "react-native-elements";
 import {useTranslation} from "react-i18next";
 import {Button as PaperButton, Dialog, TextInput} from "react-native-paper";
-import {getUserIdByEmail, setDependentUser, signUp} from "../lib/supabase";
+import {getUserIdByEmail, setDependentUser} from "../lib/supabase";
 import ScrollableBg from "../components/ScrollableBg";
-import {User} from "../lib/types";
 import {SexGenderOption} from "../lib/types";
 
 
@@ -143,26 +142,6 @@ const SingleDependentUser: React.FC<SingleDependentUserProps> = ({navigation, ro
         } else {
             setPasswordErrorMessage('');
         }
-    };
-
-
-    const signUpNewIndependentUser = async (dependent_user_id: string) => {
-        setLoading(true)
-        const user: User = {
-            id: "",
-            first_name: firstName,
-            last_name: lastName,
-            dni: dni,
-            email: email,
-            raw_user_meta_data: {
-                dependent_user_id: dependent_user_id,
-            },
-        };
-
-        const {success} = await signUp(user, password);
-        if (success) Alert.alert('¡Revise la bandeja de entrada del mail ingresado para el usuario para verificar el mail!',)
-        setLoading(false)
-
     };
 
 
@@ -407,7 +386,7 @@ const SingleDependentUser: React.FC<SingleDependentUserProps> = ({navigation, ro
                                     marginBottom: 100
                                 }}
                                 titleStyle={{color: '#eef9ed'}}
-                                onPress={() => signUpNewIndependentUser(route.params.du.id)}
+                                onPress={handleDeleteDependentUser}
                             />
                         </View>
                     </ScrollableBg>

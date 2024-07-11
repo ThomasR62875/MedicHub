@@ -4,26 +4,19 @@ import { View} from 'react-native'
 import {Button, Icon} from 'react-native-elements'
 import LanguageButton from '../components/LanguageButton'
 import {DependentUser, SexGenderOption} from "../lib/types";
-import {Dialog, Text, Button as PaperButton, Text as PaperText} from "react-native-paper";
+import {Dialog, Text, Button as PaperButton, Divider} from "react-native-paper";
 import {useTranslation} from "react-i18next";
-import {Calendar, DateData} from "react-native-calendars";
-import {Picker} from "@react-native-picker/picker";
 import ScrollableBg from '../components/ScrollableBg'
+import {styles} from "../assets/styles";
 
-
-function Divider(props: { style: string }) {
-    return null;
-}
 
 const Account: React.FC = ({ navigation, route } : any) => {
     const {session} = route.params;
     const [first_name, setFirstName] = useState('');
     const [last_name, setLastName] = useState('');
     const [dni, setDni] = useState(0);
-    const [id, setId] = useState('');
     const [date, setDate] = useState<Date>();
     const [sexGender,setSexGender]= useState('');
-    const [sexGenderDialog, setSexGenderDialog] = useState(false);
     const [visible, setVisible] = React.useState(false);
     const {t} = useTranslation();
     const sexGenderOptions: SexGenderOption[] = [
@@ -70,6 +63,7 @@ const Account: React.FC = ({ navigation, route } : any) => {
     };
 
 
+    // @ts-ignore
     return (
         <View style={{flex: 1, backgroundColor: '#fff', marginBottom: 0}}>
             <View

@@ -5,9 +5,8 @@ import {RootStackParamList} from "../App";
 import {Button, Icon} from "react-native-elements";
 import {useTranslation} from "react-i18next";
 import {Button as PaperButton, Dialog} from "react-native-paper";
-import {deleteAppointment, deleteDoctor, getDoctor} from "../lib/supabase";
+import {deleteAppointment, getDoctor, getUserData} from "../lib/supabase";
 import {Doctor} from "../lib/types";
-import {UserData} from "../lib/types";
 import {recommendQuestionsForAppointment} from "../lib/openai";
 
 type SingleAppointmentProps = NativeStackScreenProps<RootStackParamList, 'SingleAppointment'>
@@ -36,7 +35,7 @@ const SingleAppointment: React.FC<SingleAppointmentProps> = ({ navigation, route
     const handleDeleteAppointment = async () => {
         const session =  route.params.session;
         const appointment =  route.params.appointment;
-        const result = await deleteAppointment(appointment);
+        await deleteAppointment(appointment);
         navigation.navigate('Appointments', { session: session })
     };
 
