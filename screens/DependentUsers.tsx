@@ -58,9 +58,9 @@ return(
                             </View>
                         )
                     })) : (
-                    <View style={[cardStyle.container]}>
-                        <Text style={styles.text}>{t('text18')}</Text>
-                    </View>
+
+                        <Text  style={[styles.text2,{alignSelf: 'center', padding: 30}]}>{t('text18')}</Text>
+
                 )}
             </View>
         </ScrollableBg>
