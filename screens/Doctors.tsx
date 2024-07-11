@@ -54,7 +54,7 @@ const Doctors: React.FC = ({navigation, route}: any) => {
                         doctors.map((doc: Doctor, i) => {
                             return (
                                 <View key={i}>
-                                    <DoctorButton onPress={() => navigation.navigate({name: 'SingleDoctor', params: {doc: doc}})} doc={doc}>
+                                    <DoctorButton onPress={() => navigation.navigate({name: 'SingleDoctor', params: {doc: doc}})}>
                                         <View style={{flexDirection: 'row'}}>
                                             <Icon iconStyle={{color: 'white', fontSize: 16, padding: 5}} containerStyle={[styles.circleCard, {backgroundColor: colors[i%4]}]} name={'stethoscope'} type={'material-community'}/>
                                             <View style={{flexDirection: 'column', paddingHorizontal: 14}}>
