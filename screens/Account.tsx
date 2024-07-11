@@ -94,14 +94,14 @@ const Account: React.FC = ({ navigation, route } : any) => {
                     },
                 ]}
             />
-            <Text style={[styles.tabTitle, {paddingLeft: 60}]}>
+            <Text style={[styles.tabTitle, {paddingLeft: 40}]}>
                 {t('account')}
             </Text>
             <ScrollableBg>
                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
                     <Icon
                         name='person-circle-outline'
-                        iconStyle={{color: '#000', alignSelf: 'flex-start', paddingHorizontal: 50, paddingVertical: 25}}
+                        iconStyle={{color: '#000', alignSelf: 'flex-start', paddingHorizontal: 40, paddingVertical: 25}}
                         type='ionicon'
                         size={100}
                     />
@@ -117,14 +117,14 @@ const Account: React.FC = ({ navigation, route } : any) => {
                         <LanguageButton/>
                     </View>
                 </View>
-                <View style={{marginHorizontal: '15%', padding: 0, flexDirection: 'row'}}>
+                <View style={{marginHorizontal: '12%', padding: 0, flexDirection: 'row'}}>
                     <Text style={styles.text}>{first_name} </Text>
                     <Text style={styles.text}>{last_name}</Text>
                 </View>
                 <Divider style={styles.divider}/>
 
 
-                <View style={{marginVertical: '5%', marginHorizontal: '15%'}}>
+                <View style={{marginVertical: '5%', marginHorizontal: '12%'}}>
                     <Text style={styles.title}>Mail:</Text>
                     <Text style={styles.text2}>{session?.user.email}</Text>
                     <View style={{marginTop: 5}}/>
