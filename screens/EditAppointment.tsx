@@ -14,7 +14,7 @@ import {Picker} from "@react-native-picker/picker";
 type EditAppointmentProps = NativeStackScreenProps<RootStackParamList, 'EditAppointment'>;
 
 const EditAppointment: React.FC<EditAppointmentProps> = ({navigation, route }: any) => {
-    const { session } = route.params;
+    const { session, appointment } = route.params;
     const [id, setId] = useState('')
     const [description, setDescription] = useState('');
     const [observations, setObservations] = useState('');
@@ -140,7 +140,6 @@ const EditAppointment: React.FC<EditAppointmentProps> = ({navigation, route }: a
         if (session) {
             const fetchAppointment = async () => {
                 try {
-                    const appointment = route.params.appointment;
                     if (appointment) {
                         setId(appointment.id);
                         setDescription(appointment.description);
