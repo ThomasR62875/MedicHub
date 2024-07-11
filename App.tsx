@@ -383,14 +383,7 @@ const App = () => {
                       <Stack.Screen name="Medications"
                                     component={Medications}
                                     initialParams={{session: session}}
-                                    options={{
-                                      title: '',
-                                        headerStyle: {
-                                            backgroundColor: '#2E5829',
-                                        },
-                                      headerTintColor: '#ABD2A8',
-                                      headerBackTitle: 'Perfil',
-                                    }}/>
+                                    options={{ headerShown: false }}/>
                   </>
               )}
             </Stack.Navigator>

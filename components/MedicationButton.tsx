@@ -1,37 +1,19 @@
 import React from 'react';
-import {Text, TouchableOpacity, View} from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import {TouchableOpacity, View} from 'react-native';
 import {Medication} from '../lib/types';
-import {useTranslation} from "react-i18next";
-import {cardStyle} from "../styles/global"
+import {styles} from "../assets/styles";
 
 interface MedicationButtonProps {
+    children: React.ReactNode;
     onPress: any;
     meds: Medication;
 }
 
-const MedicationButton: React.FC<MedicationButtonProps> = ( { onPress, meds }) => {
-    const navigation = useNavigation();
-    const {t} = useTranslation();
-
+const MedicationButton: React.FC<MedicationButtonProps> = ( { children, onPress, meds }) => {
     return (
-        <TouchableOpacity style={cardStyle.container} onPress={onPress}>
-            <View>
-                <View style={cardStyle.infoRow}>
-                    <Text style={cardStyle.label}>{t('medicine')}:</Text>
-                    <Text>{meds.name}</Text>
-                </View>
-                <View style={cardStyle.infoRow}>
-                    <Text style={cardStyle.label}>{t('prescription')}:</Text>
-                    <Text>{meds.prescription}</Text>
-                </View>
-                {meds.howOften != null ? (
-                    <View style={cardStyle.infoRow}>
-                        <Text style={cardStyle.label}>{t('text23')}:</Text>
-                        <Text>{parseInt(meds.howOften.toString().split(':')[0], 10)} {t('text24')}</Text>
-                    </View>
-                ) : null
-                }
+        <TouchableOpacity onPress={onPress}>
+            <View style={[styles.cards]}>
+                {children}
             </View>
         </TouchableOpacity>
     );

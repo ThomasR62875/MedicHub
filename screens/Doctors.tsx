@@ -72,65 +72,7 @@ const Doctors: React.FC = ({navigation, route}: any) => {
                 </View>
             </ScrollableBg>
         </View>
-        // <View style={styles.container}>
-        //     <View style={styles.window}>
-        //         <View style={styles.topContent}>
-        //             <Text style={styles.titleText}>{t('doc')}</Text>
-        //             <Button
-        //                 title={t('add')}
-        //                 buttonStyle={{
-        //                     backgroundColor: '#2E5829',
-        //                     borderColor: 'white',
-        //                     borderRadius: 20,
-        //                     minHeight: 10,
-        //                     minWidth: 10,
-        //                 }}
-        //                 titleStyle={{ color: '#E9F4E9',fontSize: 15, margin: 5 }}
-        //                 onPress={() => navigation.navigate('AddDoctor', {session: session})}/>
-        //         </View>
-        //     <ScrollView>
-
-        //     </ScrollView>
-        //     </View>
-        // </View>
     )
 }
 
 export default Doctors;
-//
-// const styles = StyleSheet.create({
-//     container: {
-//         justifyContent: 'center',
-//         alignItems: 'center',
-//         backgroundColor: "#e9f4e9",
-//       },
-//
-//     titleText: {
-//         fontFamily: 'Roboto-Thin',
-//         fontSize: 25,
-//         textAlign: 'left',
-//         fontWeight: 'bold',
-//         marginTop: "1%",
-//         color: "#2E5829FF",
-//         width: "70%"
-//     },
-//     window: {
-//         marginTop: "20%",
-//         marginLeft: "5%",
-//         marginRight: "5%",
-//     },
-//     topContent: {
-//         flexDirection: 'row',
-//         alignItems: 'center',
-//         justifyContent: 'space-between',
-//         marginBottom: "5%",
-//
-//     },
-//     text: {
-//         fontFamily: 'Roboto-Thin',
-//         fontSize: 14,
-//         marginTop: "1%",
-//         color: "#2E5829FF",
-//         width: "60%"
-//     }
-// });
