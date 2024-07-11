@@ -1,9 +1,9 @@
 import React from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import {Appointment} from "../screens/Appointments";
 import {useTranslation} from "react-i18next";
 import {cardStyle} from "../styles/global"
+import {Appointment} from "../lib/types";
 
 interface AppointmentButtonProps {
     onPress: any;

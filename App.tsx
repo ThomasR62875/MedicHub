@@ -10,7 +10,6 @@ import AddDependentUser from './screens/AddDependentUser'
 import Account from "./screens/Account";
 import Register from "./screens/Register";
 import Home from "./screens/Home";
-import Appointments from "./screens/Appointments";
 import EditAccount from "./screens/EditAccount";
 import SingleAppointment from "./screens/SingleAppointment";
 import EditAppointment from "./screens/EditAppointment";
@@ -367,17 +366,6 @@ const App = () => {
                                         headerTintColor: '#ABD2A8',
                                         headerBackTitle: 'Volver',
                                     }}/>
-                    <Stack.Screen name="Appointments"
-                                  component={Appointments}
-                                  initialParams={{session: session}}
-                                  options={{
-                                    title: '',
-                                      headerStyle: {
-                                          backgroundColor: '#2E5829',
-                                      },
-                                    headerTintColor: '#ABD2A8',
-                                    headerBackTitle: 'Volver',
-                                  }}/>
                      <Stack.Screen name="Doctors"
                                    component={Doctors} initialParams={{session: session}}
                                    options={{ headerShown: false }}/>
