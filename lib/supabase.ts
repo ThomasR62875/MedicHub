@@ -1,7 +1,17 @@
 import 'react-native-url-polyfill/auto';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {createClient} from '@supabase/supabase-js';
-import {User, DependentUser, Appointment, Specialty, Doctor, Medication, Advertisement} from './types';
+import {
+    User,
+    DependentUser,
+    Appointment,
+    Specialty,
+    Doctor,
+    Medication,
+    Advertisement,
+    UserData,
+    AppointmentInfo
+} from './types';
 
 import getEnvVars from '../environment';
 
@@ -15,10 +25,11 @@ export const supabase = createClient(REACT_APP_SUPABASE_URL, REACT_APP_ANON_KEY,
         detectSessionInUrl: false,
     },
 });
-//Devuelve usuario por id
-export const getUser = async (session_user_id: String): Promise<DependentUser> => {
 
-    const {data, error} = await supabase.rpc('get_user', {user_id: session_user_id});
+
+//Devuelve usuario por id
+export const getUser = async (session_user_id:String) : Promise<DependentUser> => {
+    const { data, error } = await supabase.rpc('get_user', { user_id: session_user_id });
     if (error) {
         console.error('Error inserting users data:', error.message);
     } else {
@@ -59,6 +70,8 @@ export const signUp = async (user: User, password: string): Promise<{ success: b
                 first_name: user.first_name,
                 last_name: user.last_name,
                 dni: user.dni,
+                sex: user.sex,
+                birthdate: user.birthdate,
                 ...user.raw_user_meta_data
             },
         },
@@ -73,10 +86,8 @@ export const signUp = async (user: User, password: string): Promise<{ success: b
 
 // Agrega un appointment recibiendo el appointment como parametro
 export const addAppointment = async (appoint: Appointment): Promise<{ success: boolean; message?: string }> => {
-    const {error} = await supabase.rpc("add_appointment", {
-        date_input: appoint.date, description_input: appoint.description,
-        doctor_input: appoint.doctor, user_id: appoint.user_id
-    });
+    const { error } = await supabase.rpc("add_appointment", {date_input: appoint.date, description_input: appoint.description,
+        doctor_input: appoint.doctor, user_id: appoint.user_id, observations_input: appoint.observations});
     if (error) {
         return {success: false, message: error.message};
     } else {
@@ -106,11 +117,9 @@ export const addDoctor = async (doctor: Doctor): Promise<{ success: boolean; mes
 
 
 //Agrega un dependent user
-export const addDependentUser = async (user: DependentUser): Promise<{ success: boolean; message?: string }> => {
-    const {error} = await supabase.rpc("add_dependent_user", {
-        first_name_input: user.first_name,
-        last_name_input: user.last_name, dni_input: user.dni
-    });
+export const addDependentUser = async (user: DependentUser): Promise<{ success: boolean; message?: string }> =>{
+    const { error } = await supabase.rpc("add_dependent_user",{first_name_input: user.first_name,
+        last_name_input : user.last_name, dni_input:user.dni, birthdate_input: user.birthdate, sex_input: user.sex});
     if (error) {
         console.error('Error inserting data:', error.message);
         return {success: false, message: error.message};
@@ -226,7 +235,9 @@ export const getDependentUsers = async (session_user_id: String): Promise<Depend
                 first_name: dependent_user.first_name,
                 last_name: dependent_user.last_name,
                 dni: dependent_user.dni,
-                id: dependent_user.id
+                id: dependent_user.id,
+                birthdate: dependent_user.birthdate,
+                sex: dependent_user.sex
             })
         });
     }
@@ -253,6 +264,7 @@ export const getAppointments = async (): Promise<Appointment[] | undefined> => {
             user_name: user.first_name,
             doctor: doctor.id,
             user_id: appoint.user,
+            observations: appoint.observations
         }
         to_return.push(new_appoint);
 
@@ -264,6 +276,57 @@ export const getAppointments = async (): Promise<Appointment[] | undefined> => {
     }
     return to_return
 }
+
+
+function getAge(birthdate: Date | null): number | null {
+    if (!birthdate) {
+        return null;
+    }
+
+    const parsedBirthdate = new Date(birthdate);
+
+    const today = new Date();
+    let age = today.getFullYear() - parsedBirthdate.getFullYear();
+    const monthDiff = today.getMonth() - parsedBirthdate.getMonth();
+    const dayDiff = today.getDate() - parsedBirthdate.getDate();
+
+    if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
+        age--;
+    }
+
+    return age;
+}
+
+
+// Obtiene la informacion para las preguntas
+export const getUserData = async (appointment: Appointment): Promise<UserData | null> => {
+    const doctor: (Doctor) = await getDoctor(appointment.doctor);
+
+    const { data: lastAppointmentData, error: lastAppointmentError } = await supabase
+        .rpc('get_last_appointment_info', { doctor_id_input: appointment.doctor, user_id: appointment.user_id });
+    if (lastAppointmentError) {
+        console.error('Error getting last appointment data:', lastAppointmentError.message);
+        return null;
+    }
+
+    const appointmentInfo: AppointmentInfo = {
+        specialty: doctor.specialty,
+        observations: lastAppointmentData.observations,
+        date: lastAppointmentData.date,
+        description: lastAppointmentData.description,
+    };
+
+
+    const user: (DependentUser) = await getUser(appointment.user_id);
+
+    return {
+        lastAppointment: appointmentInfo,
+        medicalInfo: {
+            sex: user.sex,
+            age: getAge(user.birthdate),
+        },
+    };
+};
 
 
 // borrar
@@ -332,12 +395,10 @@ export const deleteMedication = async (medication: Medication): Promise<{ succes
 // editar
 
 export const updateAppointment = async (appoint: Appointment): Promise<{ success: boolean, message: string }> => {
-    console.log("id: " + appoint.id + "date: " + appoint.date + "desc:  " + appoint.description + "doc:   " + appoint.doctor + "user:   " + appoint.user_id)
-
-    const {error} = await supabase.rpc("update_appointment", {
-        id_input: appoint.id, date_input: appoint.date, description_input: appoint.description,
-        doctor_input: appoint.doctor, user_input: appoint.user_id
-    });
+    console.log("id: "+ appoint.id +"date: "+ appoint.date +"desc:  "+ appoint.description+"doc:   "+  appoint.doctor+"user:   "+appoint.user_id )
+    console.log(appoint.date)
+    const { error } = await supabase.rpc("update_appointment", {id_input: appoint.id, date_input: appoint.date, description_input: appoint.description,
+        doctor_input: appoint.doctor, user_input: appoint.user_id, observations_input: appoint.observations});
     if (error) {
         return {
             success: false,
@@ -352,12 +413,7 @@ export const updateAppointment = async (appoint: Appointment): Promise<{ success
 };
 
 export const updateDependentUser = async (depUser: DependentUser): Promise<{ success: boolean, message: string }> => {
-    const {error} = await supabase.rpc("update_dependent_user", {
-        id_input: depUser.id,
-        first_name_input: depUser.first_name,
-        last_name_input: depUser.last_name,
-        dni_input: depUser.dni
-    });
+    const { error } = await supabase.rpc("update_user", {id_input: depUser.id , first_name_input: depUser.first_name, last_name_input: depUser.last_name, dni_input: depUser.dni, birthdate_input: depUser.birthdate, sex_input: depUser.sex});
     if (error) {
         return {
             success: false,
@@ -473,7 +529,7 @@ export const getUserIdByEmail = async (email_input: string) : Promise<string | u
     return undefined
 }
 
-//Obtiene la informacion necesaria para la publicidad 
+//Obtiene la informacion necesaria para la publicidad
 
 export const getAdvertisement = async(banner_type: string) : Promise<Advertisement | undefined> =>{
     const{data,error} = await supabase.rpc('get_advertisement',{banner_input: banner_type})

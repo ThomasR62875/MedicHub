@@ -5,6 +5,8 @@ export type DependentUser = {
     last_name: string;
     dni: string;
     id: string;
+    sex: string;
+    birthdate: Date;
 }
 
 export type User = {
@@ -12,6 +14,8 @@ export type User = {
     first_name: string;
     last_name: string;
     dni: string;
+    sex: string;
+    birthdate: Date;
     email: string;
     raw_user_meta_data?: {
         dependent_user_id?: string;
@@ -50,9 +54,31 @@ export type Appointment = {
     user_name: string;
     doctor: string;
     user_id: string;
+    observations: string;
+}
+
+export type AppointmentInfo = {
+    specialty: string;
+    observations: string,
+    date: string;
+    description: string;
 }
 
 export type Advertisement = {
     client: string;
     image_url: string;
 }
+
+export type UserData = {
+    lastAppointment: AppointmentInfo;
+    medicalInfo: {
+        sex: string;
+        age: number | null;
+    };
+}
+
+export type SexGenderOption = {
+    sex_gender_name: string;
+    value: string;
+}
+

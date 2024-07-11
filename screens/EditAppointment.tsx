@@ -17,6 +17,7 @@ const EditAppointment: React.FC<EditAppointmentProps> = ({navigation, route }: a
     const { session } = route.params;
     const [id, setId] = useState('')
     const [description, setDescription] = useState('');
+    const [observations, setObservations] = useState('');
     const [doctor, setDoctor] = useState('Médico');
     const [user_id, setUserId] = useState('');
     const [session_user_id, setSessionUserId] = useState('');
@@ -78,7 +79,7 @@ const EditAppointment: React.FC<EditAppointmentProps> = ({navigation, route }: a
     const handleUpdateAppointment = async () => {
         const session =  route.params.session;
         const appointment  = {id: id, date: date, description: description,
-            user_name: '', doctor: doctor, user_id: user_id}
+            user_name: '', doctor: doctor, user_id: user_id, observations: observations}
         const result = await updateAppointment(appointment);
         if (result.success) {
             navigation.navigate('AlertPublicity', { session, msg: 'editAppoint', screen: 'SingleAppointment', appointment: appointment});
@@ -147,6 +148,7 @@ const EditAppointment: React.FC<EditAppointmentProps> = ({navigation, route }: a
                         setUserId(appointment.user_id);
                         setDate(new Date(appointment.date));
                         setTime(new Date(addHoursToDate(appointment.date, 3)));
+                        setObservations(appointment.observations);
                     }
                 } catch (error) {
                     console.error("Error fetching appointment details:", error);
@@ -171,6 +173,17 @@ const EditAppointment: React.FC<EditAppointmentProps> = ({navigation, route }: a
                                 onChangeText={(text) => {
                                     setDescription(text);
                                     validateDescription(text);
+                                }}
+                                mode='flat'
+                                underlineColor='#2E5829FF'
+                                activeUnderlineColor='#2E5829FF'
+                            />
+                            <TextInput
+                                style={{backgroundColor: "#e9f4e9", marginTop: "10%", textAlign: 'center', marginLeft:'5%' , marginRight: '5%'}}
+                                label={t('Observaciones')}
+                                value={observations}
+                                onChangeText={(text) => {
+                                    setObservations(text);
                                 }}
                                 mode='flat'
                                 underlineColor='#2E5829FF'

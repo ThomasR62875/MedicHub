@@ -1,13 +1,15 @@
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, View, Text, Image, Alert} from 'react-native';
+import {StyleSheet, View, Text, Image} from 'react-native';
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
 import {Icon, Button, Input} from "react-native-elements";
 import {useTranslation} from "react-i18next";
 import {Button as PaperButton, Dialog, TextInput} from "react-native-paper";
-import {getUserIdByEmail, setDependentUser, signUp} from "../lib/supabase";
+import {getUserIdByEmail, setDependentUser} from "../lib/supabase";
 import ScrollableBg from "../components/ScrollableBg";
-import {User} from "../lib/types";
+import {SexGenderOption} from "../lib/types";
+
+
 
 type SingleDependentUserProps = NativeStackScreenProps<RootStackParamList, 'SingleDependentUser'>
 
@@ -79,6 +81,17 @@ const SingleDependentUser: React.FC<SingleDependentUserProps> = ({navigation, ro
     let str = t('depu');
     str = lowercaseFirstLetter(str);
 
+    const sexGenderOptions: SexGenderOption[] = [
+        { sex_gender_name: t('male'), value: 'male' },
+        { sex_gender_name: t('female'), value: 'female' },
+        { sex_gender_name: t('non-binary'), value: 'non-binary' },
+        { sex_gender_name: t('other'), value: 'other' },
+    ];
+
+    const getSexGenderName = (value: string) => {
+        const option = sexGenderOptions.find(option => option.value === value);
+        return option ? option.sex_gender_name : '';
+    };
     const handleUserSharing = async () => {
         const parent_id = await getUserIdByEmail(shareEmail);
         if (parent_id === undefined) {
@@ -132,26 +145,6 @@ const SingleDependentUser: React.FC<SingleDependentUserProps> = ({navigation, ro
     };
 
 
-    const signUpNewIndependentUser = async (dependent_user_id: string) => {
-        setLoading(true)
-        const user: User = {
-            id: "",
-            first_name: firstName,
-            last_name: lastName,
-            dni: dni,
-            email: email,
-            raw_user_meta_data: {
-                dependent_user_id: dependent_user_id,
-            },
-        };
-
-        const {success} = await signUp(user, password);
-        if (success) Alert.alert('¡Revise la bandeja de entrada del mail ingresado para el usuario para verificar el mail!',)
-        setLoading(false)
-
-    };
-
-
     return (
         <View style={styles.container}>
             <View style={styles.titleContainer}>
@@ -186,6 +179,14 @@ const SingleDependentUser: React.FC<SingleDependentUserProps> = ({navigation, ro
             <View style={styles.detailRow}>
                 <Text style={styles.label}>{t('id')}:</Text>
                 <Text style={styles.value}>{route.params.du.dni}</Text>
+            </View>
+            <View style={styles.detailRow}>
+                <Text style={styles.label}>{t('birthdate')}:</Text>
+                <Text style={styles.value}>{route.params.du.birthdate}</Text>
+            </View>
+            <View style={styles.detailRow}>
+                <Text style={styles.label}>{t('sex')}:</Text>
+                <Text style={styles.value}>{getSexGenderName(route.params.du.sex)}</Text>
             </View>
             <View style={styles.screen}>
                 <View style={{alignItems: 'center', width: 'auto'}}>
@@ -385,7 +386,7 @@ const SingleDependentUser: React.FC<SingleDependentUserProps> = ({navigation, ro
                                     marginBottom: 100
                                 }}
                                 titleStyle={{color: '#eef9ed'}}
-                                onPress={() => signUpNewIndependentUser(route.params.du.id)}
+                                onPress={handleDeleteDependentUser}
                             />
                         </View>
                     </ScrollableBg>

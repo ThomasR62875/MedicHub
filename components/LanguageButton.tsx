@@ -47,16 +47,16 @@ const styles = StyleSheet.create({
         height: 50,
         width: 100,
         borderWidth: 2,
-        borderColor: 'white',
+        borderColor: 'transparent',
         borderRadius: 15,
         minHeight: 50,
-        minWidth: 150,
+        minWidth: 100,
     },
     textStyle: {
         fontSize: 16,
     },
     dropdownContainer: {
-        backgroundColor: '#eef9ed',
+        backgroundColor: '#fff',
         borderRadius: 15,
     },
     item: {

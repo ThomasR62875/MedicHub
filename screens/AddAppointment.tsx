@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {addAppointment, getAllDoctorsByUser, getAllUsers, getDoctor, getUserId} from '../lib/supabase';
+import {addAppointment, getAllDoctorsByUser, getAllUsers, getUserId} from '../lib/supabase';
 import {
     StyleSheet,
     Alert,
@@ -10,7 +10,7 @@ import {
     Keyboard,
     SafeAreaView, Platform
 } from 'react-native';
-import {Button, Input} from "react-native-elements";
+import {Button} from "react-native-elements";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../App";
 import { DependentUser } from "../lib/types";
@@ -20,18 +20,18 @@ import { Picker } from "@react-native-picker/picker";
 import { useTranslation } from "react-i18next";
 import {TextInput, Text as PaperText, HelperText, Button as PaperButton, Dialog, Portal} from "react-native-paper";
 
+
 type AddAppointmentProps = NativeStackScreenProps<RootStackParamList, 'AddAppointment'>;
 
 const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) => {
     const { session } = route.params;
-    const [loading, setLoading] = useState(false);
     const [description, setDescription] = useState('');
+    const [observations, setObservations] = useState('');
     const [doctor, setDoctor] = useState('Médico');
     const [user_id, setUserId] = useState('');
     const [session_user_id, setSessionUserId] = useState('');
     const [all_users, setAllUsers] = useState<DependentUser[] | undefined>([]);
     const [doctors, setDoctors] = useState<Doctor[] | undefined>([]);
-    const [selectedUser, setSelectedUser] = useState('');
     const [date, setDate] = useState(new Date());
     const [time, setTime] = useState(new Date());
     const [doctorDialog, setDoctorDialog] = useState(false);
@@ -56,7 +56,6 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
 
         }
     };
-
 
     useEffect(() => {
         if (session) {
@@ -97,9 +96,10 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
 
 
 
-        const appointment = { date: appointmentDate, description, user_name: '', doctor, user_id, id: '' };
+        const appointment = { date: appointmentDate, description, user_name: '', doctor, user_id, id: '' , observations: observations};
         const result = await addAppointment(appointment);
         if (result.success) {
+            // @ts-ignore
             navigation.navigate('AlertPublicity', { session, msg: 'text8', screen: 'Appointments' });
         } else {
             Alert.alert('Error', result.message || 'An unknown error occurred');
@@ -175,11 +175,22 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
                                 underlineColor='#2E5829FF'
                                 activeUnderlineColor='#2E5829FF'
                             />
+                            <TextInput
+                                style={{backgroundColor: "#e9f4e9", marginTop: "10%", textAlign: 'center', marginLeft:'5%' , marginRight: '5%'}}
+                                label={t('Observaciones')}
+                                value={observations}
+                                onChangeText={(text) => {
+                                    setObservations(text);
+                                }}
+                                mode='flat'
+                                underlineColor='#2E5829FF'
+                                activeUnderlineColor='#2E5829FF'
+                            />
                             <HelperText type="error" visible={hasErorrs}>
                                 {descriptionErrorMessage}
                             </HelperText>
                         </View>
-                        <PaperText style={styles.text}>Horario y fecha</PaperText>
+                        <PaperText style={styles.text}>{t('dateTime')}</PaperText>
                         <View style={styles.datePickerContainer}>
                             {Platform.OS === 'ios' ? (
                                 <>

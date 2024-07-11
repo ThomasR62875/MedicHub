@@ -5,8 +5,9 @@ import {RootStackParamList} from "../App";
 import {Button, Icon} from "react-native-elements";
 import {useTranslation} from "react-i18next";
 import {Button as PaperButton, Dialog} from "react-native-paper";
-import {deleteAppointment, deleteDoctor, getDoctor} from "../lib/supabase";
+import {deleteAppointment, getDoctor, getUserData} from "../lib/supabase";
 import {Doctor} from "../lib/types";
+import {recommendQuestionsForAppointment} from "../lib/openai";
 
 type SingleAppointmentProps = NativeStackScreenProps<RootStackParamList, 'SingleAppointment'>
 
@@ -20,6 +21,7 @@ const SingleAppointment: React.FC<SingleAppointmentProps> = ({ navigation, route
     const formattedTime = `${(originalDate.getHours() + 3) % 24}:${originalDate.getMinutes().toString().padStart(2, '0')}`;
     const {t} = useTranslation();
     const [doctor, setDoctor] = useState<Doctor | undefined>()
+    const [recommendation, setRecommendation] = useState<string>('');
 
     useEffect(() => {
         const fetchDoctor = async () => {
@@ -29,13 +31,37 @@ const SingleAppointment: React.FC<SingleAppointmentProps> = ({ navigation, route
         fetchDoctor();
     }, [route.params.appointment.doctor])
 
+
     const handleDeleteAppointment = async () => {
         const session =  route.params.session;
         const appointment =  route.params.appointment;
-        const result = await deleteAppointment(appointment);
+        await deleteAppointment(appointment);
         navigation.navigate('Appointments', { session: session })
     };
 
+    const handlePressRecommendQuestionsForAppointment = async () => {
+        const data = await getUserData(route.params.appointment);
+        console.log(data);
+        if (data) {
+            const prompt = t('questionPromptP1');
+            const lastAppointmentText = t('lastAppointmentText', {
+                specialty: data.lastAppointment.specialty,
+                date: data.lastAppointment.date,
+                observations: data.lastAppointment.observations
+            });
+            const demographicInfo = t('demographicInfo', {
+                sex: data.medicalInfo.sex,
+                age: data.medicalInfo.age ?? null
+            });
+            const response = await recommendQuestionsForAppointment(prompt, lastAppointmentText, demographicInfo);
+            setRecommendation(response ?? '');
+            console.log(response);
+        } else {
+            console.error('Failed to get user data.');
+        }
+    };
+
+    // @ts-ignore
     // @ts-ignore
     return (
         <View style={styles.container}>
@@ -72,8 +98,32 @@ const SingleAppointment: React.FC<SingleAppointmentProps> = ({ navigation, route
                 <Text style={styles.label}>{t('description')}:</Text>
                 <Text style={styles.value}>{route.params.appointment.description}</Text>
             </View>
+            <View style={styles.detailRow}>
+                <Text style={styles.label}>{t('observations')}:</Text>
+                <Text style={styles.value}>{route.params.appointment.observations}</Text>
+            </View>
             <View style={styles.screen}>
                 <View style={{alignItems: 'center', width: 'auto'}}>
+                    <Button
+                        title="Preguntar IA"
+                        buttonStyle={{
+                            backgroundColor: '#2E5829',
+                            borderWidth: 2,
+                            borderColor: 'white',
+                            borderRadius: 30,
+                            minHeight: 50,
+                            minWidth: 150,
+                        }}
+                        containerStyle={{
+                            width: 150,
+                            marginHorizontal: 50,
+                            marginVertical: 10,
+                            marginTop: 40,
+                            marginBottom:100
+                        }}
+                        titleStyle={{ color: '#eef9ed' }}
+                        onPress={() => handlePressRecommendQuestionsForAppointment()}
+                    />
                     <Button
                         title="Eliminar"
                         buttonStyle={{
