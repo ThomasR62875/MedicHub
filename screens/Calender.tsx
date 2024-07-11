@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import { Image,   Text, View} from "react-native";
+import { Image, Text, View} from "react-native";
 import {Appointment} from "../lib/types";
 import {Calendar} from "react-native-calendars";
 import TurnoContainer from "../components/TurnContainer";
@@ -15,7 +15,6 @@ import {Divider} from "react-native-paper";
 const Calender: React.FC = ({ navigation, route } : any) => {
     const {session} = route.params;
     const [appointments,setAppointments]= useState<Appointment[] | undefined>(undefined)
-    const monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
     const {t} = useTranslation();
 
     useEffect(() => {
@@ -25,6 +24,7 @@ const Calender: React.FC = ({ navigation, route } : any) => {
             }  
             fetchData()
         }
+        if (session) getAppointments()
     }, [session])
 
     const getCurrentDate = () => {
@@ -43,7 +43,6 @@ const Calender: React.FC = ({ navigation, route } : any) => {
 
     let targetDate = selectedDate;
     let parts = targetDate.split('-');
-    let dateNormal = `${parts[2]}-${parts[1]}-${parts[0]}`;
     let filteredData : Appointment[] | undefined = undefined; //es un array donde se guardan todos los appointments los cuales su date coinciden con el día seleccionado en el calendario (targeDate)
     let markedDates : string[] = []; //Es un array donde se guardan todos los dates de appointments, en formato string YYYY-MM-DD porq es lo q usa el calendar
     if(appointments){
@@ -122,28 +121,21 @@ const Calender: React.FC = ({ navigation, route } : any) => {
                         titleStyle={{ color: '#fff',fontSize: 15, margin: 5, fontWeight: 'bold'}}
                         onPress={() => navigation.navigate('AddAppointment', {session: session})}/>
                 </View>
-                {filteredData && filteredData.length > 0 ? (
-                                filteredData.map((turno: Appointment, i: number) => {
-                                    return(
-                                        <View key={i} style={{alignItems: 'center', marginTop: 10}}>
-                                            <TurnoContainer
-                                                date={turno.date}
-                                                turno={turno}
-                                                styleExterior={[styles.cards,{width: "85%", marginRight: '5%'}]}
-                                                onPress={() => {navigation.navigate('SingleAppointment', {session: session, appointment: turno})}}
-                                            />
-                                        </View>
-                                    )
-                                    })) :  (
-                                        <View style={{alignItems: 'center', marginTop: 10}}>
-                                            <View style={[styles.turnoContainer]}>
-                                                <Text style={styles.text}>{t('text19')} {dateNormal}</Text>
-                                            </View>
-                                        </View>
-                                    )}
-                            <View style={{marginTop: 10, marginBottom: "20%", alignContent: 'center'}}>
-
-                            </View>
+                <View style={{flexDirection: 'column'}}>
+                    {filteredData && filteredData.length > 0 ? (
+                        filteredData.map((turno: Appointment, i: number) => {
+                            return(
+                                <TurnoContainer
+                                    date={turno.date}
+                                    turno={turno}
+                                    styleExterior={[styles.cards,{width: "85%", marginHorizontal: '5%'}]}
+                                    onPress={() => {navigation.navigate('SingleAppointment', {session: session, appointment: turno})}}
+                                />
+                            )
+                        })) :  (
+                            <Text style={[styles.text2, {paddingVertical: 10, paddingHorizontal: 25}]}>{t('text13')}</Text>
+                    )}
+                </View>
             </ScrollableBg>
         </View>
     )

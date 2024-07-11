@@ -204,7 +204,7 @@ export const styles = StyleSheet.create({
     },
     text2: {
         fontFamily: 'Roboto-Thin',
-        fontSize: 16,
+        fontSize: 14,
         marginTop: "1%",
         color: "#A8A8A8",
         width: "60%"

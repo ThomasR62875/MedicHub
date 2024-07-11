@@ -1,4 +1,4 @@
-import {StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import { Text, TouchableOpacity, View} from "react-native";
 import React from "react";
 import {useTranslation} from "react-i18next";
 import {Appointment} from "../lib/types";
@@ -13,10 +13,9 @@ interface turnoContainerProps {
 
 const turnoContainer: React.FC<turnoContainerProps> = ({styleExterior, turno, date, ...props}) => {
     const otraDate = new Date(date);
-    const {t} = useTranslation();
 
     return (
-        <TouchableOpacity style={[styleExterior, {flexDirection: 'row', height: '50%'}]} {...props}>
+        <TouchableOpacity style={[styleExterior, {flexDirection: 'row'}]} {...props}>
             <Text
                 style={[styles.text, {padding: 15}]}>{otraDate.getHours()}:{otraDate.getMinutes() > 10 ? otraDate.getMinutes() : '0' + otraDate.getMinutes()}</Text>
             <View style={{padding: 10}}>

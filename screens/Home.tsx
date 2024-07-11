@@ -17,22 +17,23 @@ const Home: React.FC = ({navigation, route}: any) => {
     const [first_name, setFirstName] = useState('')
     const [loading, setLoading] = useState(true)
     const [appointments, setAppointments] = useState<Appointment[] | undefined>(undefined)
-    let turno1, turno2: Appointment | null = null;
-    let date1, date2: Date | null = null;
+    const [turno1, setTurno1] = useState<Appointment | null>(null);
+    const [turno2, setTurno2] = useState<Appointment | null>(null);
+    const [date1, setDate1] = useState<Date | null>(null);
+    const [date2, setDate2] = useState<Date | null>(null);
     const {t} = useTranslation();
 
     //se tiene q orderna por fecha appointments todo
-
-    if (appointments && appointments.length == 1) {
-        turno1 = appointments[0];
-        date1 = new Date(turno1.date);
-    }
-    if (appointments && appointments?.length > 1) {
-        turno1 = appointments[0];
-        date1 = new Date(turno1.date);
-        turno2 = appointments[1];
-        date2 = new Date(turno2.date);
-    }
+    useEffect(() => {
+        if (appointments && appointments.length > 0) {
+            setTurno1(appointments[0]);
+            setDate1(new Date(appointments[0].date));
+            if (appointments.length > 1) {
+                setTurno2(appointments[1]);
+                setDate2(new Date(appointments[1].date));
+            }
+        }
+    }, [appointments]);
 
     useEffect(() => {
         if (session) getProfile()
@@ -103,6 +104,8 @@ const Home: React.FC = ({navigation, route}: any) => {
         setAppointments(to_return)
     }
 
+    // @ts-ignore
+    // @ts-ignore
     return (
         <View style={styles.tab}>
             <Image source={Squiggle} style={styles.squiggle}/>
@@ -139,30 +142,31 @@ const Home: React.FC = ({navigation, route}: any) => {
                     </ScrollView>
                 </View>
                 <Text style={styles.subtitles}>{t('text12')}</Text>
-                <View style={styles.listCards}>
+                <View style={[styles.listCards]}>
                     {turno1 && date1 ? (
-                        <View >
+                        <View>
                             <TurnoContainer
                                 turno={turno1}
-                                date={date1}
+                                date={turno1.date}
                                 styleExterior={[styles.cards]}
+                                onPress={() => {navigation.navigate('SingleAppointment', {session: session, appointment: turno1})}}
+
                             />
                             {turno2 && date2 ? (
                                 <TurnoContainer
                                     styleExterior={[styles.cards]}
                                     date={date2}
                                     turno={turno2}
+                                    onPress={() => {navigation.navigate('SingleAppointment', {session: session, appointment: turno2})}}
                                 />
                             ) : (<View/>)}
                         </View>
                     ) : (
-                        <View style={styles.cards}>
-                            <Text style={styles.text}>{t('text13')}</Text>
-                            <Text style={[styles.text, {fontStyle: 'italic'}]}>{t('text14')}</Text>
+                        <View style={{alignItems: 'center'}}>
+                            <Text style={[styles.text2, {paddingHorizontal: 30}]}>{t('text13')}</Text>
                         </View>
                     )}
                 </View>
-
                 <Text style={styles.subtitles}>{t('text15')}</Text>
             </ScrollableBg>
         </View>
