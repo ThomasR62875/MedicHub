@@ -263,5 +263,12 @@ export const styles = StyleSheet.create({
     buttonContainer: {
         width: 225, // Ancho deseado para todos los botones
         marginVertical: 10,
-    }
+    },
+    infoRow: {
+        flexDirection: 'row',
+    },
+    label: {
+        fontWeight: 'bold',
+        marginRight: 5,
+    },
 });
