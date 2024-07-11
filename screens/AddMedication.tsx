@@ -73,7 +73,7 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
 
         const result = await addMedication(medication);
         if (result.success) {
-            navigation.navigate('AlertPublicity', { session, msg: 'text11', screen: 'Medications' });
+            navigation.navigate('AlertPublicity', { session, msg: 'text11', screen: 'Medications', appointment: null, du: null, doc: null, meds: null  });
         } else {
             Alert.alert('Error', result.message || 'An unknown error occurred');
         }
@@ -100,10 +100,11 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
         let currentDate;
         if(selectedDate1){
             currentDate = new Date(selectedDate1);
-            currentDate.setHours(currentDate.getHours()); //acomodor por la dif horaria todo
+            console.log("if")
         }
         else{
             currentDate=dateSince;
+            console.log("else")
         }
         console.log(currentDate);
         setDateSince(currentDate);
@@ -170,6 +171,8 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
                                              value={dateSince}
                                              mode="datetime"
                                              onChange={onChange1}
+                                             //timeZoneOffsetInMinutes={dateSince.getTimezoneOffset()} en vez de tener un +3 en las horas es un -3 xd
+                                             timeZoneName={'America/Buenos_Aires'}
                             />
                         </View>
                     </View>
@@ -194,6 +197,7 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
                             <DateTimePicker  testID="dateTimePicker"
                                              value={dateUntil ? dateUntil : new Date()}
                                              mode={mode}
+                                             minimumDate={dateSince}
                                              onChange={onChange2}
                             />
                         </View>

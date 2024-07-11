@@ -18,8 +18,8 @@ const EditMedication:React.FC<EditMedicationProps> = ({navigation, route }: any)
     const [id, setId] = useState(route.params.medication.id)
     const [name, setName] = useState(route.params.medication.name)
     const [prescription, setPrescription] = useState(route.params.medication.prescription);
-    const [dateSince, setDateSince] = useState<Date>(route.params.medication.dateSince);
-    const [dateUntil, setDateUntil] = useState<Date | null>(route.params.medication.dateUntil);
+    const [dateSince, setDateSince] = useState<Date>(route.params.medication.sinceWhen ? new Date(route.params.medication.sinceWhen) : new Date());
+    const [dateUntil, setDateUntil] = useState<Date | null>(route.params.medication.untilWhen ? new Date(route.params.medication.untilWhen) : null);
     const [howOften, setHowOften] = useState<Date | null>(route.params.medication.howOften);
     const [isForever, setIsForever] = useState<boolean>(route.params.medication.isForever);
     const {t} = useTranslation();
@@ -49,7 +49,11 @@ const EditMedication:React.FC<EditMedicationProps> = ({navigation, route }: any)
         } else {
             setIsButtonDisabled(true);
         }
-    }, [name, prescription]);
+        console.log("presc es" , route.params.medication.prescription);
+        console.log("since es" , route.params.medication.sinceWhen);
+        console.log("until es" , route.params.medication.untilWhen);
+
+    }, [name, prescription, dateSince, dateUntil, howOften, isForever]);
 
     const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(true);
 
@@ -97,13 +101,28 @@ const EditMedication:React.FC<EditMedicationProps> = ({navigation, route }: any)
         else{
             currentDate=dateSince;
         }
-        console.log(currentDate);
         setDateSince(currentDate);
     };
 
     const onChange2 = (event: DateTimePickerEvent, selectedDate2?: Date | undefined): void => {
         const currentDate = selectedDate2 || dateUntil;
-        setDateUntil(currentDate);
+        let adjustedDate;
+        console.log("antes", dateUntil)
+
+        if(selectedDate2){
+            const offset = selectedDate2.getTimezoneOffset();
+            adjustedDate = new Date(selectedDate2.getTime() - (offset * 60 * 1000));
+            setDateUntil(adjustedDate)
+            console.log("pri", dateUntil)
+
+        }
+        else{
+            setDateUntil(dateUntil);
+            console.log("seg", dateUntil)
+        }
+
+        console.log("dsp", dateUntil)
+
     };
 
     return(

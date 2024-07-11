@@ -18,8 +18,7 @@ const Appointments: React.FC =  ({navigation, route}: any) =>{
             if (session) {
                 async function fetchData() {
                     setAppointments(await getAppointments())
-                    console.log(appointments)
-                }  
+                }
                 fetchData()
             }
         });
