@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {Text, TouchableOpacity, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {useTranslation} from "react-i18next";
 import {cardStyle} from "../styles/global"
@@ -12,7 +12,6 @@ interface AppointmentButtonProps {
 }
 
 const AppointmentButton: React.FC<AppointmentButtonProps> = ( { onPress, turno, date }) => {
-    const navigation = useNavigation();
     const otraDate = new Date(date);
     const {t} = useTranslation();
 
