@@ -179,7 +179,7 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}) => {
         </ScrollableBg>
             <Portal>
                 <Dialog style={styles.dialog} visible={userDialog} onDismiss={hideUserDialog}>
-                    <Text style={styles.dialogTitle}>{t('Seleccionar usuario')}</Text>
+                    <Text style={styles.dialogTitle}>{t('selectUser')}</Text>
                     <Picker
                         mode='dropdown'
                         selectedValue={user_id}
@@ -203,7 +203,7 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}) => {
                         itemStyle={styles.pickerStyle}
                     >
                         {specialties?.map((item) => (
-                            <Picker.Item key={item.name} label={item.name} value={item.name} />
+                            <Picker.Item key={item.name} label={t(item.name)} value={item.name} />
                         ))}
                     </Picker>
                 </Dialog>

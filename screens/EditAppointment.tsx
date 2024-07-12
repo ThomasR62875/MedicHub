@@ -167,7 +167,7 @@ const EditAppointment: React.FC<EditAppointmentProps> = ({navigation, route }: a
                         <View>
                             <TextInput
                                 style={{backgroundColor: "#e9f4e9", marginTop: "10%", textAlign: 'center', marginLeft:'5%' , marginRight: '5%'}}
-                                label={t('Título')}
+                                label={t('title')}
                                 value={description}
                                 onChangeText={(text) => {
                                     setDescription(text);
@@ -179,7 +179,7 @@ const EditAppointment: React.FC<EditAppointmentProps> = ({navigation, route }: a
                             />
                             <TextInput
                                 style={{backgroundColor: "#e9f4e9", marginTop: "10%", textAlign: 'center', marginLeft:'5%' , marginRight: '5%'}}
-                                label={t('Observaciones')}
+                                label={t('observations')}
                                 value={observations}
                                 onChangeText={(text) => {
                                     setObservations(text);
@@ -249,7 +249,7 @@ const EditAppointment: React.FC<EditAppointmentProps> = ({navigation, route }: a
                 </ScrollView>
                 <Portal>
                     <Dialog style={styles.dialog} visible={doctorDialog} onDismiss={hideDoctorDialog}>
-                        <Text style={styles.dialogTitle}>{t('Seleccionar médico')}</Text>
+                        <Text style={styles.dialogTitle}>{t('selectDoctor')}</Text>
                         <Picker
                             mode='dropdown'
                             selectedValue={doctor}
@@ -263,7 +263,7 @@ const EditAppointment: React.FC<EditAppointmentProps> = ({navigation, route }: a
                         </Picker>
                     </Dialog>
                     <Dialog style={styles.dialog} visible={userDialog} onDismiss={hideUserDialog}>
-                        <Text style={styles.dialogTitle}>{t('Seleccionar usuario')}</Text>
+                        <Text style={styles.dialogTitle}>{t('selectUser')}</Text>
                         <Picker
                             mode='dropdown'
                             selectedValue={user_id}
