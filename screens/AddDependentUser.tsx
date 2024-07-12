@@ -110,6 +110,7 @@ const AddDependentUser:React.FC<AddDependentUserProps> = ({navigation, route} : 
         }
 
     };
+
     const handleAddDependentUser = async () => {
         const dep_user = {
             first_name: firstName, last_name :lastName, dni:dni, id: '', sex: sexGender,
@@ -117,7 +118,7 @@ const AddDependentUser:React.FC<AddDependentUserProps> = ({navigation, route} : 
 
         const result = await addDependentUser(dep_user);
         if (result.success) {
-            navigation.navigate('AlertPublicity', { session, msg: 'text9', screen: 'Usuarios' });
+            navigation.navigate('AlertPublicity', { session, msg: 'text9', screen: 'Usuarios', appointment: null, du: null, doc: null, meds: null  });
         } else {
             Alert.alert('Error', result.message || 'An unknown error occurred');
         }

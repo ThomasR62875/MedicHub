@@ -1,31 +1,17 @@
 import React from 'react';
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import {Doctor} from "../screens/Doctors";
-import {useTranslation} from "react-i18next";
-import {cardStyle} from "../styles/global"
+import {TouchableOpacity, View} from 'react-native';
+import {styles} from "../assets/styles";
 
 interface DoctorButtonProps {
+    children: React.ReactNode;
     onPress: any;
-    doc: Doctor;
 }
 
-const DoctorButton: React.FC<DoctorButtonProps> = ( { onPress, doc }) => {
-    const navigation = useNavigation();
-    const {t} = useTranslation();
-
+const DoctorButton: React.FC<DoctorButtonProps> = ( { children,onPress }) => {
     return (
         <TouchableOpacity onPress={onPress}>
-            <View style={cardStyle.container}>
-                <View style={cardStyle.infoRow}>
-                    <Text style={cardStyle.label}>{t('doc')}:</Text>
-                    <Text>{doc.name}</Text>
-                </View>
-                <View style={cardStyle.infoRow}>
-                    <Text style={cardStyle.label}>{t('specialty')}</Text>
-                    <Text>{doc.specialty}</Text>
-                    <View style={{ width: 30 }} />
-                </View>
+            <View style={[styles.cards]}>
+                {children}
             </View>
         </TouchableOpacity>
     );

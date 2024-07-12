@@ -95,7 +95,7 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}) => {
 
             const result = await addDoctor(doctor);
             if (result.success) {
-                navigation.navigate('AlertPublicity', { session, msg: 'text10', screen: 'Doctors' });
+                navigation.navigate('AlertPublicity', { session, msg: 'text10', screen: 'Doctors', appointment: null, du: null, doc: null, meds: null });
             } else {
                 Alert.alert('Error', result.message || 'An unknown error occurred');
             }

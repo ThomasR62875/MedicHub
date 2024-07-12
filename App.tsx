@@ -10,7 +10,6 @@ import AddDependentUser from './screens/AddDependentUser'
 import Account from "./screens/Account";
 import Register from "./screens/Register";
 import Home from "./screens/Home";
-import Appointments from "./screens/Appointments";
 import EditAccount from "./screens/EditAccount";
 import SingleAppointment from "./screens/SingleAppointment";
 import EditAppointment from "./screens/EditAppointment";
@@ -80,12 +79,12 @@ type Props = {
 
 
 // https://www.youtube.com/watch?v=XiutL0uLICg&list=PLhRhTJaArVFugDgTSvXTUaqJWY9Kpp-gV  tutorial de la bottomBar todo
-function HomeTabs({route, navigation}: Props) {
+function HomeTabs({route}: Props) {
   const {session} = route.params;
   const {t} = useTranslation();
 
   //para saber q tab esta seleccionada
-  const [selectedTab, setSelectedTab] = useState<number | null>(0);
+  const [selectedTab] = useState<number | null>(0);
   useEffect(() => {
     if (selectedTab !== null) {
       console.log('Selected tab:', selectedTab);
@@ -129,7 +128,7 @@ function HomeTabs({route, navigation}: Props) {
 
     return (
         <Tab.Navigator screenOptions={{
-            tabBarStyle: {backgroundColor: "#ffffff", borderRadius:30, padding: 10},
+            tabBarStyle: {backgroundColor: "#ffffff", borderRadius:30, padding: 10, position: 'absolute', borderColor: '#d5d4d4', borderWidth: 1},
             tabBarActiveTintColor: "#8b86be",
             tabBarInactiveTintColor: "#ababab",
         }}>
@@ -218,11 +217,6 @@ const App = () => {
                                   component={Register}
                                   options={{
                                     title: '',headerShown: false
-                                    // headerStyle: {
-                                    //   backgroundColor: '#2E5829',
-                                    // },
-                                    // headerTintColor: '#ABD2A8',
-                                    // headerBackTitle: 'Iniciar Sesión', // Cambia la etiqueta del botón de retroceso
                                     }}/>
                   </>
               ) : (
@@ -230,7 +224,7 @@ const App = () => {
                     <Stack.Screen name="HomeTabs"
                                   component={HomeTabs}
                                   initialParams={{session: session}}
-                                  options={{ headerShown: false }}/>
+                                  options={{ headerShown: false}}/>
                     <Stack.Screen name="AlertPublicity"
                                 component={AlertPublicity}
                                 initialParams={{session: session, msg: 'successful addition', screen: 'Home'}}
@@ -254,14 +248,7 @@ const App = () => {
                       <Stack.Screen name="SingleAppointment"
                                     component={SingleAppointment}
                                     initialParams={{session: session}}
-                                    options={{
-                                        title: '',
-                                        headerStyle: {
-                                            backgroundColor: '#2E5829',
-                                        },
-                                        headerTintColor: '#ABD2A8',
-                                        headerBackTitle: 'Volver',
-                                    }}/>
+                                    options={{ headerShown: false }}/>
                       <Stack.Screen name="EditAppointment"
                                     component={EditAppointment}
                                     initialParams={{session: session}}
@@ -287,14 +274,7 @@ const App = () => {
                       <Stack.Screen name="SingleDoctor"
                                     component={SingleDoctor}
                                     initialParams={{session: session}}
-                                    options={{
-                                        title: '',
-                                        headerStyle: {
-                                            backgroundColor: '#2E5829',
-                                        },
-                                        headerTintColor: '#ABD2A8',
-                                        headerBackTitle: 'Volver',
-                                    }}/>
+                                    options={{ headerShown: false }}/>
                       <Stack.Screen name="EditDoctor"
                                     component={EditDoctor}
                                     initialParams={{session: session}}
@@ -320,14 +300,7 @@ const App = () => {
                       <Stack.Screen name="SingleDependentUser"
                                     component={SingleDependentUser}
                                     initialParams={{session: session}}
-                                    options={{
-                                        title: '',
-                                        headerStyle: {
-                                            backgroundColor: '#2E5829',
-                                        },
-                                        headerTintColor: '#ABD2A8',
-                                        headerBackTitle: 'Volver',
-                                    }}/>
+                                    options={{ headerShown: false }}/>
                       <Stack.Screen name="EditDependentUser"
                                     component={EditDependentUser}
                                     initialParams={{session: session}}
@@ -353,14 +326,7 @@ const App = () => {
                       <Stack.Screen name="SingleMedication"
                                     component={SingleMedication}
                                     initialParams={{session: session}}
-                                    options={{
-                                        title: '',
-                                        headerStyle: {
-                                            backgroundColor: '#2E5829',
-                                        },
-                                        headerTintColor: '#ABD2A8',
-                                        headerBackTitle: 'Medicamentos',
-                                    }}/>
+                                    options={{ headerShown: false }}/>
                       <Stack.Screen name="EditMedication"
                                     component={EditMedication}
                                     initialParams={{session: session}}
@@ -372,27 +338,9 @@ const App = () => {
                                         headerTintColor: '#ABD2A8',
                                         headerBackTitle: 'Volver',
                                     }}/>
-                    <Stack.Screen name="Appointments"
-                                  component={Appointments}
-                                  initialParams={{session: session}}
-                                  options={{
-                                    title: '',
-                                      headerStyle: {
-                                          backgroundColor: '#2E5829',
-                                      },
-                                    headerTintColor: '#ABD2A8',
-                                    headerBackTitle: 'Volver',
-                                  }}/>
                      <Stack.Screen name="Doctors"
                                    component={Doctors} initialParams={{session: session}}
-                                   options={{
-                                     title: '',
-                                       headerStyle: {
-                                           backgroundColor: '#2E5829',
-                                       },
-                                     headerTintColor: '#ABD2A8',
-                                     headerBackTitle: 'Perfil',
-                                   }}/>
+                                   options={{ headerShown: false }}/>
                     <Stack.Screen name="EditAccount"
                                     component={EditAccount}
                                     initialParams={{session: session}}
@@ -407,14 +355,7 @@ const App = () => {
                       <Stack.Screen name="Medications"
                                     component={Medications}
                                     initialParams={{session: session}}
-                                    options={{
-                                      title: '',
-                                        headerStyle: {
-                                            backgroundColor: '#2E5829',
-                                        },
-                                      headerTintColor: '#ABD2A8',
-                                      headerBackTitle: 'Perfil',
-                                    }}/>
+                                    options={{ headerShown: false }}/>
                   </>
               )}
             </Stack.Navigator>

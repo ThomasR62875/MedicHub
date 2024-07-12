@@ -93,13 +93,14 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
         const appointmentDate = new Date(date);
         appointmentDate.setHours(time.getHours()-3);
         appointmentDate.setMinutes(time.getMinutes());
-        console.log("horaaaa_____", appointmentDate);
+
+
+
         const appointment = { date: appointmentDate, description, user_name: '', doctor, user_id, id: '' , observations: observations};
         const result = await addAppointment(appointment);
         if (result.success) {
             // @ts-ignore
-            console.log("succes")
-            //navigation.navigate('AlertPublicity', { session, msg: 'text8', screen: 'calendar' }); //no toma Calender ni calender como opcion valida todo
+            navigation.navigate('AlertPublicity', { session, msg: 'text8', screen: 'Appointments', appointment: null, du: null, doc: null, meds: null  });
         } else {
             Alert.alert('Error', result.message || 'An unknown error occurred');
         }
@@ -124,7 +125,6 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
 
     const onTimeChange = (event: any, selectedTime: Date | undefined) => {
         const currentTime = selectedTime || time;
-        console.log("hora:", currentTime)
         setShowTimePicker(Platform.OS === 'ios');
         setTime(currentTime);
     };

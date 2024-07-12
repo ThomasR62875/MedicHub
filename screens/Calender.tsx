@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import { Image, Text, View} from "react-native";
 import {Appointment} from "../lib/types";
 import {Calendar} from "react-native-calendars";
-import TurnoContainer from "../components/TurnContainer";
+import TurnoContainer from "../components/TurnoContainer";
 import {getAppointments} from "../lib/supabase";
 import {Button} from "react-native-elements";
 import {useTranslation} from "react-i18next";
@@ -11,6 +11,7 @@ import {styles} from "../assets/styles";
 import Squiggle from "../assets/tabAsset.png";
 import ScrollableBg from "../components/ScrollableBg";
 import {Divider} from "react-native-paper";
+import {formatDate} from "../lib/ourlibrary";
 
 const Calender: React.FC = ({ navigation, route } : any) => {
     const {session} = route.params;
@@ -42,7 +43,6 @@ const Calender: React.FC = ({ navigation, route } : any) => {
     };
 
     let targetDate = selectedDate;
-    let parts = targetDate.split('-');
     let filteredData : Appointment[] | undefined = undefined; //es un array donde se guardan todos los appointments los cuales su date coinciden con el día seleccionado en el calendario (targeDate)
     let markedDates : string[] = []; //Es un array donde se guardan todos los dates de appointments, en formato string YYYY-MM-DD porq es lo q usa el calendar
     if(appointments){
@@ -74,18 +74,6 @@ const Calender: React.FC = ({ navigation, route } : any) => {
         todayTextColor: '#8b86be',
     }
 
-    function formatDate(dateString: string | number | Date) {
-        const months = [
-            "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
-            "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
-        ];
-
-        const date = new Date(dateString);
-        const day = date.getDate();
-        const month = months[date.getMonth()];
-        return `${day+1} de ${month}`;
-    }
-
     return (
         <View style={styles.tab}>
             <Image source={Squiggle} style={styles.squiggle}/>
@@ -103,7 +91,7 @@ const Calender: React.FC = ({ navigation, route } : any) => {
             </View>
             <Divider style={styles.divider}/>
 
-            <ScrollableBg>
+            <ScrollableBg style={{paddingLeft: 16}}>
                 <View style={{flexDirection:'row', justifyContent: 'space-between'}}>
                     <Text style={[styles.text, {paddingVertical: 30, paddingHorizontal: 20}]}>{formatDate(selectedDate)}</Text>
                     <Button
@@ -122,9 +110,10 @@ const Calender: React.FC = ({ navigation, route } : any) => {
                 </View>
                 <View style={{flexDirection: 'column'}}>
                     {filteredData && filteredData.length > 0 ? (
-                        filteredData.map((turno: Appointment, i: number) => {
+                        filteredData.map((turno: Appointment, index) => {
                             return(
                                 <TurnoContainer
+                                    key={index}
                                     date={turno.date}
                                     turno={turno}
                                     styleExterior={[styles.cards,{width: "85%", marginHorizontal: '5%'}]}

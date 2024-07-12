@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { getDependentUsers} from '../lib/supabase'
-import {View,  Text, Dimensions, Image, TouchableOpacity} from 'react-native'
+import {View,  Text, Image, TouchableOpacity} from 'react-native'
 import { Icon} from "react-native-elements";
 import {useTranslation} from "react-i18next";
-import {cardStyle} from "../styles/global"
 import DependentUserButton from "../components/DependentUsertButton";
 import { DependentUser } from '../lib/types';
 import {styles} from '../assets/styles'
@@ -18,14 +17,13 @@ const DependentUsers: React.FC = ({navigation, route} : any) => {
     const colors = [ 'rgba(139,134,190,0.6)','rgba(222,176,189,0.6)','rgba(236,183,97,0.6)','rgba(203,214,144,0.6)']
 
     useEffect(() => {
-        const unsubscribe = navigation.addListener('focus', () => {
+        navigation.addListener('focus', () => {
             async function fetchData() {
                 setDependentUsers(await getDependentUsers(session.id))
             }  
             fetchData()
         });
 
-        return unsubscribe;
     }, [navigation, session]);
 
 return(
@@ -34,7 +32,7 @@ return(
         <Text style={[styles.tabTitle]}>
             {t('depus')}
         </Text>
-        <ScrollableBg>
+        <ScrollableBg style={{paddingHorizontal: 10}}>
             <View style={{flexDirection: 'row', justifyContent: 'space-between',flex:0, margin: '5%', marginBottom: '2.5%'}}>
                 <TouchableOpacity
                     style={styles.addButton}
@@ -58,9 +56,9 @@ return(
                             </View>
                         )
                     })) : (
-                    <View style={[cardStyle.container]}>
-                        <Text style={styles.text}>{t('text18')}</Text>
-                    </View>
+
+                        <Text  style={[styles.text2,{alignSelf: 'center', padding: 30}]}>{t('text18')}</Text>
+
                 )}
             </View>
         </ScrollableBg>

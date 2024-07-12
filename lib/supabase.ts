@@ -60,7 +60,6 @@ export const getUserId = async (): Promise<string> => {
 }
 
 // Crea el usuario
-
 export const signUp = async (user: User, password: string): Promise<{ success: boolean; message?: string }> => {
     const {error} = await supabase.auth.signUp({
         email: user.email,
@@ -278,7 +277,7 @@ export const getAppointments = async (): Promise<Appointment[] | undefined> => {
 }
 
 
-function getAge(birthdate: Date | null): number | null {
+export function getAge(birthdate: Date | null): number | null {
     if (!birthdate) {
         return null;
     }
@@ -346,8 +345,8 @@ export const deleteAppointment = async (appoint: Appointment): Promise<{ success
     }
 }
 
-export const deleteDependentUser = async (doc: Doctor): Promise<{ success: boolean, message: string }> => {
-    const {error} = await supabase.rpc('delete_dependent_user_by_id', {input_id: doc.id});
+export const deleteDependentUser = async (user: DependentUser): Promise<{ success: boolean, message: string }> => {
+    const {error} = await supabase.rpc('delete_dependent_user_by_id', {input_id: user.id});
     if (error) {
         return {
             success: false,
@@ -538,4 +537,36 @@ export const getAdvertisement = async(banner_type: string) : Promise<Advertiseme
         return data;
     }
     return undefined;
+}
+
+//obtiene las especialidades aptas para recomendaciones
+export const getRecommendationSpecialities = async (): Promise<Specialty[] | undefined> => {
+    const {data, error} = await supabase.rpc('get_recommendation_specialities');
+    if (error) {
+        console.error('Error getting specialty data:', error.message);
+    } else {
+        console.log('Specialty data got successfully');
+    }
+    return data
+}
+
+export const getAppointmentInterval = async (speciality: Specialty, age: number | null, sex: string): Promise<number | null> => {
+    try {
+        const { data, error } = await supabase.rpc('get_frequency_recommendation', {
+            speciality_input: speciality.name,
+            age_input: age,
+            sex_input: sex
+        });
+
+        if (error) {
+            console.error('Error getting appointment interval:', error.message);
+            return null;
+        } else {
+            console.log('Appointment interval data received successfully:', data);
+            return data?.data; // Assuming the structure of data returned by Supabase RPC
+        }
+    } catch (error) {
+        console.error('Error in getAppointmentInterval function:', error);
+        return null;
+    }
 }

@@ -81,8 +81,6 @@ const EditDependentUser:React.FC<EditDependentUserProps> = ({navigation, route }
         setLastName(route.params.du.last_name);
         setDni(route.params.du.dni);
         const birthdate = new Date(route.params.du.birthdate);
-        console.log("recibe:");
-        console.log(birthdate)
         setDate(birthdate);
         setSexGender(route.params.du.sex);
 

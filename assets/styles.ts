@@ -5,7 +5,6 @@ export const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: "#fff",
         height: '100%',
-        paddingLeft: 16
     },
     tabTitle: {
         color: 'black',
@@ -32,9 +31,8 @@ export const styles = StyleSheet.create({
         fontFamily: 'Roboto-Thin',
         fontSize: 20,
         textAlign: 'center',
-        fontWeight: 'bold',
-        marginTop: "1%",
-        color: "#2E5829",
+        paddingTop: 20,
+        color: "#000",
     },
     text: {
         fontSize: 20,
@@ -93,6 +91,23 @@ export const styles = StyleSheet.create({
         top: -20,
         left: 225,
     },
+    squiggle_left: {
+        position: 'absolute',
+        top: -20,
+        left: -20,
+    },
+    back_arrow: {
+        padding: 15,
+        marginTop: '10%',
+        alignSelf: 'flex-start'
+    },
+    stackTitle: {
+        color: 'black',
+        fontSize: 24,
+        fontFamily: 'Roboto-Thin',
+        paddingLeft: 25,
+        paddingTop: 50
+    },
     buttons: {
         backgroundColor: '#8B86BE',
         borderRadius: 15,
@@ -114,7 +129,8 @@ export const styles = StyleSheet.create({
     calendarContainer: {
         marginTop: '5%',
         marginRight: '4%',
-        backgroundColor: "#ffffff"
+        backgroundColor: "#ffffff",
+        paddingLeft: 16
     },
     divider: {
         borderBottomColor: '#e1dfdf',
@@ -168,6 +184,12 @@ export const styles = StyleSheet.create({
         height: 45,
         width: 45,
         padding: 10,
+    },
+    circleHeader:{
+        borderRadius: 40,
+        height: 80,
+        width: 80,
+        padding: 25,
     },
     cardText: {
         fontSize: 14,
@@ -237,7 +259,6 @@ export const styles = StyleSheet.create({
         color: 'white',
     },
     screen: {
-        backgroundColor: "#E9F4E9FF",
         height: "100%",
     },
     main: {
@@ -268,7 +289,114 @@ export const styles = StyleSheet.create({
         flexDirection: 'row',
     },
     label: {
-        fontWeight: 'bold',
+        fontSize: 16,
         marginRight: 5,
+        paddingVertical: 10
+
+    },
+    header: {
+        position: 'absolute',
+        top: 0,
+        left: -7,
+    },
+    titleContainer: {
+        fontSize: 25,
+        fontWeight: 'bold',
+        marginTop: 10,
+        alignSelf: 'center',
+        marginBottom: 20,
+    },
+    detailRow: {
+        flexDirection: 'row',
+        margin: 10,
+    },
+    value: {
+        flex: 1,
+        fontSize: 16,
+        fontFamily: 'Roboto-Thin',
+        color: '#807d7d',
+        textAlign: 'right',
+        paddingVertical: 10
+    },
+    addContainer: {
+        left: 290,
+        bottom: 60,
+        alignSelf: 'flex-start',
+    },
+    dialog: {
+        backgroundColor: '#fff',
+        padding: 15
+    },
+    shareUserBotton: {
+        borderRadius: 10,
+        borderColor: '#8B86BE',
+        margin: '5%',
+        width: '60%'
+    },
+    inputStyle: {
+        marginTop: '5%',
+        marginBottom: '5%',
+    },
+    buttonSignInContainer: {
+        width: '50%',
+        justifyContent: 'center',
+    },
+    buttonSignIn: {
+        backgroundColor: '#B5DCCA',
+        borderRadius: 10,
+        justifyContent: 'center',
+    },
+    colorIcon: {
+        color: '#2E5829FF'
+    },
+    colorLabel: {
+        color: '#2E5829FF',
+        fontSize: 12
+    },
+    icon: {
+        width: 24,
+        height: 24,
+    },
+    registerW: {
+        backgroundColor: '#e9f4e9',
+        height: '100%',
+        marginLeft: 10,
+        marginRight: 10,
+        alignContent: 'center'
+    },
+    makeIndepUserBotton: {
+        borderRadius: 10,
+        margin: '5%',
+        borderColor: '#8B86BE',
+        borderWidth: 1,
+    },
+    text3:{
+        fontFamily: 'Roboto-Thin',
+        fontSize: 16,
+        textAlign: 'center',
+        padding: 10,
+        color: "#000",
+    },
+    pickerStyle: {
+        marginBottom: 20,
+    },
+    datePicker: {
+        alignSelf: 'center',
+        marginTop: "5%",
+    },
+    pickerButton: {
+        borderRadius: 6,
+        marginLeft: '5%',
+        marginRight: '5%',
+    },
+    dialogTitle: {
+        fontFamily: 'Roboto-Thin',
+        fontSize: 25,
+        textAlign: 'center',
+        fontWeight: 'bold',
+        margin: "5%",
+        marginLeft: '15%',
+        color: "#2E5829FF",
+        width: "70%"
     },
 });
