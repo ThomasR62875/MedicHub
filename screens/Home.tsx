@@ -69,7 +69,8 @@ const Home: React.FC = ({ navigation, route }: any) => {
         if (appointments && appointments.length > 0) {
             const now = new Date();  // Obtener la fecha actual
 
-            const futureAppointments = appointments.filter(appointment => new Date(appointment.date) > now);
+            const futureAppointments = appointments.filter(appointment => new Date(appointment.date) >= now);
+            futureAppointments.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
             if (futureAppointments.length > 0) {
                 setTurno1(futureAppointments[0]);
@@ -82,6 +83,7 @@ const Home: React.FC = ({ navigation, route }: any) => {
             }
         }
     }, [appointments]);
+
 
 
     useEffect(() => {
