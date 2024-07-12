@@ -289,7 +289,7 @@ export const styles = StyleSheet.create({
         flexDirection: 'row',
     },
     label: {
-        fontWeight: 'bold',
+        fontSize: 16,
         marginRight: 5,
     },
     header: {
@@ -310,6 +310,11 @@ export const styles = StyleSheet.create({
     },
     value: {
         flex: 1,
+        fontSize: 16,
+        fontFamily: 'Roboto-Thin',
+        color: '#807d7d',
+        textAlign: 'right',
+        paddingVertical: 10
     },
     addContainer: {
         left: 290,
@@ -317,12 +322,12 @@ export const styles = StyleSheet.create({
         alignSelf: 'flex-start',
     },
     dialog: {
-        height: '90%',
-        backgroundColor: '#E9F4E9FF',
-        alignItems: 'center',
+        backgroundColor: '#fff',
+        padding: 15
     },
     shareUserBotton: {
-        borderRadius: 6,
+        borderRadius: 10,
+        borderColor: '#8B86BE',
         margin: '5%',
         width: '60%'
     },
@@ -349,7 +354,8 @@ export const styles = StyleSheet.create({
     icon: {
         width: 24,
         height: 24,
-    }, registerW: {
+    },
+    registerW: {
         backgroundColor: '#e9f4e9',
         height: '100%',
         marginLeft: 10,
@@ -357,7 +363,16 @@ export const styles = StyleSheet.create({
         alignContent: 'center'
     },
     makeIndepUserBotton: {
-        borderRadius: 6,
+        borderRadius: 10,
         margin: '5%',
+        borderColor: '#8B86BE',
+        borderWidth: 1,
+    },
+    text3:{
+        fontFamily: 'Roboto-Thin',
+        fontSize: 16,
+        textAlign: 'center',
+        padding: 10,
+        color: "#000",
     }
 });

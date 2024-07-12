@@ -5,9 +5,9 @@ import {RootStackParamList} from "../App";
 import {Icon, Button, Input} from "react-native-elements";
 import {useTranslation} from "react-i18next";
 import {Button as PaperButton, Dialog, Divider, TextInput} from "react-native-paper";
-import {deleteDependentUser, getUserIdByEmail, setDependentUser} from "../lib/supabase";
+import {deleteDependentUser, getUserIdByEmail, setDependentUser, signUp} from "../lib/supabase";
 import ScrollableBg from "../components/ScrollableBg";
-import {SexGenderOption} from "../lib/types";
+import {SexGenderOption, User} from "../lib/types";
 import {styles} from "../assets/styles";
 // @ts-ignore
 import Header from "../assets/header_violet.png";
@@ -32,7 +32,6 @@ const SingleDependentUser: React.FC<SingleDependentUserProps> = ({navigation, ro
     const [lastName, setLastName] = useState('')
     const [dni, setDni] = useState<string>('')
     const [newIndepUserDialog, setNewIndepUserDialog] = React.useState(false);
-    const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(true);
 
 
     const [nameErrorMessage, setNameErrorMessage] = useState<string>('');
@@ -43,23 +42,6 @@ const SingleDependentUser: React.FC<SingleDependentUserProps> = ({navigation, ro
 
 
     useEffect(() => {
-        if (
-            firstName.trim() !== '' &&
-            lastName.trim() !== '' &&
-            dni.trim() !== '' &&
-            email.trim() !== '' &&
-            password.trim() !== '' &&
-            confirmed_password.trim() !== '' &&
-            nameErrorMessage === '' &&
-            lastNameErrorMessage === '' &&
-            DNIErrorMessage === '' &&
-            mailErrorMessage === '' &&
-            passwordErrorMessage === ''
-        ) {
-            setIsButtonDisabled(false);
-        } else {
-            setIsButtonDisabled(true);
-        }
         setFirstName(route.params.du.first_name)
         setLastName(route.params.du.last_name)
         console.log("entrando:"+ route.params.du.dni)
@@ -146,6 +128,24 @@ const SingleDependentUser: React.FC<SingleDependentUserProps> = ({navigation, ro
         }
     };
 
+    const signUpNewDependentUser = async (dependent_user_id: string) => {
+        setLoading(true)
+        const user: User = {
+            id: "",
+            first_name: firstName,
+            last_name: lastName,
+            dni: dni,
+            email: email,
+            raw_user_meta_data: {
+                dependent_user_id: dependent_user_id,
+            },
+        };
+
+        const {success} = await signUp(user, password);
+        if (success) Alert.alert('¡Revise la bandeja de entrada del mail ingresado para el usuario para verificar el mail!',)
+        setLoading(false)
+
+    };
 
     return (
         <View style={styles.tab}>
@@ -184,22 +184,22 @@ const SingleDependentUser: React.FC<SingleDependentUserProps> = ({navigation, ro
                         <View style={{alignItems: 'center', width: 'auto'}}>
                             <PaperButton
                                 mode="outlined"
-                                style={styles.makeIndepUserBotton}
-                                textColor='#2E5829'
-                                labelStyle={{textAlign: 'left', display: 'flex'}}
+                                style={[styles.makeIndepUserBotton]}
+                                textColor='#000'
+                                labelStyle={{textAlign: 'left'}}
                                 onPress={() => setNewIndepUserDialog(true)}
                             >{t('make_independent')}</PaperButton>
                             <PaperButton
                                 mode="outlined"
                                 style={styles.shareUserBotton}
-                                textColor='#2E5829'
+                                textColor='#000'
                                 labelStyle={{textAlign: 'left', display: 'flex'}}
                                 onPress={() => setShareDialog(true)}
                             >{t('share_user')}</PaperButton>
                             <Button
                                 title="Eliminar"
                                 buttonStyle={{
-                                    backgroundColor: '#2E5829',
+                                    backgroundColor: '#8b86be',
                                     borderWidth: 2,
                                     borderColor: 'white',
                                     borderRadius: 30,
@@ -231,7 +231,7 @@ const SingleDependentUser: React.FC<SingleDependentUserProps> = ({navigation, ro
                         {t('RUsureDU')}
                     </Text>
                 </Dialog.Content>
-                <Dialog.Actions style={{justifyContent: 'center'}}>
+                <Dialog.Actions style={{justifyContent: 'space-between'}}>
                     <PaperButton textColor="#2E5829FF"
                                  onPress={hideDialog}>
                         {t('cancel')}
@@ -242,16 +242,18 @@ const SingleDependentUser: React.FC<SingleDependentUserProps> = ({navigation, ro
                     </PaperButton>
                 </Dialog.Actions>
             </Dialog>
+
             <Dialog style={styles.dialog}
                     visible={shareDialog}
                     onDismiss={() => setShareDialog(false)}>
                 <Dialog.Actions>
                     <View>
-                        <Text>Ingrese el mail del usario con el que desea compartir</Text>
+                        <Text>{t('share_user_msg')}</Text>
                         <TextInput
                             label="Email"
                             value={shareEmail}
                             mode={'outlined'}
+                            outlineStyle={{borderRadius: 10}}
                             style={styles.inputStyle}
                             onChangeText={text => setShareEmail(text)}
                         />
@@ -268,7 +270,7 @@ const SingleDependentUser: React.FC<SingleDependentUserProps> = ({navigation, ro
                     onDismiss={() => setNewIndepUserDialog(false)}>
                 <Dialog.Actions>
                     <ScrollableBg>
-                        <Text style={styles.title}>Ingrese los datos para mover este usario y sus datos a una nueva cuenta</Text>
+                        <Text style={styles.text3}>Ingrese los datos para mover este usario y sus datos a una nueva cuenta</Text>
                         <Input
                             label={t('name')}
                             labelStyle={styles.colorLabel}
@@ -365,7 +367,6 @@ const SingleDependentUser: React.FC<SingleDependentUserProps> = ({navigation, ro
                         <View style={{alignItems: 'center'}}>
                             <Button
                                 title={t('confirm')}
-                                disabled={isButtonDisabled}
                                 loading={loading}
                                 buttonStyle={{
                                     backgroundColor: '#2E5829',
@@ -383,7 +384,7 @@ const SingleDependentUser: React.FC<SingleDependentUserProps> = ({navigation, ro
                                     marginBottom: 100
                                 }}
                                 titleStyle={{color: '#eef9ed'}}
-                                onPress={handleDeleteDependentUser}
+                                onPress={() => signUpNewDependentUser(route.params.du.id)}
                             />
                         </View>
                     </ScrollableBg>

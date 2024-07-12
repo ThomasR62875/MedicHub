@@ -25,6 +25,7 @@
   "text3" : "Doctor details",
   "specialty" : "Specialty",
   "phone" : "Phone",
+  "share_user_msg": "Enter the email of the user you want to share with",
   "address" : "Address",
   "text4" : "Appointment details",
   "time" : "Time",

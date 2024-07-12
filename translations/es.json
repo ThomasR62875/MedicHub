@@ -17,6 +17,7 @@
   "text2" : "Detalles del",
   "text3" : "Detalles del doctor",
   "specialty" : "Especialidad",
+  "share_user_msg": "Ingrese el mail del usario con el que desea compartir",
   "phone" : "Telefono",
   "address" : "Dirección",
   "text4" : "Detalles del turno",
