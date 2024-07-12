@@ -19,6 +19,7 @@ import Squiggle from "../assets/tabAsset.png";
 import {Icon} from "react-native-elements";
 import {getRecommendations} from "../lib/ourlibrary";
 import {formatISO} from "date-fns";
+import app from "../App";
 
 const Home: React.FC = ({ navigation, route }: any) => {
     const session = route.params.session;
@@ -66,12 +67,11 @@ const Home: React.FC = ({ navigation, route }: any) => {
 
     useEffect(() => {
         if (appointments && appointments.length > 0) {
-            const sortedAppointments = [...appointments].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-            setTurno1(sortedAppointments[0]);
-            setDate1(new Date(sortedAppointments[0].date));
-            if (sortedAppointments.length > 1) {
-                setTurno2(sortedAppointments[1]);
-                setDate2(new Date(sortedAppointments[1].date));
+            setTurno1(appointments[0]);
+            setDate1(new Date(appointments[0].date));
+            if (appointments.length > 1) {
+                setTurno2(appointments[1]);
+                setDate2(new Date(appointments[1].date));
             }
         }
     }, [appointments]);
