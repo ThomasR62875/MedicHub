@@ -74,8 +74,6 @@ const Calender: React.FC = ({ navigation, route } : any) => {
         todayTextColor: '#8b86be',
     }
 
-
-
     return (
         <View style={styles.tab}>
             <Image source={Squiggle} style={styles.squiggle}/>
@@ -130,8 +128,6 @@ const Calender: React.FC = ({ navigation, route } : any) => {
         </View>
     )
 }
-
-
 
 export default Calender;
 

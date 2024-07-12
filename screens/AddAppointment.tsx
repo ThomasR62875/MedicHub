@@ -171,7 +171,6 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
 
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-
             <SafeAreaView style={styles.container}>
                 <ScrollView >
                     <View>
@@ -269,17 +268,13 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
                             )}
                         </View>
                         <PaperText style={styles.text}>Doctor</PaperText>
-
                         <PaperButton mode="outlined" style={styles.pickerButton} textColor='#2E5829' labelStyle={{textAlign: 'left', display:'flex'}} onPress={()=> setDoctorDialog(true)}>
                             {getDoctorName(doctor)}
                         </PaperButton>
-
                         <PaperText style={styles.text}>{t('user')}</PaperText>
-
                         <PaperButton mode="outlined" style={styles.pickerButton} textColor='#2E5829' labelStyle={{textAlign: 'left', display:'flex'}} onPress={()=> setUserDialog(true)}>
                             {getUserName(user_id)}
                         </PaperButton>
-
                         <View style={{alignItems: 'center'}}>
                             <Button
                                 title={t('add')}
