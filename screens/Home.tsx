@@ -23,7 +23,6 @@ import {Icon} from "react-native-elements";
 const Home: React.FC = ({ navigation, route }: any) => {
     const session = route.params.session;
     const [first_name, setFirstName] = useState('');
-    const [loading, setLoading] = useState(true);
     const [appointments, setAppointments] = useState<Appointment[] | undefined>(undefined);
     const [appointmentRecommendations, setAppointmentRecommendations] = useState<RecommendationAppointment[] | undefined>(undefined);
     const [lastAppointments, setLastAppointments] = useState<Appointment[] | undefined>(undefined);
@@ -58,8 +57,6 @@ const Home: React.FC = ({ navigation, route }: any) => {
                     setSpecialties(fetchedSpecialties);
                 } catch (error) {
                     console.error('Error fetching data:', error);
-                } finally {
-                    setLoading(false);
                 }
             }
             fetchData();
