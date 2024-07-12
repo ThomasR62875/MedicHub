@@ -10,6 +10,7 @@ import {DependentUser, SexGenderOption, User} from "../lib/types";
 import {Picker} from "@react-native-picker/picker";
 import ScrollableBg from '../components/ScrollableBg';
 import DateTimePicker, {DateTimePickerEvent} from "@react-native-community/datetimepicker";
+import {getSexGenderName, sexGenderOptions} from "../lib/ourlibrary";
 
 
 
@@ -30,12 +31,6 @@ const EditAccount:React.FC<EditAccountProps> = ({navigation, route }: any) =>{
     const [firstNameErrorMessage, setFirstNameErrorMessage] = useState('')
     const [lastNameErrorMessage, setLastNameErrorMessage] = useState('')
     const [dniErrorMessage, setDniErrorMessage] = useState('')
-    const sexGenderOptions: SexGenderOption[] = [
-        { sex_gender_name: t('male'), value: 'male' },
-        { sex_gender_name: t('female'), value: 'female' },
-        { sex_gender_name: t('non-binary'), value: 'non-binary' },
-        { sex_gender_name: t('other'), value: 'other' },
-    ];
     const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(true);
     const [birthDateErrorMessage, setBirthDateErrorMessage] = useState<string>('');
     const [genderErrorMessage, setGenderErrorMessage] = useState<string>('');
@@ -131,12 +126,6 @@ const EditAccount:React.FC<EditAccountProps> = ({navigation, route }: any) =>{
         }
     };
     const hideSexGenderDialog = () => setSexGenderDialog(false);
-
-    const getSexGenderName = (value: string) => {
-        const option = sexGenderOptions.find(option => option.value === value);
-        return option ? option.sex_gender_name : '';
-    };
-
     const handleDayPress = (event: DateTimePickerEvent, selectedDate?: Date) => {
         if (event.type === "set" && selectedDate) {
             let birthdateWithTime = new Date(selectedDate);
