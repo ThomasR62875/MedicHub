@@ -2,7 +2,6 @@ import React, {useEffect, useState} from "react";
 import {
     Alert,
     Image,
-    StyleSheet,
     View,
     Dimensions,
     AppState,
@@ -20,6 +19,7 @@ import Logo from '../assets/icon_black.png'
 import {useTranslation} from "react-i18next";
 import LanguageButton from "../components/LanguageButton";
 import ScrollableBg from "../components/ScrollableBg";
+import {styles} from "../assets/styles";
 
 
 const windowHeight = Dimensions.get('window').height;
@@ -35,7 +35,7 @@ AppState.addEventListener('change', (state) => {
 type LogInProps = NativeStackScreenProps<RootStackParamList, 'Login'>;
 
 
-const LogIn: React.FC<LogInProps> = ({navigation, route}) => {
+const LogIn: React.FC<LogInProps> = ({navigation}) => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [loading, setLoading] = useState(false)
@@ -54,7 +54,6 @@ const LogIn: React.FC<LogInProps> = ({navigation, route}) => {
         }
     }, [email, password]);
 
-    const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(false);
 
     const validateInput = (value: string) => {
         if (value.trim() === '' || !value.includes("@") || !(value.includes(".edu") || value.includes(".com") || value.includes(".ar"))) {
@@ -125,17 +124,17 @@ const LogIn: React.FC<LogInProps> = ({navigation, route}) => {
                     <Input
                         label={t('email')}
                         labelStyle={{color: '#000000', paddingBottom: 10, paddingLeft: 5}}
-                        leftIcon={{type: 'font-awesome', name: 'envelope', color: '#000000'}}
+                        leftIcon={{type: 'font-awesome', name: 'envelope', color: '#000000', size: 20}}
                         onChangeText={(text) => {
                             setEmail(text);
                             validateInput(text)
                         }}
                         value={email}
-                        inputStyle={{marginLeft: 10, color: '#000000'}}
-                        placeholder='email@address.com'
-                        placeholderTextColor={'#000000'}
+                        inputStyle={{marginLeft: 12, color: '#000000',fontSize:14}}
+                        placeholder={t('email')}
+                        placeholderTextColor={'#807d7d'}
                         autoCapitalize={'none'}
-                        inputContainerStyle={[{paddingLeft: 10}, styles.input]}
+                        inputContainerStyle={[{paddingLeft: 20}, styles.input]}
                         errorStyle={{color: 'red'}}
                         errorMessage={errorMessage}
                     />
@@ -143,21 +142,20 @@ const LogIn: React.FC<LogInProps> = ({navigation, route}) => {
                     <Input
                         label={t('password')}
                         labelStyle={{color: '#000000', paddingBottom: 10, paddingLeft: 5}}
-                        leftIcon={{type: 'font-awesome', name: 'lock', color: '#000000'}}
+                        leftIcon={{type: 'font-awesome', name: 'lock', color: '#000000', size: 20, }}
                         onChangeText={(text) => setPassword(text)}
                         value={password}
                         secureTextEntry={true}
                         placeholder={t('password')}
-                        placeholderTextColor={'#000000'}
+                        placeholderTextColor={'#807d7d'}
                         autoCapitalize={'none'}
-                        inputContainerStyle={[{paddingLeft: 10}, styles.input]}
-                        inputStyle={{marginLeft: 10, color: '#000000'}}
+                        inputContainerStyle={[{paddingLeft: 20}, styles.input]}
+                        inputStyle={{marginLeft: 12, color: '#000000',fontSize:14}}
                     />
 
                     <View style={[styles.logInContainer]}>
                         <Button
                             title={t('logIn')}
-                            disabled={isButtonDisabled}
                             loading={loading}
                             buttonStyle={{
                                 backgroundColor: '#86abba',
@@ -193,53 +191,3 @@ const LogIn: React.FC<LogInProps> = ({navigation, route}) => {
 
 
 export default LogIn;
-
-const styles = StyleSheet.create({
-    input: {
-        backgroundColor: '#ffffff',
-        borderBottomWidth: 2,
-        borderWidth: 2,
-        borderRadius: 15
-    },
-    buttonSignInContainer: {
-        width: '50%',
-    },
-    buttonRegisterContainer: {
-        width: '100%',
-    },
-    buttonRegister: {
-        backgroundColor: '#ffffff',
-        width: 'auto',
-    },
-    logo: {
-        color: '#86ABBA',
-        width: 100,
-        height: 100
-    },
-    iconContainer: {
-        textAlign: "center",
-    }, activityIndicator: {
-        position: 'absolute',
-        right: 16,
-    },
-    window: {
-        marginBottom: 50,
-        alignItems: 'center',
-        marginTop: "25%",
-    },
-    logInContainer: {
-        alignItems: 'center'
-    },
-    bubble: {
-        position: 'absolute',
-    },
-    bubbleContainer: {
-        width: '200%',
-        height: '200%',
-        justifyContent: 'center',
-        alignItems: 'center',
-        position: 'absolute',
-    },
-
-
-});
