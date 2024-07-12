@@ -22,7 +22,6 @@ const Home: React.FC = ({navigation, route}: any) => {
     const [date2, setDate2] = useState<Date | null>(null);
     const {t} = useTranslation();
 
-    //se tiene q orderna por fecha appointments todo
     useEffect(() => {
         if (appointments && appointments.length > 0) {
             setTurno1(appointments[0]);
@@ -137,10 +136,9 @@ const Home: React.FC = ({navigation, route}: any) => {
                 <View style={{
                     height: 125,
                     marginTop: '5%',
-                    marginLeft: '5%',
                 }}>
-                    <ScrollView horizontal={true} contentContainerStyle={{paddingRight: 190, flexDirection: 'row'}}>
-                        <TouchableOpacity style={styles.buttons} onPress={() => navigation.navigate({name: 'Doctors', params: {session: session}})}>
+                    <ScrollView horizontal={true} contentContainerStyle={{ paddingLeft: 20,paddingRight: 190, flexDirection: 'row'}}>
+                        <TouchableOpacity style={[styles.buttons]} onPress={() => navigation.navigate({name: 'Doctors', params: {session: session}})}>
                             <Icon name={'stethoscope'} type={'material-community'} size={25} color={'#fff'}/>
                             <Text style={styles.buttonText}>{t('doctors')}</Text>
                         </TouchableOpacity>
