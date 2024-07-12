@@ -11,11 +11,12 @@ interface recommendationAppointmentContainerProps {
 
 const recommendationAppointmentContainer: React.FC<recommendationAppointmentContainerProps> = ({styleExterior, recommendationAppointment, ...props}) => {
     const newDate = new Date(recommendationAppointment.date);
+    const formattedDate = `${newDate.getDate().toString().padStart(2, '0')}/${(newDate.getMonth() + 1).toString().padStart(2, '0')}/${newDate.getFullYear()}`;
 
     return (
         <TouchableOpacity style={[styleExterior, {flexDirection: 'row'}]} {...props}>
             <Text
-                style={[styles.text, {padding: 15}]}>{newDate.getHours()}:{newDate.getMinutes() > 10 ? newDate.getMinutes() : '0' + newDate.getMinutes()}</Text>
+                style={[styles.text, {padding: 15}]}>{formattedDate}</Text>
             <View style={{padding: 10}}>
                 <View style={[styles.infoRow,{paddingHorizontal: 10, paddingVertical: 2}]}>
                     <Text style={{textAlign: 'center'}}>{recommendationAppointment.speciality}</Text>
