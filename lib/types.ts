@@ -1,3 +1,4 @@
+import { ModalBaseProps } from "react-native";
 
 
 export type DependentUser = {
@@ -90,3 +91,7 @@ export type SexGenderOption = {
     value: string;
 }
 
+export interface BannerProps extends ModalBaseProps{
+    advertisement: Advertisement;
+    onPress: any;
+}

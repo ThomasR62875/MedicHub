@@ -536,6 +536,7 @@ export const getAdvertisement = async(banner_type: string) : Promise<Advertiseme
     if(!error){
         return data;
     }
+    console.log(error)
     return undefined;
 }
 
