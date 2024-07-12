@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, Image, ScrollView, TouchableOpacity} from 'react-native';
+import {View, Text, Image, ScrollView, TouchableOpacity, ActivityIndicator} from 'react-native';
 import {
+    deleteAppointment,
     getAppointments,
     getDependentUsers,
     getRecommendationSpecialities,
@@ -17,6 +18,7 @@ import ScrollableBg from "../components/ScrollableBg";
 import Squiggle from "../assets/tabAsset.png";
 import {Icon} from "react-native-elements";
 import {getRecommendations} from "../lib/ourlibrary";
+import {formatISO} from "date-fns";
 
 const Home: React.FC = ({ navigation, route }: any) => {
     const session = route.params.session;
@@ -31,6 +33,7 @@ const Home: React.FC = ({ navigation, route }: any) => {
     const [date2, setDate2] = useState<Date | null>(null);
     const [specialties, setSpecialties] = useState<Specialty[] | null>(null);
     const [allUsers, setAllUsers] = useState<DependentUser[] | undefined>(undefined);
+    const [isLoading, setIsLoading] = useState(true);
     const { t } = useTranslation();
 
     useEffect(() => {
@@ -82,6 +85,7 @@ const Home: React.FC = ({ navigation, route }: any) => {
     useEffect(() => {
         if (allUsers && specialties) {
             async function fetchRecommendations() {
+                setIsLoading(true);
                 const recommendations = await getRecommendations(
                     allUsers,
                     specialties,
@@ -91,6 +95,7 @@ const Home: React.FC = ({ navigation, route }: any) => {
                 setAppointmentRecommendations(recommendations);
             }
             fetchRecommendations();
+            setIsLoading(false);
         }
     }, [allUsers, specialties, futureAppointments]);
 
@@ -114,6 +119,15 @@ const Home: React.FC = ({ navigation, route }: any) => {
 
         setLastAppointments(lastAppointments);
         setFutureAppointments(futureAppointments);
+    };
+
+    const serializeAppointment = (appointment: RecommendationAppointment) => ({
+        ...appointment,
+        date: formatISO(appointment.date),
+    });
+
+    const handleAddRecommendation = async (recommendationAppointment : RecommendationAppointment) => {
+        navigation.navigate('AddAppointment', { session: session, recommendation:  serializeAppointment(recommendationAppointment)})
     };
 
 
@@ -182,23 +196,27 @@ const Home: React.FC = ({ navigation, route }: any) => {
 
 
                 <View style={[styles.listCards]}>
-                    {appointmentRecommendations && appointmentRecommendations?.length > 0 ? (
-                        appointmentRecommendations.map((appointment: RecommendationAppointment, i) => {
-                            return (
-                                <View key={i}>
-                                    <RecommendationAppointmentContainer
-                                        recommendationAppointment={appointment}
-                                        styleExterior={[styles.cards]}
-                                        onPress={() => {navigation.navigate('AddAppointment', {session: session, recommendation: appointment})}}
-
-                                    />
-                                </View>
-                            )})
+                    {isLoading ? (
+                        <ActivityIndicator size="large" color="#2E5829" />
                     ) : (
-                        <View style={{alignItems: 'center'}}>
-                            <Text style={[styles.text2, {paddingHorizontal: 30}]}>{t('text13')}</Text>
-                        </View>
-                    )}
+                        appointmentRecommendations && appointmentRecommendations.length > 0 ? (
+                            appointmentRecommendations.map((appointment: RecommendationAppointment, i) => {
+                                return (
+                                    <View key={i}>
+                                        <RecommendationAppointmentContainer
+                                            recommendationAppointment={appointment}
+                                            styleExterior={[styles.cards]}
+                                            onPress={() => handleAddRecommendation(appointment)}
+                                        />
+                                    </View>
+                                )})
+                        ) : (
+                            <View style={{alignItems: 'center'}}>
+                                <Text style={[styles.text2, {paddingHorizontal: 30}]}>{t('text13')}</Text>
+                            </View>
+                        )
+                    )
+                    }
                 </View>
 
 

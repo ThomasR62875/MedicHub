@@ -43,6 +43,9 @@ export const getRecommendations = async (
             const hasFutureAppointment = await Promise.all(
                 futureAppointments?.map(async appointment => {
                     const doctor = await getDoctor(appointment.doctor);
+                    if (!doctor) {
+                        return false;
+                    }
                     return (
                         appointment.user_id === user.id &&
                         doctor.specialty === speciality.name
@@ -56,6 +59,12 @@ export const getRecommendations = async (
                 if (lastAppointments && lastAppointments.length > 0) {
                     const appointmentsWithDoctor = await Promise.all(lastAppointments.map(async appointment => {
                         const doctor = await getDoctor(appointment.doctor);
+                        if (!doctor) {
+                            return {
+                                ...appointment,
+                                doctorSpecialty: undefined, // or handle the absence of doctor
+                            };
+                        }
                         return {
                             ...appointment,
                             doctorSpecialty: doctor.specialty,

@@ -47,6 +47,11 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
 
     const [hasErorrs, setHasErrors] = useState(false)
 
+    const deserializeAppointment = (appointment : RecommendationAppointment) => ({
+        ...appointment,
+        date: new Date(appointment.date),
+    });
+
     const validateDescription = (value: string) => {
         if (value.trim() === '') {
             setDescriptionErrorMessage(t('text7'));
@@ -71,6 +76,7 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
         if (session_user_id) {
             async function getInfo() {
                 if (recommendation) {
+                    recommendation.date = new Date(recommendation.date);
                     setDoctors(await getDoctorsBySpecialty(session_user_id, recommendation.speciality));
                     setDate(recommendation.date);
                     setTime(recommendation.date);

@@ -73,7 +73,7 @@ export type RecommendationAppointment = {
 }
 
 export type AppointmentInfo = {
-    specialty: string;
+    specialty: string | null;
     observations: string,
     date: string;
     description: string;

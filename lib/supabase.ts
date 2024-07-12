@@ -38,6 +38,7 @@ export const getUser = async (session_user_id:String) : Promise<DependentUser> =
 
 export const getUserSession = async (auth_id: string): Promise<DependentUser> => {
     const {data, error} = await supabase.rpc('get_independent_user', {auth_id_input: auth_id});
+    console.log("ESTE ES EL USER", data)
     if (error) {
         console.error('Error inserting users data:', error.message);
     }
@@ -158,8 +159,10 @@ export const getSpecialties = async (): Promise<Specialty[] | undefined> => {
 }
 
 // Obtiene el doctor por su id
-export const getDoctor = async (doctor_id: string): Promise<Doctor> => {
-
+export const getDoctor = async (doctor_id: string): Promise<Doctor | undefined> => {
+    if (doctor_id === '') {
+        return undefined;
+    }
     const {data, error} = await supabase.rpc('get_doctor', {doctor_id: doctor_id});
     if (error) {
         console.error('Error getting doctor data:', error.message);
@@ -196,7 +199,7 @@ export const getDoctorsBySpecialty = async (session_user_id: string, speciality:
     const id: string = await getUserId();
     const {data, error} = await supabase.rpc("get_doctors_by_specialty", {user_id: id, specialty_input: speciality});
     if (error) {
-        console.error('Error getting doctor data:', error.message);
+        console.error('Error getting doctor in doctors by speciality data:', error.message);
     }
     data.forEach((doctor: Doctor) => {
         // @ts-ignore
@@ -255,14 +258,14 @@ export const getAppointments = async (): Promise<Appointment[] | undefined> => {
 
     for (const appoint of data) {
         const user: (DependentUser) = await getUser(appoint.user);
-        const doctor: (Doctor) = await getDoctor(appoint.doctor);
+        const doctor: (Doctor|undefined) = await getDoctor(appoint.doctor);
 
         const new_appoint: Appointment = {
             id: appoint.id,
             description: appoint.description,
             date: appoint.date,
             user_name: user.first_name,
-            doctor: doctor.id,
+            doctor: doctor ? doctor.id : '',
             user_id: appoint.user,
             observations: appoint.observations
         }
@@ -298,7 +301,7 @@ export function getAge(birthdate: Date | null): number | null {
 
 // Obtiene la informacion para las preguntas
 export const getUserData = async (appointment: Appointment): Promise<UserData | null> => {
-    const doctor: (Doctor) = await getDoctor(appointment.doctor);
+    const doctor: (Doctor|undefined) = await getDoctor(appointment.doctor);
 
     const { data: lastAppointmentData, error: lastAppointmentError } = await supabase
         .rpc('get_last_appointment_info', { doctor_id_input: appointment.doctor, user_id: appointment.user_id });
@@ -308,7 +311,7 @@ export const getUserData = async (appointment: Appointment): Promise<UserData | 
     }
 
     const appointmentInfo: AppointmentInfo = {
-        specialty: doctor.specialty,
+        specialty: doctor ? doctor.specialty : null,
         observations: lastAppointmentData.observations,
         date: lastAppointmentData.date,
         description: lastAppointmentData.description,
