@@ -6,7 +6,7 @@ import {
     StyleSheet,
     Image
 } from 'react-native';
-import {signUp, supabase} from "../lib/supabase";
+import {signUp} from "../lib/supabase";
 import {Input, Icon, Button} from "react-native-elements";
 // @ts-ignore
 import Logo from '../assets/icon_black.png'

@@ -3,7 +3,7 @@ import {getUser, getUserId, supabase} from '../lib/supabase'
 import { View} from 'react-native'
 import {Button, Icon} from 'react-native-elements'
 import LanguageButton from '../components/LanguageButton'
-import {DependentUser, SexGenderOption} from "../lib/types";
+import {DependentUser} from "../lib/types";
 import {Dialog, Text, Button as PaperButton, Divider} from "react-native-paper";
 import {useTranslation} from "react-i18next";
 import ScrollableBg from '../components/ScrollableBg'

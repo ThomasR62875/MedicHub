@@ -18,7 +18,6 @@ const AddDependentUser:React.FC<AddDependentUserProps> = ({navigation, route} : 
     const [firstName,setFirstName] = useState('')
     const [lastName,setLastName] = useState('')
     const [dni,setDni]  = useState('')
-    const [loading,setLoading]= useState(false)
     const [firstNameErrorMessage, setFirstNameErrorMessage] = useState('')
     const [lastNameErrorMessage, setLastNameErrorMessage] = useState('')
     const [DNIErrorMessage, setDNIErrorMessage] = useState<string>('');

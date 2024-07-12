@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import {getUserSession, supabase, updateDependentUser} from '../lib/supabase'
 import {View, Alert, StyleSheet} from 'react-native'
-import {Button, Icon, Input, Text} from 'react-native-elements'
+import {Button, Icon, Input} from 'react-native-elements'
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
 import {useTranslation} from "react-i18next";
 import {Button as PaperButton, Dialog, Portal, Text as PaperText} from "react-native-paper";
-import {DependentUser, SexGenderOption, User} from "../lib/types";
+import {DependentUser} from "../lib/types";
 import {Picker} from "@react-native-picker/picker";
 import ScrollableBg from '../components/ScrollableBg';
 import DateTimePicker, {DateTimePickerEvent} from "@react-native-community/datetimepicker";
@@ -25,7 +25,6 @@ const EditAccount:React.FC<EditAccountProps> = ({navigation, route }: any) =>{
     const [dni,setDni]  = useState('');
     const [date, setDate] = useState(new Date());
     const [sexGender,setSexGender]= useState('');
-    const [user, setUser] = useState<DependentUser>();
     const [sexGenderDialog, setSexGenderDialog] = useState(false);
     const {t} = useTranslation();
     const [firstNameErrorMessage, setFirstNameErrorMessage] = useState('')
