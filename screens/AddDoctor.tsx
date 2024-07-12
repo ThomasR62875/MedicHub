@@ -145,7 +145,7 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}) => {
 
                         <PaperText style={styles.text}>{t('specialty')}</PaperText>
                         <PaperButton mode="outlined" style={styles.pickerButton} textColor='#2E5829' labelStyle={{textAlign: 'left', display:'flex'}} onPress={()=> setSpecialtyDialog(true)}>
-                            {specialty}
+                            {t(specialty)}
                         </PaperButton>
 
                         <PaperText style={styles.text}>{t('phone')}</PaperText>
@@ -227,7 +227,7 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}) => {
                             itemStyle={styles.pickerStyle}
                         >
                             {specialties?.map((item) => (
-                                <Picker.Item key={item.name} label={item.name} value={item.name} />
+                                <Picker.Item key={item.name} label={t(item.name)} value={item.name} />
                             ))}
                         </Picker>
                     </Dialog>
