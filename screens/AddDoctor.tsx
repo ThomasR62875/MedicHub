@@ -180,7 +180,7 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}) => {
                 </ScrollView>
                 <Portal>
                     <Dialog style={styles.dialog} visible={userDialog} onDismiss={hideUserDialog}>
-                        <Text style={styles.dialogTitle}>{t('Seleccionar usuario')}</Text>
+                        <Text style={styles.dialogTitle}>{t('selectUser')}</Text>
                         <Picker
                             mode='dropdown'
                             selectedValue={user_id}

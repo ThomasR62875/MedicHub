@@ -143,6 +143,9 @@
   "oncology": "Oncology",
   "ophthalmology": "Ophthalmology" ,
   "orthopedics": "Orthopedics",
-  "pediatrics": "Pediatrics"
+  "pediatrics": "Pediatrics",
+  "selectUser": "Select User",
+  "title": "Title",
+  "selectDoctor": "Select doctor"
 }
 
