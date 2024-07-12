@@ -63,12 +63,6 @@ export const styles = StyleSheet.create({
         shadowOpacity: 0.25,
         shadowRadius: 3.85,
     },
-    logo:{
-        color: '#407738',
-        width: 50,
-        height: 50,
-
-    },
     topContent: {
         alignItems: 'flex-start',
         marginTop: "8%",
@@ -268,9 +262,6 @@ export const styles = StyleSheet.create({
         display: 'flex',
         marginLeft: '5%'
     },
-    iconContainer: {
-        alignItems: 'flex-start',
-    },
     name: {
         color: "#2E5829FF",
         fontSize: 20,
@@ -347,7 +338,7 @@ export const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     colorIcon: {
-        color: '#2E5829FF'
+        color: '#000'
     },
     colorLabel: {
         color: '#2E5829FF',
@@ -385,7 +376,7 @@ export const styles = StyleSheet.create({
         marginTop: "5%",
     },
     pickerButton: {
-        borderRadius: 6,
+        borderRadius: 10,
         marginLeft: '5%',
         marginRight: '5%',
     },
@@ -398,5 +389,65 @@ export const styles = StyleSheet.create({
         marginLeft: '15%',
         color: "#2E5829FF",
         width: "70%"
+    },
+    input: {
+        backgroundColor: '#ffffff',
+        borderBottomWidth: 1,
+        borderWidth: 1,
+        borderRadius: 15,
+    },
+    buttonRegisterContainer: {
+        width: '100%',
+    },
+    buttonRegister: {
+        backgroundColor: '#ffffff',
+        width: 'auto',
+    },
+    logo: {
+        color: '#86ABBA',
+        width: 80,
+        height: 80
+    },
+    iconContainer: {
+        textAlign: "center",
+    },
+    activityIndicator: {
+        position: 'absolute',
+        right: 16,
+    },
+    window: {
+        marginBottom: 50,
+        alignItems: 'center',
+        marginTop: "25%",
+    },
+    logInContainer: {
+        alignItems: 'center'
+    },
+    bubble: {
+        position: 'absolute',
+    },
+    bubbleContainer: {
+        width: '200%',
+        height: '200%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        position: 'absolute',
+    },
+    Ptitle: {
+        color: '#000000',
+        textAlign: 'center',
+        marginBottom: 80,
+        marginTop: 0,
+        fontSize: 20,
+        fontWeight: 'bold'
+    },
+    text4: {
+        fontSize: 16,
+        textAlign: 'left',
+        color: '#000',
+        paddingHorizontal: 12,
+        paddingBottom: 12,
+        fontFamily: 'Roboto-Thin',
+        fontWeight: 'bold'
     },
 });
