@@ -93,14 +93,13 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
         const appointmentDate = new Date(date);
         appointmentDate.setHours(time.getHours()-3);
         appointmentDate.setMinutes(time.getMinutes());
-
-
-
+        console.log("horaaaa_____", appointmentDate);
         const appointment = { date: appointmentDate, description, user_name: '', doctor, user_id, id: '' , observations: observations};
         const result = await addAppointment(appointment);
         if (result.success) {
             // @ts-ignore
-            navigation.navigate('AlertPublicity', { session, msg: 'text8', screen: 'Appointments' });
+            console.log("succes")
+            //navigation.navigate('AlertPublicity', { session, msg: 'text8', screen: 'calendar' }); //no toma Calender ni calender como opcion valida todo
         } else {
             Alert.alert('Error', result.message || 'An unknown error occurred');
         }
@@ -125,6 +124,7 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
 
     const onTimeChange = (event: any, selectedTime: Date | undefined) => {
         const currentTime = selectedTime || time;
+        console.log("hora:", currentTime)
         setShowTimePicker(Platform.OS === 'ios');
         setTime(currentTime);
     };
@@ -155,7 +155,6 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
 
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-
             <SafeAreaView style={styles.container}>
                 <ScrollView >
                     <View>
@@ -253,17 +252,13 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
                             )}
                         </View>
                         <PaperText style={styles.text}>Doctor</PaperText>
-
                         <PaperButton mode="outlined" style={styles.pickerButton} textColor='#2E5829' labelStyle={{textAlign: 'left', display:'flex'}} onPress={()=> setDoctorDialog(true)}>
                             {getDoctorName(doctor)}
                         </PaperButton>
-
                         <PaperText style={styles.text}>{t('user')}</PaperText>
-
                         <PaperButton mode="outlined" style={styles.pickerButton} textColor='#2E5829' labelStyle={{textAlign: 'left', display:'flex'}} onPress={()=> setUserDialog(true)}>
                             {getUserName(user_id)}
                         </PaperButton>
-
                         <View style={{alignItems: 'center'}}>
                             <Button
                                 title={t('add')}

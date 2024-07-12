@@ -75,7 +75,6 @@ const Calender: React.FC = ({ navigation, route } : any) => {
     }
 
     function formatDate(dateString: string | number | Date) {
-        console.log(dateString)
         const months = [
             "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
             "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
