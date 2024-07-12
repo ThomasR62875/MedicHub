@@ -131,5 +131,16 @@
   "close": "Cerrar",
   "warn19": "Fecha de nacimiento invalida",
   "warn20": "Debe ingresar su sexo",
-  "addRecommendationAppointmentDescription": "Turno de la especialidad "
+  "addRecommendationAppointmentDescription": "Turno de la especialidad ",
+  "cardiology": "Cardiología",
+  "dentistry": "Odontología",
+  "dermatology": "Dermatología",
+  "familydoctor": "Doctor Familiar",
+  "gastroenterology": "Gastroenterología",
+  "gynecology": "Ginecología",
+  "neurology": "Neurología",
+  "oncology": "Oncología",
+  "ophthalmology": "Oftalmología" ,
+  "orthopedics": "Ortopedia",
+  "pediatrics": "Pediatría"
 }

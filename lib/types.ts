@@ -25,8 +25,6 @@ export type User = {
 
 export type Specialty = {
     name: string;
-    spanish:string;
-    english:string;
 };
 
 export type Medication = {

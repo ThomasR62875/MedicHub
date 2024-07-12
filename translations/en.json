@@ -132,6 +132,17 @@
   "close": "Close",
   "warn19": "Invalid birth date",
   "warn20": "You must enter your sex",
-  "addRecommendationAppointmentDescription" : "Appointment with specialty "
+  "addRecommendationAppointmentDescription" : "Appointment with specialty ",
+  "cardiology": "Cardiology",
+  "dentistry": "Dentistry",
+  "dermatology": "Dermatology",
+  "familydoctor": "Family Doctor",
+  "gastroenterology": "Gastroenterology",
+  "gynecology": "Gynecology",
+  "neurology": "Neurology",
+  "oncology": "Oncology",
+  "ophthalmology": "Ophthalmology" ,
+  "orthopedics": "Orthopedics",
+  "pediatrics": "Pediatrics"
 }
 

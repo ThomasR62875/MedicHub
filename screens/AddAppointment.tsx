@@ -77,12 +77,13 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
             async function getInfo() {
                 if (recommendation) {
                     recommendation.date = new Date(recommendation.date);
-                    setDoctors(await getDoctorsBySpecialty(session_user_id, recommendation.speciality));
+                    setDoctors(await getDoctorsBySpecialty(session_user_id, recommendation.specialty));
                     setDate(recommendation.date);
                     setTime(recommendation.date);
                     setUserId(recommendation.user_id);
                     setDoctor(recommendation.doctor);
-                    setDescription(t('addRecommendationAppointmentDescription') + recommendation.speciality)
+
+                    setDescription(t('addRecommendationAppointmentDescription') + t(recommendation.specialty))
                 } else {
                     setDoctors(await getAllDoctorsByUser(session_user_id));
                 }
