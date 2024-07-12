@@ -5,7 +5,6 @@ export const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: "#fff",
         height: '100%',
-        paddingLeft: 16
     },
     tabTitle: {
         color: 'black',
@@ -32,9 +31,8 @@ export const styles = StyleSheet.create({
         fontFamily: 'Roboto-Thin',
         fontSize: 20,
         textAlign: 'center',
-        fontWeight: 'bold',
-        marginTop: "1%",
-        color: "#2E5829",
+        paddingTop: 20,
+        color: "#000",
     },
     text: {
         fontSize: 20,
@@ -131,7 +129,8 @@ export const styles = StyleSheet.create({
     calendarContainer: {
         marginTop: '5%',
         marginRight: '4%',
-        backgroundColor: "#ffffff"
+        backgroundColor: "#ffffff",
+        paddingLeft: 16
     },
     divider: {
         borderBottomColor: '#e1dfdf',
@@ -185,6 +184,12 @@ export const styles = StyleSheet.create({
         height: 45,
         width: 45,
         padding: 10,
+    },
+    circleHeader:{
+        borderRadius: 40,
+        height: 80,
+        width: 80,
+        padding: 25,
     },
     cardText: {
         fontSize: 14,
@@ -254,7 +259,6 @@ export const styles = StyleSheet.create({
         color: 'white',
     },
     screen: {
-        backgroundColor: "#E9F4E9FF",
         height: "100%",
     },
     main: {
@@ -288,4 +292,72 @@ export const styles = StyleSheet.create({
         fontWeight: 'bold',
         marginRight: 5,
     },
+    header: {
+        position: 'absolute',
+        top: 0,
+        left: -7,
+    },
+    titleContainer: {
+        fontSize: 25,
+        fontWeight: 'bold',
+        marginTop: 10,
+        alignSelf: 'center',
+        marginBottom: 20,
+    },
+    detailRow: {
+        flexDirection: 'row',
+        marginBottom: 10,
+    },
+    value: {
+        flex: 1,
+    },
+    addContainer: {
+        left: 290,
+        bottom: 60,
+        alignSelf: 'flex-start',
+    },
+    dialog: {
+        height: '90%',
+        backgroundColor: '#E9F4E9FF',
+        alignItems: 'center',
+    },
+    shareUserBotton: {
+        borderRadius: 6,
+        margin: '5%',
+        width: '60%'
+    },
+    inputStyle: {
+        marginTop: '5%',
+        marginBottom: '5%',
+    },
+    buttonSignInContainer: {
+        width: '50%',
+        justifyContent: 'center',
+    },
+    buttonSignIn: {
+        backgroundColor: '#B5DCCA',
+        borderRadius: 10,
+        justifyContent: 'center',
+    },
+    colorIcon: {
+        color: '#2E5829FF'
+    },
+    colorLabel: {
+        color: '#2E5829FF',
+        fontSize: 12
+    },
+    icon: {
+        width: 24,
+        height: 24,
+    }, registerW: {
+        backgroundColor: '#e9f4e9',
+        height: '100%',
+        marginLeft: 10,
+        marginRight: 10,
+        alignContent: 'center'
+    },
+    makeIndepUserBotton: {
+        borderRadius: 6,
+        margin: '5%',
+    }
 });

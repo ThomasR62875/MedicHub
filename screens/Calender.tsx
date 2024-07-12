@@ -93,7 +93,7 @@ const Calender: React.FC = ({ navigation, route } : any) => {
             </View>
             <Divider style={styles.divider}/>
 
-            <ScrollableBg>
+            <ScrollableBg style={{paddingLeft: 16}}>
                 <View style={{flexDirection:'row', justifyContent: 'space-between'}}>
                     <Text style={[styles.text, {paddingVertical: 30, paddingHorizontal: 20}]}>{formatDate(selectedDate)}</Text>
                     <Button

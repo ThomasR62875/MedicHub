@@ -248,14 +248,7 @@ const App = () => {
                       <Stack.Screen name="SingleAppointment"
                                     component={SingleAppointment}
                                     initialParams={{session: session}}
-                                    options={{
-                                        title: '',
-                                        headerStyle: {
-                                            backgroundColor: '#2E5829',
-                                        },
-                                        headerTintColor: '#ABD2A8',
-                                        headerBackTitle: 'Volver',
-                                    }}/>
+                                    options={{ headerShown: false }}/>
                       <Stack.Screen name="EditAppointment"
                                     component={EditAppointment}
                                     initialParams={{session: session}}
@@ -281,14 +274,7 @@ const App = () => {
                       <Stack.Screen name="SingleDoctor"
                                     component={SingleDoctor}
                                     initialParams={{session: session}}
-                                    options={{
-                                        title: '',
-                                        headerStyle: {
-                                            backgroundColor: '#2E5829',
-                                        },
-                                        headerTintColor: '#ABD2A8',
-                                        headerBackTitle: 'Volver',
-                                    }}/>
+                                    options={{ headerShown: false }}/>
                       <Stack.Screen name="EditDoctor"
                                     component={EditDoctor}
                                     initialParams={{session: session}}
@@ -314,14 +300,7 @@ const App = () => {
                       <Stack.Screen name="SingleDependentUser"
                                     component={SingleDependentUser}
                                     initialParams={{session: session}}
-                                    options={{
-                                        title: '',
-                                        headerStyle: {
-                                            backgroundColor: '#2E5829',
-                                        },
-                                        headerTintColor: '#ABD2A8',
-                                        headerBackTitle: 'Volver',
-                                    }}/>
+                                    options={{ headerShown: false }}/>
                       <Stack.Screen name="EditDependentUser"
                                     component={EditDependentUser}
                                     initialParams={{session: session}}
@@ -347,14 +326,7 @@ const App = () => {
                       <Stack.Screen name="SingleMedication"
                                     component={SingleMedication}
                                     initialParams={{session: session}}
-                                    options={{
-                                        title: '',
-                                        headerStyle: {
-                                            backgroundColor: '#2E5829',
-                                        },
-                                        headerTintColor: '#ABD2A8',
-                                        headerBackTitle: 'Medicamentos',
-                                    }}/>
+                                    options={{ headerShown: false }}/>
                       <Stack.Screen name="EditMedication"
                                     component={EditMedication}
                                     initialParams={{session: session}}
