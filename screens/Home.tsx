@@ -222,13 +222,9 @@ const Home: React.FC = ({ navigation, route }: any) => {
                             <View style={{alignItems: 'center'}}>
                                 <Text style={[styles.text2, {paddingHorizontal: 30}]}>{t('text13')}</Text>
                             </View>
-                        )
-                    )
-                    }
+                        ))}
                 </View>
-
-
-
+                <View style={{padding: 40}}/>
             </ScrollableBg>
         </View>
     )

@@ -54,9 +54,7 @@ const Account: React.FC = ({ navigation, route } : any) => {
     return (
         <View style={{flex: 1, backgroundColor: '#fff', marginBottom: 0}}>
             <View
-                style={[
-
-                    {
+                style={[{
                         width: 500,
                         height: 500,
                         borderRadius: 250,
@@ -64,13 +62,9 @@ const Account: React.FC = ({ navigation, route } : any) => {
                         top: -250,
                         backgroundColor: 'rgba(203,214,144,0.2)',
                         position: 'absolute',
-                    },
-                ]}
-            />
+                    },]}/>
             <View
-                style={[
-
-                    {
+                style={[{
                         width: 400,
                         height: 400,
                         borderRadius: 200,
@@ -78,13 +72,10 @@ const Account: React.FC = ({ navigation, route } : any) => {
                         top: -200,
                         backgroundColor: 'rgba(203,214,144,0.2)',
                         position: 'absolute',
-                    },
-                ]}
-            />
+                    },]}/>
             <Text style={[styles.tabTitle, {paddingLeft: 40}]}>
                 {t('account')}
             </Text>
-            <ScrollableBg>
                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
                     <Icon
                         name='person-circle-outline'
@@ -109,8 +100,6 @@ const Account: React.FC = ({ navigation, route } : any) => {
                     <Text style={styles.text}>{last_name}</Text>
                 </View>
                 <Divider style={styles.divider}/>
-
-
                 <View style={{marginVertical: '5%', marginHorizontal: '12%'}}>
                     <Text style={styles.title}>Mail:</Text>
                     <Text style={styles.text2}>{session?.user.email}</Text>
@@ -143,7 +132,6 @@ const Account: React.FC = ({ navigation, route } : any) => {
                         titleStyle={{color: '#ffffff', fontWeight: 'bold', fontSize: 16}}
                         onPress={() => showDialog()}/>
                 </View>
-            </ScrollableBg>
             <Dialog style={{backgroundColor: '#E9F4E9FF'}}
                     visible={visible}
                     onDismiss={hideDialog}>
