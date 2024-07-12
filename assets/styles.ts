@@ -291,6 +291,8 @@ export const styles = StyleSheet.create({
     label: {
         fontSize: 16,
         marginRight: 5,
+        paddingVertical: 10
+
     },
     header: {
         position: 'absolute',
@@ -306,7 +308,7 @@ export const styles = StyleSheet.create({
     },
     detailRow: {
         flexDirection: 'row',
-        marginBottom: 10,
+        margin: 10,
     },
     value: {
         flex: 1,
