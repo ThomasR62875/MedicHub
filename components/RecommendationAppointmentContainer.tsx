@@ -1,7 +1,6 @@
 import { Text, TouchableOpacity, View} from "react-native";
 import React from "react";
-import {useTranslation} from "react-i18next";
-import {Appointment, RecommendationAppointment} from "../lib/types";
+import {RecommendationAppointment} from "../lib/types";
 import {styles} from "../assets/styles";
 
 interface recommendationAppointmentContainerProps {

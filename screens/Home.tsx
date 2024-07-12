@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, Alert, Image, ScrollView, TouchableOpacity} from 'react-native';
+import {View, Text, Image, ScrollView, TouchableOpacity} from 'react-native';
 import {
     getAge,
     getAppointmentInterval,
@@ -19,8 +19,6 @@ import ScrollableBg from "../components/ScrollableBg";
 // @ts-ignore
 import Squiggle from "../assets/tabAsset.png";
 import {Icon} from "react-native-elements";
-import AppointmentButton from "../components/AppointmentButton";
-import {cardStyle} from "../styles/global";
 
 const Home: React.FC = ({ navigation, route }: any) => {
     const session = route.params.session;
