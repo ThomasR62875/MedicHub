@@ -130,5 +130,6 @@
   "closeSes" : "¿Está seguro de que desea cerrar sesión?",
   "close": "Cerrar",
   "warn19": "Fecha de nacimiento invalida",
-  "warn20": "Debe ingresar su sexo"
+  "warn20": "Debe ingresar su sexo",
+  "addRecommendationAppointmentDescription": "Turno de la especialidad "
 }

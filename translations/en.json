@@ -131,6 +131,7 @@
   "closeSes": "Are you sure you want to close your session ?",
   "close": "Close",
   "warn19": "Invalid birth date",
-  "warn20": "You must enter your sex"
+  "warn20": "You must enter your sex",
+  "addRecommendationAppointmentDescription" : "Appointment with specialty "
 }
 

@@ -1,11 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import {View, Text, Image, ScrollView, TouchableOpacity} from 'react-native';
 import {
-    getAge,
-    getAppointmentInterval,
     getAppointments,
     getDependentUsers,
-    getDoctor,
     getRecommendationSpecialities,
     getUserSession
 } from "../lib/supabase";
@@ -192,7 +189,7 @@ const Home: React.FC = ({ navigation, route }: any) => {
                                     <RecommendationAppointmentContainer
                                         recommendationAppointment={appointment}
                                         styleExterior={[styles.cards]}
-                                        onPress={() => {navigation.navigate('SingleAppointment', {session: session, appointment: appointment})}}
+                                        onPress={() => {navigation.navigate('AddAppointment', {session: session, recommendation: appointment})}}
 
                                     />
                                 </View>

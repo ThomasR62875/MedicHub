@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {addAppointment, getAllDoctorsByUser, getAllUsers, getUserId} from '../lib/supabase';
+import {addAppointment, getAllDoctorsByUser, getAllUsers, getDoctorsBySpecialty, getUserId} from '../lib/supabase';
 import {
     StyleSheet,
     Alert,
@@ -13,7 +13,7 @@ import {
 import {Button} from "react-native-elements";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../App";
-import { DependentUser } from "../lib/types";
+import {DependentUser, RecommendationAppointment} from "../lib/types";
 import { Doctor } from "../lib/types";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Picker } from "@react-native-picker/picker";
@@ -24,7 +24,8 @@ import {TextInput, Text as PaperText, HelperText, Button as PaperButton, Dialog,
 type AddAppointmentProps = NativeStackScreenProps<RootStackParamList, 'AddAppointment'>;
 
 const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) => {
-    const { session } = route.params;
+    const { session, recommendation }: { session?: any, recommendation?: RecommendationAppointment } = route.params ?? {};
+
     const [description, setDescription] = useState('');
     const [observations, setObservations] = useState('');
     const [doctor, setDoctor] = useState('Médico');
@@ -53,7 +54,6 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
         } else {
             setDescriptionErrorMessage('');
             setHasErrors(true);
-
         }
     };
 
@@ -64,12 +64,22 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
             }
             fetchUserId();
         }
+
     }, [session]);
 
     useEffect(() => {
         if (session_user_id) {
             async function getInfo() {
-                setDoctors(await getAllDoctorsByUser(session_user_id));
+                if (recommendation) {
+                    setDoctors(await getDoctorsBySpecialty(session_user_id, recommendation.speciality));
+                    setDate(recommendation.date);
+                    setTime(recommendation.date);
+                    setUserId(recommendation.user_id);
+                    setDoctor(recommendation.doctor);
+                    setDescription(t('addRecommendationAppointmentDescription') + recommendation.speciality)
+                } else {
+                    setDoctors(await getAllDoctorsByUser(session_user_id));
+                }
                 setAllUsers(await getAllUsers(session_user_id));
             }
             getInfo();
