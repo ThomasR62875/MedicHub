@@ -23,7 +23,6 @@ const EditMedication:React.FC<EditMedicationProps> = ({navigation, route }: any)
     const [howOften, setHowOften] = useState<Date | null>(route.params.medication.howOften);
     const [isForever, setIsForever] = useState<boolean>(route.params.medication.isForever);
     const {t} = useTranslation();
-    const [mode, setMode] = useState<'date' | 'time'>('date');
     const times = [
         '02:00:00',
         '04:00:00',
@@ -68,9 +67,9 @@ const EditMedication:React.FC<EditMedicationProps> = ({navigation, route }: any)
             howOften:howOften,
             isForever:isForever,
         }
-        const result = await updateMedication(medication); // huhh??? literlamente son el mismo Type
+        const result = await updateMedication(medication);
         if (result.success) {
-            navigation.navigate('AlertPublicity', { session, msg: 'editMed', screen: 'SingleMedication', meds: medication});
+            navigation.navigate('AlertPublicity', { session, msg: 'editMed', screen: 'SingleMedication', meds: medication});  //tira error a veces xd
         } else {
             Alert.alert('Error', result.message || 'An unknown error occurred');
         }
@@ -105,13 +104,13 @@ const EditMedication:React.FC<EditMedicationProps> = ({navigation, route }: any)
     };
 
     const onChange2 = (event: DateTimePickerEvent, selectedDate2?: Date | undefined): void => {
-        const currentDate = selectedDate2 || dateUntil;
         let adjustedDate;
         console.log("antes", dateUntil)
 
         if(selectedDate2){
             const offset = selectedDate2.getTimezoneOffset();
-            adjustedDate = new Date(selectedDate2.getTime() - (offset * 60 * 1000));
+            console.log("offset: ", offset)
+            adjustedDate = new Date(selectedDate2.getTime());
             setDateUntil(adjustedDate)
             console.log("pri", dateUntil)
 
@@ -181,9 +180,10 @@ const EditMedication:React.FC<EditMedicationProps> = ({navigation, route }: any)
                         <View style={styles.datePicker}>
                             <DateTimePicker  testID="dateTimePicker"
                                              value={dateUntil ? dateUntil : new Date()}
-                                             mode={mode}
+                                             mode='date'
                                              minimumDate={dateSince}
                                              onChange={onChange2}
+                                             timeZoneName={"America/Argentina/Ushuaia"}
                             />
                         </View>
                         <View style={[cardStyle.infoRow, {marginTop: "5%"}]}>
