@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import {getAllUsers, getSpecialties, getUserId, updateDependentUser, updateDoctor} from '../lib/supabase'
+import {getAllUsers, getSpecialties, getUserId, updateDoctor} from '../lib/supabase'
 import {View, StyleSheet, Alert, Keyboard, TouchableWithoutFeedback, KeyboardAvoidingView, SafeAreaView, ScrollView} from 'react-native'
 import {Button, Input, Text} from 'react-native-elements'
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
@@ -21,7 +21,6 @@ const EditDoctor:React.FC<EditDoctorProps> = ({navigation, route }: any) =>{
     const [phone, setPhone] = useState('')
     const [addresses, setAddresses] = useState<[string]>([''])
     const [all_users, setAllUsers] = useState<DependentUser[] | undefined>(undefined)
-    const [session_user_id, setSessionUserId] = useState('')
     const [user_id, setUserId] = useState('')
     const [id, setId] = useState('')
     const {t} = useTranslation();

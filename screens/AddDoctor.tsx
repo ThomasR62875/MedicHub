@@ -25,13 +25,11 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}) => {
     const session = route.params.session;
     const [email, setEmail] = useState('')
     const [name, setName] = useState('')
-    const [loading, setLoading] = useState(false)
     const [specialties, setSpecialties] = useState<Specialty[] | null>(null);
     const [specialty,setSpecialty]= useState('')
     const [phone, setPhone] = useState('')
     const [addresses, setAddresses] = useState<[string]>([''])
     const [all_users, setAllUsers] = useState<DependentUser[] | undefined>(undefined)
-    const [session_user_id, setSessionUserId] = useState('')
     const [user_id, setUserId] = useState('')
     const [nameErrorMessage, setNameErrorMessage] = useState('')
     const {t} = useTranslation();
@@ -70,22 +68,6 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}) => {
         }
     };
 
-    const validateSpecialty = (value: string) => {
-        if (value.trim() === '') {
-            setNameErrorMessage(t('warn9'));
-        } else {
-            setNameErrorMessage('');
-        }
-    };
-
-    const validateUser = (value: string) => {
-        if (value.trim() === '') {
-            setNameErrorMessage(t('warn10'));
-        } else {
-            setNameErrorMessage('');
-        }
-    };
-
     const handleAddDoctor = async () => {
         const doctor = {
             name:name, specialty:specialty, phone:phone, email:email, addresses:
@@ -104,11 +86,6 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}) => {
     const hideSpecialtyDialog = () => setSpecialtyDialog(false);
     const hideUserDialog = () => setUserDialog(false);
 
-
-    const getSpecialtyName = (special: string) => {
-        const selectedSpecialty = specialties?.find(specialty => specialty.name === special);
-        return selectedSpecialty ? selectedSpecialty : t('select_specialty');
-    };
 
     const getUserName = (id: string) => {
         const selectedUser = all_users?.find(user => user.id === id);
@@ -325,29 +302,3 @@ const styles = StyleSheet.create({
     }
 
 });
-
-const pickerSelectStyles = StyleSheet.create({
-    inputIOS: {
-        fontSize: 16,
-        paddingVertical: 12,
-        paddingHorizontal: 10,
-        borderWidth: 1,
-        borderColor: 'gray',
-        borderRadius: 4,
-        color: 'black',
-        paddingRight: 30,
-    },
-    inputAndroid: {
-        fontSize: 16,
-        paddingHorizontal: 10,
-        paddingVertical: 8,
-        borderWidth: 0.5,
-        borderColor: 'purple',
-        borderRadius: 8,
-        color: 'black',
-        paddingRight: 30,
-    },
-});
-
-
-
