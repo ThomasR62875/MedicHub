@@ -63,11 +63,11 @@ const SingleDependentUser: React.FC<SingleDependentUserProps> = ({navigation, ro
 
     const handleDeleteDependentUser = async () => {
         const session = route.params.session;
-        const {success,message} = await deleteDependentUser(route.params.du);
+        const {message} = await deleteDependentUser(route.params.du);
         Alert.alert(message,'',[{text: 'Ok', onPress: () => navigation.navigate('Usuarios', {session: session})}])
     };
 
-    const {t, i18n} = useTranslation();
+    const {t} = useTranslation();
 
     function lowercaseFirstLetter(str: string) {
         if (!str) return str; // Handle empty strings or null
@@ -75,7 +75,7 @@ const SingleDependentUser: React.FC<SingleDependentUserProps> = ({navigation, ro
     }
 
     let str = t('depu');
-    str = lowercaseFirstLetter(str);
+    lowercaseFirstLetter(str);
 
     const hideSexGenderDialog = () => setSexGenderDialog(false);
 
@@ -308,27 +308,28 @@ const SingleDependentUser: React.FC<SingleDependentUserProps> = ({navigation, ro
                     onDismiss={() => setNewIndepUserDialog(false)}>
                 <Dialog.Actions>
                     <ScrollableBg>
-                        <Text style={styles.text3}>Ingrese los datos para mover este usario y sus datos a una nueva cuenta</Text>
+                        <Text style={[styles.text3, {fontWeight: 'bold'}]}>Ingrese los datos para mover este usario y sus datos a una nueva cuenta</Text>
                         <Input
                             label={t('name')}
-                            labelStyle={styles.colorLabel}
-                            leftIcon={<Icon type="font-awesome" name="user" color={styles.colorIcon.color}/>}
+                            labelStyle={{color: '#000000', paddingBottom: 10, paddingLeft: 5, fontWeight: 'normal', fontSize: 14, fontFamily: 'Roboto-Thin'}}
+                            leftIcon={<Icon type="font-awesome" name="user" color={styles.colorIcon.color} iconStyle={{fontSize: 20, paddingLeft: 10}} />}
                             onChangeText={(text) => {
                                 setFirstName(text);
                                 validateName(text)
                             }}
                             value={firstName}
                             placeholder={t('name')}
-                            placeholderTextColor={"#407738"}
+                            inputContainerStyle={[{paddingLeft: 14}, styles.input]}
                             autoCapitalize={'none'}
-                            inputStyle={{color: '#407738', marginLeft: 10}}
+                            placeholderTextColor={"#807d7d"}
+                            inputStyle={{color: '#000', fontSize:14, marginLeft: 10}}
                             errorStyle={{color: 'red'}}
                             errorMessage={nameErrorMessage}
                         />
                         <Input
                             label={t('surname')}
-                            labelStyle={styles.colorLabel}
-                            leftIcon={<Icon type="font-awesome" name="user" color={styles.colorIcon.color}/>}
+                            labelStyle={{fontWeight: 'normal',color: '#000000', paddingBottom: 10, paddingLeft: 5}}
+                            leftIcon={<Icon type="font-awesome" name="user" color={styles.colorIcon.color}  iconStyle={{fontSize: 20, paddingLeft: 10}} />}
                             onChangeText={(text) => {
                                 setLastName(text);
                                 validateLastName(text)
@@ -336,15 +337,16 @@ const SingleDependentUser: React.FC<SingleDependentUserProps> = ({navigation, ro
                             value={lastName}
                             placeholder={t('surname')}
                             autoCapitalize={'none'}
-                            placeholderTextColor={"#407738"}
-                            inputStyle={{color: '#407738', marginLeft: 10}}
+                            placeholderTextColor={"#807d7d"}
+                            inputStyle={{color: '#000', fontSize:14, marginLeft: 10}}
+                            inputContainerStyle={[{paddingLeft: 10}, styles.input]}
                             errorStyle={{color: 'red'}}
                             errorMessage={lastNameErrorMessage}
                         />
                         <Input
                             label={t('id')}
-                            labelStyle={styles.colorLabel}
-                            leftIcon={<Image source={require('../assets/fingerprint.png')} style={styles.icon}/>}
+                            labelStyle={{fontWeight: 'normal',color: '#000000', paddingBottom: 10, paddingLeft: 5}}
+                            leftIcon={<Image source={require('../assets/fingerprint.png')} style={styles.icon} />}
                             onChangeText={(text) => {
                                 setDni(text);
                                 validateDNI(text);
@@ -352,15 +354,16 @@ const SingleDependentUser: React.FC<SingleDependentUserProps> = ({navigation, ro
                             value={dni}
                             placeholder={t('id')}
                             autoCapitalize={'none'}
-                            placeholderTextColor={"#407738"}
-                            inputStyle={{color: '#407738', marginLeft: 10}}
+                            inputContainerStyle={[{paddingLeft: 14}, styles.input]}
+                            placeholderTextColor={"#807d7d"}
+                            inputStyle={{color: '#000', fontSize:14, marginLeft: 10}}
                             errorStyle={{color: 'red'}}
                             errorMessage={DNIErrorMessage}
                         />
                         <Input
                             label="Mail"
-                            labelStyle={styles.colorLabel}
-                            leftIcon={<Icon type="font-awesome" name="envelope" color={styles.colorIcon.color}/>}
+                            labelStyle={{fontWeight: 'normal',color: '#000000', paddingBottom: 10, paddingLeft: 5}}
+                            leftIcon={<Icon type="font-awesome" name="envelope" color={styles.colorIcon.color} iconStyle={{fontSize: 20, paddingLeft: 10}} />}
                             onChangeText={(text) => {
                                 setEmail(text);
                                 validateEmail(text)
@@ -368,29 +371,31 @@ const SingleDependentUser: React.FC<SingleDependentUserProps> = ({navigation, ro
                             value={email}
                             placeholder="email@address.com"
                             autoCapitalize={'none'}
-                            placeholderTextColor={"#407738"}
-                            inputStyle={{color: '#407738', marginLeft: 10}}
+                            inputContainerStyle={[{paddingLeft: 10}, styles.input]}
+                            placeholderTextColor={"#807d7d"}
+                            inputStyle={{color: '#000', fontSize:14, marginLeft: 10}}
                             errorStyle={{color: 'red'}}
                             errorMessage={mailErrorMessage}
                         />
 
 
-                        <PaperText style={styles.text}>{t('sex')}</PaperText>
-                        <PaperButton mode="outlined" style={styles.pickerButton} textColor='#2E5829' labelStyle={{textAlign: 'left', display:'flex'}} onPress={()=> setSexGenderDialog(true)}>
+                        <PaperText style={[styles.text4,{fontWeight: 'normal'}]}>{t('sex')}</PaperText>
+                        <PaperButton mode="outlined" style={[styles.input, {padding: 5, marginHorizontal: '3%', marginBottom:'5%'}]} textColor='#000' labelStyle={{textAlign: 'left', display:'flex'}} contentStyle={{justifyContent: 'flex-start'}} onPress={()=> setSexGenderDialog(true)}>
                             {getSexGenderName(sexGender)}
                         </PaperButton>
-                        <PaperText style={styles.text}>{t('birthdate')}</PaperText>
+                        <PaperText style={styles.text5}>{t('birthdate')}</PaperText>
                         <View style={styles.datePicker}>
-                            <DateTimePicker  testID="dateTimePicker"
-                                             value={date ? date : new Date()}
-                                             mode="date"
-                                             display="default"
-                                             onChange={(event, selectedDate) => {
-                                                 handleDayPress(event, selectedDate)
-                                                 validateBirthDate(selectedDate);
-                                             }}
+                            <DateTimePicker testID="dateTimePicker"
+                                            value={date || undefined}
+                                            mode="date"
+                                            display="default"
+                                            onChange={() => {
+                                                handleDayPress;
+                                                validateBirthDate(date)
+                                            }}
                             />
                         </View>
+
                         <Portal>
                             <Dialog style={styles.dialog} visible={sexGenderDialog} onDismiss={hideSexGenderDialog}>
                                 <Text style={styles.dialogTitle}>{t("selSex")}</Text>
@@ -422,20 +427,21 @@ const SingleDependentUser: React.FC<SingleDependentUserProps> = ({navigation, ro
 
                         <Input
                             label={t('password')}
-                            labelStyle={styles.colorLabel}
-                            leftIcon={<Icon type="font-awesome" name="lock" color={styles.colorIcon.color}/>}
+                            labelStyle={{fontWeight: 'normal',color: '#000000', paddingVertical: 12, paddingLeft: 5}}
+                            leftIcon={<Icon type="font-awesome" name="lock" color={styles.colorIcon.color} iconStyle={{fontSize: 20, paddingLeft: 10}}/>}
                             onChangeText={(text) => setPassword(text)}
                             value={password}
                             secureTextEntry={true}
+                            placeholderTextColor={"#807d7d"}
+                            inputStyle={{color: '#000', fontSize:14, marginLeft: 10}}
                             placeholder={t('password')}
+                            inputContainerStyle={[{paddingLeft: 10}, styles.input]}
                             autoCapitalize={'none'}
-                            inputStyle={{color: '#407738', marginLeft: 10}}
-                            placeholderTextColor={"#407738"}
                         />
                         <Input
                             label={t('confirmp')}
-                            labelStyle={styles.colorLabel}
-                            leftIcon={<Icon type="font-awesome" name="lock" color={styles.colorIcon.color}/>}
+                            labelStyle={{fontWeight: 'normal',color: '#000000', paddingBottom: 10, paddingLeft: 5}}
+                            leftIcon={<Icon type="font-awesome" name="lock" color={styles.colorIcon.color} iconStyle={{fontSize: 20, paddingLeft: 10}}/>}
                             onChangeText={(text1) => {
                                 setConfirmedPassword(text1);
                                 validatePassword(text1);
@@ -444,8 +450,9 @@ const SingleDependentUser: React.FC<SingleDependentUserProps> = ({navigation, ro
                             secureTextEntry={true}
                             placeholder={t('password')}
                             autoCapitalize={'none'}
-                            inputStyle={{color: '#407738', marginLeft: 10}}
-                            placeholderTextColor={"#407738"}
+                            placeholderTextColor={"#807d7d"}
+                            inputStyle={{color: '#000', fontSize:14, marginLeft: 10}}
+                            inputContainerStyle={[{paddingLeft: 10}, styles.input]}
                             errorStyle={{color: 'red'}}
                             errorMessage={passwordErrorMessage}
                         />
@@ -454,7 +461,7 @@ const SingleDependentUser: React.FC<SingleDependentUserProps> = ({navigation, ro
                                 title={t('confirm')}
                                 loading={loading}
                                 buttonStyle={{
-                                    backgroundColor: '#2E5829',
+                                    backgroundColor: '#8B86BE',
                                     borderWidth: 2,
                                     borderColor: 'white',
                                     borderRadius: 30,
@@ -476,134 +483,7 @@ const SingleDependentUser: React.FC<SingleDependentUserProps> = ({navigation, ro
                 </Dialog.Actions>
             </Dialog>
         </View>
-        // <View style={styles.container}>
-        //     <View style={styles.titleContainer}>
-        //         {i18n.language === 'english' ? (
-        //             <Text style={styles.titleText}>{t('depu')} {t('text2')} </Text>
-        //         ) : (
-        //             <View>
-        //                 <Text style={styles.titleText}>{t('text2')}</Text>
-        //                 <Text style={styles.titleText}>{str}</Text>
-        //             </View>
-        //         )
-        //         }
-        //     </View>
-        //     <View style={styles.addContainer}>
-
-        //     </View>
-        //     <View style={styles.detailRow}>
-        //         <Text style={styles.label}>{t('name')}:</Text>
-        //         <Text style={styles.value}>{route.params.du.first_name}</Text>
-        //     </View>
-        //     <View style={styles.detailRow}>
-        //         <Text style={styles.label}>{t('surname')}:</Text>
-        //         <Text style={styles.value}>{route.params.du.last_name}</Text>
-        //     </View>
-
-        //         </View>
-        //     </View>
-
-        // </View>
     );
 };
 
 export default SingleDependentUser;
-//
-// // @ts-ignore
-// const styles = StyleSheet.create({
-//     container: {
-//         flex: 1,
-//         padding: 20,
-//         backgroundColor: '#e9f4e9',
-//     },
-//     titleContainer: {
-//         fontSize: 25,
-//         fontWeight: 'bold',
-//         marginTop: 10,
-//         alignSelf: 'center',
-//         marginBottom: 20,
-//     },
-//     titleText: {
-//         fontSize: 25,
-//         textAlign: 'center',
-//         justifyContent: 'center',
-//         fontWeight: 'bold',
-//     },
-//     detailRow: {
-//         flexDirection: 'row',
-//         marginBottom: 10,
-//     },
-//     label: {
-//         fontWeight: 'bold',
-//         marginRight: 5,
-//     },
-//     value: {
-//         flex: 1,
-//     },
-//     addContainer: {
-//         left: 290,
-//         bottom: 60,
-//         alignSelf: 'flex-start',
-//     },
-//     screen: {
-//         backgroundColor: "#E9F4E9FF",
-//         height: "100%",
-//     },
-//     dialog: {
-//         height: '90%',
-//         backgroundColor: '#E9F4E9FF',
-//         alignItems: 'center',
-//     },
-//     shareUserBotton: {
-//         borderRadius: 6,
-//         margin: '5%',
-//         width: '60%'
-//     },
-//     inputStyle: {
-//         marginTop: '5%',
-//         marginBottom: '5%',
-//     },
-//     buttonSignInContainer: {
-//         width: '50%',
-//         justifyContent: 'center',
-//     },
-//     buttonSignIn: {
-//         backgroundColor: '#B5DCCA',
-//         borderRadius: 10,
-//         justifyContent: 'center',
-//     },
-//     colorIcon: {
-//         color: '#2E5829FF'
-//     },
-//     colorLabel: {
-//         color: '#2E5829FF',
-//         fontSize: 12
-//     },
-//     icon: {
-//         width: 24,
-//         height: 24,
-//     }, registerW: {
-//         backgroundColor: '#e9f4e9',
-//         height: '100%',
-//         marginLeft: 10,
-//         marginRight: 10,
-//         alignContent: 'center'
-//     },
-//     title: {
-//         color: '#2E5829FF',
-//         textAlign: 'center',
-//         marginBottom: '15%',
-//         marginTop: 0,
-//         fontSize: 14,
-//         fontWeight: 'bold'
-//     },
-//     logo: {
-//         height: 50,
-//         width: 50,
-//         marginBottom: 0
-//     },
-//     makeIndepUserBotton: {
-//         borderRadius: 6,
-//         margin: '5%',
-//     }
-// });

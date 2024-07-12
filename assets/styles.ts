@@ -365,7 +365,8 @@ export const styles = StyleSheet.create({
         fontFamily: 'Roboto-Thin',
         fontSize: 16,
         textAlign: 'center',
-        padding: 10,
+        paddingVertical: 20,
+        paddingHorizontal: 10,
         color: "#000",
     },
     pickerStyle: {
@@ -449,5 +450,13 @@ export const styles = StyleSheet.create({
         paddingBottom: 12,
         fontFamily: 'Roboto-Thin',
         fontWeight: 'bold'
+    },
+    text5: {
+        fontSize: 16,
+        textAlign: 'left',
+        color: '#000',
+        paddingHorizontal: 12,
+        paddingBottom: 12,
+        fontFamily: 'Roboto-Thin',
     },
 });
