@@ -1,13 +1,17 @@
 import React, {useEffect, useState} from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import {View, Text, Image} from 'react-native';
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
 import {Button, Icon} from "react-native-elements";
 import {useTranslation} from "react-i18next";
-import {Button as PaperButton, Dialog} from "react-native-paper";
+import {Button as PaperButton, Dialog, Divider} from "react-native-paper";
 import {deleteAppointment, getDoctor, getUserData} from "../lib/supabase";
 import {Doctor} from "../lib/types";
 import {recommendQuestionsForAppointment} from "../lib/openai";
+import {styles} from "../assets/styles";
+// @ts-ignore
+import Header from "../assets/header_green.png";
+import ScrollableBg from '../components/ScrollableBg';
 
 type SingleAppointmentProps = NativeStackScreenProps<RootStackParamList, 'SingleAppointment'>
 
@@ -15,13 +19,11 @@ const SingleAppointment: React.FC<SingleAppointmentProps> = ({ navigation, route
     const [visible, setVisible] = React.useState(false);
     const hideDialog = () => setVisible(false);
     const showDialog = () => setVisible(true);
-    // Convert date to desired format
     const originalDate = new Date(route.params.appointment.date);
     const formattedDate = `${originalDate.getDate()}/${originalDate.getMonth() + 1}/${originalDate.getFullYear()}`;
     const formattedTime = `${(originalDate.getHours() + 3) % 24}:${originalDate.getMinutes().toString().padStart(2, '0')}`;
     const {t} = useTranslation();
     const [doctor, setDoctor] = useState<Doctor | undefined>()
-    const [recommendation, setRecommendation] = useState<string>('');
 
     useEffect(() => {
         const fetchDoctor = async () => {
@@ -64,88 +66,90 @@ const SingleAppointment: React.FC<SingleAppointmentProps> = ({ navigation, route
     // @ts-ignore
     // @ts-ignore
     return (
-        <View style={styles.container}>
-            <View style={styles.titleContainer}>
-                <Text style={styles.titleText}>{t('text4')}</Text>
-            </View>
-            <View style={styles.addContainer}>
+        <View style={styles.tab}>
+            <Image source={Header} style={styles.header}/>
+
+            <Icon iconStyle={{color: 'white', paddingVertical: 20}} name={'arrow-left'} type={'material-community'}
+                  style={styles.back_arrow}
+                  onPress={() => navigation.navigate('HomeTabs')}></Icon>
+            <View style={{
+                flexDirection: 'row',
+                paddingTop: '5%',
+                marginLeft: '10%',
+                alignItems: 'center',
+                justifyContent: 'center'
+            }}>
+                <Icon iconStyle={{color: 'white', fontSize: 24}} containerStyle={[styles.circleHeader, {
+                    backgroundColor: 'rgba(203,214,144,0.6)',
+                    alignSelf: 'center',
+                    marginHorizontal: "10%"
+                }]} name={'calendar-month-outline'} type={'material-community'}/>
                 <Icon
                     name='pencil'
-                    iconStyle={{ color: '#1E3A1AFF' }}
+                    iconStyle={{color: '#fff', paddingLeft: 20, paddingBottom: 25}}
                     type='ionicon'
                     size={25}
-                    style={{margin: "10%"}}
                     onPress={() => navigation.navigate('EditAppointment', {appointment: route.params.appointment})}
                 />
             </View>
-            <View style={styles.detailRow}>
-                <Text style={styles.label}>{t('user')}:</Text>
-                <Text style={styles.value}>{route.params.appointment.user_name}</Text>
-            </View>
-            <View style={styles.detailRow}>
-                <Text style={styles.label}>{t('date')}:</Text>
-                <Text style={styles.value}>{formattedDate}</Text>
-            </View>
-            <View style={styles.detailRow}>
-                <Text style={styles.label}>{t('time')}:</Text>
-                <Text style={styles.value}>{formattedTime}</Text>
-            </View>
-            <View style={styles.detailRow}>
-                <Text style={styles.label}>{t('doc')}:</Text>
-                <Text style={styles.value}>{doctor ? `${doctor.name} (especialidad: ${doctor.specialty})` : 'Sin datos de doctor'}</Text>
-            </View>
-            <View style={styles.detailRow}>
-                <Text style={styles.label}>{t('description')}:</Text>
-                <Text style={styles.value}>{route.params.appointment.description}</Text>
-            </View>
-            <View style={styles.detailRow}>
-                <Text style={styles.label}>{t('observations')}:</Text>
-                <Text style={styles.value}>{route.params.appointment.observations}</Text>
-            </View>
-            <View style={styles.screen}>
-                <View style={{alignItems: 'center', width: 'auto'}}>
-                    <Button
-                        title="Preguntar IA"
-                        buttonStyle={{
-                            backgroundColor: '#2E5829',
-                            borderWidth: 2,
-                            borderColor: 'white',
-                            borderRadius: 30,
-                            minHeight: 50,
-                            minWidth: 150,
-                        }}
-                        containerStyle={{
-                            width: 150,
-                            marginHorizontal: 50,
-                            marginVertical: 10,
-                            marginTop: 40,
-                            marginBottom:100
-                        }}
-                        titleStyle={{ color: '#eef9ed' }}
-                        onPress={() => handlePressRecommendQuestionsForAppointment()}
-                    />
-                    <Button
-                        title="Eliminar"
-                        buttonStyle={{
-                            backgroundColor: '#2E5829',
-                            borderWidth: 2,
-                            borderColor: 'white',
-                            borderRadius: 30,
-                            minHeight: 50,
-                            minWidth: 150,
-                        }}
-                        containerStyle={{
-                            width: 150,
-                            marginHorizontal: 50,
-                            marginVertical: 10,
-                            marginTop: 40,
-                            marginBottom:100
-                        }}
-                        titleStyle={{ color: '#eef9ed' }}
-                        onPress={() => showDialog()}
-                    />
+            <ScrollableBg>
+                <Text style={styles.titleText}>{route.params.appointment.description}</Text>
+                <Divider style={styles.divider}></Divider>
+
+                <View style={{padding: '10%'}}>
+                    <View style={styles.detailRow}>
+                        <Text style={styles.label}>{t('user')}:</Text>
+                        <Text style={styles.value}>{route.params.appointment.user_name}</Text>
+                    </View>
+                    <View style={styles.detailRow}>
+                        <Text style={styles.label}>{t('date')}:</Text>
+                        <Text style={styles.value}>{formattedDate}</Text>
+                    </View>
+                    <View style={styles.detailRow}>
+                        <Text style={styles.label}>{t('time')}:</Text>
+                        <Text style={styles.value}>{formattedTime}</Text>
+                    </View>
+                    <View style={styles.detailRow}>
+                        <Text style={styles.label}>{t('doc')}:</Text>
+                        <Text style={styles.value}>{doctor ? `${doctor.name} (especialidad: ${doctor.specialty})` : 'Sin datos de doctor'}</Text>
+                    </View>
+                    <View style={styles.detailRow}>
+                        <Text style={styles.label}>{t('observations')}:</Text>
+                        <Text style={styles.value}>{route.params.appointment.observations}</Text>
+                    </View>
+                    <View style={styles.screen}>
+                        <View style={{alignItems: 'center', width: 'auto'}}>
+                            <PaperButton
+                                mode="outlined"
+                                style={{borderRadius: 15, borderColor: '#CBD690FF', marginTop: '10%', width: '70%'}}
+                                textColor='#000'
+                                labelStyle={{textAlign: 'left', display: 'flex'}}
+                                onPress={() => handlePressRecommendQuestionsForAppointment()}>
+                                {t('ai')}
+                            </PaperButton>
+                            <Button
+                                title={t('delete')}
+                                buttonStyle={{
+                                    backgroundColor: '#CBD690',
+                                    borderWidth: 2,
+                                    borderColor: 'white',
+                                    borderRadius: 30,
+                                    minHeight: 50,
+                                    minWidth: 150,
+                                }}
+                                containerStyle={{
+                                    width: 150,
+                                    marginHorizontal: 50,marginVertical: '10%',
+                                    marginBottom:100
+                                }}
+                                titleStyle={{ color: '#fff' }}
+                                onPress={() => showDialog()}
+                            />
+                        </View>
+                    </View>
                 </View>
-            </View>
+            </ScrollableBg>
+
             <Dialog style={styles.dialog}
                     visible={visible}
                     onDismiss={hideDialog}>
@@ -157,61 +161,17 @@ const SingleAppointment: React.FC<SingleAppointmentProps> = ({ navigation, route
                 <Dialog.Actions style={{ justifyContent: 'space-between' }}>
                     <PaperButton textColor="#2E5829FF"
                                  onPress={hideDialog}>
-                        Cancelar
+                        {t('cancel')}
                     </PaperButton>
                     <PaperButton textColor="#b6265d"
                                  onPress={handleDeleteAppointment}>
-                        Eliminar
+                        {t('delete')}
                     </PaperButton>
                 </Dialog.Actions>
             </Dialog>
         </View>
+
     );
 };
 
 export default SingleAppointment;
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        padding: 20,
-        backgroundColor: '#e9f4e9',
-    },
-    titleContainer: {
-        fontSize: 25,
-        fontWeight: 'bold',
-        marginTop: 10,
-        alignSelf: 'center',
-        marginBottom: 20,
-    },
-    titleText: {
-        fontSize: 25,
-        textAlign: 'center',
-        justifyContent: 'center',
-        fontWeight: 'bold',
-    },
-    detailRow: {
-        flexDirection: 'row',
-        marginBottom: 10,
-    },
-    label: {
-        fontWeight: 'bold',
-        marginRight: 5,
-    },
-    value: {
-        flex: 1,
-    },
-    addContainer: {
-        left: 290,
-        bottom: 60,
-        alignSelf: 'flex-start',
-    },
-    screen: {
-        backgroundColor: "#E9F4E9FF",
-        height: "100%",
-    },
-    dialog:{
-        backgroundColor: '#E9F4E9FF',
-
-    }
-});

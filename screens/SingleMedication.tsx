@@ -152,11 +152,11 @@ const SingleMedication: React.FC<SingleMedicationProps> = ({navigation, route}: 
                 <Dialog.Actions style={{justifyContent: 'space-between'}}>
                     <PaperButton textColor="#2E5829FF"
                                  onPress={hideDialog}>
-                        Cancelar
+                        {t('cancel')}
                     </PaperButton>
                     <PaperButton textColor="#b6265d"
                                  onPress={handleDeleteMedication}>
-                        Eliminar
+                        {t('delete')}
                     </PaperButton>
                 </Dialog.Actions>
             </Dialog>

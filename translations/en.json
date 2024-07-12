@@ -89,6 +89,7 @@
   "warn13" : "If you don't complete the 'How often' we won't be able to notify you when to take it",
   "warn14" : "If you don't complete the 'Until when' we won't be able to notify you when to take it",
   "text23" : "Every: ",
+  "ai": "Chat with AI",
   "text24" : " hours",
   "text25" : "There was no date completed for this medicine",
   "delete" : "Delete",
