@@ -4,13 +4,15 @@ import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
 import {Icon, Button, Input} from "react-native-elements";
 import {useTranslation} from "react-i18next";
-import {Button as PaperButton, Dialog, Divider, TextInput} from "react-native-paper";
+import {Button as PaperButton, Dialog, Divider, Portal, Text as PaperText, TextInput} from "react-native-paper";
 import {deleteDependentUser, getUserIdByEmail, setDependentUser, signUp} from "../lib/supabase";
 import ScrollableBg from "../components/ScrollableBg";
 import {SexGenderOption, User} from "../lib/types";
 import {styles} from "../assets/styles";
 // @ts-ignore
 import Header from "../assets/header_violet.png";
+import DateTimePicker, {DateTimePickerEvent} from "@react-native-community/datetimepicker";
+import {Picker} from "@react-native-picker/picker";
 
 type SingleDependentUserProps = NativeStackScreenProps<RootStackParamList, 'SingleDependentUser'>
 
@@ -33,12 +35,18 @@ const SingleDependentUser: React.FC<SingleDependentUserProps> = ({navigation, ro
     const [dni, setDni] = useState<string>('')
     const [newIndepUserDialog, setNewIndepUserDialog] = React.useState(false);
 
+    const [date, setDate] = useState(new Date());
+    const [sexGender,setSexGender]= useState('');
+    const [sexGenderDialog, setSexGenderDialog] = useState(false);
+
 
     const [nameErrorMessage, setNameErrorMessage] = useState<string>('');
     const [lastNameErrorMessage, setLastNameErrorMessage] = useState<string>('');
     const [DNIErrorMessage, setDNIErrorMessage] = useState<string>('');
     const [mailErrorMessage, setMailErrorMessage] = useState<string>('');
     const [passwordErrorMessage, setPasswordErrorMessage] = useState<string>('');
+    const [birthDateErrorMessage, setBirthDateErrorMessage] = useState<string>('');
+    const [genderErrorMessage, setGenderErrorMessage] = useState<string>('');
 
 
     useEffect(() => {
@@ -46,6 +54,9 @@ const SingleDependentUser: React.FC<SingleDependentUserProps> = ({navigation, ro
         setLastName(route.params.du.last_name)
         console.log("entrando:"+ route.params.du.dni)
         setDni(route.params.du.dni.toString())
+        const birthdate = new Date(route.params.du.birthdate);
+        setDate(birthdate);
+        setSexGender(route.params.du.sex)
     }, [firstName, lastName, dni, email, password, confirmed_password]);
 
 
@@ -72,6 +83,8 @@ const SingleDependentUser: React.FC<SingleDependentUserProps> = ({navigation, ro
         { sex_gender_name: t('other'), value: 'other' },
     ];
 
+    const hideSexGenderDialog = () => setSexGenderDialog(false);
+
     const getSexGenderName = (value: string) => {
         const option = sexGenderOptions.find(option => option.value === value);
         return option ? option.sex_gender_name : '';
@@ -90,6 +103,13 @@ const SingleDependentUser: React.FC<SingleDependentUserProps> = ({navigation, ro
             console.log('Failed to set user sharing');
         }
     }
+
+    const handleDayPress = (event: DateTimePickerEvent, selectedDate?: Date) => {
+        if (event.type === "set" && selectedDate) {
+            const birthdateWithTime = new Date(selectedDate);
+            setDate(birthdateWithTime);
+        }
+    };
 
     const validateName = (value: string) => {
         if (value.trim() === '') {
@@ -128,9 +148,37 @@ const SingleDependentUser: React.FC<SingleDependentUserProps> = ({navigation, ro
         }
     };
 
+    const validateBirthDate = (value : Date | undefined) => { // vamos a pedir q tenga minimo un día de vida
+        const yesterday = new Date();
+        yesterday.setDate(yesterday.getDate() - 1);
+        yesterday.setHours(0, 0, 0, 0);
+        let birthdate = new Date();
+        if(value){
+            birthdate = new Date(value);
+        }
+        birthdate.setHours(0, 0, 0, 0);
+
+        if(birthdate >= yesterday){
+            setBirthDateErrorMessage(t('warn19'));
+        } else {
+            setBirthDateErrorMessage('');
+        }
+    };
+
+    const validateGender = (value: string) => {
+        if (value == null || value.trim() === '') {
+            setGenderErrorMessage(t('warn20'));
+        } else {
+            setGenderErrorMessage('');
+        }
+
+    };
+
     const signUpNewDependentUser = async (dependent_user_id: string) => {
         setLoading(true)
         const user: User = {
+            birthdate: date,
+            sex: sexGender,
             id: "",
             first_name: firstName,
             last_name: lastName,
@@ -138,7 +186,7 @@ const SingleDependentUser: React.FC<SingleDependentUserProps> = ({navigation, ro
             email: email,
             raw_user_meta_data: {
                 dependent_user_id: dependent_user_id,
-            },
+            }
         };
 
         const {success} = await signUp(user, password);
@@ -335,6 +383,53 @@ const SingleDependentUser: React.FC<SingleDependentUserProps> = ({navigation, ro
                             errorStyle={{color: 'red'}}
                             errorMessage={mailErrorMessage}
                         />
+
+
+                        <PaperText style={styles.text}>{t('sex')}</PaperText>
+                        <PaperButton mode="outlined" style={styles.pickerButton} textColor='#2E5829' labelStyle={{textAlign: 'left', display:'flex'}} onPress={()=> setSexGenderDialog(true)}>
+                            {getSexGenderName(sexGender)}
+                        </PaperButton>
+                        <PaperText style={styles.text}>{t('birthdate')}</PaperText>
+                        <View style={styles.datePicker}>
+                            <DateTimePicker  testID="dateTimePicker"
+                                             value={date ? date : new Date()}
+                                             mode="date"
+                                             display="default"
+                                             onChange={(event, selectedDate) => {
+                                                 handleDayPress(event, selectedDate)
+                                                 validateBirthDate(selectedDate);
+                                             }}
+                            />
+                        </View>
+                        <Portal>
+                            <Dialog style={styles.dialog} visible={sexGenderDialog} onDismiss={hideSexGenderDialog}>
+                                <Text style={styles.dialogTitle}>{t("selSex")}</Text>
+                                <Picker
+                                    mode='dropdown'
+                                    selectedValue={sexGender}
+                                    onValueChange={(value) => {
+                                        setSexGender(value)
+                                        validateGender(sexGender)
+                                    }}
+                                    placeholder='sex'
+                                    enabled={true}
+                                    itemStyle={styles.pickerStyle}
+                                >
+                                    {sexGenderOptions?.map((item) => (
+                                        <Picker.Item key={item.value} label={item.sex_gender_name} value={item.value} />
+                                    ))}
+                                </Picker>
+                                <Dialog.Actions style={{ justifyContent: 'space-between' }}>
+                                    <PaperButton textColor="#2E5829FF"
+                                                 onPress={hideSexGenderDialog}>
+                                        {t("close")}
+                                    </PaperButton>
+                                </Dialog.Actions>
+                            </Dialog>
+                        </Portal>
+
+
+
                         <Input
                             label={t('password')}
                             labelStyle={styles.colorLabel}

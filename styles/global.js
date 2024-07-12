@@ -27,5 +27,4 @@ export const cardStyle = StyleSheet.create({
         flex: 1,
     },
 
-
 })

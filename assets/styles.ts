@@ -374,5 +374,27 @@ export const styles = StyleSheet.create({
         textAlign: 'center',
         padding: 10,
         color: "#000",
-    }
+    },
+    pickerStyle: {
+        marginBottom: 20,
+    },
+    datePicker: {
+        alignSelf: 'center',
+        marginTop: "5%",
+    },
+    pickerButton: {
+        borderRadius: 6,
+        marginLeft: '5%',
+        marginRight: '5%',
+    },
+    dialogTitle: {
+        fontFamily: 'Roboto-Thin',
+        fontSize: 25,
+        textAlign: 'center',
+        fontWeight: 'bold',
+        margin: "5%",
+        marginLeft: '15%',
+        color: "#2E5829FF",
+        width: "70%"
+    },
 });
