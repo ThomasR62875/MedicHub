@@ -84,7 +84,7 @@
   "appo" : " appointment",
   "text20" : "How often will you take it ?",
   "text21" : "Until when do you have to take it ?",
-  "text22" : "Since when will you be taking it ?",
+  "text22" : "From",
   "warning" : "Warning",
   "warn13" : "If you don't complete the 'How often' we won't be able to notify you when to take it",
   "warn14" : "If you don't complete the 'Until when' we won't be able to notify you when to take it",
