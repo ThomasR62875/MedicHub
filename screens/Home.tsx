@@ -67,14 +67,22 @@ const Home: React.FC = ({ navigation, route }: any) => {
 
     useEffect(() => {
         if (appointments && appointments.length > 0) {
-            setTurno1(appointments[0]);
-            setDate1(new Date(appointments[0].date));
-            if (appointments.length > 1) {
-                setTurno2(appointments[1]);
-                setDate2(new Date(appointments[1].date));
+            const now = new Date();  // Obtener la fecha actual
+
+            const futureAppointments = appointments.filter(appointment => new Date(appointment.date) > now);
+
+            if (futureAppointments.length > 0) {
+                setTurno1(futureAppointments[0]);
+                setDate1(new Date(futureAppointments[0].date));
+            }
+
+            if (futureAppointments.length > 1) {
+                setTurno2(futureAppointments[1]);
+                setDate2(new Date(futureAppointments[1].date));
             }
         }
     }, [appointments]);
+
 
     useEffect(() => {
         if (appointments) {

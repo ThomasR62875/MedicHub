@@ -249,7 +249,7 @@ const EditAppointment: React.FC<EditAppointmentProps> = ({navigation, route }: a
                 </ScrollView>
                 <Portal>
                     <Dialog style={styles.dialog} visible={doctorDialog} onDismiss={hideDoctorDialog}>
-                        <Text style={styles.dialogTitle}>{t('Seleccionar médico')}</Text>
+                        <Text style={styles.dialogTitle}>{t('selectDoctor')}</Text>
                         <Picker
                             mode='dropdown'
                             selectedValue={doctor}
