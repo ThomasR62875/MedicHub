@@ -19,6 +19,7 @@ import ScrollableBg from "../components/ScrollableBg";
 // @ts-ignore
 import Squiggle from "../assets/tabAsset.png";
 import {Icon} from "react-native-elements";
+import {getRecommendations} from "../lib/ourlibrary";
 
 const Home: React.FC = ({ navigation, route }: any) => {
     const session = route.params.session;
@@ -83,9 +84,18 @@ const Home: React.FC = ({ navigation, route }: any) => {
 
     useEffect(() => {
         if (allUsers && specialties) {
-            getRecommendations();
+            async function fetchRecommendations() {
+                const recommendations = await getRecommendations(
+                    allUsers,
+                    specialties,
+                    futureAppointments,
+                    lastAppointments,
+                );
+                setAppointmentRecommendations(recommendations);
+            }
+            fetchRecommendations();
         }
-    }, [allUsers, specialties]);
+    }, [allUsers, specialties, futureAppointments]);
 
     const classifyAppointments = (appointments: Appointment[]) => {
         const lastAppointments: Appointment[] = [];
@@ -109,34 +119,45 @@ const Home: React.FC = ({ navigation, route }: any) => {
         setFutureAppointments(futureAppointments);
     };
 
+    /*
     const getRecommendations = async () => {
         const recommendations: RecommendationAppointment[] = [];
 
         for (const user of allUsers!) {
             for (const speciality of specialties!) {
-                const hasFutureAppointment = futureAppointments?.some(async appointment => {
-                    const doctor = await getDoctor(appointment.doctor);
-                    return (
-                        appointment.user_id === user.id &&
-                        doctor.specialty === speciality.name
-                    );
-                });
-
-                if (!hasFutureAppointment) {
-                    const hasLastAppointments = lastAppointments?.filter(async appointment => {
+                const hasFutureAppointment = await Promise.all(
+                    futureAppointments?.map(async appointment => {
                         const doctor = await getDoctor(appointment.doctor);
                         return (
                             appointment.user_id === user.id &&
                             doctor.specialty === speciality.name
                         );
-                    });
+                    }) || []
+                );
 
-                    if (hasLastAppointments && hasLastAppointments.length > 0) {
+                if (!hasFutureAppointment.some(appointment => appointment)) {
+                    let hasLastAppointments: any[] = [];
+
+                    if (lastAppointments && lastAppointments.length > 0) {
+                        const appointmentsWithDoctor = await Promise.all(lastAppointments.map(async appointment => {
+                            const doctor = await getDoctor(appointment.doctor);
+                            return {
+                                ...appointment,
+                                doctorSpecialty: doctor.specialty,
+                            };
+                        }));
+
+                        hasLastAppointments = appointmentsWithDoctor.filter(appointment =>
+                            appointment.user_id === user.id &&
+                            appointment.doctorSpecialty === speciality.name
+                        );
+                    }
+
+                    if (hasLastAppointments.length > 0) {
                         hasLastAppointments.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
                         const lastAppointment = hasLastAppointments[0];
 
-                        try {
                             const interval = await getAppointmentInterval(speciality, getAge(user.birthdate), user.sex);
                             if (interval !== null) {
                                 const nextAppointmentDate = new Date(lastAppointment.date);
@@ -152,16 +173,6 @@ const Home: React.FC = ({ navigation, route }: any) => {
                                 const threeMonthsFromNow = new Date();
                                 threeMonthsFromNow.setDate(threeMonthsFromNow.getDate() + 90);
 
-                                if(user.first_name == "mi hijo" && speciality.name == "Pediatría"){
-                                    console.log("-------------")
-                                    console.log("lastAppointment", lastAppointment);
-                                    console.log("interval", interval);
-                                    console.log("nextAppointmentDate", nextAppointmentDate);
-                                    console.log("-------------")
-
-
-                                }
-
                                 if (nextAppointmentDate <= threeMonthsFromNow) {
                                     recommendations.push({
                                         date: nextAppointmentDate,
@@ -170,31 +181,37 @@ const Home: React.FC = ({ navigation, route }: any) => {
                                         user_id: user.id,
                                         speciality: speciality.name
                                     });
+                                } else {
+                                    recommendations.push({
+                                        date: twoDaysFromNow,
+                                        user_name: user.first_name,
+                                        doctor: lastAppointment.doctor,
+                                        user_id: user.id,
+                                        speciality: speciality.name
+                                    });
                                 }
-                            } else {
-                                console.error('El intervalo de cita es null o no se pudo obtener.');
                             }
-                        } catch (error) {
-                            console.error('Error al obtener el intervalo de cita:', error);
-                        }
                     } else {
-                        const newAppointmentDate = new Date();
-                        newAppointmentDate.setDate(newAppointmentDate.getDate() + 2);
+                        const interval = await getAppointmentInterval(speciality, getAge(user.birthdate), user.sex);
+                        if (interval !== null && interval !== undefined) {
+                            const newAppointmentDate = new Date();
+                            newAppointmentDate.setDate(newAppointmentDate.getDate() + 2);
 
-                        recommendations.push({
-                            date: newAppointmentDate,
-                            user_name: user.first_name,
-                            doctor: '',
-                            user_id: user.id,
-                            speciality: speciality.name
-                        });
+                            recommendations.push({
+                                date: newAppointmentDate,
+                                user_name: user.first_name,
+                                doctor: '',
+                                user_id: user.id,
+                                speciality: speciality.name
+                            });
+                        }
                     }
                 }
             }
         }
-
         setAppointmentRecommendations(recommendations);
     };
+     */
 
 
     // @ts-ignore
