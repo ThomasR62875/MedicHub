@@ -24,6 +24,7 @@ const SingleAppointment: React.FC<SingleAppointmentProps> = ({ navigation, route
     const formattedTime = `${(originalDate.getHours() + 3) % 24}:${originalDate.getMinutes().toString().padStart(2, '0')}`;
     const {t} = useTranslation();
     const [doctor, setDoctor] = useState<Doctor | undefined>()
+    const [recommendation, setRecommendation] = useState<string>('');
 
     useEffect(() => {
         const fetchDoctor = async () => {
