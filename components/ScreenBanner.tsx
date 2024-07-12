@@ -8,18 +8,11 @@ import {
     TouchableOpacity,
     Modal
 } from 'react-native';
-import { Advertisement } from '../lib/types';
-import { DialogProps} from 'react-native-paper';
-import { Dialog, Icon } from 'react-native-elements';
+import { Icon } from 'react-native-elements';
 import { styles } from '../assets/styles';
 import {useTranslation} from "react-i18next";
 
-interface ScreenBannerProps extends DialogProps{
-    advertisement: Advertisement;
-    onPress: any;
-}
-
-export const ScreenBanner: React.FC<ScreenBannerProps> = (params:ScreenBannerProps)=>{
+export const ScreenBanner: React.FC<BannerProps> = (params:BannerProps)=>{
     const [visible,setVisible]= useState(params.visible);
     const {t} = useTranslation();
 
