@@ -18,6 +18,7 @@ import {useTranslation} from "react-i18next";
 import {Button as PaperButton, Dialog, Portal, Text as PaperText} from "react-native-paper";
 import {Picker} from "@react-native-picker/picker";
 import { Specialty } from '../lib/types';
+import ScrollableBg from "../components/ScrollableBg";
 type AddDoctorProps = NativeStackScreenProps<RootStackParamList, 'AddDoctor'>
 
 
@@ -25,13 +26,11 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}) => {
     const session = route.params.session;
     const [email, setEmail] = useState('')
     const [name, setName] = useState('')
-    const [loading, setLoading] = useState(false)
     const [specialties, setSpecialties] = useState<Specialty[] | null>(null);
     const [specialty,setSpecialty]= useState('')
     const [phone, setPhone] = useState('')
     const [addresses, setAddresses] = useState<[string]>([''])
     const [all_users, setAllUsers] = useState<DependentUser[] | undefined>(undefined)
-    const [session_user_id, setSessionUserId] = useState('')
     const [user_id, setUserId] = useState('')
     const [nameErrorMessage, setNameErrorMessage] = useState('')
     const {t} = useTranslation();
@@ -70,22 +69,6 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}) => {
         }
     };
 
-    const validateSpecialty = (value: string) => {
-        if (value.trim() === '') {
-            setNameErrorMessage(t('warn9'));
-        } else {
-            setNameErrorMessage('');
-        }
-    };
-
-    const validateUser = (value: string) => {
-        if (value.trim() === '') {
-            setNameErrorMessage(t('warn10'));
-        } else {
-            setNameErrorMessage('');
-        }
-    };
-
     const handleAddDoctor = async () => {
         const doctor = {
             name:name, specialty:specialty, phone:phone, email:email, addresses:
@@ -105,11 +88,6 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}) => {
     const hideUserDialog = () => setUserDialog(false);
 
 
-    const getSpecialtyName = (special: string) => {
-        const selectedSpecialty = specialties?.find(specialty => specialty.name === special);
-        return selectedSpecialty ? selectedSpecialty : t('select_specialty');
-    };
-
     const getUserName = (id: string) => {
         const selectedUser = all_users?.find(user => user.id === id);
         return selectedUser ? selectedUser.first_name : t('select_user');
@@ -118,65 +96,62 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}) => {
 
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-            <KeyboardAvoidingView
-                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-                style={{ flex: 1 }}
-            >
-                <SafeAreaView style={{ flex: 1 }}>
+        <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            style={{ flex: 1 }}>
+        <SafeAreaView style={{ flex: 1 }}>
         <View style={styles.container}>
-            <ScrollView keyboardShouldPersistTaps='handled'>
+            <ScrollableBg>
+                <View>
+                    <View style={styles.topContent}>
+                        <Text style={styles.titleText}>{t('addoctor')}</Text>
+                    </View>
+                    <PaperText style={styles.text}>Nombre</PaperText>
+                    <Input
+                        leftIcon={{ type: 'font-awesome', name: 'user' }}
+                        onChangeText={(text) => {
+                            setName(text);
+                            validateName(text);
+                        }}
+                        value={name}
+                        placeholder={t('name')}
+                        autoCapitalize={'none'}
+                        errorStyle={{ color: 'red' }}
+                        errorMessage={nameErrorMessage}
+                    />
+                    <PaperText style={styles.text}>{t('specialty')}</PaperText>
+                    <PaperButton mode="outlined" style={styles.pickerButton} textColor='#2E5829' labelStyle={{textAlign: 'left', display:'flex'}} onPress={()=> setSpecialtyDialog(true)}>
+                        {specialty}
+                    </PaperButton>
+                    <PaperText style={styles.text}>{t('phone')}</PaperText>
+                    <Input
+                        leftIcon={{ type: 'font-awesome', name: 'phone' }}
+                        onChangeText={(text) => setPhone(text)}
+                        value={phone}
+                        placeholder={t('phone')}
+                        autoCapitalize={'none'}
+                    />
+                    <PaperText style={styles.text}>{t("email")}</PaperText>
+                    <Input
+                        leftIcon={{ type: 'font-awesome', name: 'envelope' }}
+                        onChangeText={(text) => setEmail(text)}
+                        value={email}
+                        placeholder="Mail"
+                        autoCapitalize={'none'}
+                    />
+                    <PaperText style={styles.text}>{t("address")}</PaperText>
+                    <Input
+                        leftIcon={{ type: 'font-awesome', name: 'map-marker' }}
+                        onChangeText={(text) => setAddresses([text])}
+                        value={addresses[0] || ''}
+                        placeholder={t('address')}
+                        autoCapitalize={'none'}
+                    />
+
+                    <PaperText style={styles.text}>{t("user")}</PaperText>
+                    <PaperButton mode="outlined" style={styles.pickerButton} textColor='#2E5829' labelStyle={{textAlign: 'left', display:'flex'}} onPress={()=> setUserDialog(true)}>
+                        {getUserName(user_id)}
+                    </PaperButton>
                     <View>
-                        <View style={styles.topContent}>
-                            <Text style={styles.titleText}>{t('addoctor')}</Text>
-                        </View>
-                        <PaperText style={styles.text}>Nombre</PaperText>
-                        <Input
-                            leftIcon={{ type: 'font-awesome', name: 'user' }}
-                            onChangeText={(text) => {
-                                setName(text);
-                                validateName(text);
-                            }}
-                            value={name}
-                            placeholder={t('name')}
-                            autoCapitalize={'none'}
-                            errorStyle={{ color: 'red' }}
-                            errorMessage={nameErrorMessage}
-                        />
-
-                        <PaperText style={styles.text}>{t('specialty')}</PaperText>
-                        <PaperButton mode="outlined" style={styles.pickerButton} textColor='#2E5829' labelStyle={{textAlign: 'left', display:'flex'}} onPress={()=> setSpecialtyDialog(true)}>
-                            {specialty}
-                        </PaperButton>
-
-                        <PaperText style={styles.text}>{t('phone')}</PaperText>
-                        <Input
-                            leftIcon={{ type: 'font-awesome', name: 'phone' }}
-                            onChangeText={(text) => setPhone(text)}
-                            value={phone}
-                            placeholder={t('phone')}
-                            autoCapitalize={'none'}
-                        />
-                        <PaperText style={styles.text}>{t("email")}</PaperText>
-                        <Input
-                            leftIcon={{ type: 'font-awesome', name: 'envelope' }}
-                            onChangeText={(text) => setEmail(text)}
-                            value={email}
-                            placeholder="Mail"
-                            autoCapitalize={'none'}
-                        />
-                        <PaperText style={styles.text}>{t("address")}</PaperText>
-                        <Input
-                            leftIcon={{ type: 'font-awesome', name: 'map-marker' }}
-                            onChangeText={(text) => setAddresses([text])}
-                            value={addresses[0] || ''}
-                            placeholder={t('address')}
-                            autoCapitalize={'none'}
-                        />
-
-                        <PaperText style={styles.text}>{t("user")}</PaperText>
-                        <PaperButton mode="outlined" style={styles.pickerButton} textColor='#2E5829' labelStyle={{textAlign: 'left', display:'flex'}} onPress={()=> setUserDialog(true)}>
-                            {getUserName(user_id)}
-                        </PaperButton>
                         <Button
                             title={t('add')}
                             disabled={isButtonDisabled}
@@ -196,48 +171,47 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}) => {
                                 alignSelf: 'center',
                             }}
                             titleStyle={{ color: '#eef9ed' }}
-
                             onPress={handleAddDoctor}
                         />
                     </View>
-                </ScrollView>
-                <Portal>
-                    <Dialog style={styles.dialog} visible={userDialog} onDismiss={hideUserDialog}>
-                        <Text style={styles.dialogTitle}>{t('Seleccionar usuario')}</Text>
-                        <Picker
-                            mode='dropdown'
-                            selectedValue={user_id}
-                            onValueChange={(value: string) => setUserId(value)}
-                            enabled={true}
-                            itemStyle={styles.pickerStyle}
-                        >
-                            {all_users?.map((item) => (
-                                <Picker.Item key={item.id} label={item.first_name} value={item.id} />
-                            ))}
-                        </Picker>
-                    </Dialog>
-                    <Dialog style={styles.dialog} visible={specialtyDialog} onDismiss={hideSpecialtyDialog}>
-                        <Text style={styles.dialogTitle}>{t("selSpec")}</Text>
-                        <Picker
-                            mode='dropdown'
-                            selectedValue={specialty}
-                            onValueChange={(value: string) => setSpecialty(value)}
-                            placeholder='Usuario'
-                            enabled={true}
-                            itemStyle={styles.pickerStyle}
-                        >
-                            {specialties?.map((item) => (
-                                <Picker.Item key={item.name} label={item.name} value={item.name} />
-                            ))}
-                        </Picker>
-                    </Dialog>
-                </Portal>
-
-            </View>
-                </SafeAreaView>
-            </KeyboardAvoidingView>
+                </View>
+                <View style={{padding: 250}}/>
+        </ScrollableBg>
+            <Portal>
+                <Dialog style={styles.dialog} visible={userDialog} onDismiss={hideUserDialog}>
+                    <Text style={styles.dialogTitle}>{t('selectUser')}</Text>
+                    <Picker
+                        mode='dropdown'
+                        selectedValue={user_id}
+                        onValueChange={(value: string) => setUserId(value)}
+                        enabled={true}
+                        itemStyle={styles.pickerStyle}
+                    >
+                        {all_users?.map((item) => (
+                            <Picker.Item key={item.id} label={item.first_name} value={item.id} />
+                        ))}
+                    </Picker>
+                </Dialog>
+                <Dialog style={styles.dialog} visible={specialtyDialog} onDismiss={hideSpecialtyDialog}>
+                    <Text style={styles.dialogTitle}>{t("selSpec")}</Text>
+                    <Picker
+                        mode='dropdown'
+                        selectedValue={specialty}
+                        onValueChange={(value: string) => setSpecialty(value)}
+                        placeholder='Usuario'
+                        enabled={true}
+                        itemStyle={styles.pickerStyle}
+                    >
+                        {specialties?.map((item) => (
+                            <Picker.Item key={item.name} label={t(item.name)} value={item.name} />
+                        ))}
+                    </Picker>
+                </Dialog>
+            </Portal>
+        </View>
+        </SafeAreaView>
+        </KeyboardAvoidingView>
         </TouchableWithoutFeedback>
-
     );
 };
 
@@ -325,29 +299,3 @@ const styles = StyleSheet.create({
     }
 
 });
-
-const pickerSelectStyles = StyleSheet.create({
-    inputIOS: {
-        fontSize: 16,
-        paddingVertical: 12,
-        paddingHorizontal: 10,
-        borderWidth: 1,
-        borderColor: 'gray',
-        borderRadius: 4,
-        color: 'black',
-        paddingRight: 30,
-    },
-    inputAndroid: {
-        fontSize: 16,
-        paddingHorizontal: 10,
-        paddingVertical: 8,
-        borderWidth: 0.5,
-        borderColor: 'purple',
-        borderRadius: 8,
-        color: 'black',
-        paddingRight: 30,
-    },
-});
-
-
-

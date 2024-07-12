@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {addAppointment, getAllDoctorsByUser, getAllUsers, getUserId} from '../lib/supabase';
+import {addAppointment, getAllDoctorsByUser, getAllUsers, getDoctorsBySpecialty, getUserId} from '../lib/supabase';
 import {
     StyleSheet,
     Alert,
@@ -13,7 +13,7 @@ import {
 import {Button} from "react-native-elements";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../App";
-import { DependentUser } from "../lib/types";
+import {DependentUser, RecommendationAppointment} from "../lib/types";
 import { Doctor } from "../lib/types";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Picker } from "@react-native-picker/picker";
@@ -24,7 +24,8 @@ import {TextInput, Text as PaperText, HelperText, Button as PaperButton, Dialog,
 type AddAppointmentProps = NativeStackScreenProps<RootStackParamList, 'AddAppointment'>;
 
 const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) => {
-    const { session } = route.params;
+    const { session, recommendation }: { session?: any, recommendation?: RecommendationAppointment } = route.params ?? {};
+
     const [description, setDescription] = useState('');
     const [observations, setObservations] = useState('');
     const [doctor, setDoctor] = useState('Médico');
@@ -46,6 +47,11 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
 
     const [hasErorrs, setHasErrors] = useState(false)
 
+    const deserializeAppointment = (appointment : RecommendationAppointment) => ({
+        ...appointment,
+        date: new Date(appointment.date),
+    });
+
     const validateDescription = (value: string) => {
         if (value.trim() === '') {
             setDescriptionErrorMessage(t('text7'));
@@ -53,7 +59,6 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
         } else {
             setDescriptionErrorMessage('');
             setHasErrors(true);
-
         }
     };
 
@@ -64,12 +69,24 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
             }
             fetchUserId();
         }
+
     }, [session]);
 
     useEffect(() => {
         if (session_user_id) {
             async function getInfo() {
-                setDoctors(await getAllDoctorsByUser(session_user_id));
+                if (recommendation) {
+                    recommendation.date = new Date(recommendation.date);
+                    setDoctors(await getDoctorsBySpecialty(session_user_id, recommendation.specialty));
+                    setDate(recommendation.date);
+                    setTime(recommendation.date);
+                    setUserId(recommendation.user_id);
+                    setDoctor(recommendation.doctor);
+
+                    setDescription(t('addRecommendationAppointmentDescription') + t(recommendation.specialty))
+                } else {
+                    setDoctors(await getAllDoctorsByUser(session_user_id));
+                }
                 setAllUsers(await getAllUsers(session_user_id));
             }
             getInfo();
@@ -100,7 +117,8 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
         const result = await addAppointment(appointment);
         if (result.success) {
             // @ts-ignore
-            navigation.navigate('AlertPublicity', { session, msg: 'text8', screen: 'Appointments', appointment: null, du: null, doc: null, meds: null  });
+            navigation.navigate('AlertPublicity', { session, msg: 'text8', screen: 'calendar', appointment: null, du: null, doc: null, meds: null  });
+            //:( ni calendar ni Calender funcionan como screen xd
         } else {
             Alert.alert('Error', result.message || 'An unknown error occurred');
         }
@@ -155,7 +173,6 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
 
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-
             <SafeAreaView style={styles.container}>
                 <ScrollView >
                     <View>
@@ -165,7 +182,7 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
                         <View>
                             <TextInput
                                 style={{backgroundColor: "#e9f4e9", marginTop: "10%", textAlign: 'center', marginLeft:'5%' , marginRight: '5%'}}
-                                label={t('Título')}
+                                label={t('title')}
                                 value={description}
                                 onChangeText={(text) => {
                                     setDescription(text);
@@ -177,7 +194,7 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
                             />
                             <TextInput
                                 style={{backgroundColor: "#e9f4e9", marginTop: "10%", textAlign: 'center', marginLeft:'5%' , marginRight: '5%'}}
-                                label={t('Observaciones')}
+                                label={t('observations')}
                                 value={observations}
                                 onChangeText={(text) => {
                                     setObservations(text);
@@ -253,17 +270,13 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
                             )}
                         </View>
                         <PaperText style={styles.text}>Doctor</PaperText>
-
                         <PaperButton mode="outlined" style={styles.pickerButton} textColor='#2E5829' labelStyle={{textAlign: 'left', display:'flex'}} onPress={()=> setDoctorDialog(true)}>
                             {getDoctorName(doctor)}
                         </PaperButton>
-
                         <PaperText style={styles.text}>{t('user')}</PaperText>
-
                         <PaperButton mode="outlined" style={styles.pickerButton} textColor='#2E5829' labelStyle={{textAlign: 'left', display:'flex'}} onPress={()=> setUserDialog(true)}>
                             {getUserName(user_id)}
                         </PaperButton>
-
                         <View style={{alignItems: 'center'}}>
                             <Button
                                 title={t('add')}
@@ -290,7 +303,7 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
                 </ScrollView>
                 <Portal>
                     <Dialog style={styles.dialog} visible={doctorDialog} onDismiss={hideDoctorDialog}>
-                        <Text style={styles.dialogTitle}>{t('Seleccionar médico')}</Text>
+                        <Text style={styles.dialogTitle}>{t('selectDoctor')}</Text>
                         <Picker
                             mode='dropdown'
                             selectedValue={doctor}
@@ -304,7 +317,7 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
                         </Picker>
                     </Dialog>
                     <Dialog style={styles.dialog} visible={userDialog} onDismiss={hideUserDialog}>
-                        <Text style={styles.dialogTitle}>{t('Seleccionar usuario')}</Text>
+                        <Text style={styles.dialogTitle}>{t('selectUser')}</Text>
                         <Picker
                             mode='dropdown'
                             selectedValue={user_id}

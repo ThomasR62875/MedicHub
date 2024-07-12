@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import {getAllUsers, getSpecialties, getUserId, updateDependentUser, updateDoctor} from '../lib/supabase'
+import {getAllUsers, getSpecialties, getUserId, updateDoctor} from '../lib/supabase'
 import {View, StyleSheet, Alert, Keyboard, TouchableWithoutFeedback, KeyboardAvoidingView, SafeAreaView, ScrollView} from 'react-native'
 import {Button, Input, Text} from 'react-native-elements'
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
@@ -21,7 +21,6 @@ const EditDoctor:React.FC<EditDoctorProps> = ({navigation, route }: any) =>{
     const [phone, setPhone] = useState('')
     const [addresses, setAddresses] = useState<[string]>([''])
     const [all_users, setAllUsers] = useState<DependentUser[] | undefined>(undefined)
-    const [session_user_id, setSessionUserId] = useState('')
     const [user_id, setUserId] = useState('')
     const [id, setId] = useState('')
     const {t} = useTranslation();
@@ -120,7 +119,7 @@ const EditDoctor:React.FC<EditDoctorProps> = ({navigation, route }: any) =>{
 
                             <PaperText style={styles.text}>{t('specialty')}</PaperText>
                             <PaperButton mode="outlined" style={styles.pickerButton} textColor='#2E5829' labelStyle={{textAlign: 'left', display:'flex'}} onPress={()=> setSpecialtyDialog(true)}>
-                                {specialty}
+                                {t(specialty)}
                             </PaperButton>
 
                             <PaperText style={styles.text}>{t('phone')}</PaperText>
@@ -177,7 +176,7 @@ const EditDoctor:React.FC<EditDoctorProps> = ({navigation, route }: any) =>{
                         </ScrollView>
                         <Portal>
                             <Dialog style={styles.dialog} visible={userDialog} onDismiss={hideUserDialog}>
-                                <Text style={styles.dialogTitle}>{t('Seleccionar usuario')}</Text>
+                                <Text style={styles.dialogTitle}>{t('selectUser')}</Text>
                                 <Picker
                                     mode='dropdown'
                                     selectedValue={user_id}
@@ -201,7 +200,7 @@ const EditDoctor:React.FC<EditDoctorProps> = ({navigation, route }: any) =>{
                                     itemStyle={styles.pickerStyle}
                                 >
                                     {specialties?.map((item) => (
-                                        <Picker.Item key={item.name} label={item.name} value={item.name} />
+                                        <Picker.Item key={item.name} label={t(item.name)} value={item.name} />
                                     ))}
                                 </Picker>
                             </Dialog>

@@ -5,7 +5,6 @@ export const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: "#fff",
         height: '100%',
-        paddingLeft: 16
     },
     tabTitle: {
         color: 'black',
@@ -32,9 +31,8 @@ export const styles = StyleSheet.create({
         fontFamily: 'Roboto-Thin',
         fontSize: 20,
         textAlign: 'center',
-        fontWeight: 'bold',
-        marginTop: "1%",
-        color: "#2E5829",
+        paddingTop: 20,
+        color: "#000",
     },
     text: {
         fontSize: 20,
@@ -64,12 +62,6 @@ export const styles = StyleSheet.create({
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.25,
         shadowRadius: 3.85,
-    },
-    logo:{
-        color: '#407738',
-        width: 50,
-        height: 50,
-
     },
     topContent: {
         alignItems: 'flex-start',
@@ -131,7 +123,8 @@ export const styles = StyleSheet.create({
     calendarContainer: {
         marginTop: '5%',
         marginRight: '4%',
-        backgroundColor: "#ffffff"
+        backgroundColor: "#ffffff",
+        paddingLeft: 16
     },
     divider: {
         borderBottomColor: '#e1dfdf',
@@ -185,6 +178,12 @@ export const styles = StyleSheet.create({
         height: 45,
         width: 45,
         padding: 10,
+    },
+    circleHeader:{
+        borderRadius: 40,
+        height: 80,
+        width: 80,
+        padding: 25,
     },
     cardText: {
         fontSize: 14,
@@ -254,7 +253,6 @@ export const styles = StyleSheet.create({
         color: 'white',
     },
     screen: {
-        backgroundColor: "#E9F4E9FF",
         height: "100%",
     },
     main: {
@@ -263,9 +261,6 @@ export const styles = StyleSheet.create({
         alignItems: 'flex-start',
         display: 'flex',
         marginLeft: '5%'
-    },
-    iconContainer: {
-        alignItems: 'flex-start',
     },
     name: {
         color: "#2E5829FF",
@@ -285,7 +280,183 @@ export const styles = StyleSheet.create({
         flexDirection: 'row',
     },
     label: {
-        fontWeight: 'bold',
+        fontSize: 16,
         marginRight: 5,
+        paddingVertical: 10
+
+    },
+    header: {
+        position: 'absolute',
+        top: 0,
+        left: -7,
+    },
+    titleContainer: {
+        fontSize: 25,
+        fontWeight: 'bold',
+        marginTop: 10,
+        alignSelf: 'center',
+        marginBottom: 20,
+    },
+    detailRow: {
+        flexDirection: 'row',
+        margin: 10,
+    },
+    value: {
+        flex: 1,
+        fontSize: 16,
+        fontFamily: 'Roboto-Thin',
+        color: '#807d7d',
+        textAlign: 'right',
+        paddingVertical: 10
+    },
+    addContainer: {
+        left: 290,
+        bottom: 60,
+        alignSelf: 'flex-start',
+    },
+    dialog: {
+        backgroundColor: '#fff',
+        padding: 15
+    },
+    shareUserBotton: {
+        borderRadius: 10,
+        borderColor: '#8B86BE',
+        margin: '5%',
+        width: '60%'
+    },
+    inputStyle: {
+        marginTop: '5%',
+        marginBottom: '5%',
+    },
+    buttonSignInContainer: {
+        width: '50%',
+        justifyContent: 'center',
+    },
+    buttonSignIn: {
+        backgroundColor: '#B5DCCA',
+        borderRadius: 10,
+        justifyContent: 'center',
+    },
+    colorIcon: {
+        color: '#000'
+    },
+    colorLabel: {
+        color: '#2E5829FF',
+        fontSize: 12
+    },
+    icon: {
+        width: 24,
+        height: 24,
+    },
+    registerW: {
+        backgroundColor: '#e9f4e9',
+        height: '100%',
+        marginLeft: 10,
+        marginRight: 10,
+        alignContent: 'center'
+    },
+    makeIndepUserBotton: {
+        borderRadius: 10,
+        margin: '5%',
+        borderColor: '#8B86BE',
+        borderWidth: 1,
+    },
+    text3:{
+        fontFamily: 'Roboto-Thin',
+        fontSize: 16,
+        textAlign: 'center',
+        paddingVertical: 20,
+        paddingHorizontal: 10,
+        color: "#000",
+    },
+    pickerStyle: {
+        marginBottom: 20,
+    },
+    datePicker: {
+        alignSelf: 'center',
+        marginTop: "5%",
+    },
+    pickerButton: {
+        borderRadius: 10,
+        marginLeft: '5%',
+        marginRight: '5%',
+    },
+    dialogTitle: {
+        fontFamily: 'Roboto-Thin',
+        fontSize: 25,
+        textAlign: 'center',
+        fontWeight: 'bold',
+        margin: "5%",
+        marginLeft: '15%',
+        color: "#2E5829FF",
+        width: "70%"
+    },
+    input: {
+        backgroundColor: '#ffffff',
+        borderBottomWidth: 1,
+        borderWidth: 1,
+        borderRadius: 15,
+    },
+    buttonRegisterContainer: {
+        width: '100%',
+    },
+    buttonRegister: {
+        backgroundColor: '#ffffff',
+        width: 'auto',
+    },
+    logo: {
+        color: '#86ABBA',
+        width: 80,
+        height: 80
+    },
+    iconContainer: {
+        textAlign: "center",
+    },
+    activityIndicator: {
+        position: 'absolute',
+        right: 16,
+    },
+    window: {
+        marginBottom: 50,
+        alignItems: 'center',
+        marginTop: "25%",
+    },
+    logInContainer: {
+        alignItems: 'center'
+    },
+    bubble: {
+        position: 'absolute',
+    },
+    bubbleContainer: {
+        width: '200%',
+        height: '200%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        position: 'absolute',
+    },
+    Ptitle: {
+        color: '#000000',
+        textAlign: 'center',
+        marginBottom: 80,
+        marginTop: 0,
+        fontSize: 20,
+        fontWeight: 'bold'
+    },
+    text4: {
+        fontSize: 16,
+        textAlign: 'left',
+        color: '#000',
+        paddingHorizontal: 12,
+        paddingBottom: 12,
+        fontFamily: 'Roboto-Thin',
+        fontWeight: 'bold'
+    },
+    text5: {
+        fontSize: 16,
+        textAlign: 'left',
+        color: '#000',
+        paddingHorizontal: 12,
+        paddingBottom: 12,
+        fontFamily: 'Roboto-Thin',
     },
 });

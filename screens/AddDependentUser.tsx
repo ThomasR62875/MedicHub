@@ -9,8 +9,7 @@ import {useTranslation} from "react-i18next";
 import DateTimePicker, {DateTimePickerEvent} from "@react-native-community/datetimepicker";
 import {Button as PaperButton, Dialog, Portal, Text as PaperText} from "react-native-paper";
 import {Picker} from "@react-native-picker/picker";
-import {SexGenderOption} from "../lib/types";
-import ScrollableBg from "../components/ScrollableBg";
+import {getSexGenderName, sexGenderOptions} from "../lib/ourlibrary";
 
 type AddDependentUserProps = NativeStackScreenProps<RootStackParamList, 'AddDependentUser'>
 
@@ -19,7 +18,6 @@ const AddDependentUser:React.FC<AddDependentUserProps> = ({navigation, route} : 
     const [firstName,setFirstName] = useState('')
     const [lastName,setLastName] = useState('')
     const [dni,setDni]  = useState('')
-    const [loading,setLoading]= useState(false)
     const [firstNameErrorMessage, setFirstNameErrorMessage] = useState('')
     const [lastNameErrorMessage, setLastNameErrorMessage] = useState('')
     const [DNIErrorMessage, setDNIErrorMessage] = useState<string>('');
@@ -29,15 +27,6 @@ const AddDependentUser:React.FC<AddDependentUserProps> = ({navigation, route} : 
     const {t} = useTranslation();
     const [birthDateErrorMessage, setBirthDateErrorMessage] = useState<string>('');
     const [genderErrorMessage, setGenderErrorMessage] = useState<string>('');
-
-
-    const sexGenderOptions: SexGenderOption[] = [
-        { sex_gender_name: t('male'), value: 'male' },
-        { sex_gender_name: t('female'), value: 'female' },
-        { sex_gender_name: t('non-binary'), value: 'non-binary' },
-        { sex_gender_name: t('other'), value: 'other' },
-    ];
-
     const handleDayPress = (event: DateTimePickerEvent, selectedDate?: Date) => {
         if (event.type === "set" && selectedDate) {
             const birthdateWithTime = new Date(selectedDate);
@@ -110,6 +99,7 @@ const AddDependentUser:React.FC<AddDependentUserProps> = ({navigation, route} : 
         }
 
     };
+
     const handleAddDependentUser = async () => {
         const dep_user = {
             first_name: firstName, last_name :lastName, dni:dni, id: '', sex: sexGender,
@@ -124,11 +114,6 @@ const AddDependentUser:React.FC<AddDependentUserProps> = ({navigation, route} : 
     };
 
     const hideSexGenderDialog = () => setSexGenderDialog(false);
-
-    const getSexGenderName = (value: string) => {
-        const option = sexGenderOptions.find(option => option.value === value);
-        return option ? option.sex_gender_name : '';
-    };
 
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>

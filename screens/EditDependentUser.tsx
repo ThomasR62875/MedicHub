@@ -7,9 +7,9 @@ import {RootStackParamList} from "../App";
 import {useTranslation} from "react-i18next";
 import {Button as PaperButton, Dialog, Portal, Text as PaperText} from "react-native-paper";
 import {Picker} from "@react-native-picker/picker";
-import {SexGenderOption} from "../lib/types";
 import ScrollableBg from '../components/ScrollableBg';
 import DateTimePicker from "@react-native-community/datetimepicker";
+import {getSexGenderName, sexGenderOptions} from "../lib/ourlibrary";
 
 type EditDependentUserProps = NativeStackScreenProps<RootStackParamList, 'EditDependentUser'>;
 
@@ -26,12 +26,6 @@ const EditDependentUser:React.FC<EditDependentUserProps> = ({navigation, route }
     const [firstNameErrorMessage, setFirstNameErrorMessage] = useState('')
     const [lastNameErrorMessage, setLastNameErrorMessage] = useState('')
     const [dniErrorMessage, setDniErrorMessage] = useState('')
-    const sexGenderOptions: SexGenderOption[] = [
-        { sex_gender_name: t('male'), value: 'male' },
-        { sex_gender_name: t('female'), value: 'female' },
-        { sex_gender_name: t('non-binary'), value: 'non-binary' },
-        { sex_gender_name: t('other'), value: 'other' },
-    ];
     const [birthDateErrorMessage, setBirthDateErrorMessage] = useState<string>('');
     const [genderErrorMessage, setGenderErrorMessage] = useState<string>('');
 
@@ -81,8 +75,6 @@ const EditDependentUser:React.FC<EditDependentUserProps> = ({navigation, route }
         setLastName(route.params.du.last_name);
         setDni(route.params.du.dni);
         const birthdate = new Date(route.params.du.birthdate);
-        console.log("recibe:");
-        console.log(birthdate)
         setDate(birthdate);
         setSexGender(route.params.du.sex);
 
@@ -127,7 +119,6 @@ const EditDependentUser:React.FC<EditDependentUserProps> = ({navigation, route }
         }
     };
 
-
     const validateGender = (value: string) => {
         if (value.trim() === '') {
             setGenderErrorMessage(t('warn20'));
@@ -137,12 +128,7 @@ const EditDependentUser:React.FC<EditDependentUserProps> = ({navigation, route }
     };
     const hideSexGenderDialog = () => setSexGenderDialog(false);
 
-    const getSexGenderName = (value: string) => {
-        if(value == null)
-            return ''
-        const option = sexGenderOptions.find(option => option.value === value);
-        return option ? option.sex_gender_name : '';
-    };
+
 
     return(
         <ScrollableBg>

@@ -58,8 +58,16 @@ export type Appointment = {
     observations: string;
 }
 
-export type AppointmentInfo = {
+export type RecommendationAppointment = {
+    date: Date;
+    user_name: string;
+    doctor: string;
+    user_id: string;
     specialty: string;
+}
+
+export type AppointmentInfo = {
+    specialty: string | null;
     observations: string,
     date: string;
     description: string;
