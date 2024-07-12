@@ -110,6 +110,7 @@ const AddDependentUser:React.FC<AddDependentUserProps> = ({navigation, route} : 
         }
 
     };
+
     const handleAddDependentUser = async () => {
         const dep_user = {
             first_name: firstName, last_name :lastName, dni:dni, id: '', sex: sexGender,

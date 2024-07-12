@@ -60,7 +60,6 @@ export const getUserId = async (): Promise<string> => {
 }
 
 // Crea el usuario
-
 export const signUp = async (user: User, password: string): Promise<{ success: boolean; message?: string }> => {
     const {error} = await supabase.auth.signUp({
         email: user.email,
