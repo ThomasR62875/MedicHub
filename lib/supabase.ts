@@ -277,7 +277,7 @@ export const getAppointments = async (): Promise<Appointment[] | undefined> => {
 }
 
 
-function getAge(birthdate: Date | null): number | null {
+export function getAge(birthdate: Date | null): number | null {
     if (!birthdate) {
         return null;
     }
@@ -537,4 +537,36 @@ export const getAdvertisement = async(banner_type: string) : Promise<Advertiseme
         return data;
     }
     return undefined;
+}
+
+//obtiene las especialidades aptas para recomendaciones
+export const getRecommendationSpecialities = async (): Promise<Specialty[] | undefined> => {
+    const {data, error} = await supabase.rpc('get_recommendation_specialities');
+    if (error) {
+        console.error('Error getting specialty data:', error.message);
+    } else {
+        console.log('Specialty data got successfully');
+    }
+    return data
+}
+
+export const getAppointmentInterval = async (speciality: Specialty, age: number | null, sex: string): Promise<number | null> => {
+    try {
+        const { data, error } = await supabase.rpc('get_frequency_recommendation', {
+            speciality_input: speciality.name,
+            age_input: age,
+            sex_input: sex
+        });
+
+        if (error) {
+            console.error('Error getting appointment interval:', error.message);
+            return null;
+        } else {
+            console.log('Appointment interval data received successfully:', data);
+            return data?.data; // Assuming the structure of data returned by Supabase RPC
+        }
+    } catch (error) {
+        console.error('Error in getAppointmentInterval function:', error);
+        return null;
+    }
 }

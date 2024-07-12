@@ -1,131 +1,208 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, Image, ScrollView, TouchableOpacity} from 'react-native';
-import {getAppointments, getUserSession} from "../lib/supabase";
-import {Appointment} from "../lib/types";
+import {View, Text, Alert, Image, ScrollView, TouchableOpacity} from 'react-native';
+import {
+    getAge,
+    getAppointmentInterval,
+    getAppointments,
+    getDependentUsers,
+    getDoctor,
+    getRecommendationSpecialities,
+    getUserSession
+} from "../lib/supabase";
+import {Appointment, DependentUser, RecommendationAppointment, Specialty} from "../lib/types";
 import TurnoContainer from "../components/TurnoContainer";
+import RecommendationAppointmentContainer from "../components/RecommendationAppointmentContainer";
 // @ts-ignore
 import {useTranslation} from "react-i18next";
-
 import {styles} from '../assets/styles'
 import ScrollableBg from "../components/ScrollableBg";
 // @ts-ignore
 import Squiggle from "../assets/tabAsset.png";
 import {Icon} from "react-native-elements";
+import AppointmentButton from "../components/AppointmentButton";
+import {cardStyle} from "../styles/global";
 
-const Home: React.FC = ({navigation, route}: any) => {
+const Home: React.FC = ({ navigation, route }: any) => {
     const session = route.params.session;
-    const [first_name, setFirstName] = useState('')
-    const [appointments, setAppointments] = useState<Appointment[] | undefined>(undefined)
+    const [first_name, setFirstName] = useState('');
+    const [loading, setLoading] = useState(true);
+    const [appointments, setAppointments] = useState<Appointment[] | undefined>(undefined);
+    const [appointmentRecommendations, setAppointmentRecommendations] = useState<RecommendationAppointment[] | undefined>(undefined);
+    const [lastAppointments, setLastAppointments] = useState<Appointment[] | undefined>(undefined);
+    const [futureAppointments, setFutureAppointments] = useState<Appointment[] | undefined>(undefined);
     const [turno1, setTurno1] = useState<Appointment | null>(null);
     const [turno2, setTurno2] = useState<Appointment | null>(null);
     const [date1, setDate1] = useState<Date | null>(null);
     const [date2, setDate2] = useState<Date | null>(null);
-    const {t} = useTranslation();
+    const [specialties, setSpecialties] = useState<Specialty[] | null>(null);
+    const [allUsers, setAllUsers] = useState<DependentUser[] | undefined>(undefined);
+    const { t } = useTranslation();
 
-    //se tiene q orderna por fecha appointments todo
+    useEffect(() => {
+        if (session) {
+            async function fetchData() {
+                try {
+                    const user = await getUserSession(session.user.id);
+                    setFirstName(user.first_name);
+
+                    const dependentUsers = await getDependentUsers(session.id);
+                    const updatedUsers = dependentUsers ? [...dependentUsers] : [];
+                    if (!dependentUsers?.some(u => u.id === user.id)) {
+                        updatedUsers.push(user);
+                    }
+                    setAllUsers(updatedUsers);
+
+                    const fetchedAppointments = await getAppointments();
+                    setAppointments(fetchedAppointments);
+
+                    const fetchedSpecialties = await getRecommendationSpecialities();
+                    // @ts-ignore
+                    setSpecialties(fetchedSpecialties);
+                } catch (error) {
+                    console.error('Error fetching data:', error);
+                } finally {
+                    setLoading(false);
+                }
+            }
+            fetchData();
+        }
+    }, [session]);
+
     useEffect(() => {
         if (appointments && appointments.length > 0) {
-            setTurno1(appointments[0]);
-            setDate1(new Date(appointments[0].date));
-            if (appointments.length > 1) {
-                setTurno2(appointments[1]);
-                setDate2(new Date(appointments[1].date));
+            const sortedAppointments = [...appointments].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+            setTurno1(sortedAppointments[0]);
+            setDate1(new Date(sortedAppointments[0].date));
+            if (sortedAppointments.length > 1) {
+                setTurno2(sortedAppointments[1]);
+                setDate2(new Date(sortedAppointments[1].date));
             }
         }
     }, [appointments]);
 
     useEffect(() => {
-        if (session) {
-
-            async function fetchUser() {
-                const user = await getUserSession(session?.user.id);
-                setFirstName(user.first_name);
-            }
-            fetchUser();
+        if (appointments) {
+            classifyAppointments(appointments);
         }
-        if (session) {
-            async function fetchData() {
-                setAppointments(await getAppointments())
-            }
-            fetchData();
+    }, [appointments]);
+
+    useEffect(() => {
+        if (allUsers && specialties) {
+            getRecommendations();
         }
-        }, [session])
+    }, [allUsers, specialties]);
 
-    /*
-  async function getProfile() {
-      try {
-          if (!session?.user) throw new Error('No user on the session!')
-          const {data} = await supabase.rpc('get_independent_user', {auth_id_input: session?.user.id});
+    const classifyAppointments = (appointments: Appointment[]) => {
+        const lastAppointments: Appointment[] = [];
+        const futureAppointments: Appointment[] = [];
 
-          if (data) {
-              setFirstName(data.first_name)
-          }
-      } catch (error) {
-          if (error instanceof Error) {
-              Alert.alert(error.message)
-          }
-      }
-  }
+        const today = new Date();
 
-  useEffect(() => {
-      const unsubscribe = navigation.addListener('focus', () => {
-             fetchData()
-          }
-      });
+        appointments.forEach(appointment => {
+            const appointmentDate = new Date(appointment.date);
 
-      return unsubscribe;
-  }, [session]);
+            if (appointmentDate >= today) {
+                futureAppointments.push(appointment);
+            }
 
-  async function getAppointments() {
-      const to_return: Appointment[] = [];
-      try {
-          setLoading(true)
-          if (!session?.user) throw new Error('No user on the session!')
+            if (appointmentDate < today) {
+                lastAppointments.push(appointment);
+            }
+        });
 
-          const {data: user_id, error: user_data_error} = await supabase.rpc('get_independent_user_id')
-          if (user_data_error)
-              throw new Error(user_data_error.message);
+        setLastAppointments(lastAppointments);
+        setFutureAppointments(futureAppointments);
+    };
 
-          const {data, error, status} = await supabase.rpc('get_appointments', {user_id: user_id})
-          if (error && status !== 406) {
-              throw error
-          }
+    const getRecommendations = async () => {
+        const recommendations: RecommendationAppointment[] = [];
 
-          if (data) {
-              for (const appoint of data) {
-                  try {
-                      const {
-                          data: user_data,
-                          error: user_error
-                      } = await supabase.rpc('get_user', {user_id: appoint.user})
-                      const {data: doctor_data} = await supabase.rpc('get_doctor', {doctor_id: appoint.doctor})
-                      if (user_error) {
-                          throw user_error;
-                      }
-                      to_return.push({
-                          id: appoint.id,
-                          description: appoint.description,
-                          date: appoint.date,
-                          user_name: user_data.first_name, // Suponiendo que name es el campo que quieres agregar
-                          doctor: doctor_data && doctor_data.name ? doctor_data.name.concat(" (especialidad: ").concat(doctor_data.specialty).concat(")") : 'Sin datos de doctor',
-                          user_id: appoint.user,
-                          observations: appoint.observaions
-                      });
-                  } catch (error) {
-                      console.error('Error al obtener el usuario:', error);
-                  }
-              }
-          }
-      } catch (error) {
-          if (error instanceof Error) {
-              Alert.alert(error.message)
-          }
-      }
-      setLoading(false)
-      setAppointments(to_return)
-  }
-   */
+        for (const user of allUsers!) {
+            for (const speciality of specialties!) {
+                const hasFutureAppointment = futureAppointments?.some(async appointment => {
+                    const doctor = await getDoctor(appointment.doctor);
+                    return (
+                        appointment.user_id === user.id &&
+                        doctor.specialty === speciality.name
+                    );
+                });
 
+                if (!hasFutureAppointment) {
+                    const hasLastAppointments = lastAppointments?.filter(async appointment => {
+                        const doctor = await getDoctor(appointment.doctor);
+                        return (
+                            appointment.user_id === user.id &&
+                            doctor.specialty === speciality.name
+                        );
+                    });
+
+                    if (hasLastAppointments && hasLastAppointments.length > 0) {
+                        hasLastAppointments.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
+                        const lastAppointment = hasLastAppointments[0];
+
+                        try {
+                            const interval = await getAppointmentInterval(speciality, getAge(user.birthdate), user.sex);
+                            if (interval !== null) {
+                                const nextAppointmentDate = new Date(lastAppointment.date);
+                                nextAppointmentDate.setDate(nextAppointmentDate.getDate() + interval);
+
+                                const twoDaysFromNow = new Date();
+                                twoDaysFromNow.setDate(twoDaysFromNow.getDate() + 2);
+
+                                if (nextAppointmentDate < new Date()) {
+                                    nextAppointmentDate.setDate(twoDaysFromNow.getDate());
+                                }
+
+                                const threeMonthsFromNow = new Date();
+                                threeMonthsFromNow.setDate(threeMonthsFromNow.getDate() + 90);
+
+                                if(user.first_name == "mi hijo" && speciality.name == "Pediatría"){
+                                    console.log("-------------")
+                                    console.log("lastAppointment", lastAppointment);
+                                    console.log("interval", interval);
+                                    console.log("nextAppointmentDate", nextAppointmentDate);
+                                    console.log("-------------")
+
+
+                                }
+
+                                if (nextAppointmentDate <= threeMonthsFromNow) {
+                                    recommendations.push({
+                                        date: nextAppointmentDate,
+                                        user_name: user.first_name,
+                                        doctor: lastAppointment.doctor,
+                                        user_id: user.id,
+                                        speciality: speciality.name
+                                    });
+                                }
+                            } else {
+                                console.error('El intervalo de cita es null o no se pudo obtener.');
+                            }
+                        } catch (error) {
+                            console.error('Error al obtener el intervalo de cita:', error);
+                        }
+                    } else {
+                        const newAppointmentDate = new Date();
+                        newAppointmentDate.setDate(newAppointmentDate.getDate() + 2);
+
+                        recommendations.push({
+                            date: newAppointmentDate,
+                            user_name: user.first_name,
+                            doctor: '',
+                            user_id: user.id,
+                            speciality: speciality.name
+                        });
+                    }
+                }
+            }
+        }
+
+        setAppointmentRecommendations(recommendations);
+    };
+
+
+    // @ts-ignore
     return (
         <View style={styles.tab}>
             <Image source={Squiggle} style={styles.squiggle}/>
@@ -188,10 +265,34 @@ const Home: React.FC = ({navigation, route}: any) => {
                     )}
                 </View>
                 <Text style={styles.subtitles}>{t('text15')}</Text>
+
+
+                <View style={[styles.listCards]}>
+                    {appointmentRecommendations && appointmentRecommendations?.length > 0 ? (
+                        appointmentRecommendations.map((appointment: RecommendationAppointment, i) => {
+                            return (
+                                <View key={i}>
+                                    <RecommendationAppointmentContainer
+                                        recommendationAppointment={appointment}
+                                        styleExterior={[styles.cards]}
+                                        onPress={() => {navigation.navigate('SingleAppointment', {session: session, appointment: appointment})}}
+
+                                    />
+                                </View>
+                            )})
+                    ) : (
+                        <View style={{alignItems: 'center'}}>
+                            <Text style={[styles.text2, {paddingHorizontal: 30}]}>{t('text13')}</Text>
+                        </View>
+                    )}
+                </View>
+
+
+
             </ScrollableBg>
         </View>
-    );
+    )
+        ;
 }
-
 
 export default Home;
