@@ -543,7 +543,7 @@ export const getAdvertisement = async(banner_type: string) : Promise<Advertiseme
 export const getRecommendationSpecialities = async (): Promise<Specialty[] | undefined> => {
     const {data, error} = await supabase.rpc('get_recommendation_specialities');
     if (error) {
-        console.error('Error getting specialty data:', error.message);
+        console.error('Error getting specialty data in recommendationInterval:', error.message);
     } else {
         console.log('Specialty data got successfully');
     }
