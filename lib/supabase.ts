@@ -10,7 +10,7 @@ import {
     Medication,
     Advertisement,
     UserData,
-    AppointmentInfo
+    AppointmentInfo, RecommendationAppointment
 } from './types';
 
 import getEnvVars from '../environment';
@@ -38,7 +38,6 @@ export const getUser = async (session_user_id:String) : Promise<DependentUser> =
 
 export const getUserSession = async (auth_id: string): Promise<DependentUser> => {
     const {data, error} = await supabase.rpc('get_independent_user', {auth_id_input: auth_id});
-    console.log("ESTE ES EL USER", data)
     if (error) {
         console.error('Error inserting users data:', error.message);
     }
@@ -529,7 +528,6 @@ export const getUserIdByEmail = async (email_input: string) : Promise<string | u
 }
 
 //Obtiene la informacion necesaria para la publicidad
-
 export const getAdvertisement = async(banner_type: string) : Promise<Advertisement | undefined> =>{
     const{data,error} = await supabase.rpc('get_advertisement',{banner_input: banner_type})
 
@@ -540,33 +538,15 @@ export const getAdvertisement = async(banner_type: string) : Promise<Advertiseme
     return undefined;
 }
 
-//obtiene las especialidades aptas para recomendaciones
-export const getRecommendationSpecialities = async (): Promise<Specialty[] | undefined> => {
-    const {data, error} = await supabase.rpc('get_recommendation_specialities');
+//Obtiene las recomendaciones de los turnos para un usuario y sus dependientes
+export const getRecommendations = async (user_id: string): Promise<RecommendationAppointment[] | undefined> => {
+    const {data, error} = await supabase.rpc('generate_recommendations', {user_id: user_id});
+    console.log(user_id)
     if (error) {
-        console.error('Error getting specialty data in recommendationInterval:', error.message);
+        console.error('Error generating the recommendations:', error.message);
     } else {
-        console.log('Specialty data got successfully');
+        console.log('Recommendations generated successfully');
     }
     return data
 }
 
-export const getAppointmentInterval = async (speciality: Specialty, age: number | null, sex: string): Promise<number | null> => {
-    try {
-        const { data, error } = await supabase.rpc('get_frequency_recommendation', {
-            speciality_input: speciality.name,
-            age_input: age,
-            sex_input: sex
-        });
-
-        if (error) {
-            console.error('Error getting appointment interval:', error.message);
-            return null;
-        } else {
-            return data;
-        }
-    } catch (error) {
-        console.error('Error in getAppointmentInterval function:', error);
-        return null;
-    }
-}

@@ -1,10 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import {View, Text, Image, ScrollView, TouchableOpacity, ActivityIndicator} from 'react-native';
 import {
-    deleteAppointment,
     getAppointments,
-    getDependentUsers,
-    getRecommendationSpecialities,
+    getRecommendations,
     getUserSession
 } from "../lib/supabase";
 import {Appointment, DependentUser, RecommendationAppointment, Specialty} from "../lib/types";
@@ -17,23 +15,18 @@ import ScrollableBg from "../components/ScrollableBg";
 // @ts-ignore
 import Squiggle from "../assets/tabAsset.png";
 import {Icon} from "react-native-elements";
-import {getRecommendations} from "../lib/ourlibrary";
 import {formatISO} from "date-fns";
-import app from "../App";
 
 const Home: React.FC = ({ navigation, route }: any) => {
     const session = route.params.session;
     const [first_name, setFirstName] = useState('');
     const [appointments, setAppointments] = useState<Appointment[] | undefined>(undefined);
     const [appointmentRecommendations, setAppointmentRecommendations] = useState<RecommendationAppointment[] | undefined>(undefined);
-    const [lastAppointments, setLastAppointments] = useState<Appointment[] | undefined>(undefined);
-    const [futureAppointments, setFutureAppointments] = useState<Appointment[] | undefined>(undefined);
     const [turno1, setTurno1] = useState<Appointment | null>(null);
     const [turno2, setTurno2] = useState<Appointment | null>(null);
     const [date1, setDate1] = useState<Date | null>(null);
     const [date2, setDate2] = useState<Date | null>(null);
-    const [specialties, setSpecialties] = useState<Specialty[] | null>(null);
-    const [allUsers, setAllUsers] = useState<DependentUser[] | undefined>(undefined);
+    const [userId, setUserId] = useState('');
     const [isLoading, setIsLoading] = useState(true);
     const { t } = useTranslation();
 
@@ -43,20 +36,10 @@ const Home: React.FC = ({ navigation, route }: any) => {
                 try {
                     const user = await getUserSession(session.user.id);
                     setFirstName(user.first_name);
-
-                    const dependentUsers = await getDependentUsers(session.id);
-                    const updatedUsers = dependentUsers ? [...dependentUsers] : [];
-                    if (!dependentUsers?.some(u => u.id === user.id)) {
-                        updatedUsers.push(user);
-                    }
-                    setAllUsers(updatedUsers);
-
+                    setUserId(user.id);
                     const fetchedAppointments = await getAppointments();
                     setAppointments(fetchedAppointments);
 
-                    const fetchedSpecialties = await getRecommendationSpecialities();
-                    // @ts-ignore
-                    setSpecialties(fetchedSpecialties);
                 } catch (error) {
                     console.error('Error fetching data:', error);
                 }
@@ -64,6 +47,23 @@ const Home: React.FC = ({ navigation, route }: any) => {
             fetchData();
         }
     }, [session]);
+
+
+    useEffect(() => {
+        if (session) {
+            async function fetchRecommendations() {
+                setIsLoading(true)
+                try {
+                    const recommendations = await getRecommendations(userId)
+                    setAppointmentRecommendations(recommendations);
+                    setIsLoading(false)
+                } catch (error) {
+                    console.error('Error fetching recommendations:', error);
+                }
+            }
+            fetchRecommendations();
+        }
+    }, [appointments]);
 
     useEffect(() => {
         if (appointments && appointments.length > 0) {
@@ -84,52 +84,6 @@ const Home: React.FC = ({ navigation, route }: any) => {
         }
     }, [appointments]);
 
-
-
-    useEffect(() => {
-        if (appointments) {
-            classifyAppointments(appointments);
-        }
-    }, [appointments]);
-
-    useEffect(() => {
-        if (allUsers && specialties) {
-            async function fetchRecommendations() {
-                setIsLoading(true);
-                const recommendations = await getRecommendations(
-                    allUsers,
-                    specialties,
-                    futureAppointments,
-                    lastAppointments,
-                );
-                setAppointmentRecommendations(recommendations);
-            }
-            fetchRecommendations();
-            setIsLoading(false);
-        }
-    }, [allUsers, specialties, futureAppointments]);
-
-    const classifyAppointments = (appointments: Appointment[]) => {
-        const lastAppointments: Appointment[] = [];
-        const futureAppointments: Appointment[] = [];
-
-        const today = new Date();
-
-        appointments.forEach(appointment => {
-            const appointmentDate = new Date(appointment.date);
-
-            if (appointmentDate >= today) {
-                futureAppointments.push(appointment);
-            }
-
-            if (appointmentDate < today) {
-                lastAppointments.push(appointment);
-            }
-        });
-
-        setLastAppointments(lastAppointments);
-        setFutureAppointments(futureAppointments);
-    };
 
     const serializeAppointment = (appointment: RecommendationAppointment) => ({
         ...appointment,
