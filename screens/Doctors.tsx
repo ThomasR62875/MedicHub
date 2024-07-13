@@ -58,7 +58,7 @@ const Doctors: React.FC = ({navigation, route}: any) => {
                                             <Icon iconStyle={{color: 'white', fontSize: 16, padding: 5}} containerStyle={[styles.circleCard, {backgroundColor: colors[i%4]}]} name={'stethoscope'} type={'material-community'}/>
                                             <View style={{flexDirection: 'column', paddingHorizontal: 14}}>
                                                 <Text style={[{fontSize: 14, paddingVertical: 7}]}>{doc.name}</Text>
-                                                <Text style={[styles.text2, {fontSize: 12, width: '150%', paddingBottom: 5}]}>{doc.specialty}</Text>
+                                                <Text style={[styles.text2, {fontSize: 12, width: '150%', paddingBottom: 5}]}>{t(doc.specialty)}</Text>
                                             </View>
                                         </View>
                                     </DoctorButton>

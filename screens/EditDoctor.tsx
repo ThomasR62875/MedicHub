@@ -36,6 +36,15 @@ const EditDoctor: React.FC<EditDoctorProps> = ({navigation, route}: any) => {
     const [specialtyDialog, setSpecialtyDialog] = useState(false);
     const [userDialog, setUserDialog] = useState(false);
 
+    let doc = {
+        id: id,
+        name: name,
+        specialty: specialty,
+        phone: phone,
+        email: email,
+        addresses: addresses,
+        user_id: user_id
+    }
 
     useEffect(() => {
         if (
@@ -46,6 +55,7 @@ const EditDoctor: React.FC<EditDoctorProps> = ({navigation, route}: any) => {
         } else {
             setIsButtonDisabled(true);
         }
+
     }, [name, specialty]);
 
     const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(true);
@@ -86,15 +96,13 @@ const EditDoctor: React.FC<EditDoctorProps> = ({navigation, route}: any) => {
 
     const handleUpdateDoctor = async () => {
         const session = route.params.session;
-        const doc = {
-            id: id,
-            name: name,
-            specialty: specialty,
-            phone: phone,
-            email: email,
-            addresses: addresses,
-            user_id: user_id
-        }
+        doc.id = id;
+        doc.name = name;
+        doc.email = email;
+        doc.specialty = specialty;
+        doc.phone = phone;
+        doc.addresses = addresses;
+        doc.user_id = user_id;
         const result = await updateDoctor(doc);
         if (result.success) {
             navigation.navigate('AlertPublicity', {session, msg: 'editDoc', screen: 'SingleDoctor', doc: doc});
@@ -117,12 +125,13 @@ const EditDoctor: React.FC<EditDoctorProps> = ({navigation, route}: any) => {
 
             <Icon iconStyle={{color: 'white', paddingVertical: 20}} name={'arrow-left'} type={'material-community'}
                   style={styles.back_arrow}
-                  onPress={() => navigation.navigate({name: 'SingleDoctor', params: route.params.doc})}></Icon>
+                  onPress={() => navigation.navigate('SingleDoctor', {doc: doc})}></Icon>
             <View style={{
                 flexDirection: 'row',
                 paddingTop: '5%',
                 alignItems: 'center',
-                justifyContent: 'center'
+                justifyContent: 'center',
+                marginRight: 2
             }}>
                 <Icon iconStyle={{color: 'white', fontSize: 24}} containerStyle={[styles.circleHeader, {
                     backgroundColor: 'rgba(134,171,186,0.6)',
@@ -131,9 +140,13 @@ const EditDoctor: React.FC<EditDoctorProps> = ({navigation, route}: any) => {
                 }]} name={'stethoscope'} type={'material-community'}/>
             </View>
             <ScrollableBg style={{padding: '10%'}}>
-                <PaperText style={styles.text}>{t('name')}</PaperText>
                 <Input
-                    leftIcon={{type: 'font-awesome', name: 'user'}}
+                    label={t('name')}
+                    leftIcon={<Icon type="font-awesome" name="user" color={styles.colorIcon.color}  iconStyle={{fontSize: 20, paddingLeft: 10}} />}
+                    labelStyle={styles.label2}
+                    placeholderTextColor={"#807d7d"}
+                    inputContainerStyle={[{paddingLeft: 10}, styles.input]}
+                    inputStyle={{color: '#000', fontSize:14, marginLeft: 10}}
                     onChangeText={(text) => {
                         setName(text);
                         validateName(text);
@@ -145,48 +158,58 @@ const EditDoctor: React.FC<EditDoctorProps> = ({navigation, route}: any) => {
                     errorMessage={nameErrorMessage}
                 />
 
-                <PaperText style={styles.text}>{t('specialty')}</PaperText>
-                <PaperButton mode="outlined" style={styles.pickerButton} textColor='#2E5829'
-                             labelStyle={{textAlign: 'left', display: 'flex'}} onPress={() => setSpecialtyDialog(true)}>
+                <PaperText style={[styles.label2,{paddingLeft: 14}]}>{t('specialty')}</PaperText>
+                <PaperButton mode="outlined" style={[styles.input, {padding: 5, marginHorizontal: '3.5%', marginBottom:'5%'}]} textColor='#000' labelStyle={{textAlign: 'left', display:'flex'}} contentStyle={{justifyContent: 'flex-start'}} onPress={() => setSpecialtyDialog(true)}>
                     {t(specialty)}
                 </PaperButton>
 
-                <PaperText style={styles.text}>{t('phone')}</PaperText>
                 <Input
+                    label={t('phone')}
                     leftIcon={{type: 'font-awesome', name: 'phone'}}
                     onChangeText={(text) => setPhone(text)}
                     value={phone}
                     placeholder={t('phone')}
                     autoCapitalize={'none'}
+                    labelStyle={styles.label2}
+                    placeholderTextColor={"#807d7d"}
+                    inputContainerStyle={[{paddingLeft: 10}, styles.input]}
+                    inputStyle={{color: '#000', fontSize:14, marginLeft: 10}}
                 />
 
-                <PaperText style={styles.text}>{t("email")}</PaperText>
                 <Input
+                    label={t('email')}
                     leftIcon={{type: 'font-awesome', name: 'envelope'}}
                     onChangeText={(text) => setEmail(text)}
                     value={email}
                     placeholder="Mail"
                     autoCapitalize={'none'}
+                    labelStyle={styles.label2}
+                    placeholderTextColor={"#807d7d"}
+                    inputContainerStyle={[{paddingLeft: 10}, styles.input]}
+                    inputStyle={{color: '#000', fontSize:14, marginLeft: 10}}
                 />
 
-                <PaperText style={styles.text}>{t("address")}</PaperText>
                 <Input
+                    label={t('address')}
                     leftIcon={{type: 'font-awesome', name: 'map-marker'}}
                     onChangeText={(text) => setAddresses([text])}
                     value={addresses[0] || ''}
                     placeholder={t('address')}
                     autoCapitalize={'none'}
+                    labelStyle={styles.label2}
+                    placeholderTextColor={"#807d7d"}
+                    inputContainerStyle={[{paddingLeft: 10}, styles.input]}
+                    inputStyle={{color: '#000', fontSize:14, marginLeft: 10}}
                 />
 
-                <PaperText style={styles.text}>{t("user")}</PaperText>
-                <PaperButton mode="outlined" style={styles.pickerButton} textColor='#2E5829'
-                             labelStyle={{textAlign: 'left', display: 'flex'}} onPress={() => setUserDialog(true)}>
+                <PaperText style={[styles.label2,{paddingLeft: 14}]}>{t("user")}</PaperText>
+                <PaperButton mode="outlined" style={[styles.input, {padding: 5, marginHorizontal: '3.5%', marginBottom:'5%'}]} textColor='#000' labelStyle={{textAlign: 'left', display:'flex'}} contentStyle={{justifyContent: 'flex-start'}} onPress={() => setUserDialog(true)}>
                     {getUserName(user_id)}
                 </PaperButton>
                 <Button
                     title={t('savec')}
                     buttonStyle={{
-                        backgroundColor: '#2E5829',
+                        backgroundColor: '#86abba',
                         borderWidth: 2,
                         borderColor: 'white',
                         borderRadius: 30,
@@ -199,7 +222,7 @@ const EditDoctor: React.FC<EditDoctorProps> = ({navigation, route}: any) => {
                         marginTop: 40,
                         alignContent: 'center'
                     }}
-                    titleStyle={{color: '#eef9ed'}}
+                    titleStyle={{color: '#fff'}}
                     disabled={isButtonDisabled}
                     onPress={handleUpdateDoctor}
                 />

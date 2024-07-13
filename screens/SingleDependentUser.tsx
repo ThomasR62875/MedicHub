@@ -63,7 +63,7 @@ const SingleDependentUser: React.FC<SingleDependentUserProps> = ({navigation, ro
     const handleDeleteDependentUser = async () => {
         const session = route.params.session;
         const {message} = await deleteDependentUser(route.params.du);
-        Alert.alert(message,'',[{text: 'Ok', onPress: () => navigation.navigate('Usuarios', {session: session})}])
+        navigation.navigate(t('dusers'), {session: session})
     };
 
     const {t} = useTranslation();
@@ -179,7 +179,7 @@ const SingleDependentUser: React.FC<SingleDependentUserProps> = ({navigation, ro
         };
 
         const {success} = await signUp(user, password);
-        if (success) Alert.alert('¡Revise la bandeja de entrada del mail ingresado para el usuario para verificar el mail!',)
+        if (success) Alert.alert(t('confirmationemailnotification'),)
         setLoading(false)
 
     };
@@ -189,7 +189,7 @@ const SingleDependentUser: React.FC<SingleDependentUserProps> = ({navigation, ro
             <Image source={Header} style={styles.header}/>
 
             <Icon iconStyle={{color: 'white', paddingVertical:20}} name={'arrow-left'} type={'material-community'} style={styles.back_arrow}
-                  onPress={() => navigation.navigate('HomeTabs')}></Icon>
+                  onPress={() => navigation.navigate(t('dusers'))}></Icon>
             <View style={{flexDirection: 'row', paddingTop:'5%', marginLeft:'10%', alignItems: 'center', justifyContent: 'center'}}>
                 <Icon iconStyle={{color: 'white', fontSize: 24}} containerStyle={[styles.circleHeader, {backgroundColor: 'rgba(139,134,190,0.6)', alignSelf: 'center', marginHorizontal: "10%"}]} name={'account'} type={'material-community'}/>
                 <Icon
@@ -234,7 +234,7 @@ const SingleDependentUser: React.FC<SingleDependentUserProps> = ({navigation, ro
                                 onPress={() => setShareDialog(true)}
                             >{t('share_user')}</PaperButton>
                             <Button
-                                title="Eliminar"
+                                title= {t('delete')}
                                 buttonStyle={{
                                     backgroundColor: '#8b86be',
                                     borderWidth: 2,
@@ -388,9 +388,9 @@ const SingleDependentUser: React.FC<SingleDependentUserProps> = ({navigation, ro
                                             value={date || undefined}
                                             mode="date"
                                             display="default"
-                                            onChange={() => {
-                                                handleDayPress;
-                                                validateBirthDate(date)
+                                            onChange={(event, selectedDate) => {
+                                                handleDayPress(event, selectedDate)
+                                                validateBirthDate(selectedDate);
                                             }}
                             />
                         </View>
