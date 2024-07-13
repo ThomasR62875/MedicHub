@@ -5,7 +5,7 @@ import {
     getRecommendations,
     getUserSession
 } from "../lib/supabase";
-import {Appointment, DependentUser, RecommendationAppointment, Specialty} from "../lib/types";
+import {Appointment, RecommendationAppointment} from "../lib/types";
 import TurnoContainer from "../components/TurnoContainer";
 import RecommendationAppointmentContainer from "../components/RecommendationAppointmentContainer";
 // @ts-ignore
