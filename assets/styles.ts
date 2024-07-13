@@ -91,7 +91,7 @@ export const styles = StyleSheet.create({
     back_arrow: {
         padding: 15,
         marginTop: '10%',
-        alignSelf: 'flex-start'
+        paddingRight: '90%',
     },
     stackTitle: {
         color: 'black',
