@@ -6,7 +6,7 @@ import {
     TouchableWithoutFeedback,
     Keyboard,
     KeyboardAvoidingView,
-    Text as RNText, ScrollView
+    Text as RNText, ScrollView, Platform
 } from 'react-native';
 import {addMedication} from "../lib/supabase";
 import {Button, Input} from "react-native-elements";
@@ -19,6 +19,7 @@ import DateTimePicker, {DateTimePickerEvent} from '@react-native-community/datet
 import UnderlinedText from '../components/UnderlinedText';
 import Checkbox from 'expo-checkbox';
 import {cardStyle} from "../styles/global"
+import {Button as PaperButton} from "react-native-paper";
 
 type AddMedicationProps = NativeStackScreenProps<RootStackParamList, 'AddMedication'>
 
@@ -29,9 +30,14 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
     const [nameErrorMessage, setNameErrorMessage] = useState('')
     const [prescriptionErrorMessage, setPrescriptionErrorMessage] = useState('');
     const [dateSince, setDateSince] = useState(new Date());
-    const [dateUntil, setDateUntil] = useState<Date | null>(null);
+    const [timeSince, setTimeSince] = useState(new Date());
+    const [dateUntil, setDateUntil] = useState<Date >(new Date());
     const [howOften, setHowOften] = useState<Date | null>(null);
     const [isForever, setIsForever] = useState<boolean>(false);
+    const [showDatePickerSince, setShowDatePickerSince] = useState(false);
+    const [showTimePicker, setShowTimePicker] = useState(false);
+    const [showDatePickerUntil, setShowDatePickerUntil] = useState(false);
+
     const {t} = useTranslation();
     const times = [
         '02:00:00',
@@ -61,19 +67,24 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
     const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(true);
 
     const handleAddMedication= async () => {
+        const sinceDate = new Date(dateSince);
+        sinceDate.setHours(timeSince.getHours()-3) //acomodo por el UCT
+        sinceDate.setMinutes(timeSince.getMinutes())
+        console.log("sinceDate completa:", sinceDate)
+        dateUntil.setHours(dateUntil.getHours()-3) //UTC acomodo, esta bien?? o queremos q sea siempre hasta als 23:59 ?? todo
+        console.log("dateUntil completa:", dateUntil)
         const medication : Medication = {
             id:'',
             name:name,
             prescription:prescription,
-            sinceWhen:dateSince,
+            sinceWhen:sinceDate,
             untilWhen:dateUntil,
             howOften:howOften,
             isForever:isForever,
         }
-
         const result = await addMedication(medication);
         if (result.success) {
-            navigation.navigate('AlertPublicity', { session, msg: 'text11', screen: 'Medications', appointment: null, du: null, doc: null, meds: null  });
+            //navigation.navigate('AlertPublicity', { session, msg: 'text11', screen: 'Medications', appointment: null, du: null, doc: null, meds: null  });
         } else {
             Alert.alert('Error', result.message || 'An unknown error occurred');
         }
@@ -94,36 +105,45 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
         }
     };
 
-    const [mode, setMode] = useState<'date' | 'time'>('date');
-
-    const onChange1 = (event: DateTimePickerEvent, selectedDate1?: Date | undefined): void => {
-        let currentDate;
-        if(selectedDate1){
-            currentDate = new Date(selectedDate1);
-            console.log("if")
-        }
-        else{
-            currentDate=dateSince;
-            console.log("else")
-        }
-        console.log(currentDate);
+    const onSDateChange = (event: any, selectedDate: Date | undefined) => {
+        const currentDate = selectedDate || dateSince;
+        setShowDatePickerSince(Platform.OS === 'ios');
         setDateSince(currentDate);
     };
 
-    const onChange2 = (event: DateTimePickerEvent, selectedDate2?: Date | undefined): void => {
-        const currentDate = selectedDate2 || dateUntil;
+    const onSTimeChange = (event: any, selectedTime: Date | undefined) => {
+        const currentTime = selectedTime || timeSince;
+        setShowTimePicker(Platform.OS === 'ios');
+        setTimeSince(currentTime);
+    };
+
+    const getDateSince = () => {
+        return dateSince ? dateSince.toLocaleDateString() : 'Seleccione una fecha';
+    };
+
+    const getTime = () => {
+        return timeSince ? timeSince.toLocaleTimeString() : 'Seleccione una hora';
+    };
+
+    const onChange2 = (event: DateTimePickerEvent, selectedDate?: Date | undefined): void => {
+        const currentDate = selectedDate || dateUntil;
+        setShowDatePickerUntil(Platform.OS === 'ios');
         setDateUntil(currentDate);
     };
 
+    const getDateUntil = () => {
+        return dateUntil ? dateUntil.toLocaleDateString() : 'Seleccione una fecha';
+    };
     const onChange3 = (value : boolean) => {
         setIsForever(!isForever);
     }
     const resetForm = () => {
+        //poner todos los datos todo
         setName('');
         setPrescription('');
         setDateSince(new Date());
+        setDateUntil(new Date());
         setHowOften(null);
-        setDateUntil(null);
         setNameErrorMessage('');
         setPrescriptionErrorMessage('');
     };
@@ -166,14 +186,68 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
                         <RNText style={styles.buttons} >
                             <UnderlinedText>{t('text22')}</UnderlinedText>
                         </RNText>
-                        <View style={styles.datePicker}>
-                            <DateTimePicker  testID="dateTimePicker"
-                                             value={dateSince}
-                                             mode="datetime"
-                                             onChange={onChange1}
-                                             //timeZoneOffsetInMinutes={dateSince.getTimezoneOffset()} en vez de tener un +3 en las horas es un -3 xd
-                                             timeZoneName={'America/Buenos_Aires'}
-                            />
+                        <View style={styles.datePickerContainer}>
+                            {Platform.OS === 'ios' ? (
+                                <>
+                                    <DateTimePicker
+                                        testID="datePicker"
+                                        value={dateSince}
+                                        mode="date"
+                                        minimumDate={new Date()}
+                                        display="default"
+                                        style={{ backgroundColor: 'transparent' }}
+                                        onChange={onSDateChange}
+                                    />
+                                    <DateTimePicker
+                                        testID="timePicker"
+                                        value={timeSince}
+                                        mode="time"
+                                        display="default"
+                                        textColor='#cbe4c9'
+                                        onChange={onSTimeChange}
+                                    />
+                                </>
+                            ) : (
+                                <>
+                                    <PaperButton
+                                        mode="outlined"
+                                        style={styles.pickerButton}
+                                        textColor='#2E5829'
+                                        labelStyle={{ textAlign: 'left', display: 'flex' }}
+                                        onPress={() => setShowDatePickerSince(true)}
+                                    >
+                                        {getDateSince()}
+                                    </PaperButton>
+                                    <PaperButton
+                                        mode="outlined"
+                                        style={styles.pickerButton}
+                                        textColor='#2E5829'
+                                        labelStyle={{ textAlign: 'left', display: 'flex' }}
+                                        onPress={() => setShowTimePicker(true)}
+                                    >
+                                        {getTime()}
+                                    </PaperButton>
+                                    {showDatePickerSince && (
+                                        <DateTimePicker
+                                            testID="datePicker"
+                                            value={dateSince}
+                                            minimumDate={new Date()}
+                                            mode="date"
+                                            display="default"
+                                            onChange={onSDateChange}
+                                        />
+                                    )}
+                                    {showTimePicker && (
+                                        <DateTimePicker
+                                            testID="timePicker"
+                                            value={timeSince}
+                                            mode="time"
+                                            display="default"
+                                            onChange={onSTimeChange}
+                                        />
+                                    )}
+                                </>
+                            )}
                         </View>
                     </View>
                     <View style={{marginBottom: "5%", marginTop: "5%"}}>
@@ -193,13 +267,42 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
                         <RNText style={styles.buttons}>
                             <UnderlinedText>{t('text21')}</UnderlinedText>
                         </RNText>
-                        <View style={styles.datePicker}>
-                            <DateTimePicker  testID="dateTimePicker"
-                                             value={dateUntil ? dateUntil : new Date()}
-                                             mode={mode}
-                                             minimumDate={dateSince}
-                                             onChange={onChange2}
-                            />
+                        <View style={styles.datePickerContainer}>
+                            {Platform.OS === 'ios' ? (
+                                    <>
+                                    <DateTimePicker
+                                        testID="datePicker"
+                                        value={dateUntil}
+                                        minimumDate={dateSince}
+                                        mode="date"
+                                        display="default"
+                                        style={{ backgroundColor: 'transparent' }}
+                                        onChange={onChange2}
+                                    />
+                                    </>
+                            ) : (
+                                <>
+                                    <PaperButton
+                                        mode="outlined"
+                                        style={styles.pickerButton}
+                                        textColor='#2E5829'
+                                        labelStyle={{ textAlign: 'left', display: 'flex' }}
+                                        onPress={() => setShowDatePickerUntil(true)}
+                                    >
+                                        {getDateUntil()}
+                                    </PaperButton>
+                                    {showDatePickerUntil && (
+                                        <DateTimePicker
+                                            testID="datePicker"
+                                            value={dateUntil}
+                                            minimumDate={dateSince}
+                                            mode="date"
+                                            display="default"
+                                            onChange={onChange2}
+                                        />
+                                    )}
+                                </>
+                            )}
                         </View>
                         <View style={[cardStyle.infoRow, {marginTop: "5%"}]}>
                             <RNText style={styles.text}>
@@ -294,5 +397,19 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         color: '#12210f',
         fontSize: 18,
+    },
+    datePickerContainer: {
+        flexDirection: 'row',
+        display: 'flex',
+        justifyContent: 'center',
+        marginLeft: '10%',
+        marginRight: '15%',
+        marginTop: '10%',
+        marginBottom: '10%'
+    },
+    pickerButton: {
+        borderRadius: 6,
+        marginLeft: '5%',
+        marginRight: '5%',
     },
  });
