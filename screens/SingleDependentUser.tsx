@@ -53,7 +53,6 @@ const SingleDependentUser: React.FC<SingleDependentUserProps> = ({navigation, ro
     useEffect(() => {
         setFirstName(route.params.du.first_name)
         setLastName(route.params.du.last_name)
-        console.log("entrando:"+ route.params.du.dni)
         setDni(route.params.du.dni.toString())
         const birthdate = new Date(route.params.du.birthdate);
         setDate(birthdate);

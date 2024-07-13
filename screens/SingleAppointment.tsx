@@ -1,11 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, Image} from 'react-native';
+import {View, Text, Image, Alert} from 'react-native';
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
 import {Button, Icon} from "react-native-elements";
 import {useTranslation} from "react-i18next";
 import {Button as PaperButton, Dialog, Divider} from "react-native-paper";
-import {deleteAppointment, getDoctor, getUserData} from "../lib/supabase";
+import {deleteAppointment, deleteDependentUser, getDoctor, getUserData} from "../lib/supabase";
 import {Doctor} from "../lib/types";
 import {recommendQuestionsForAppointment} from "../lib/openai";
 import {styles} from "../assets/styles";
@@ -38,11 +38,10 @@ const SingleAppointment: React.FC<SingleAppointmentProps> = ({ navigation, route
     const handleDeleteAppointment = async () => {
         try {
             const session = route.params.session;
-            const appointment = route.params.appointment;
+            const {message} =  await deleteAppointment(route.params.appointment.id);
 
-            await deleteAppointment(appointment);
+            Alert.alert(message,'',[{text: 'Ok', onPress: () => navigation.navigate(t('calendar'), {session: session})}])
 
-            navigation.navigate('Home', { session: session });
         } catch (error) {
             console.error('Error deleting appointment:', error);
         }

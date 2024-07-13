@@ -542,7 +542,6 @@ export const getAdvertisement = async(banner_type: string) : Promise<Advertiseme
 //Obtiene las recomendaciones de los turnos para un usuario y sus dependientes
 export const getRecommendations = async (user_id: string): Promise<RecommendationAppointment[] | undefined> => {
     const {data, error} = await supabase.rpc('generate_recommendations', {user_id: user_id});
-    console.log(user_id)
     if (error) {
         console.error('Error generating the recommendations:', error.message);
     } else {

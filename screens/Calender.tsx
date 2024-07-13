@@ -3,7 +3,7 @@ import { Image, Text, View} from "react-native";
 import {Appointment} from "../lib/types";
 import {Calendar} from "react-native-calendars";
 import TurnoContainer from "../components/TurnoContainer";
-import {getAppointments} from "../lib/supabase";
+import {getAppointments, getDependentUsers} from "../lib/supabase";
 import {Button} from "react-native-elements";
 import {useTranslation} from "react-i18next";
 import {styles} from "../assets/styles";
@@ -18,15 +18,17 @@ const Calender: React.FC = ({ navigation, route } : any) => {
     const [appointments,setAppointments]= useState<Appointment[] | undefined>(undefined)
     const {t} = useTranslation();
 
+
     useEffect(() => {
-        if (session) {
+        navigation.addListener('focus', () => {
             async function fetchData() {
                 setAppointments(await getAppointments())
-            }  
+            }
             fetchData()
-        }
-        if (session) getAppointments()
-    }, [session])
+        });
+
+    }, [navigation, session]);
+
 
     const getCurrentDate = () => {
         const date = new Date();
