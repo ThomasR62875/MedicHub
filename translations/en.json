@@ -146,6 +146,7 @@
   "pediatrics": "Pediatrics",
   "selectUser": "Select patient",
   "title": "Title",
-  "selectDoctor": "Select doctor"
+  "selectDoctor": "Select doctor",
+  "confirmationemailnotification": "Check the inbox of the entered email for the user to verify the email!"
 }
 
