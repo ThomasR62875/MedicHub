@@ -34,7 +34,7 @@ const SingleDoctor: React.FC<SingleDoctorProps> = ({navigation, route}: any) => 
 
             <Icon iconStyle={{color: 'white', paddingVertical: 20}} name={'arrow-left'} type={'material-community'}
                   style={styles.back_arrow}
-                  onPress={() => navigation.navigate('HomeTabs')}></Icon>
+                  onPress={() => navigation.navigate('Doctors')}></Icon>
             <View style={{
                 flexDirection: 'row',
                 paddingTop: '5%',
@@ -127,48 +127,3 @@ const SingleDoctor: React.FC<SingleDoctorProps> = ({navigation, route}: any) => 
 };
 
 export default SingleDoctor;
-
-// const styles = StyleSheet.create({
-//     container: {
-//         flex: 1,
-//         padding: 20,
-//         backgroundColor: '#e9f4e9',
-//     },
-//     titleContainer: {
-//         fontSize: 25,
-//         fontWeight: 'bold',
-//         marginTop: 10,
-//         alignSelf: 'center',
-//         marginBottom: 20,
-//     },
-//     titleText: {
-//         fontSize: 25,
-//         textAlign: 'center',
-//         justifyContent: 'center',
-//         fontWeight: 'bold',
-//     },
-//     detailRow: {
-//         flexDirection: 'row',
-//         marginBottom: 10,
-//     },
-//     label: {
-//         fontWeight: 'bold',
-//         marginRight: 5,
-//     },
-//     value: {
-//         flex: 1,
-//     },
-//     addContainer: {
-//         left: 290,
-//         bottom: 60,
-//         alignSelf: 'flex-start',
-//     },
-//     screen: {
-//         backgroundColor: "#E9F4E9FF",
-//         height: "100%",
-//     },
-//     dialog:{
-//         backgroundColor: '#E9F4E9FF',
-//
-//     }
-// });
