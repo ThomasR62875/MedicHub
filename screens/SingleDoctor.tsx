@@ -35,7 +35,7 @@ const SingleDoctor: React.FC<SingleDoctorProps> = ({navigation, route}: any) => 
                 <View style={{flexDirection: 'row', marginHorizontal:'10%', marginVertical:'20%', alignItems: 'center', justifyContent: 'space-between'}}>
                     <Icon iconStyle={{color: 'white'}} name={'arrow-left'} type={'material-community'} style={styles.back_arrow}
                           onPress={() => navigation.navigate('Doctors')}></Icon>
-                    <Icon iconStyle={{color: 'white', fontSize: 20}} containerStyle={[styles.circleHeader, {backgroundColor: 'rgba(134,171,186,0.6)', alignSelf: 'center'}]} name={'calendar-month-outline'} type={'material-community'}/>
+                    <Icon iconStyle={{color: 'white', fontSize: 20}} containerStyle={[styles.circleHeader, {backgroundColor: 'rgba(134,171,186,0.6)', alignSelf: 'center'}]} name={'stethoscope'} type={'material-community'}/>
                     <Icon
                         name='pencil'
                         iconStyle={{color: '#fff'}}
