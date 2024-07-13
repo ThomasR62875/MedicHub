@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Alert, Keyboard, StyleSheet, TouchableWithoutFeedback, View,} from 'react-native';
+import {Alert, View,} from 'react-native';
 import {addDependentUser} from "../lib/supabase";
 import {Button, Icon, Input, Text} from "react-native-elements";
 import {Image} from 'react-native';

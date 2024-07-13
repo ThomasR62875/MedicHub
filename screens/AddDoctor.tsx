@@ -2,12 +2,8 @@ import React, {useEffect, useState} from 'react';
 import {
     View,
     Alert,
-    StyleSheet,
-    TouchableWithoutFeedback,
-    Keyboard,
-    KeyboardAvoidingView,
-    ScrollView,
-    SafeAreaView, Text, Platform, Image
+    Text,
+    Image
 } from 'react-native';
 import {addDoctor, getAllUsers, getSpecialties, getUserId} from "../lib/supabase";
 import {Button, Icon, Input} from "react-native-elements";
