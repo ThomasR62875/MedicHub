@@ -63,7 +63,7 @@
   "text7" : "You must enter a description to the appointment.",
   "text8" : "The appointment has been added.",
   "text9" : "The user has been added",
-  "newu" : "New user",
+  "addnewu" : "Add new user",
   "add" : "Add",
   "warn9" : "You must enter a specialty.",
   "warn10" : "You must select a user.",

@@ -7,9 +7,13 @@ import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
 import {useTranslation} from "react-i18next";
 import DateTimePicker, {DateTimePickerEvent} from "@react-native-community/datetimepicker";
-import {Button as PaperButton, Dialog, Portal, Text as PaperText} from "react-native-paper";
+import {Button as PaperButton, Dialog, Text as PaperText} from "react-native-paper";
 import {Picker} from "@react-native-picker/picker";
 import {getSexGenderName, sexGenderOptions} from "../lib/ourlibrary";
+import {styles} from "../assets/styles";
+// @ts-ignore
+import Header from "../assets/header_violet.png";
+import ScrollableBg from "../components/ScrollableBg";
 
 type AddDependentUserProps = NativeStackScreenProps<RootStackParamList, 'AddDependentUser'>
 
@@ -41,7 +45,7 @@ const AddDependentUser:React.FC<AddDependentUserProps> = ({navigation, route} : 
             firstNameErrorMessage === '' &&
             lastNameErrorMessage === '' &&
             birthDateErrorMessage === '' &&
-            genderErrorMessage === ''
+            sexGender !== ''
         ) {
             setIsButtonDisabled(false);
         } else {
@@ -53,20 +57,23 @@ const AddDependentUser:React.FC<AddDependentUserProps> = ({navigation, route} : 
 
     const validateFirstName = (value: string) => {
         if (value.trim() === '') {
-            setFirstNameErrorMessage(t('warn17'));
+            setFirstNameErrorMessage(t('warn1'));
         } else {
             setFirstNameErrorMessage('');
         }
     };
     const validateLastName = (value: string) => {
         if (value.trim() === '') {
-            setLastNameErrorMessage(t('warn18'));
+            setLastNameErrorMessage(t('warn17'));
         } else {
             setLastNameErrorMessage('');
         }
     };
     const validateDNI = (value: string) => {
         const containsLetterOrSymbol = /([a-zA-Z!@#$%^&*()_+{}\[\]:;<>,.?\/\\|'"`~-])/.test(value);
+        if(value === ''){
+            setDNIErrorMessage(t('warn18'));
+        }
         if (containsLetterOrSymbol) {
             setDNIErrorMessage(t('warn3'));
         } else {
@@ -107,7 +114,7 @@ const AddDependentUser:React.FC<AddDependentUserProps> = ({navigation, route} : 
 
         const result = await addDependentUser(dep_user);
         if (result.success) {
-            navigation.navigate('AlertPublicity', { session, msg: 'text9', screen: 'Usuarios', appointment: null, du: null, doc: null, meds: null  });
+            navigation.navigate('AlertPublicity', { session, msg: 'text9', screen: t('dusers'), appointment: null, du: null, doc: null, meds: null  });
         } else {
             Alert.alert('Error', result.message || 'An unknown error occurred');
         }
@@ -116,30 +123,37 @@ const AddDependentUser:React.FC<AddDependentUserProps> = ({navigation, route} : 
     const hideSexGenderDialog = () => setSexGenderDialog(false);
 
     return (
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-        <View style={styles.container}>
-            <View style={styles.window}>
-            <Text style={styles.screenTitle}>{t('newu')}</Text>
+        <View style={styles.tab}>
+            <Image source={Header} style={styles.header}/>
+
+            <Icon iconStyle={{color: 'white', paddingVertical:20}} name={'arrow-left'} type={'material-community'} style={styles.back_arrow}
+                  onPress={() => navigation.navigate(t('dusers'))}></Icon>
+            <View style={{flexDirection: 'row', paddingTop:'5%', marginLeft:'10%', alignItems: 'center', justifyContent: 'center'}}>
+                <Icon iconStyle={{color: 'white', fontSize: 24}} containerStyle={[styles.circleHeader, {backgroundColor: 'rgba(139,134,190,0.6)', alignSelf: 'center', marginHorizontal: "10%"}]} name={'account'} type={'material-community'}/>
+            </View>
+
+
+            <ScrollableBg style={{padding: '10%'}}>
+
+                <PaperText style={styles.text}>{t('name')}</PaperText>
                 <Input
-                    label={t('name')}
-                    labelStyle={styles.colorLable}
-                    leftIcon={<Icon type="material-icons" name="person" color={styles.colorLable.color}/>}
+                    leftIcon={<Icon type="font-awesome" name="user" color={styles.colorIcon.color} iconStyle={{fontSize: 20, paddingLeft: 10}} />}
                     onChangeText={(text) => {
                         setFirstName(text);
                         validateFirstName(text)
                     }}
                     value={firstName}
                     placeholder={t('name')}
+                    inputContainerStyle={[{paddingLeft: 14}, styles.input]}
                     autoCapitalize={'none'}
-                    inputStyle={{color: '#407738', marginLeft: 10}}
-                    placeholderTextColor={"#407738"}
-                    errorStyle={{ color: 'red' }}
+                    placeholderTextColor={"#807d7d"}
+                    inputStyle={{color: '#000', fontSize:14, marginLeft: 10}}
+                    errorStyle={{color: 'red'}}
                     errorMessage={firstNameErrorMessage}
                 />
+                <PaperText style={styles.text}>{t('surname')}</PaperText>
                 <Input
-                    label={t('surname')}
-                    labelStyle={styles.colorLable}
-                    leftIcon={<Icon type="material-icons" name="person" color={styles.colorLable.color}/>}
+                    leftIcon={<Icon type="font-awesome" name="user" color={styles.colorIcon.color}  iconStyle={{fontSize: 20, paddingLeft: 10}} />}
                     onChangeText={(text) => {
                         setLastName(text);
                         validateLastName(text)
@@ -147,14 +161,14 @@ const AddDependentUser:React.FC<AddDependentUserProps> = ({navigation, route} : 
                     value={lastName}
                     placeholder={t('surname')}
                     autoCapitalize={'none'}
-                    inputStyle={{color: '#407738', marginLeft: 10}}
-                    placeholderTextColor={"#407738"}
-                    errorStyle={{ color: 'red' }}
-                    errorMessage={firstNameErrorMessage}
+                    placeholderTextColor={"#807d7d"}
+                    inputStyle={{color: '#000', fontSize:14, marginLeft: 10}}
+                    inputContainerStyle={[{paddingLeft: 10}, styles.input]}
+                    errorStyle={{color: 'red'}}
+                    errorMessage={lastNameErrorMessage}
                 />
+                <PaperText style={styles.text}>{t('id')}</PaperText>
                 <Input
-                    label={t('id')}
-                    labelStyle={styles.colorLable}
                     leftIcon={<Image source={require('../assets/fingerprint.png')} style={styles.icon} />}
                     onChangeText={(text) => {
                         setDni(text);
@@ -163,153 +177,69 @@ const AddDependentUser:React.FC<AddDependentUserProps> = ({navigation, route} : 
                     value={dni}
                     placeholder={t('id')}
                     autoCapitalize={'none'}
-                    placeholderTextColor={"#407738"}
-                    inputStyle={{color: '#407738', marginLeft: 10}}
-                    errorStyle={{ color: 'red' }}
+                    inputContainerStyle={[{paddingLeft: 14}, styles.input]}
+                    placeholderTextColor={"#807d7d"}
+                    inputStyle={{color: '#000', fontSize:14, marginLeft: 10}}
+                    errorStyle={{color: 'red'}}
                     errorMessage={DNIErrorMessage}
                 />
                 <PaperText style={styles.text}>{t('sex')}</PaperText>
-                <PaperButton mode="outlined" style={styles.pickerButton} textColor='#2E5829' labelStyle={{textAlign: 'left', display:'flex'}} onPress={()=> setSexGenderDialog(true)}>
+                <PaperButton mode="outlined" style={[styles.input, {padding: 5, marginHorizontal: '3%', marginBottom:'5%'}]} textColor='#000' labelStyle={{textAlign: 'left', display:'flex'}} contentStyle={{justifyContent: 'flex-start'}} onPress={()=> setSexGenderDialog(true)}>
                     {getSexGenderName(sexGender)}
                 </PaperButton>
                 <PaperText style={styles.text}>{t('birthdate')}</PaperText>
                 <View style={styles.datePicker}>
-                    <DateTimePicker  testID="dateTimePicker"
-                                     value={date ? date : new Date()}
-                                     mode="date"
-                                     display="default"
-                                     onChange={(event, selectedDate) => {
-                                         handleDayPress(event, selectedDate)
-                                         validateBirthDate(selectedDate);
-                                     }}
-                    />
+                    <DateTimePicker testID="dateTimePicker"
+                                    value={date || undefined}
+                                    mode="date"
+                                    display="default"
+                                    onChange={(event, date) => {
+                                        handleDayPress(event, date);
+                                        validateBirthDate(date)
+                                    }}/>
                 </View>
-                <Portal>
-                    <Dialog style={styles.dialog} visible={sexGenderDialog} onDismiss={hideSexGenderDialog}>
-                        <Text style={styles.dialogTitle}>{t("selSex")}</Text>
-                        <Picker
-                            mode='dropdown'
-                            selectedValue={sexGender}
-                            onValueChange={(value) => {
-                                setSexGender(value)
-                                validateGender(sexGender)
-                            }}
-                            placeholder='sex'
-                            enabled={true}
-                            itemStyle={styles.pickerStyle}
-                        >
-                            {sexGenderOptions?.map((item) => (
-                                <Picker.Item key={item.value} label={item.sex_gender_name} value={item.value} />
-                            ))}
-                        </Picker>
-                        <Dialog.Actions style={{ justifyContent: 'space-between' }}>
-                            <PaperButton textColor="#2E5829FF"
-                                         onPress={hideSexGenderDialog}>
-                                {t("close")}
-                            </PaperButton>
-                        </Dialog.Actions>
-                    </Dialog>
-                </Portal>
                 <Button
-                    title={t('add')}
-                    disabled={isButtonDisabled}
+                    title={t('addnewu')}
                     buttonStyle={{
-                        backgroundColor: '#2E5829',
+                        backgroundColor: '#8b86be',
                         borderWidth: 2,
                         borderColor: 'white',
                         borderRadius: 30,
-                        minHeight: 50
+                        minHeight: 50,
                     }}
                     containerStyle={{
-                        width: 150,
+                        width: 210,
                         marginHorizontal: 50,
                         marginVertical: 10,
                         marginTop: 40,
+                        marginBottom: 100
                     }}
-                    titleStyle={{ color: '#eef9ed' }}
-
+                    titleStyle={{color: '#eef9ed'}}
+                    disabled={isButtonDisabled}
                     onPress={handleAddDependentUser}
                 />
-            </View>
+            </ScrollableBg>
+            <Dialog style={styles.dialog} visible={sexGenderDialog} onDismiss={hideSexGenderDialog}>
+                <Text style={styles.dialogTitle}>{t("selSex")}</Text>
+                <Picker
+                    mode='dropdown'
+                    selectedValue={sexGender}
+                    onValueChange={(value: string) => {
+                        setSexGender(value);
+                        validateGender(value);
+                    }}
+                    placeholder='sex'
+                    enabled={true}
+                    itemStyle={styles.pickerStyle}
+                >
+                    {sexGenderOptions?.map((item) => (
+                        <Picker.Item key={item.value} label={item.sex_gender_name} value={item.value} />
+                    ))}
+                </Picker>
+            </Dialog>
         </View>
-        </TouchableWithoutFeedback>
 
     );
 }
 
 export default AddDependentUser;
-
-const styles = StyleSheet.create({
-    container: {
-        alignItems: 'center',
-        backgroundColor: '#e9f4e9', height: "100%"
-    },
-    icon: {
-        width: 24,
-        height: 24,
-    },
-    datePicker: {
-        alignSelf: 'center',
-        marginTop: "5%",
-    },
-    screenTitle: {
-        fontFamily: 'Roboto-Thin',
-        fontSize: 25,
-        textAlign: 'center',
-        fontWeight: 'bold',
-        marginTop: "1%",
-        marginBottom: "15%",
-        color: "#2E5829FF",
-    },
-    window: {
-        alignItems: 'center',
-        marginTop: "20%",
-        width: "90%",
-    },
-    colorLable: {
-        color: '#2E5829FF',
-    },
-    datePickerContainer: {
-        flexDirection: 'row',
-        display: 'flex',
-        justifyContent: 'center',
-        marginLeft: '10%',
-        marginRight: '15%',
-        marginTop: '10%',
-        marginBottom: '10%'
-    },
-    pickerButton: {
-        borderRadius: 6,
-        marginLeft: '5%',
-        marginRight: '5%',
-    },
-    dialog: {
-        backgroundColor: "#e9f4e9"
-    },
-    dialogTitle: {
-        fontFamily: 'Roboto-Thin',
-        fontSize: 25,
-        textAlign: 'center',
-        fontWeight: 'bold',
-        margin: "5%",
-        marginLeft: '15%',
-        color: "#2E5829FF",
-        width: "70%"
-    },
-    pickerStyle: {
-        marginBottom: 20,
-    },
-    text: {
-        fontFamily: 'Roboto-Thin',
-        fontSize: 14,
-        marginTop: "5%",
-        marginLeft: '4%',
-        marginBottom: '2%',
-        color: "#2E5829FF",
-        width: "60%"
-    },
-    calendarContainer: {
-        margin: '5%',
-        backgroundColor: "#E9F4E9FF"
-    },
-});

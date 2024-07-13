@@ -234,7 +234,7 @@ const SingleDependentUser: React.FC<SingleDependentUserProps> = ({navigation, ro
                                 onPress={() => setShareDialog(true)}
                             >{t('share_user')}</PaperButton>
                             <Button
-                                title="Eliminar"
+                                title= {t('delete')}
                                 buttonStyle={{
                                     backgroundColor: '#8b86be',
                                     borderWidth: 2,
@@ -388,9 +388,9 @@ const SingleDependentUser: React.FC<SingleDependentUserProps> = ({navigation, ro
                                             value={date || undefined}
                                             mode="date"
                                             display="default"
-                                            onChange={() => {
-                                                handleDayPress;
-                                                validateBirthDate(date)
+                                            onChange={(event, selectedDate) => {
+                                                handleDayPress(event, selectedDate)
+                                                validateBirthDate(selectedDate);
                                             }}
                             />
                         </View>

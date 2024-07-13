@@ -63,7 +63,7 @@
   "text8" : "El turno fue agregado.",
   "confirm" : "Confirmar",
   "text9" : "El Usuario fue agregado",
-  "newu" : "Nuevo usuario",
+  "addnewu" : "Agregar nuevo usuario",
   "add" : "Agregar",
   "warn9" : "Debe seleccionar la especialidad del médico.",
   "warn10" : "Debe seleccionar el usuario.",

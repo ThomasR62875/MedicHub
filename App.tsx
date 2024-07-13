@@ -275,14 +275,7 @@ const App = () => {
                     <Stack.Screen name="AddDependentUser"
                                   component={AddDependentUser}
                                   initialParams={{session: session}}
-                                  options={{
-                                    title: '',
-                                      headerStyle: {
-                                          backgroundColor: '#2E5829',
-                                      },
-                                    headerTintColor: '#ABD2A8',
-                                    headerBackTitle: 'Usuario Dependiente',
-                                  }}/>
+                                  options={{ headerShown: false }}/>
                       <Stack.Screen name="SingleDependentUser"
                                     component={SingleDependentUser}
                                     initialParams={{session: session}}
