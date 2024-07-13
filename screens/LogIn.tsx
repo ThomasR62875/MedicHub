@@ -78,8 +78,7 @@ const LogIn: React.FC<LogInProps> = ({navigation}) => {
         <View style={{flex: 1, backgroundColor: '#fff', marginBottom: 0}}>
             {/* Burbuja 1 */}
             <View
-                style={[
-                    styles.bubble,
+                style={[styles.bubble,
                     {
                         width: 250,
                         height: 250,
@@ -87,13 +86,10 @@ const LogIn: React.FC<LogInProps> = ({navigation}) => {
                         left: 200,
                         top: -50,
                         backgroundColor: 'rgba(139,134,190,0.2)',
-                    },
-                ]}
-            />
+                    },]}/>
             {/* Burbuja 2 */}
             <View
-                style={[
-                    styles.bubble,
+                style={[styles.bubble,
                     {
                         width: 400,
                         height: 400,
@@ -101,10 +97,7 @@ const LogIn: React.FC<LogInProps> = ({navigation}) => {
                         left: -60,
                         top: -200,
                         backgroundColor: 'rgba(139,134,190,0.2)',
-                    },
-                ]}
-            />
-
+                    },]}/>
             <ScrollableBg>
                 <View style={{padding: 16}}>
                     <View style={{paddingTop: 40, paddingLeft: 20}}>
@@ -119,8 +112,6 @@ const LogIn: React.FC<LogInProps> = ({navigation}) => {
                             fontSize: 20
                         }}>MedicHub</Text>
                     </View>
-
-
                     <Input
                         label={t('email')}
                         labelStyle={{color: '#000000', paddingBottom: 10, paddingLeft: 5}}
@@ -152,7 +143,6 @@ const LogIn: React.FC<LogInProps> = ({navigation}) => {
                         inputContainerStyle={[{paddingLeft: 20}, styles.input]}
                         inputStyle={{marginLeft: 12, color: '#000000',fontSize:14}}
                     />
-
                     <View style={[styles.logInContainer]}>
                         <Button
                             title={t('logIn')}
@@ -183,9 +173,9 @@ const LogIn: React.FC<LogInProps> = ({navigation}) => {
                         />
                     </View>
                 </View>
+                <View style={{padding: 100}}/>
             </ScrollableBg>
         </View>
-
     );
 };
 

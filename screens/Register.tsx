@@ -30,7 +30,6 @@ const Register: React.FC = ({navigation}: any) => {
     const [date, setDate] = useState(new Date());
     const [sexGender,setSexGender]= useState('');
     const {t} = useTranslation();
-
     const [nameErrorMessage, setNameErrorMessage] = useState<string>('');
     const [lastNameErrorMessage, setLastNameErrorMessage] = useState<string>('');
     const [DNIErrorMessage, setDNIErrorMessage] = useState<string>('');
@@ -164,10 +163,7 @@ const Register: React.FC = ({navigation}: any) => {
                         left: -60,
                         top: -200,
                         backgroundColor: 'rgba(236,183,97,0.2)',
-                    },
-                ]}
-            />
-
+                    },]}/>
             <Button
                 loading={loading}
                 buttonStyle={{
@@ -247,10 +243,8 @@ const Register: React.FC = ({navigation}: any) => {
                                     onChange={() => {
                                         handleDateChange;
                                         validateBirthDate(date)
-                                    }}
-                    />
+                                    }}/>
                 </View>
-
                 <Input
                     label="Mail"
                     labelStyle={{color: '#000000', paddingBottom: 10, paddingLeft: 5}}
@@ -320,6 +314,7 @@ const Register: React.FC = ({navigation}: any) => {
                         onPress={() => signUpWithEmail()}
                     />
                 </View>
+                <View style={{padding: 100}}/>
             </ScrollableBg>
             <Dialog style={styles.dialog} visible={sexGenderDialog} onDismiss={hideSexGenderDialog}>
                 <Text style={styles.dialogTitle}>{t("selSex")}</Text>

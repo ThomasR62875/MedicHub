@@ -39,7 +39,6 @@ const Home: React.FC = ({ navigation, route }: any) => {
                     setUserId(user.id);
                     const fetchedAppointments = await getAppointments();
                     setAppointments(fetchedAppointments);
-
                 } catch (error) {
                     console.error('Error fetching data:', error);
                 }
@@ -50,7 +49,7 @@ const Home: React.FC = ({ navigation, route }: any) => {
 
 
     useEffect(() => {
-        if (session) {
+        if (userId !== '') {
             async function fetchRecommendations() {
                 setIsLoading(true)
                 try {
