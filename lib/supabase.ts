@@ -332,8 +332,8 @@ export const getUserData = async (appointment: Appointment): Promise<UserData | 
 
 // borrar
 
-export const deleteAppointment = async (appoint: Appointment): Promise<{ success: boolean, message: string }> => {
-    const {error} = await supabase.rpc('delete_appointment_by_id', {input_id: appoint.id});
+export const deleteAppointment = async (appoint_id: string): Promise<{ success: boolean, message: string }> => {
+    const {error} = await supabase.rpc('delete_appointment_by_id', {input_id: appoint_id});
     if (error) {
         return {
             success: false,
