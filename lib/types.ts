@@ -1,3 +1,4 @@
+import { ModalBaseProps } from "react-native";
 
 
 export type DependentUser = {
@@ -25,13 +26,6 @@ export type User = {
 
 export type Specialty = {
     name: string;
-};
-
-export type RecommendationFrequencies = {
-    speciality: string;
-    sex: string;
-    ageGroup: string;
-    frequency: number;
 };
 
 export type Medication = {
@@ -69,11 +63,11 @@ export type RecommendationAppointment = {
     user_name: string;
     doctor: string;
     user_id: string;
-    speciality: string;
+    specialty: string;
 }
 
 export type AppointmentInfo = {
-    specialty: string;
+    specialty: string | null;
     observations: string,
     date: string;
     description: string;
@@ -97,3 +91,7 @@ export type SexGenderOption = {
     value: string;
 }
 
+export interface BannerProps extends ModalBaseProps{
+    advertisement: Advertisement;
+    onPress: any;
+}

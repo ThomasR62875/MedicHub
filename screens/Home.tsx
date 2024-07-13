@@ -1,11 +1,9 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, Image, ScrollView, TouchableOpacity} from 'react-native';
+import {View, Text, Image, ScrollView, TouchableOpacity, ActivityIndicator} from 'react-native';
 import {
-    getAge,
-    getAppointmentInterval,
+    deleteAppointment,
     getAppointments,
     getDependentUsers,
-    getDoctor,
     getRecommendationSpecialities,
     getUserSession
 } from "../lib/supabase";
@@ -19,6 +17,9 @@ import ScrollableBg from "../components/ScrollableBg";
 // @ts-ignore
 import Squiggle from "../assets/tabAsset.png";
 import {Icon} from "react-native-elements";
+import {getRecommendations} from "../lib/ourlibrary";
+import {formatISO} from "date-fns";
+import app from "../App";
 
 const Home: React.FC = ({ navigation, route }: any) => {
     const session = route.params.session;
@@ -33,6 +34,7 @@ const Home: React.FC = ({ navigation, route }: any) => {
     const [date2, setDate2] = useState<Date | null>(null);
     const [specialties, setSpecialties] = useState<Specialty[] | null>(null);
     const [allUsers, setAllUsers] = useState<DependentUser[] | undefined>(undefined);
+    const [isLoading, setIsLoading] = useState(true);
     const { t } = useTranslation();
 
     useEffect(() => {
@@ -65,15 +67,24 @@ const Home: React.FC = ({ navigation, route }: any) => {
 
     useEffect(() => {
         if (appointments && appointments.length > 0) {
-            const sortedAppointments = [...appointments].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-            setTurno1(sortedAppointments[0]);
-            setDate1(new Date(sortedAppointments[0].date));
-            if (sortedAppointments.length > 1) {
-                setTurno2(sortedAppointments[1]);
-                setDate2(new Date(sortedAppointments[1].date));
+            const now = new Date();  // Obtener la fecha actual
+
+            const futureAppointments = appointments.filter(appointment => new Date(appointment.date) >= now);
+            futureAppointments.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+
+            if (futureAppointments.length > 0) {
+                setTurno1(futureAppointments[0]);
+                setDate1(new Date(futureAppointments[0].date));
+            }
+
+            if (futureAppointments.length > 1) {
+                setTurno2(futureAppointments[1]);
+                setDate2(new Date(futureAppointments[1].date));
             }
         }
     }, [appointments]);
+
+
 
     useEffect(() => {
         if (appointments) {
@@ -83,9 +94,20 @@ const Home: React.FC = ({ navigation, route }: any) => {
 
     useEffect(() => {
         if (allUsers && specialties) {
-            getRecommendations();
+            async function fetchRecommendations() {
+                setIsLoading(true);
+                const recommendations = await getRecommendations(
+                    allUsers,
+                    specialties,
+                    futureAppointments,
+                    lastAppointments,
+                );
+                setAppointmentRecommendations(recommendations);
+            }
+            fetchRecommendations();
+            setIsLoading(false);
         }
-    }, [allUsers, specialties]);
+    }, [allUsers, specialties, futureAppointments]);
 
     const classifyAppointments = (appointments: Appointment[]) => {
         const lastAppointments: Appointment[] = [];
@@ -109,91 +131,13 @@ const Home: React.FC = ({ navigation, route }: any) => {
         setFutureAppointments(futureAppointments);
     };
 
-    const getRecommendations = async () => {
-        const recommendations: RecommendationAppointment[] = [];
+    const serializeAppointment = (appointment: RecommendationAppointment) => ({
+        ...appointment,
+        date: formatISO(appointment.date),
+    });
 
-        for (const user of allUsers!) {
-            for (const speciality of specialties!) {
-                const hasFutureAppointment = futureAppointments?.some(async appointment => {
-                    const doctor = await getDoctor(appointment.doctor);
-                    return (
-                        appointment.user_id === user.id &&
-                        doctor.specialty === speciality.name
-                    );
-                });
-
-                if (!hasFutureAppointment) {
-                    const hasLastAppointments = lastAppointments?.filter(async appointment => {
-                        const doctor = await getDoctor(appointment.doctor);
-                        return (
-                            appointment.user_id === user.id &&
-                            doctor.specialty === speciality.name
-                        );
-                    });
-
-                    if (hasLastAppointments && hasLastAppointments.length > 0) {
-                        hasLastAppointments.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-
-                        const lastAppointment = hasLastAppointments[0];
-
-                        try {
-                            const interval = await getAppointmentInterval(speciality, getAge(user.birthdate), user.sex);
-                            if (interval !== null) {
-                                const nextAppointmentDate = new Date(lastAppointment.date);
-                                nextAppointmentDate.setDate(nextAppointmentDate.getDate() + interval);
-
-                                const twoDaysFromNow = new Date();
-                                twoDaysFromNow.setDate(twoDaysFromNow.getDate() + 2);
-
-                                if (nextAppointmentDate < new Date()) {
-                                    nextAppointmentDate.setDate(twoDaysFromNow.getDate());
-                                }
-
-                                const threeMonthsFromNow = new Date();
-                                threeMonthsFromNow.setDate(threeMonthsFromNow.getDate() + 90);
-
-                                if(user.first_name == "mi hijo" && speciality.name == "Pediatría"){
-                                    console.log("-------------")
-                                    console.log("lastAppointment", lastAppointment);
-                                    console.log("interval", interval);
-                                    console.log("nextAppointmentDate", nextAppointmentDate);
-                                    console.log("-------------")
-
-
-                                }
-
-                                if (nextAppointmentDate <= threeMonthsFromNow) {
-                                    recommendations.push({
-                                        date: nextAppointmentDate,
-                                        user_name: user.first_name,
-                                        doctor: lastAppointment.doctor,
-                                        user_id: user.id,
-                                        speciality: speciality.name
-                                    });
-                                }
-                            } else {
-                                console.error('El intervalo de cita es null o no se pudo obtener.');
-                            }
-                        } catch (error) {
-                            console.error('Error al obtener el intervalo de cita:', error);
-                        }
-                    } else {
-                        const newAppointmentDate = new Date();
-                        newAppointmentDate.setDate(newAppointmentDate.getDate() + 2);
-
-                        recommendations.push({
-                            date: newAppointmentDate,
-                            user_name: user.first_name,
-                            doctor: '',
-                            user_id: user.id,
-                            speciality: speciality.name
-                        });
-                    }
-                }
-            }
-        }
-
-        setAppointmentRecommendations(recommendations);
+    const handleAddRecommendation = async (recommendationAppointment : RecommendationAppointment) => {
+        navigation.navigate('AddAppointment', { session: session, recommendation:  serializeAppointment(recommendationAppointment)})
     };
 
 
@@ -262,27 +206,27 @@ const Home: React.FC = ({ navigation, route }: any) => {
 
 
                 <View style={[styles.listCards]}>
-                    {appointmentRecommendations && appointmentRecommendations?.length > 0 ? (
-                        appointmentRecommendations.map((appointment: RecommendationAppointment, i) => {
-                            return (
-                                <View key={i}>
-                                    <RecommendationAppointmentContainer
-                                        recommendationAppointment={appointment}
-                                        styleExterior={[styles.cards]}
-                                        onPress={() => {navigation.navigate('SingleAppointment', {session: session, appointment: appointment})}}
-
-                                    />
-                                </View>
-                            )})
+                    {isLoading ? (
+                        <ActivityIndicator size="large" color="#2E5829" />
                     ) : (
-                        <View style={{alignItems: 'center'}}>
-                            <Text style={[styles.text2, {paddingHorizontal: 30}]}>{t('text13')}</Text>
-                        </View>
-                    )}
+                        appointmentRecommendations && appointmentRecommendations.length > 0 ? (
+                            appointmentRecommendations.map((appointment: RecommendationAppointment, i) => {
+                                return (
+                                    <View key={i}>
+                                        <RecommendationAppointmentContainer
+                                            recommendationAppointment={appointment}
+                                            styleExterior={[styles.cards]}
+                                            onPress={() => handleAddRecommendation(appointment)}
+                                        />
+                                    </View>
+                                )})
+                        ) : (
+                            <View style={{alignItems: 'center'}}>
+                                <Text style={[styles.text2, {paddingHorizontal: 30}]}>{t('text13')}</Text>
+                            </View>
+                        ))}
                 </View>
-
-
-
+                <View style={{padding: 40}}/>
             </ScrollableBg>
         </View>
     )

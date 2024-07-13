@@ -3,11 +3,12 @@ import {getUser, getUserId, supabase} from '../lib/supabase'
 import { View} from 'react-native'
 import {Button, Icon} from 'react-native-elements'
 import LanguageButton from '../components/LanguageButton'
-import {DependentUser, SexGenderOption} from "../lib/types";
+import {DependentUser} from "../lib/types";
 import {Dialog, Text, Button as PaperButton, Divider} from "react-native-paper";
 import {useTranslation} from "react-i18next";
 import ScrollableBg from '../components/ScrollableBg'
 import {styles} from "../assets/styles";
+import { getSexGenderName } from '../lib/ourlibrary'
 
 
 const Account: React.FC = ({ navigation, route } : any) => {
@@ -19,12 +20,6 @@ const Account: React.FC = ({ navigation, route } : any) => {
     const [sexGender,setSexGender]= useState('');
     const [visible, setVisible] = React.useState(false);
     const {t} = useTranslation();
-    const sexGenderOptions: SexGenderOption[] = [
-        { sex_gender_name: t('male'), value: 'male' },
-        { sex_gender_name: t('female'), value: 'female' },
-        { sex_gender_name: t('non-binary'), value: 'non-binary' },
-        { sex_gender_name: t('other'), value: 'other' },
-    ];
 
     useEffect(() => {
         if (session) {
@@ -55,21 +50,11 @@ const Account: React.FC = ({ navigation, route } : any) => {
     const hideDialog = () => setVisible(false);
     const showDialog = () => setVisible(true);
 
-    const getSexGenderName = (value: string) => {
-        if(value == null)
-            return ''
-        const option = sexGenderOptions.find(option => option.value === value);
-        return option ? option.sex_gender_name : '';
-    };
-
-
     // @ts-ignore
     return (
         <View style={{flex: 1, backgroundColor: '#fff', marginBottom: 0}}>
             <View
-                style={[
-
-                    {
+                style={[{
                         width: 500,
                         height: 500,
                         borderRadius: 250,
@@ -77,13 +62,9 @@ const Account: React.FC = ({ navigation, route } : any) => {
                         top: -250,
                         backgroundColor: 'rgba(203,214,144,0.2)',
                         position: 'absolute',
-                    },
-                ]}
-            />
+                    },]}/>
             <View
-                style={[
-
-                    {
+                style={[{
                         width: 400,
                         height: 400,
                         borderRadius: 200,
@@ -91,13 +72,10 @@ const Account: React.FC = ({ navigation, route } : any) => {
                         top: -200,
                         backgroundColor: 'rgba(203,214,144,0.2)',
                         position: 'absolute',
-                    },
-                ]}
-            />
+                    },]}/>
             <Text style={[styles.tabTitle, {paddingLeft: 40}]}>
                 {t('account')}
             </Text>
-            <ScrollableBg>
                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
                     <Icon
                         name='person-circle-outline'
@@ -122,8 +100,6 @@ const Account: React.FC = ({ navigation, route } : any) => {
                     <Text style={styles.text}>{last_name}</Text>
                 </View>
                 <Divider style={styles.divider}/>
-
-
                 <View style={{marginVertical: '5%', marginHorizontal: '12%'}}>
                     <Text style={styles.title}>Mail:</Text>
                     <Text style={styles.text2}>{session?.user.email}</Text>
@@ -156,7 +132,6 @@ const Account: React.FC = ({ navigation, route } : any) => {
                         titleStyle={{color: '#ffffff', fontWeight: 'bold', fontSize: 16}}
                         onPress={() => showDialog()}/>
                 </View>
-            </ScrollableBg>
             <Dialog style={{backgroundColor: '#E9F4E9FF'}}
                     visible={visible}
                     onDismiss={hideDialog}>

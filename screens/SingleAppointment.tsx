@@ -36,10 +36,16 @@ const SingleAppointment: React.FC<SingleAppointmentProps> = ({ navigation, route
 
 
     const handleDeleteAppointment = async () => {
-        const session =  route.params.session;
-        const appointment =  route.params.appointment;
-        await deleteAppointment(appointment);
-        navigation.navigate('Appointments', { session: session })
+        try {
+            const session = route.params.session;
+            const appointment = route.params.appointment;
+
+            await deleteAppointment(appointment);
+
+            navigation.navigate('Home', { session: session });
+        } catch (error) {
+            console.error('Error deleting appointment:', error);
+        }
     };
 
     const handlePressRecommendQuestionsForAppointment = async () => {

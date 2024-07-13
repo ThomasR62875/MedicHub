@@ -1,20 +1,22 @@
 import React, {useEffect, useState} from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text, PermissionsAndroid } from 'react-native';
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
 import {useTranslation} from "react-i18next";
-import {} from "../lib/supabase";
+import { getAdvertisement } from "../lib/supabase";
 import {Button} from "react-native-elements";
-
+import { Advertisement } from '../lib/types';
+import { BigBanner } from '../components/BigBanner';
+import { styles } from '../assets/styles';
 type AlertPublicityProps = NativeStackScreenProps<RootStackParamList, 'AlertPublicity'>
 
 const AlertPublicity: React.FC<AlertPublicityProps> = ({navigation, route} ) => {
     const {t} = useTranslation();
     const { session, msg, screen, appointment , du, doc, meds } = route.params;
-
+    const [advertisement, setAdvertisement]= useState<Advertisement | undefined>()
+    const [publicity,setPublicity]= useState(true)
     const handleNavigateBack = () => {
         const params: any = { session: session };
-
         if (appointment) params.appointment = appointment;
         if (du) params.du = du;
         if (doc) params.doc = doc;
@@ -23,27 +25,34 @@ const AlertPublicity: React.FC<AlertPublicityProps> = ({navigation, route} ) => 
         // @ts-ignore
         navigation.navigate(screen, params);
     };
-
+    
+    useEffect(()=>{
+        const unsubscribe = navigation.addListener('focus', () => {
+            async function fetchData() {
+                if (session) {
+                    setAdvertisement( await getAdvertisement('BIG'));
+                }
+            }
+            fetchData();
+        });
+    },[publicity]);
     return (
-        <View style={styles.container}>
-            <View style={styles.titleContainer}>
-                <Text style={styles.titleText}>{t(msg)}</Text>
+        <View style={ownStyles.container}>
+            <View style={ownStyles.titleContainer}>
+                <Text style={ownStyles.titleText}>{t(msg)}</Text>
             </View>
-            <View style={{alignItems: 'center'}}>
+            <BigBanner advertisement={advertisement} visible={publicity}/>
+            <View style={{alignItems: 'center', marginTop:0}}>
                 <Button
                     title={t('ok')}
-                    buttonStyle={{
-                        backgroundColor: '#2E5829',
+                    buttonStyle={[{
                         borderWidth: 2,
                         borderColor: 'white',
                         borderRadius: 30,
-                        minHeight: 50
-                    }}
+                    },ownStyles.color]}
                     containerStyle={{
                         width: 150,
-                        marginHorizontal: 50,
-                        marginVertical: 10,
-                        marginTop: 40,
+                        paddingTop:'5%'
                     }}
                     titleStyle={{ color: '#eef9ed' }}
                     onPress={handleNavigateBack}
@@ -55,11 +64,13 @@ const AlertPublicity: React.FC<AlertPublicityProps> = ({navigation, route} ) => 
 
 export default AlertPublicity;
 
-const styles = StyleSheet.create({
+const ownStyles = StyleSheet.create({
+    color:{
+        backgroundColor:'#86abba',
+    },
     container: {
         flex: 1,
         padding: 20,
-        backgroundColor: '#e9f4e9',
     },
     titleContainer: {
         fontSize: 25,
@@ -85,17 +96,8 @@ const styles = StyleSheet.create({
     value: {
         flex: 1,
     },
-    addContainer: {
-        left: 290,
-        bottom: 60,
-        alignSelf: 'flex-start',
-    },
     screen: {
         backgroundColor: "#E9F4E9FF",
         height: "100%",
     },
-    dialog:{
-        backgroundColor: '#E9F4E9FF',
-
-    }
 });

@@ -3,19 +3,20 @@ import {
     View,
     Text,
     Alert,
-    StyleSheet,
     Image
 } from 'react-native';
-import {signUp, supabase} from "../lib/supabase";
+import {signUp} from "../lib/supabase";
 import {Input, Icon, Button} from "react-native-elements";
 // @ts-ignore
 import Logo from '../assets/icon_black.png'
 import {useTranslation} from "react-i18next";
 import ScrollableBg from "../components/ScrollableBg";
-import {SexGenderOption, User} from '../lib/types';
+import {User} from '../lib/types';
 import {Button as PaperButton, Dialog, Text as PaperText} from "react-native-paper";
 import {Picker} from "@react-native-picker/picker";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import {getSexGenderName, sexGenderOptions} from "../lib/ourlibrary";
+import {styles} from "../assets/styles";
 
 
 const Register: React.FC = ({navigation}: any) => {
@@ -39,13 +40,6 @@ const Register: React.FC = ({navigation}: any) => {
     const [birthDateErrorMessage, setBirthDateErrorMessage] = useState<string>('');
     const [genderErrorMessage, setGenderErrorMessage] = useState<string>('');
 
-    const sexGenderOptions: SexGenderOption[] = [
-        { sex_gender_name: t('male'), value: 'male' },
-        { sex_gender_name: t('female'), value: 'female' },
-        { sex_gender_name: t('non-binary'), value: 'non-binary' },
-        { sex_gender_name: t('other'), value: 'other' },
-    ];
-
     useEffect(() => {
         if (
             firstName.trim() !== '' &&
@@ -66,7 +60,6 @@ const Register: React.FC = ({navigation}: any) => {
         }
     }, [firstName, lastName, dni, email, password, confirmed_password, date, sexGender, birthDateErrorMessage]);
 
-    const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(false);
     const validateName = (value: string) => {
         if (value.trim() === '') {
             setNameErrorMessage(t('warn1'));
@@ -132,19 +125,13 @@ const Register: React.FC = ({navigation}: any) => {
         setLoading(true)
         const user: User = {id:"",first_name:firstName,last_name:lastName,dni:dni, email:email, sex: sexGender,
             birthdate: date}
-        const {success,message} = await signUp(user,password);
+        const {success} = await signUp(user,password);
 
         if (success) Alert.alert('¡Revise su bandeja de entrada para verificar el mail!',)
         setLoading(false)
     }
 
     const hideSexGenderDialog = () => setSexGenderDialog(false);
-
-    const getSexGenderName = (value: string) => {
-        const option = sexGenderOptions.find(option => option.value === value);
-        return option ? option.sex_gender_name : '';
-    };
-
     const handleDateChange = (event: any, selectedDate?: Date) => {
         const currentDate = selectedDate || date;
         setDate(currentDate);
@@ -182,7 +169,6 @@ const Register: React.FC = ({navigation}: any) => {
             />
 
             <Button
-                disabled={isButtonDisabled}
                 loading={loading}
                 buttonStyle={{
                     backgroundColor: 'transparent'
@@ -200,24 +186,24 @@ const Register: React.FC = ({navigation}: any) => {
                 <Input
                     label={t('name')}
                     labelStyle={{color: '#000000', paddingBottom: 10, paddingLeft: 5}}
-                    leftIcon={<Icon type="font-awesome" name="user" color={styles.colorIcon.color}/>}
+                    leftIcon={<Icon type="font-awesome" name="user" color={styles.colorIcon.color} iconStyle={{fontSize: 20, paddingLeft: 10}} />}
                     onChangeText={(text) => {
                         setFirstName(text);
                         validateName(text)
                     }}
                     value={firstName}
                     placeholder={t('name')}
-                    placeholderTextColor={"#000000"}
-                    inputContainerStyle={[{paddingLeft: 10}, styles.input]}
+                    inputContainerStyle={[{paddingLeft: 14}, styles.input]}
                     autoCapitalize={'none'}
-                    inputStyle={{color: '#000000', marginLeft: 10}}
+                    placeholderTextColor={"#807d7d"}
+                    inputStyle={{color: '#000', fontSize:14, marginLeft: 10}}
                     errorStyle={{color: 'red'}}
                     errorMessage={nameErrorMessage}
                 />
                 <Input
                     label={t('surname')}
                     labelStyle={{color: '#000000', paddingBottom: 10, paddingLeft: 5}}
-                    leftIcon={<Icon type="font-awesome" name="user" color={styles.colorIcon.color}/>}
+                    leftIcon={<Icon type="font-awesome" name="user" color={styles.colorIcon.color}  iconStyle={{fontSize: 20, paddingLeft: 10}} />}
                     onChangeText={(text) => {
                         setLastName(text);
                         validateLastName(text)
@@ -225,8 +211,8 @@ const Register: React.FC = ({navigation}: any) => {
                     value={lastName}
                     placeholder={t('surname')}
                     autoCapitalize={'none'}
-                    placeholderTextColor={"#000000"}
-                    inputStyle={{color: '#000000', marginLeft: 10}}
+                    placeholderTextColor={"#807d7d"}
+                    inputStyle={{color: '#000', fontSize:14, marginLeft: 10}}
                     inputContainerStyle={[{paddingLeft: 10}, styles.input]}
                     errorStyle={{color: 'red'}}
                     errorMessage={lastNameErrorMessage}
@@ -234,7 +220,7 @@ const Register: React.FC = ({navigation}: any) => {
                 <Input
                     label={t('id')}
                     labelStyle={{color: '#000000', paddingBottom: 10, paddingLeft: 5}}
-                    leftIcon={<Image source={require('../assets/fingerprint.png')} style={styles.icon}/>}
+                    leftIcon={<Image source={require('../assets/fingerprint.png')} style={styles.icon} />}
                     onChangeText={(text) => {
                         setDni(text);
                         validateDNI(text);
@@ -242,17 +228,17 @@ const Register: React.FC = ({navigation}: any) => {
                     value={dni}
                     placeholder={t('id')}
                     autoCapitalize={'none'}
-                    inputContainerStyle={[{paddingLeft: 10}, styles.input]}
-                    placeholderTextColor={"#000000"}
-                    inputStyle={{color: '#000000', marginLeft: 10}}
+                    inputContainerStyle={[{paddingLeft: 14}, styles.input]}
+                    placeholderTextColor={"#807d7d"}
+                    inputStyle={{color: '#000', fontSize:14, marginLeft: 10}}
                     errorStyle={{color: 'red'}}
                     errorMessage={DNIErrorMessage}
                 />
-                <PaperText style={styles.text}>{t('sex')}</PaperText>
-                <PaperButton mode="outlined" style={styles.pickerButton} textColor='#2E5829' labelStyle={{textAlign: 'left', display:'flex'}} onPress={()=> setSexGenderDialog(true)}>
+                <PaperText style={styles.text4}>{t('sex')}</PaperText>
+                <PaperButton mode="outlined" style={[styles.input, {padding: 5, marginHorizontal: '3%', marginBottom:'5%'}]} textColor='#000' labelStyle={{textAlign: 'left', display:'flex'}} contentStyle={{justifyContent: 'flex-start'}} onPress={()=> setSexGenderDialog(true)}>
                     {getSexGenderName(sexGender)}
                 </PaperButton>
-                <PaperText style={styles.text}>{t('birthdate')}</PaperText>
+                <PaperText style={styles.text4}>{t('birthdate')}</PaperText>
                 <View style={styles.datePicker}>
                     <DateTimePicker testID="dateTimePicker"
                                     value={date || undefined}
@@ -264,28 +250,11 @@ const Register: React.FC = ({navigation}: any) => {
                                     }}
                     />
                 </View>
-                <Dialog style={styles.dialog} visible={sexGenderDialog} onDismiss={hideSexGenderDialog}>
-                    <Text style={styles.dialogTitle}>{t("selSex")}</Text>
-                    <Picker
-                        mode='dropdown'
-                        selectedValue={sexGender}
-                        onValueChange={(value: string) => {
-                            setSexGender(value);
-                            validateGender(value);
-                        }}
-                        placeholder='sex'
-                        enabled={true}
-                        itemStyle={styles.pickerStyle}
-                    >
-                        {sexGenderOptions?.map((item) => (
-                            <Picker.Item key={item.value} label={item.sex_gender_name} value={item.value} />
-                        ))}
-                    </Picker>
-                </Dialog>
+
                 <Input
                     label="Mail"
                     labelStyle={{color: '#000000', paddingBottom: 10, paddingLeft: 5}}
-                    leftIcon={<Icon type="font-awesome" name="envelope" color={styles.colorIcon.color}/>}
+                    leftIcon={<Icon type="font-awesome" name="envelope" color={styles.colorIcon.color} iconStyle={{fontSize: 20, paddingLeft: 10}} />}
                     onChangeText={(text) => {
                         setEmail(text);
                         validateEmail(text)
@@ -294,28 +263,28 @@ const Register: React.FC = ({navigation}: any) => {
                     placeholder="email@address.com"
                     autoCapitalize={'none'}
                     inputContainerStyle={[{paddingLeft: 10}, styles.input]}
-                    placeholderTextColor={"#000000"}
-                    inputStyle={{color: '#000000', marginLeft: 10}}
+                    placeholderTextColor={"#807d7d"}
+                    inputStyle={{color: '#000', fontSize:14, marginLeft: 10}}
                     errorStyle={{color: 'red'}}
                     errorMessage={mailErrorMessage}
                 />
                 <Input
                     label={t('password')}
                     labelStyle={{color: '#000000', paddingBottom: 10, paddingLeft: 5}}
-                    leftIcon={<Icon type="font-awesome" name="lock" color={styles.colorIcon.color}/>}
+                    leftIcon={<Icon type="font-awesome" name="lock" color={styles.colorIcon.color} iconStyle={{fontSize: 20, paddingLeft: 10}}/>}
                     onChangeText={(text) => setPassword(text)}
                     value={password}
                     secureTextEntry={true}
+                    placeholderTextColor={"#807d7d"}
+                    inputStyle={{color: '#000', fontSize:14, marginLeft: 10}}
                     placeholder={t('password')}
                     inputContainerStyle={[{paddingLeft: 10}, styles.input]}
                     autoCapitalize={'none'}
-                    inputStyle={{color: '#000000', marginLeft: 10}}
-                    placeholderTextColor={"#000000"}
                 />
                 <Input
                     label={t('confirmp')}
                     labelStyle={{color: '#000000', paddingBottom: 10, paddingLeft: 5}}
-                    leftIcon={<Icon type="font-awesome" name="lock" color={styles.colorIcon.color}/>}
+                    leftIcon={<Icon type="font-awesome" name="lock" color={styles.colorIcon.color} iconStyle={{fontSize: 20, paddingLeft: 10}}/>}
                     onChangeText={(text1) => {
                         setConfirmedPassword(text1);
                         validatePassword(text1);
@@ -324,16 +293,15 @@ const Register: React.FC = ({navigation}: any) => {
                     secureTextEntry={true}
                     placeholder={t('password')}
                     autoCapitalize={'none'}
-                    inputStyle={{color: '#000000', marginLeft: 10}}
+                    placeholderTextColor={"#807d7d"}
+                    inputStyle={{color: '#000', fontSize:14, marginLeft: 10}}
                     inputContainerStyle={[{paddingLeft: 10}, styles.input]}
-                    placeholderTextColor={"#000000"}
                     errorStyle={{color: 'red'}}
                     errorMessage={passwordErrorMessage}
                 />
                 <View style={{alignItems: 'center'}}>
                     <Button
                         title={t('register')}
-                        disabled={isButtonDisabled}
                         loading={loading}
                         buttonStyle={{
                             backgroundColor: '#ecb761',
@@ -353,102 +321,27 @@ const Register: React.FC = ({navigation}: any) => {
                     />
                 </View>
             </ScrollableBg>
+            <Dialog style={styles.dialog} visible={sexGenderDialog} onDismiss={hideSexGenderDialog}>
+                <Text style={styles.dialogTitle}>{t("selSex")}</Text>
+                <Picker
+                    mode='dropdown'
+                    selectedValue={sexGender}
+                    onValueChange={(value: string) => {
+                        setSexGender(value);
+                        validateGender(value);
+                    }}
+                    placeholder='sex'
+                    enabled={true}
+                    itemStyle={styles.pickerStyle}
+                >
+                    {sexGenderOptions?.map((item) => (
+                        <Picker.Item key={item.value} label={item.sex_gender_name} value={item.value} />
+                    ))}
+                </Picker>
+            </Dialog>
         </View>
     );
 };
-
-const styles = StyleSheet.create({
-    container: {
-        marginLeft: 20,
-        marginRight: 20
-    },
-    buttonSignInContainer: {
-        width: '50%',
-        justifyContent: 'center',
-    },
-    datePicker: {
-        alignSelf: 'center',
-        marginTop: "5%",
-    },
-    buttonSignIn: {
-        backgroundColor: '#ffffff',
-        borderRadius: 10,
-        justifyContent: 'center',
-    },
-    colorIcon: {
-        color: '#000000'
-    },
-    colorLable: {
-        color: '#000000',
-    },
-    icon: {
-        width: 24,
-        height: 24,
-    }, registerW: {
-        backgroundColor: '#ffffff',
-        height: '100%',
-        marginLeft: 10,
-        marginRight: 10,
-        alignContent: 'center'
-    },
-    Ptitle: {
-        color: '#000000',
-        textAlign: 'center',
-        marginBottom: 80,
-        marginTop: 0,
-        fontSize: 20,
-        fontWeight: 'bold'
-    },
-    logo: {
-        height: 50,
-        width: 50,
-        marginBottom: 0
-    },
-    pickerButton: {
-        borderRadius: 6,
-        marginLeft: '5%',
-        marginRight: '5%',
-    },
-    dialog: {
-        backgroundColor: "#e9f4e9"
-    },
-    dialogTitle: {
-        fontFamily: 'Roboto-Thin',
-        fontSize: 25,
-        textAlign: 'center',
-        fontWeight: 'bold',
-        margin: "5%",
-        marginLeft: '15%',
-        color: "#2E5829FF",
-        width: "70%"
-    },
-    pickerStyle: {
-        marginBottom: 20,
-    },
-    text: {
-        fontFamily: 'Roboto-Thin',
-        fontSize: 14,
-        marginTop: "5%",
-        marginLeft: '4%',
-        marginBottom: '2%',
-        color: "#2E5829FF",
-        width: "60%"
-    },
-    calendarContainer: {
-        margin: '5%',
-        backgroundColor: "#E9F4E9FF"
-    },
-    bubble: {
-        position: 'absolute',
-    },
-    input: {
-        backgroundColor: '#ffffff',
-        borderBottomWidth:2,
-        borderWidth: 2,
-        borderRadius: 15
-    },
-
-});
 
 export default Register;
 
