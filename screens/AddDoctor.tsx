@@ -96,10 +96,9 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}) => {
     return (
         <View style={styles.tab}>
             <Image source={Header} style={styles.header}/>
-
-            <Icon iconStyle={{color: 'white', paddingVertical: 20}} name={'arrow-left'} type={'material-community'}
-                  style={styles.back_arrow}
-                  onPress={() => navigation.navigate({name: 'Doctors', params: {session : session}})}></Icon>
+            <View style={{flexDirection: 'row', justifyContent: 'space-between',flex:0, margin: '5%', marginBottom: '2.5%'}}>
+                <Icon iconStyle={{color: 'white', paddingVertical: 20}} name={'arrow-left'} type={'material-community'} style={styles.back_arrow} onPress={() => navigation.navigate({name: 'Doctors', params: {session : session}})}></Icon>
+            </View>
             <View style={{
                 flexDirection: 'row',
                 paddingTop: '5%',
