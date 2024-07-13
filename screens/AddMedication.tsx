@@ -68,11 +68,11 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
 
     const handleAddMedication= async () => {
         const sinceDate = new Date(dateSince);
-        sinceDate.setHours(timeSince.getHours()-3) //acomodo por el UCT
+        sinceDate.setHours(timeSince.getHours())
         sinceDate.setMinutes(timeSince.getMinutes())
-        console.log("sinceDate completa:", sinceDate)
-        dateUntil.setHours(dateUntil.getHours()-3) //UTC acomodo, esta bien?? o queremos q sea siempre hasta als 23:59 ?? todo
-        console.log("dateUntil completa:", dateUntil)
+        //osea el horario nunca se toca en dateUntil, pero nso sirve tenerlo bien para mandar las notis
+        dateUntil.setHours(dateUntil.getHours() - 3) //UTC acomodo, esta bien?? o queremos q sea siempre hasta las 23:59 ?? todo
+
         const medication : Medication = {
             id:'',
             name:name,
@@ -205,6 +205,7 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
                                         display="default"
                                         textColor='#cbe4c9'
                                         onChange={onSTimeChange}
+                                        timeZoneOffsetInMinutes={0}
                                     />
                                 </>
                             ) : (
