@@ -92,6 +92,6 @@ export type SexGenderOption = {
 }
 
 export interface BannerProps extends ModalBaseProps{
-    advertisement: Advertisement;
+    advertisement: Advertisement | undefined;
     onPress: any;
 }
