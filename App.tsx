@@ -238,13 +238,7 @@ const App = () => {
                     <Stack.Screen name="AddAppointment"
                                   component={AddAppointment}
                                   initialParams={{session: session}}
-                                  options={{
-                                    title: '',
-                                    headerStyle: {
-                                      backgroundColor: '#2E5829',
-                                    },
-                                    headerTintColor: '#ABD2A8',
-                                  }}/>
+                                  options={{ headerShown: false }}/>
                       <Stack.Screen name="SingleAppointment"
                                     component={SingleAppointment}
                                     initialParams={{session: session}}

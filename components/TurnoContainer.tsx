@@ -13,8 +13,6 @@ interface turnoContainerProps {
 
 const turnoContainer: React.FC<turnoContainerProps> = ({styleExterior, turno, date, onPress, ...props}) => {
     const otraDate = new Date(date);
-    console.log("d", date)
-    console.log("asa", formatDate(otraDate));
     return (
         <TouchableOpacity style={[styleExterior, {flexDirection: 'row'}]} {...props} onPress={onPress}>
             <View style={{flexDirection: 'column', padding: 10}}>
