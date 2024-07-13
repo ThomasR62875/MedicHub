@@ -28,6 +28,7 @@ const SingleDoctor: React.FC<SingleDoctorProps> = ({navigation, route}: any) => 
         navigation.navigate('Doctors', {session: session})
     };
 
+
     return (
         <View style={styles.tab}>
             <Image source={Header} style={styles.header}/>
