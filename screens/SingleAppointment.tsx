@@ -38,6 +38,7 @@ const SingleAppointment: React.FC<SingleAppointmentProps> = ({ navigation, route
     const handleDeleteAppointment = async () => {
         try {
             const session = route.params.session;
+            console.log("Esta es el id del appointments: ", route.params.appointment.id);
             const {message} =  await deleteAppointment(route.params.appointment.id);
 
             Alert.alert(message,'',[{text: 'Ok', onPress: () => navigation.navigate(t('calendar'), {session: session})}])

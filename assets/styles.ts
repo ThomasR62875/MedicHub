@@ -464,5 +464,14 @@ export const styles = StyleSheet.create({
         fontWeight: 'normal',
         fontSize: 14,
         fontFamily: 'Roboto-Thin'
-    }
+    },
+    datePickerContainer: {
+        flexDirection: 'row',
+        display: 'flex',
+        justifyContent: 'center',
+        marginLeft: '10%',
+        marginRight: '15%',
+        marginTop: '10%',
+        marginBottom: '10%'
+    },
 });
