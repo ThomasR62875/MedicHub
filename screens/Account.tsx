@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import {getUser, getUserId, supabase} from '../lib/supabase'
+import {getAppointments, getUser, getUserId, supabase} from '../lib/supabase'
 import { View} from 'react-native'
 import {Button, Icon} from 'react-native-elements'
 import LanguageButton from '../components/LanguageButton'
@@ -21,31 +21,36 @@ const Account: React.FC = ({ navigation, route } : any) => {
     const [visible, setVisible] = React.useState(false);
     const {t} = useTranslation();
 
-    useEffect(() => {
-        if (session) {
-            async function fetchData() {
-                const data: DependentUser = await getUser(await getUserId())
-                setFirstName(data.first_name)
-                setLastName(data.last_name)
-                if (data.birthdate) {
-                    const birthdate = new Date(data.birthdate);
-                    setDate(birthdate);
-                } else {
-                    setDate(undefined);
-                }
-                setSexGender(data.sex)
-                const dniString = String(data.dni);
-                if (dniString && dniString.length >= 8) {
-                    const dniNumber = parseInt(dniString.slice(0, 8), 10);
-                    setDni(dniNumber);
-                } else {
-                    console.error('El DNI no es una cadena válida o no tiene al menos 8 caracteres.');
-                }
-            }
 
-            fetchData()
-        }
-    }, [session , dni, first_name, last_name, date, sexGender])
+    useEffect(() => {
+        navigation.addListener('focus', () => {
+            if (session) {
+                async function fetchData() {
+                    const data: DependentUser = await getUser(await getUserId())
+                    setFirstName(data.first_name)
+                    setLastName(data.last_name)
+                    if (data.birthdate) {
+                        const birthdate = new Date(data.birthdate);
+                        setDate(birthdate);
+                    } else {
+                        setDate(undefined);
+                    }
+                    setSexGender(data.sex)
+                    const dniString = String(data.dni);
+                    if (dniString && dniString.length >= 8) {
+                        const dniNumber = parseInt(dniString.slice(0, 8), 10);
+                        setDni(dniNumber);
+                    } else {
+                        console.error('El DNI no es una cadena válida o no tiene al menos 8 caracteres.');
+                    }
+                }
+
+                fetchData()
+            }
+        });
+
+    }, [navigation, session]);
+
 
     const hideDialog = () => setVisible(false);
     const showDialog = () => setVisible(true);
