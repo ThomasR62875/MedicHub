@@ -125,9 +125,9 @@ const AddDependentUser:React.FC<AddDependentUserProps> = ({navigation, route} : 
     return (
         <View style={styles.tab}>
             <Image source={Header} style={styles.header}/>
-
-            <Icon iconStyle={{color: 'white', paddingVertical:20}} name={'arrow-left'} type={'material-community'} style={styles.back_arrow}
-                  onPress={() => navigation.navigate(t('dusers'))}></Icon>
+            <View style={{flexDirection: 'row', justifyContent: 'space-between',flex:0, margin: '5%', marginBottom: '2.5%'}}>
+                <Icon iconStyle={{color: 'white', paddingVertical:20}} name={'arrow-left'} type={'material-community'} style={styles.back_arrow} onPress={() => navigation.navigate(t('dusers'))}></Icon>
+            </View>
             <View style={{flexDirection: 'row', paddingTop:'5%', marginLeft:'10%', alignItems: 'center', justifyContent: 'center'}}>
                 <Icon iconStyle={{color: 'white', fontSize: 24}} containerStyle={[styles.circleHeader, {backgroundColor: 'rgba(139,134,190,0.6)', alignSelf: 'center', marginHorizontal: "10%"}]} name={'account'} type={'material-community'}/>
             </View>

@@ -32,8 +32,9 @@ const Medications: React.FC = ({navigation, route}: any) => {
     return (
         <View style={styles.tab}>
             <Image source={Squiggle} style={styles.squiggle_left}/>
-            <Icon name={'arrow-left'} type={'material-community'} style={styles.back_arrow}
-                  onPress={() => navigation.navigate('HomeTabs')}></Icon>
+            <View style={{flexDirection: 'row', justifyContent: 'space-between',flex:0, margin: '5%', marginBottom: '2.5%'}}>
+                <Icon name={'arrow-left'} type={'material-community'} style={styles.back_arrow} onPress={() => navigation.navigate('HomeTabs')}></Icon>
+            </View>
             <Text style={[styles.stackTitle]}>
                 {t('medicine')}
             </Text>

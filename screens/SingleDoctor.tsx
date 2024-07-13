@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Image} from 'react-native';
+import { View, Text} from 'react-native';
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
 import {Button, Icon} from "react-native-elements";
@@ -31,31 +31,21 @@ const SingleDoctor: React.FC<SingleDoctorProps> = ({navigation, route}: any) => 
 
     return (
         <View style={styles.tab}>
-            <Image source={Header} style={styles.header}/>
-
-            <Icon iconStyle={{color: 'white', paddingVertical: 20}} name={'arrow-left'} type={'material-community'}
-                  style={styles.back_arrow}
-                  onPress={() => navigation.navigate('Doctors')}></Icon>
-            <View style={{
-                flexDirection: 'row',
-                paddingTop: '5%',
-                marginLeft: '10%',
-                alignItems: 'center',
-                justifyContent: 'center'
-            }}>
-                <Icon iconStyle={{color: 'white', fontSize: 24}} containerStyle={[styles.circleHeader, {
-                    backgroundColor: 'rgba(134,171,186,0.6)',
-                    alignSelf: 'center',
-                    marginHorizontal: "12%"
-                }]} name={'stethoscope'} type={'material-community'}/>
-                <Icon
-                    name='pencil'
-                    iconStyle={{color: '#fff', paddingLeft: 20, paddingBottom: 25}}
-                    type='ionicon'
-                    size={25}
-                    onPress={() => navigation.navigate('EditDoctor', {doc: route.params.doc})}
-                />
+            <View style={[styles.header, {backgroundColor: 'rgba(134,171,186,0.6)'}]}>
+                <View style={{flexDirection: 'row', marginHorizontal:'10%', marginVertical:'20%', alignItems: 'center', justifyContent: 'space-between'}}>
+                    <Icon iconStyle={{color: 'white'}} name={'arrow-left'} type={'material-community'} style={styles.back_arrow}
+                          onPress={() => navigation.navigate('Doctors')}></Icon>
+                    <Icon iconStyle={{color: 'white', fontSize: 20}} containerStyle={[styles.circleHeader, {backgroundColor: 'rgba(134,171,186,0.6)', alignSelf: 'center'}]} name={'calendar-month-outline'} type={'material-community'}/>
+                    <Icon
+                        name='pencil'
+                        iconStyle={{color: '#fff'}}
+                        type='ionicon'
+                        size={25}
+                        onPress={() => navigation.navigate('EditDoctor', {doc: route.params.doc})}
+                    />
+                </View>
             </View>
+
             <ScrollableBg>
                 <Text style={styles.titleText}>{route.params.doc.name}</Text>
                 <Divider style={styles.divider}></Divider>
