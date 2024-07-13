@@ -34,7 +34,7 @@ const Doctors: React.FC = ({navigation, route}: any) => {
     return (
         <View style={styles.tab}>
             <Image source={Squiggle} style={styles.squiggle_left}/>
-            <View style={{flexDirection: 'row', justifyContent: 'space-between',flex:0, margin: '5%', marginBottom: '2.5%'}}>
+            <View style={{flexDirection: 'row', justifyContent: 'space-between',flex:0, marginTop: '15%', marginHorizontal: '5%'}}>
                 <Icon name={'arrow-left'} type={'material-community'} style={styles.back_arrow} onPress={() => navigation.navigate('HomeTabs')}></Icon>
             </View>
             <Text style={[styles.stackTitle]}>
