@@ -29,7 +29,7 @@ export const styles = StyleSheet.create({
         fontFamily: 'Roboto-Thin',
         fontSize: 20,
         textAlign: 'center',
-        paddingTop: 20,
+        paddingTop: '15%',
         color: "#000",
     },
     text: {
@@ -89,9 +89,7 @@ export const styles = StyleSheet.create({
         left: -20,
     },
     back_arrow: {
-        padding: 15,
-        marginTop: '10%',
-        paddingRight: '90%',
+        paddingVertical: '15%',
     },
     stackTitle: {
         color: 'black',
@@ -177,10 +175,10 @@ export const styles = StyleSheet.create({
         padding: 10,
     },
     circleHeader: {
-        borderRadius: 40,
-        height: 80,
-        width: 80,
-        padding: 25,
+        borderRadius: 30,
+        height: 60,
+        width: 60,
+        padding: 20
     },
     cardText: {
         fontSize: 14,
@@ -283,10 +281,9 @@ export const styles = StyleSheet.create({
 
     },
     header: {
-        position: 'absolute',
-        top: '0%',
-        left: '-1.5%',
-
+        borderRadius: 30,
+        height: '20%',
+        top: 0
     },
     titleContainer: {
         fontSize: 25,
