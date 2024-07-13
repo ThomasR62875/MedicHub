@@ -160,23 +160,12 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
 
     return (
         <View style={styles.tab}>
-            <Image source={Header} style={styles.header}/>
-
-            <Icon iconStyle={{color: 'white', paddingVertical: 20}} name={'arrow-left'} type={'material-community'}
-                  style={styles.back_arrow}
-                  onPress={() => navigation.navigate(t('calendar'))}></Icon>
-            <View style={{
-                flexDirection: 'row',
-                paddingTop: '5%',
-                marginLeft: '10%',
-                alignItems: 'center',
-                justifyContent: 'center'
-            }}>
-                <Icon iconStyle={{color: 'white', fontSize: 24}} containerStyle={[styles.circleHeader, {
-                    backgroundColor: 'rgba(203,214,144,0.6)',
-                    alignSelf: 'center',
-                    marginHorizontal: "10%"
-                }]} name={'calendar-month-outline'} type={'material-community'}/>
+            <View style={[styles.header, {backgroundColor: 'rgba(203,214,144,0.6)'}]}>
+                <View style={{flexDirection: 'row', marginHorizontal:'10%', marginVertical:'20%', alignItems: 'center', justifyContent: 'space-between'}}>
+                    <Icon iconStyle={{color: 'white'}} name={'arrow-left'} type={'material-community'} style={styles.back_arrow}
+                          onPress={() => navigation.navigate(t('calendar'))}></Icon>
+                    <Icon iconStyle={{color: 'white', fontSize: 20}} containerStyle={[styles.circleHeader, {backgroundColor: 'rgba(203,214,144,0.6)', alignSelf: 'center'}]} name={'calendar-month-outline'} type={'material-community'}/>
+                </View>
             </View>
 
             <ScrollableBg style={{padding: '10%'}}>
