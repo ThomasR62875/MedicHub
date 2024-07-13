@@ -215,6 +215,7 @@ const EditAppointment: React.FC<EditAppointmentProps> = ({navigation, route }: a
                                     <DateTimePicker
                                         testID="datePicker"
                                         value={date}
+                                        minimumDate={new Date()}
                                         mode="date"
                                         display="default"
                                         style={{ backgroundColor: 'transparent' }}
@@ -254,6 +255,7 @@ const EditAppointment: React.FC<EditAppointmentProps> = ({navigation, route }: a
                                         <DateTimePicker
                                             testID="datePicker"
                                             value={date}
+                                            minimumDate={new Date()}
                                             mode="date"
                                             display="default"
                                             onChange={onDateChange}
