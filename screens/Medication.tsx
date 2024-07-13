@@ -35,7 +35,7 @@ const Medications: React.FC = ({navigation, route}: any) => {
             <Icon name={'arrow-left'} type={'material-community'} style={styles.back_arrow}
                   onPress={() => navigation.navigate('HomeTabs')}></Icon>
             <Text style={[styles.stackTitle]}>
-                {t('medicines')}
+                {t('medicine')}
             </Text>
             <ScrollableBg>
                 <View style={{
