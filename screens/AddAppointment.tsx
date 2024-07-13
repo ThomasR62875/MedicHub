@@ -24,7 +24,7 @@ import {TextInput, Text as PaperText, HelperText, Button as PaperButton, Dialog,
 type AddAppointmentProps = NativeStackScreenProps<RootStackParamList, 'AddAppointment'>;
 
 const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) => {
-    const { session, recommendation }: { session?: any, recommendation?: RecommendationAppointment } = route.params ?? {};
+    const {session, recommendation}: { session?: any, recommendation?: RecommendationAppointment } = route.params ?? {};
     const [description, setDescription] = useState('');
     const [observations, setObservations] = useState('');
     const [doctor, setDoctor] = useState('Médico');
@@ -40,27 +40,8 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
     const [showDatePicker, setShowDatePicker] = useState(false);
     const [showTimePicker, setShowTimePicker] = useState(false);
     const [descriptionErrorMessage, setDescriptionErrorMessage] = useState('');
-    const { t } = useTranslation();
+    const {t} = useTranslation();
     const [hasErorrs, setHasErrors] = useState(false)
-
-    const validateDescription = (value: string) => {
-        if (value.trim() === '') {
-            setDescriptionErrorMessage(t('text7'));
-            setHasErrors(true);
-        } else {
-            setDescriptionErrorMessage('');
-            setHasErrors(true);
-        }
-    };
-
-    useEffect(() => {
-        if (session) {
-            async function fetchUserId() {
-                setSessionUserId(await getUserId());
-            }
-            fetchUserId();
-        }
-    }, [session]);
 
     useEffect(() => {
         if (session_user_id) {
@@ -82,6 +63,25 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
         }
     }, [session_user_id]);
 
+    const validateDescription = (value: string) => {
+        if (value.trim() === '') {
+            setDescriptionErrorMessage(t('text7'));
+            setHasErrors(true);
+        } else {
+            setDescriptionErrorMessage('');
+            setHasErrors(true);
+        }
+    };
+
+    useEffect(() => {
+        if (session) {
+            async function fetchUserId() {
+                setSessionUserId(await getUserId());
+            }
+            fetchUserId();
+        }
+    }, [session]);
+
     useEffect(() => {
         if (
             doctor.trim() !== '' &&
@@ -96,20 +96,20 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
 
 
     const handleAddAppointment = async () => {
-        const appointmentDate = new Date(date);
-        console.log("pri: ", appointmentDate)
-        appointmentDate.setHours(time.getHours()-3);
-        console.log("seg: ", appointmentDate)
+        const appointmentDate = new Date(date)
+        appointmentDate.setHours(time.getHours()-3)
+        appointmentDate.setMinutes(time.getMinutes())
+        console.log("date q se pasa a la func de supabase: ", appointmentDate)
 
         const appointment = { date: appointmentDate, description, user_name: '', doctor, user_id, id: '', observations: observations};
         const result = await addAppointment(appointment);
-        /*if (result.success) {
+        if (result.success) {
             // @ts-ignore
-            //navigation.navigate('AlertPublicity', { session, msg: 'text8', screen: 'calendar', appointment: null, du: null, doc: null, meds: null  });
+            navigation.navigate('AlertPublicity', { session, msg: 'text8', screen: 'calendar', appointment: null, du: null, doc: null, meds: null  });
             //:( ni calendar ni Calender funcionan como screen xd
         } else {
             Alert.alert('Error', result.message || 'An unknown error occurred');
-        }*/
+        }
     };
 
     const doctorsList = doctors?.map((doctor) => ({
