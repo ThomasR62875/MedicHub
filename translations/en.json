@@ -123,7 +123,7 @@
   "non-binary": "Non-binary",
   "other": "Other",
   "birthdate": "Birthdate",
-  "dateTime": "Date and Time",
+  "dateTime": "Date and time",
   "selSex":"Select sex",
   "questionPromptP1": "  Given my medical information and the information about past appointments with this doctor, which questions do you recommend i should ask my doctor? (the answer should have maximum 150 words):\n",
   "lastAppointmentText": "The appointment with {{specialty}} (last appointment on {{date}} and the observations were: {{observations}})",
@@ -131,6 +131,9 @@
   "closeSes": "Are you sure you want to close your session ?",
   "close": "Close",
   "warn19": "Invalid birth date",
-  "warn20": "You must enter your sex"
+  "warn20": "You must enter your sex",
+  "title" : "Title",
+  "choseDoc" : "Select your doctor",
+  "choseUser" : "Select patient"
 }
 

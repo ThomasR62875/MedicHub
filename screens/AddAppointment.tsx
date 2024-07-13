@@ -164,7 +164,7 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
                         <View>
                             <TextInput
                                 style={{backgroundColor: "#e9f4e9", marginTop: "10%", textAlign: 'center', marginLeft:'5%' , marginRight: '5%'}}
-                                label={t('Título')}
+                                label={t('title')}
                                 value={description}
                                 onChangeText={(text) => {
                                     setDescription(text);
@@ -176,7 +176,7 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
                             />
                             <TextInput
                                 style={{backgroundColor: "#e9f4e9", marginTop: "10%", textAlign: 'center', marginLeft:'5%' , marginRight: '5%'}}
-                                label={t('Observaciones')}
+                                label={t('observations')}
                                 value={observations}
                                 onChangeText={(text) => {
                                     setObservations(text);
@@ -189,7 +189,7 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
                                 {descriptionErrorMessage}
                             </HelperText>
                         </View>
-                        <PaperText style={styles.text}>{t('dateTime')}</PaperText>
+                        <PaperText style={styles.text}>{t('dateTime')}:</PaperText>
                         <View style={styles.datePickerContainer}>
                             {Platform.OS === 'ios' ? (
                                 <>
@@ -285,7 +285,7 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
                 </ScrollView>
                 <Portal>
                     <Dialog style={styles.dialog} visible={doctorDialog} onDismiss={hideDoctorDialog}>
-                        <Text style={styles.dialogTitle}>{t('Seleccionar médico')}</Text>
+                        <Text style={styles.dialogTitle}>{t('choseDoc')}</Text>
                         <Picker
                             mode='dropdown'
                             selectedValue={doctor}
@@ -299,7 +299,7 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
                         </Picker>
                     </Dialog>
                     <Dialog style={styles.dialog} visible={userDialog} onDismiss={hideUserDialog}>
-                        <Text style={styles.dialogTitle}>{t('Seleccionar usuario')}</Text>
+                        <Text style={styles.dialogTitle}>{t('choseUser')}</Text>
                         <Picker
                             mode='dropdown'
                             selectedValue={user_id}
