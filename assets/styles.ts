@@ -149,7 +149,6 @@ export const styles = StyleSheet.create({
         borderColor: 'white',
         borderRadius: 15,
         width: '40%',
-        maxHeight: '90%',
         justifyContent: 'center',
         alignContent: 'center',
         textAlign: 'center',
