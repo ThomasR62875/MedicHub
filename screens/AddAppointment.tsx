@@ -104,9 +104,7 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
         const appointment = { date: appointmentDate, description, user_name: '', doctor, user_id, id: '', observations: observations};
         const result = await addAppointment(appointment);
         if (result.success) {
-            // @ts-ignore
-            navigation.navigate('AlertPublicity', { session, msg: 'text8', screen: 'calendar', appointment: null, du: null, doc: null, meds: null  });
-            //:( ni calendar ni Calender funcionan como screen xd
+            navigation.navigate('AlertPublicity', { session, msg: 'text8', screen: t('calendar'), appointment: null, du: null, doc: null, meds: null  });
         } else {
             Alert.alert('Error', result.message || 'An unknown error occurred');
         }
