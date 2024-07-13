@@ -2,7 +2,7 @@ import 'dotenv/config';
 
 export default {
     expo: {
-        name: "TP Inge Soft",
+        name: "MedicHub",
         slug: "tp-inge-soft",
         version: "1.0.0",
         orientation: "portrait",
