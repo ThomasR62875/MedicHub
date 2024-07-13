@@ -54,7 +54,7 @@ const SingleMedication: React.FC<SingleMedicationProps> = ({navigation, route}: 
 
             <Icon iconStyle={{color: 'white', paddingVertical: 20}} name={'arrow-left'} type={'material-community'}
                   style={styles.back_arrow}
-                  onPress={() => navigation.navigate('HomeTabs')}></Icon>
+                  onPress={() => navigation.navigate('Medications')}></Icon>
             <View style={{
                 flexDirection: 'row',
                 paddingTop: '5%',
