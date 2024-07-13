@@ -19,7 +19,10 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { Picker } from "@react-native-picker/picker";
 import { useTranslation } from "react-i18next";
 import {TextInput, Text as PaperText, HelperText, Button as PaperButton, Dialog, Portal} from "react-native-paper";
+import { LogBox } from 'react-native';
 
+LogBox.ignoreLogs(['`timeZoneOffsetInMinutes` is deprecated and will be removed in a future release. Use `timeZoneName` instead.']);
+console.warn = () => {};  //atentos a esto todo
 
 type AddAppointmentProps = NativeStackScreenProps<RootStackParamList, 'AddAppointment'>;
 
@@ -97,9 +100,8 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
 
     const handleAddAppointment = async () => {
         const appointmentDate = new Date(date)
-        appointmentDate.setHours(time.getHours()-3)
+        appointmentDate.setHours(time.getHours())
         appointmentDate.setMinutes(time.getMinutes())
-        console.log("date q se pasa a la func de supabase: ", appointmentDate)
 
         const appointment = { date: appointmentDate, description, user_name: '', doctor, user_id, id: '', observations: observations};
         const result = await addAppointment(appointment);
@@ -196,6 +198,7 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
                                     <DateTimePicker
                                         testID="datePicker"
                                         value={date}
+                                        minimumDate={new Date()}
                                         mode="date"
                                         display="default"
                                         style={{ backgroundColor: 'transparent' }}
@@ -208,6 +211,7 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
                                         display="default"
                                         textColor='#cbe4c9'
                                         onChange={onTimeChange}
+                                        timeZoneOffsetInMinutes={0}
                                     />
                                 </>
                             ) : (
@@ -234,6 +238,7 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
                                         <DateTimePicker
                                             testID="datePicker"
                                             value={date}
+                                            minimumDate={new Date()}
                                             mode="date"
                                             display="default"
                                             onChange={onDateChange}

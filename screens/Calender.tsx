@@ -11,7 +11,7 @@ import {styles} from "../assets/styles";
 import Squiggle from "../assets/tabAsset.png";
 import ScrollableBg from "../components/ScrollableBg";
 import {Divider} from "react-native-paper";
-import {formatDate} from "../lib/ourlibrary";
+import {formatDateV2} from "../lib/ourlibrary";
 
 const Calender: React.FC = ({ navigation, route } : any) => {
     const {session} = route.params;
@@ -95,7 +95,7 @@ const Calender: React.FC = ({ navigation, route } : any) => {
 
             <ScrollableBg style={{paddingLeft: 16}}>
                 <View style={{flexDirection:'row', justifyContent: 'space-between'}}>
-                    <Text style={[styles.text, {paddingVertical: 30, paddingHorizontal: 20}]}>{formatDate(selectedDate)}</Text>
+                    <Text style={[styles.text, {paddingVertical: 30, paddingHorizontal: 20}]}>{formatDateV2(selectedDate)}</Text>
                     <Button
                         title={t('add')+t('appo')}
                         buttonStyle={{

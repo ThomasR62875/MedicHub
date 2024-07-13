@@ -63,7 +63,7 @@ const SingleDependentUser: React.FC<SingleDependentUserProps> = ({navigation, ro
     const handleDeleteDependentUser = async () => {
         const session = route.params.session;
         const {message} = await deleteDependentUser(route.params.du);
-        Alert.alert(message,'',[{text: 'Ok', onPress: () => navigation.navigate(t('dusers'), {session: session})}])
+        navigation.navigate(t('dusers'), {session: session})
     };
 
     const {t} = useTranslation();

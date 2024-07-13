@@ -29,7 +29,9 @@ const EditMedication:React.FC<EditMedicationProps> = ({navigation, route }: any)
     const [name, setName] = useState(route.params.medication.name)
     const [prescription, setPrescription] = useState(route.params.medication.prescription);
     const [dateSince, setDateSince] = useState<Date>(route.params.medication.sinceWhen ? new Date(route.params.medication.sinceWhen) : new Date());
-    const [timeSince, setTimeSince] = useState<Date>(route.params.medication.sinceWhen ? new Date(route.params.medication.sinceWhen): new Date());
+    let aux =  new Date(route.params.medication.sinceWhen);  //horripilante pero funciona todo
+    aux.setHours(aux.getHours()-3)
+    const [timeSince, setTimeSince] = useState<Date>(route.params.medication.sinceWhen ? aux : new Date());
     const [dateUntil, setDateUntil] = useState<Date>(route.params.medication.untilWhen ? new Date(route.params.medication.untilWhen) : new Date());
     const [howOften, setHowOften] = useState<Date | null>(route.params.medication.howOften);
     const [isForever, setIsForever] = useState<boolean>(route.params.medication.isForever);
@@ -70,24 +72,23 @@ const EditMedication:React.FC<EditMedicationProps> = ({navigation, route }: any)
     const handleUpdateMedication = async () => {
         const session = route.params.session;
         const sinceDate = new Date(dateSince);
-        sinceDate.setHours(timeSince.getHours() - 3) //acomodo por el UCT
+        sinceDate.setHours(timeSince.getHours())
         sinceDate.setMinutes(timeSince.getMinutes())
-        console.log("sinceDate completa:", sinceDate)
-        dateUntil.setHours(dateUntil.getHours() - 3) //UTC acomodo, esta bien?? o queremos q sea siempre hasta als 23:59 ?? todo
-        console.log("dateUntil completa:", dateUntil)
+        //osea el horario nunca se toca en dateUntil, pero nos sirve tenerlo bien para mandar las notis
+        dateUntil.setHours(dateUntil.getHours() - 3) //UTC acomodo, esta bien?? o queremos q sea siempre hasta las 23:59 ?? todo
 
         const medication   = {
             id: id,
             name: name,
             prescription: prescription,
-            sinceWhen:dateSince,
+            sinceWhen:sinceDate,
             untilWhen:dateUntil,
             howOften:howOften,
             isForever:isForever,
         }
         const result = await updateMedication(medication);
         if (result.success) {
-            //navigation.navigate('AlertPublicity', { session, msg: 'editMed', screen: 'SingleMedication', meds: medication});  //tira error a veces xd
+            //navigation.navigate('AlertPublicity', { session, msg: 'editMed', screen: 'SingleMedication', meds: medication});  //tira error a veces xd todo
         } else {
             Alert.alert('Error', result.message || 'An unknown error occurred');
         }
@@ -186,6 +187,7 @@ const EditMedication:React.FC<EditMedicationProps> = ({navigation, route }: any)
                                         display="default"
                                         textColor='#cbe4c9'
                                         onChange={onSTimeChange}
+                                        timeZoneOffsetInMinutes={0}
                                     />
                                 </>
                             ) : (

@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import {StyleSheet} from 'react-native';
 
 export const styles = StyleSheet.create({
     tab: {
@@ -19,9 +19,7 @@ export const styles = StyleSheet.create({
         padding: 15,
         fontWeight: 'bold'
     },
-    container: {
-
-    },
+    container: {},
     col: {
         flex: 1,
         flexDirection: 'column',
@@ -59,7 +57,7 @@ export const styles = StyleSheet.create({
         borderColor: '#CBE4C9',
         borderWidth: 1,
         shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
+        shadowOffset: {width: 0, height: 2},
         shadowOpacity: 0.25,
         shadowRadius: 3.85,
     },
@@ -139,7 +137,7 @@ export const styles = StyleSheet.create({
         borderColor: '#CBE4C9',
         borderWidth: 1,
         shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
+        shadowOffset: {width: 0, height: 2},
         shadowOpacity: 0.25,
         shadowRadius: 3.85,
         padding: "2%",
@@ -149,20 +147,19 @@ export const styles = StyleSheet.create({
         borderColor: 'white',
         borderRadius: 15,
         width: '40%',
-        maxHeight: '90%',
         justifyContent: 'center',
         alignContent: 'center',
         textAlign: 'center',
         alignItems: 'center',
     },
-    cards:{
+    cards: {
         borderWidth: 1,
         borderColor: '#A8A8A8',
         padding: 10,
         borderRadius: 20,
-        shadowRadius:2.5,
+        shadowRadius: 2.5,
         shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
+        shadowOffset: {width: 0, height: 2},
         shadowOpacity: 0.1,
         backgroundColor: 'white',
         marginBottom: '2%',
@@ -173,13 +170,13 @@ export const styles = StyleSheet.create({
         backgroundColor: '#ffffff',
         borderRadius: 20,
     },
-    circleCard:{
+    circleCard: {
         borderRadius: 30,
         height: 45,
         width: 45,
         padding: 10,
     },
-    circleHeader:{
+    circleHeader: {
         borderRadius: 40,
         height: 80,
         width: 80,
@@ -190,7 +187,7 @@ export const styles = StyleSheet.create({
         padding: 15,
         paddingLeft: 20
     },
-    cerrarSesion:{
+    cerrarSesion: {
         width: '50%',
         alignSelf: 'center',
         backgroundColor: '#073A29',
@@ -287,8 +284,9 @@ export const styles = StyleSheet.create({
     },
     header: {
         position: 'absolute',
-        top: 0,
-        left: -7,
+        top: '0%',
+        left: '-1.5%',
+
     },
     titleContainer: {
         fontSize: 25,
@@ -361,7 +359,7 @@ export const styles = StyleSheet.create({
         borderColor: '#8B86BE',
         borderWidth: 1,
     },
-    text3:{
+    text3: {
         fontFamily: 'Roboto-Thin',
         fontSize: 16,
         textAlign: 'center',
@@ -383,12 +381,12 @@ export const styles = StyleSheet.create({
     },
     dialogTitle: {
         fontFamily: 'Roboto-Thin',
-        fontSize: 25,
+        fontSize: 22,
         textAlign: 'center',
         fontWeight: 'bold',
         margin: "5%",
         marginLeft: '15%',
-        color: "#2E5829FF",
+        color: "#000",
         width: "70%"
     },
     input: {
@@ -459,4 +457,12 @@ export const styles = StyleSheet.create({
         paddingBottom: 12,
         fontFamily: 'Roboto-Thin',
     },
+    label2: {
+        color: '#000000',
+        paddingBottom: 10,
+        paddingLeft: 5,
+        fontWeight: 'normal',
+        fontSize: 14,
+        fontFamily: 'Roboto-Thin'
+    }
 });

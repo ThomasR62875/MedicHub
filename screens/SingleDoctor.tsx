@@ -28,6 +28,7 @@ const SingleDoctor: React.FC<SingleDoctorProps> = ({navigation, route}: any) => 
         navigation.navigate('Doctors', {session: session})
     };
 
+
     return (
         <View style={styles.tab}>
             <Image source={Header} style={styles.header}/>
@@ -45,7 +46,7 @@ const SingleDoctor: React.FC<SingleDoctorProps> = ({navigation, route}: any) => 
                 <Icon iconStyle={{color: 'white', fontSize: 24}} containerStyle={[styles.circleHeader, {
                     backgroundColor: 'rgba(134,171,186,0.6)',
                     alignSelf: 'center',
-                    marginHorizontal: "10%"
+                    marginHorizontal: "12%"
                 }]} name={'stethoscope'} type={'material-community'}/>
                 <Icon
                     name='pencil'
