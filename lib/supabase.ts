@@ -79,8 +79,7 @@ export const signUp = async (user: User, password: string): Promise<{ success: b
 
 // Agrega un appointment recibiendo el appointment como parametro
 export const addAppointment = async (appoint: Appointment): Promise<{ success: boolean; message?: string }> => {
-    console.log("date en la func supabase, addAppointments:", appoint.date)
-    const { error } = await supabase.rpc("add_appointment", {date_input: appoint.date, description_input: appoint.description,
+    const { error } = await supabase.rpc("add_appointment", {datetime_input: appoint.date, description_input: appoint.description,
         doctor_input: appoint.doctor, user_id: appoint.user_id, observations_input: appoint.observations});
     if (error) {
         return {success: false, message: error.message};
