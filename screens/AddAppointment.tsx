@@ -25,7 +25,6 @@ type AddAppointmentProps = NativeStackScreenProps<RootStackParamList, 'AddAppoin
 
 const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) => {
     const { session, recommendation }: { session?: any, recommendation?: RecommendationAppointment } = route.params ?? {};
-
     const [description, setDescription] = useState('');
     const [observations, setObservations] = useState('');
     const [doctor, setDoctor] = useState('Médico');
@@ -40,17 +39,9 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
     const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(true);
     const [showDatePicker, setShowDatePicker] = useState(false);
     const [showTimePicker, setShowTimePicker] = useState(false);
-
-
     const [descriptionErrorMessage, setDescriptionErrorMessage] = useState('');
     const { t } = useTranslation();
-
     const [hasErorrs, setHasErrors] = useState(false)
-
-    const deserializeAppointment = (appointment : RecommendationAppointment) => ({
-        ...appointment,
-        date: new Date(appointment.date),
-    });
 
     const validateDescription = (value: string) => {
         if (value.trim() === '') {
@@ -69,7 +60,6 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
             }
             fetchUserId();
         }
-
     }, [session]);
 
     useEffect(() => {
@@ -82,7 +72,6 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
                     setTime(recommendation.date);
                     setUserId(recommendation.user_id);
                     setDoctor(recommendation.doctor);
-
                     setDescription(t('addRecommendationAppointmentDescription') + t(recommendation.specialty))
                 } else {
                     setDoctors(await getAllDoctorsByUser(session_user_id));
@@ -111,17 +100,16 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
         console.log("pri: ", appointmentDate)
         appointmentDate.setHours(time.getHours()-3);
         console.log("seg: ", appointmentDate)
-        appointmentDate.setMinutes(time.getMinutes());
-        console.log("tri: ", appointmentDate)
-        const appointment = { date: appointmentDate, description, user_name: '', doctor, user_id, id: '' , observations: observations};
+
+        const appointment = { date: appointmentDate, description, user_name: '', doctor, user_id, id: '', observations: observations};
         const result = await addAppointment(appointment);
-        if (result.success) {
+        /*if (result.success) {
             // @ts-ignore
-            navigation.navigate('AlertPublicity', { session, msg: 'text8', screen: 'calendar', appointment: null, du: null, doc: null, meds: null  });
+            //navigation.navigate('AlertPublicity', { session, msg: 'text8', screen: 'calendar', appointment: null, du: null, doc: null, meds: null  });
             //:( ni calendar ni Calender funcionan como screen xd
         } else {
             Alert.alert('Error', result.message || 'An unknown error occurred');
-        }
+        }*/
     };
 
     const doctorsList = doctors?.map((doctor) => ({
@@ -133,7 +121,6 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
         label: user.first_name,
         value: user.id,
     }));
-
 
     const onDateChange = (event: any, selectedDate: Date | undefined) => {
         const currentDate = selectedDate || date;
@@ -160,16 +147,13 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
         return selectedUser ? selectedUser.first_name : t('select_user');
     };
 
-
     const getDate = () => {
         return date ? date.toLocaleDateString() : 'Seleccione una fecha';
     };
 
-
     const getTime = () => {
         return time ? time.toLocaleTimeString() : 'Seleccione una hora';
     };
-
 
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
