@@ -132,7 +132,6 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
         const currentTime = selectedTime || time;
         setShowTimePicker(Platform.OS === 'ios');
         setTime(currentTime);
-        console.log("currentTime", currentTime)
     };
 
     const hideDoctorDialog = () => setDoctorDialog(false);

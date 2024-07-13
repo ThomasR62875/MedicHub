@@ -108,7 +108,7 @@ const EditAppointment: React.FC<EditAppointmentProps> = ({navigation, route }: a
     const handleUpdateAppointment = async () => {
         const session =  route.params.session;
         const appointmentDate = new Date(date);
-        appointmentDate.setHours(time.getHours()-3);
+        appointmentDate.setHours(time.getHours());
         appointmentDate.setMinutes(time.getMinutes())
         console.log("date q se pasa a la func de supabase: ", appointmentDate)
 
@@ -227,6 +227,7 @@ const EditAppointment: React.FC<EditAppointmentProps> = ({navigation, route }: a
                                         display="default"
                                         textColor='#cbe4c9'
                                         onChange={onTimeChange}
+                                        timeZoneOffsetInMinutes={0}
                                     />
                                 </>
                             ) : (
@@ -271,17 +272,13 @@ const EditAppointment: React.FC<EditAppointmentProps> = ({navigation, route }: a
                             )}
                         </View>
                         <PaperText style={styles.text}>Doctor</PaperText>
-
                         <PaperButton mode="outlined" style={styles.pickerButton} textColor='#2E5829' labelStyle={{textAlign: 'left', display:'flex'}} onPress={()=> setDoctorDialog(true)}>
                             {getDoctorName(doctor)}
                         </PaperButton>
-
                         <PaperText style={styles.text}>{t('user')}</PaperText>
-
                         <PaperButton mode="outlined" style={styles.pickerButton} textColor='#2E5829' labelStyle={{textAlign: 'left', display:'flex'}} onPress={()=> setUserDialog(true)}>
                             {getUserName(user_id)}
                         </PaperButton>
-
                         <View style={{alignItems: 'center'}}>
                             <Button
                                 title={t('savec')}
