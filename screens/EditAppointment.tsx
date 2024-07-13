@@ -1,6 +1,16 @@
 import React, {useEffect, useState} from 'react';
 import {getAllDoctorsByUser, getAllUsers, getUserId, updateAppointment } from '../lib/supabase';
-import {SafeAreaView, StyleSheet, View, Keyboard, TouchableWithoutFeedback, ScrollView, Text, Alert} from 'react-native';
+import {
+    SafeAreaView,
+    StyleSheet,
+    View,
+    Keyboard,
+    TouchableWithoutFeedback,
+    ScrollView,
+    Text,
+    Alert,
+    Platform
+} from 'react-native';
 import {Button, Input} from 'react-native-elements';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../App';
@@ -25,15 +35,35 @@ const EditAppointment: React.FC<EditAppointmentProps> = ({navigation, route }: a
     const [doctors, setDoctors] = useState<Doctor[] | undefined>([]);
     const [date, setDate] = useState(new Date());
     const [time, setTime] = useState(new Date());
+    const [showDatePicker, setShowDatePicker] = useState(false);
+    const [showTimePicker, setShowTimePicker] = useState(false);
     const [doctorDialog, setDoctorDialog] = useState(false);
     const [userDialog, setUserDialog] = useState(false);
     const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(true);
-
     const [descriptionErrorMessage, setDescriptionErrorMessage] = useState('');
     const { t } = useTranslation();
-
     const [hasErorrs, setHasErrors] = useState(false)
 
+    useEffect(() => {
+        if (session) {
+            const fetchAppointment = async () => {
+                try {
+                    if (appointment) {
+                        setId(appointment.id);
+                        setDescription(appointment.description);
+                        setDoctor(appointment.doctor);
+                        setUserId(appointment.user_id);
+                        setDate(new Date(appointment.date));
+                        setTime(new Date(appointment.date));
+                        setObservations(appointment.observations);
+                    }
+                } catch (error) {
+                    console.error("Error fetching appointment details:", error);
+                }
+            };
+            fetchAppointment();
+        }
+    }, [session, route.params.appointment]);
     const validateDescription = (value: string) => {
         if (value.trim() === '') {
             setDescriptionErrorMessage(t('text7'));
@@ -44,7 +74,6 @@ const EditAppointment: React.FC<EditAppointmentProps> = ({navigation, route }: a
 
         }
     };
-
 
     useEffect(() => {
         if (session) {
@@ -78,7 +107,12 @@ const EditAppointment: React.FC<EditAppointmentProps> = ({navigation, route }: a
 
     const handleUpdateAppointment = async () => {
         const session =  route.params.session;
-        const appointment  = {id: id, date: date, description: description,
+        const appointmentDate = new Date(date);
+        appointmentDate.setHours(time.getHours()-3);
+        appointmentDate.setMinutes(time.getMinutes())
+        console.log("date q se pasa a la func de supabase: ", appointmentDate)
+
+        const appointment  = {id: id, date: appointmentDate, description: description,
             user_name: '', doctor: doctor, user_id: user_id, observations: observations}
         const result = await updateAppointment(appointment);
         if (result.success) {
@@ -98,15 +132,6 @@ const EditAppointment: React.FC<EditAppointmentProps> = ({navigation, route }: a
         value: user.id,
     }));
 
-    const onDateChange = (event: any, selectedDate?: Date) => {
-        const currentDate = selectedDate || date;
-        setDate(currentDate);
-    };
-
-    const onTimeChange = (event: any, selectedTime?: Date) => {
-        const currentTime = selectedTime || time;
-        setTime(currentTime);
-    };
     const hideDoctorDialog = () => setDoctorDialog(false);
     const hideUserDialog = () => setUserDialog(false);
 
@@ -120,7 +145,6 @@ const EditAppointment: React.FC<EditAppointmentProps> = ({navigation, route }: a
         return selectedUser ? selectedUser.first_name : 'Seleccione un usuario';
     };
 
-
     function cutStringAtParenthesis(str: string): string {
         let parenthesisIndex = str.indexOf('(');
         if (parenthesisIndex !== -1) {
@@ -130,33 +154,25 @@ const EditAppointment: React.FC<EditAppointmentProps> = ({navigation, route }: a
         }
     }
 
-    function addHoursToDate(date: Date, hoursToAdd: number) {
-        const newDate = new Date(date);
-        newDate.setHours(newDate.getHours() + hoursToAdd);
-        return newDate;
-    }
+    const onDateChange = (event: any, selectedDate: Date | undefined) => {
+        const currentDate = selectedDate || date;
+        setShowDatePicker(Platform.OS === 'ios');
+        setDate(currentDate);
+    };
 
-    useEffect(() => {
-        if (session) {
-            const fetchAppointment = async () => {
-                try {
-                    if (appointment) {
-                        setId(appointment.id);
-                        setDescription(appointment.description);
-                        setDoctor(appointment.doctor);
-                        setUserId(appointment.user_id);
-                        setDate(new Date(appointment.date));
-                        setTime(new Date(addHoursToDate(appointment.date, 3)));
-                        setObservations(appointment.observations);
-                    }
-                } catch (error) {
-                    console.error("Error fetching appointment details:", error);
-                }
-            };
-            fetchAppointment();
-        }
-    }, [session, route.params.appointment]);
+    const onTimeChange = (event: any, selectedTime: Date | undefined) => {
+        const currentTime = selectedTime || time;
+        setShowTimePicker(Platform.OS === 'ios');
+        setTime(currentTime);
+    };
 
+    const getDate = () => {
+        return date ? date.toLocaleDateString() : 'Seleccione una fecha';
+    };
+
+    const getTime = () => {
+        return time ? time.toLocaleTimeString() : 'Seleccione una hora';
+    };
 
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
@@ -194,22 +210,65 @@ const EditAppointment: React.FC<EditAppointmentProps> = ({navigation, route }: a
                         </View>
                         <PaperText style={styles.text}>Horario y fecha</PaperText>
                         <View style={styles.datePickerContainer}>
-                            <DateTimePicker
-                                testID="datePicker"
-                                value={date}
-                                mode="date"
-                                display="default"
-                                style={{ backgroundColor: 'transparent' }}
-                                onChange={onDateChange}
-                            />
-                            <DateTimePicker
-                                testID="timePicker"
-                                value={time}
-                                mode="time"
-                                display="default"
-                                textColor='#cbe4c9'
-                                onChange={onTimeChange}
-                            />
+                            {Platform.OS === 'ios' ? (
+                                <>
+                                    <DateTimePicker
+                                        testID="datePicker"
+                                        value={date}
+                                        mode="date"
+                                        display="default"
+                                        style={{ backgroundColor: 'transparent' }}
+                                        onChange={onDateChange}
+                                    />
+                                    <DateTimePicker
+                                        testID="timePicker"
+                                        value={time}
+                                        mode="time"
+                                        display="default"
+                                        textColor='#cbe4c9'
+                                        onChange={onTimeChange}
+                                    />
+                                </>
+                            ) : (
+                                <>
+                                    <PaperButton
+                                        mode="outlined"
+                                        style={styles.pickerButton}
+                                        textColor='#2E5829'
+                                        labelStyle={{ textAlign: 'left', display: 'flex' }}
+                                        onPress={() => setShowDatePicker(true)}
+                                    >
+                                        {getDate()}
+                                    </PaperButton>
+                                    <PaperButton
+                                        mode="outlined"
+                                        style={styles.pickerButton}
+                                        textColor='#2E5829'
+                                        labelStyle={{ textAlign: 'left', display: 'flex' }}
+                                        onPress={() => setShowTimePicker(true)}
+                                    >
+                                        {getTime()}
+                                    </PaperButton>
+                                    {showDatePicker && (
+                                        <DateTimePicker
+                                            testID="datePicker"
+                                            value={date}
+                                            mode="date"
+                                            display="default"
+                                            onChange={onDateChange}
+                                        />
+                                    )}
+                                    {showTimePicker && (
+                                        <DateTimePicker
+                                            testID="timePicker"
+                                            value={time}
+                                            mode="time"
+                                            display="default"
+                                            onChange={onTimeChange}
+                                        />
+                                    )}
+                                </>
+                            )}
                         </View>
                         <PaperText style={styles.text}>Doctor</PaperText>
 
