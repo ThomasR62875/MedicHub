@@ -13,11 +13,12 @@ interface turnoContainerProps {
 
 const turnoContainer: React.FC<turnoContainerProps> = ({styleExterior, turno, date, onPress, ...props}) => {
     const otraDate = new Date(date);
-
+    console.log("d", date)
+    console.log("asa", formatDate(otraDate));
     return (
         <TouchableOpacity style={[styleExterior, {flexDirection: 'row'}]} {...props} onPress={onPress}>
             <View style={{flexDirection: 'column', padding: 10}}>
-                <Text style={[styles.text]}>{otraDate.getHours()}:{otraDate.getMinutes() > 10 ? otraDate.getMinutes() : '0' + otraDate.getMinutes()}</Text>
+                <Text style={[styles.text]}>{otraDate.getUTCHours()}:{otraDate.getMinutes() > 10 ? otraDate.getMinutes() : '0' + otraDate.getMinutes()}</Text>
                 <Text style={[styles.text2, {fontSize: 12, width: '150%'}]}>{formatDate(date)}</Text>
             </View>
 

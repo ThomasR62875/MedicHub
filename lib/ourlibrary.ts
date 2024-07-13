@@ -21,7 +21,7 @@ export function formatDate(dateString: string | number | Date) {
     const date = new Date(dateString);
     const day = date.getDate();
     const month = months[date.getMonth()];
-    return `${day+1} de ${month}`;
+    return `${day} de ${month}`;
 }
 
 export const sexGenderOptions: SexGenderOption[] = [
