@@ -108,11 +108,11 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
 
     const handleAddAppointment = async () => {
         const appointmentDate = new Date(date);
+        console.log("pri: ", appointmentDate)
         appointmentDate.setHours(time.getHours()-3);
+        console.log("seg: ", appointmentDate)
         appointmentDate.setMinutes(time.getMinutes());
-
-
-
+        console.log("tri: ", appointmentDate)
         const appointment = { date: appointmentDate, description, user_name: '', doctor, user_id, id: '' , observations: observations};
         const result = await addAppointment(appointment);
         if (result.success) {
@@ -207,7 +207,7 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
                                 {descriptionErrorMessage}
                             </HelperText>
                         </View>
-                        <PaperText style={styles.text}>{t('dateTime')}</PaperText>
+                        <PaperText style={styles.text}>{t('dateTime')}:</PaperText>
                         <View style={styles.datePickerContainer}>
                             {Platform.OS === 'ios' ? (
                                 <>
