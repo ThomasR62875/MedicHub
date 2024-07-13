@@ -285,8 +285,9 @@ export const styles = StyleSheet.create({
     },
     header: {
         position: 'absolute',
-        top: 0,
-        left: -7,
+        top: '0%',
+        left: '-1.5%',
+
     },
     titleContainer: {
         fontSize: 25,
