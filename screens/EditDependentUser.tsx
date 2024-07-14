@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import {updateDependentUser} from '../lib/supabase'
-import {View, StyleSheet, Alert, TouchableWithoutFeedback, Keyboard} from 'react-native'
+import {View, Alert} from 'react-native'
 import {Button, Icon, Input, Text} from 'react-native-elements'
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
@@ -272,64 +272,3 @@ const EditDependentUser: React.FC<EditDependentUserProps> = ({navigation, route}
 }
 
 export default EditDependentUser
-//
-// const styles = StyleSheet.create({
-//     container: {
-//         backgroundColor: '#e9f4e9',
-//         height: '100%',
-//         alignContent: 'center'
-//     },
-//     window: {
-//         alignItems: 'center',
-//         marginTop: '20%',
-//         marginLeft: '5%',
-//         marginRight: '5%'
-//     },
-//     datePicker: {
-//         alignSelf: 'center',
-//         marginTop: "5%",
-//     },
-//     datePickerContainer: {
-//         flexDirection: 'row',
-//         display: 'flex',
-//         justifyContent: 'center',
-//         marginLeft: '10%',
-//         marginRight: '15%',
-//         marginTop: '10%',
-//         marginBottom: '10%'
-//     },
-//     pickerButton: {
-//         borderRadius: 6,
-//         marginLeft: '5%',
-//         marginRight: '5%',
-//     },
-//     dialog: {
-//         backgroundColor: "#e9f4e9"
-//     },
-//     dialogTitle: {
-//         fontFamily: 'Roboto-Thin',
-//         fontSize: 25,
-//         textAlign: 'center',
-//         fontWeight: 'bold',
-//         margin: "5%",
-//         marginLeft: '15%',
-//         color: "#2E5829FF",
-//         width: "70%"
-//     },
-//     pickerStyle: {
-//         marginBottom: 20,
-//     },
-//     text: {
-//         fontFamily: 'Roboto-Thin',
-//         fontSize: 14,
-//         marginTop: "5%",
-//         marginLeft: '4%',
-//         marginBottom: '2%',
-//         color: "#2E5829FF",
-//         width: "60%"
-//     },
-//     calendarContainer: {
-//         margin: '5%',
-//         backgroundColor: "#E9F4E9FF"
-//     },
-// })

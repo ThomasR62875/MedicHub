@@ -135,34 +135,3 @@ const Calender: React.FC = ({ navigation, route } : any) => {
 }
 
 export default Calender;
-
-/*
-Esto lo use para encontrar errores, asiq queda acá por si se vuelve a necesitar
-
-<View style={{marginTop:60}}>
-                        {!filteredData && <Text>filteredData is undefined</Text>}
-                        {filteredData && (
-                            <>
-                                <Text>Contenido de filteredData:</Text>
-                                <Text>{filteredData.length}</Text>
-                                {filteredData.map((item, index) => (
-                                    <Text key={index}>{item.date.toString()}</Text>
-                                ))}
-                            </>
-                        )}
-                        {appointments && appointments.length > 0 ? (
-                            <>
-                                <Text> el targetDate {targetDate}</Text>
-                                <Text>Contenido de appointments:</Text>
-                                {appointments.map((item, index) => (
-                                    <View key={index}>
-                                        <Text>{item.date.toString().slice(0,10)} === {targetDate}</Text>
-                                    </View>
-
-                                ))}
-                            </>
-                        ) : (
-                            <Text>No hay citas disponibles</Text>
-                        )}
-                    </View>
- */
