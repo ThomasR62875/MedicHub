@@ -186,7 +186,7 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
                     inputStyle={{color: '#000', fontSize: 14, marginLeft: 10}}
                     errorMessage={prescriptionErrorMessage}
                 />
-                <RNText style={[styles.label2, {marginLeft: '5%'}]}>
+                <RNText style={[styles.label2, {marginLeft: '3%'}]}>
                     {t('text22')}
                 </RNText>
                 <View style={styles.datePickerContainer}>
@@ -256,21 +256,9 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
                         </>
                     )}
                 </View>
-                <View style={{marginBottom: "5%", marginTop: "5%"}}>
-                    <RNText style={styles.label2}>
-                        {t('text20')}
-                    </RNText>
-                    <Picker
-                        mode="dropdown"
-                        selectedValue={howOften}
-                        onValueChange={(value) => setHowOften(value)}>
-                        {timesList.map((item, index) => (
-                            <Picker.Item label={item.label} value={item.value} key={index}/>
-                        ))}
-                    </Picker>
-                </View>
+
                 <View>
-                    <RNText style={[styles.label2, {marginLeft: '5%'}]}>
+                    <RNText style={[styles.label2, {marginLeft: '3%'}]}>
                         {t('text21')}
                     </RNText>
                     <View style={styles.datePickerContainer}>
@@ -309,6 +297,19 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
                                 )}
                             </>
                         )}
+                    </View>
+                    <View style={{marginBottom: "5%", marginTop: "5%"}}>
+                        <RNText style={[styles.label2,{marginLeft: '3%'}]}>
+                            {t('text20')}
+                        </RNText>
+                        <Picker
+                            mode="dropdown"
+                            selectedValue={howOften}
+                            onValueChange={(value) => setHowOften(value)}>
+                            {timesList.map((item, index) => (
+                                <Picker.Item label={item.label} value={item.value} key={index}/>
+                            ))}
+                        </Picker>
                     </View>
                     <View style={[cardStyle.infoRow, {marginTop: "5%", justifyContent: 'center'}]}>
                         <RNText style={styles.label2}>
