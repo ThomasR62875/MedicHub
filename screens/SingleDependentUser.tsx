@@ -81,15 +81,13 @@ const SingleDependentUser: React.FC<SingleDependentUserProps> = ({navigation, ro
     const handleUserSharing = async () => {
         const parent_id = await getUserIdByEmail(shareEmail);
         if (parent_id === undefined) {
-            console.log('Parent user not found');
+            console.warn('Parent user not found');
             return;
         }
 
         const result = await setDependentUser(parent_id, route.params.du.id);
-        if (result) {
-            console.log('User sharing set successfully');
-        } else {
-            console.log('Failed to set user sharing');
+        if (!result) {
+            console.error('Failed to set user sharing');
         }
     }
 

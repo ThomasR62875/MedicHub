@@ -55,7 +55,7 @@ const Medications: React.FC = ({navigation, route}: any) => {
                         <Text style={styles.buttonText}>{t('add')}</Text>
                     </TouchableOpacity>
                     <Icon name={'filter-variant'} type={'material-community'} color={'#000000'} size={30}
-                          style={{paddingRight: 20, padding: 5}} onPress={() => console.log('Filter')}/>
+                          style={{paddingRight: 20, padding: 5}}/>
                 </View>
                 <View style={styles.listCards}>
                     {isLoading ? (

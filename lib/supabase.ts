@@ -139,7 +139,7 @@ export const addMedication = async (medication: Medication): Promise<{ success: 
         return {success: true};
     }
 }
-// Devuelve todos los Doctores por usuario
+// Devuelve tods los Doctores por usuario
 export const getAllDoctorsByUser = async (session_user_id: String): Promise<Doctor [] | undefined> => {
     const {data, error} = await supabase.rpc('get_all_doctors_by_user', {user_id: session_user_id});
     if (error) {
@@ -216,7 +216,7 @@ export const getDoctorsBySpecialty = async (session_user_id: string, speciality:
     return to_return
 }
 
-// Devuelve todos los usuarios dependiendo de un user_id incluyendo el usuario independiente
+// Devuelve tods los usuarios dependiendo de un user_id incluyendo el usuario independiente
 export const getAllUsers = async (session_user_id: String): Promise<DependentUser[] | undefined> => {
     const {data, error} = await supabase.rpc('get_all_users', {user_id: session_user_id});
     if (error) {
@@ -225,7 +225,7 @@ export const getAllUsers = async (session_user_id: String): Promise<DependentUse
     return data
 }
 
-// Devuelve todos los usuarios dependiendo de un user_id
+// Devuelve tods los usuarios dependiendo de un user_id
 export const getDependentUsers = async (session_user_id: String): Promise<DependentUser[] | undefined> => {
     let to_return: DependentUser[] = []
     const {data, error} = await supabase.rpc('get_dependent_users');
@@ -535,7 +535,7 @@ export const getAdvertisement = async(banner_type: string) : Promise<Advertiseme
     if(!error){
         return data;
     }
-    console.log(error)
+    console.error(error)
     return undefined;
 }
 

@@ -32,9 +32,6 @@ type Doctor = {
   id:string;
 }
 
-
-console.log("Hello from Functions!")
-
 const supabase = createClient(
     Deno.env.get("SUPABASE_URL")!,
     Deno.env.get("SUPABASE_ANON_KEY")!,
@@ -44,7 +41,6 @@ const novu = new Novu('8174d59d606b3e4c69ac095e52bf9ae1');
 
 Deno.serve(async (req) => {
   const { name } = await req.json()
-  console.log("Sending notification day", name)
 
   await checkAppointments();
 
@@ -99,7 +95,6 @@ async function checkAppointments() {
         try {
           await sendNotification(appointmentDate, appointment.description, appointment.user_name, appointment.doctor, appointment.user_id, email);
           await updateNotification(appointment.id)
-          // console.log('Notification sent for appointment:', appointment.id);
         } catch (notificationError) {
           console.error('Error sending notification:', notificationError);
         }
@@ -116,8 +111,6 @@ const getNotificationAppointments = async () : Promise<Appointment[] | undefined
   const {data, error, status} = await supabase.rpc('get_notification_appointments_d_b')
   if (error) {
     console.error('Error getting notification appointments data:', error.message);
-  } else{
-    // console.log('Notification appointments data inserted successfully');
   }
 
   for (const appointment of data)  {
@@ -137,8 +130,6 @@ const getNotificationAppointments = async () : Promise<Appointment[] | undefined
 
   if (error) {
     console.error('Error inserting specialty data:', error.message);
-  } else {
-    // console.log('Specialty data inserted successfully');
   }
   return to_return
 }
@@ -149,8 +140,6 @@ const getUserRelation = async (user_id:String) : Promise<String | undefined> =>{
 
   if (error) {
     console.error('Error getting independent user id:', error.message);
-  } else {
-    // console.log('Independent user id retrieved successfully');
   }
 
   return data;
@@ -162,8 +151,6 @@ const getNotificationEmail = async (user_id:String) : Promise<string | undefined
 
   if (error) {
     console.error('Error getting users email:', error.message);
-  } else {
-    // console.log('User email retrieved successfully');
   }
 
   return data;
@@ -174,8 +161,6 @@ const updateNotification = async (appointment_id: string)  =>{
 
   if (error) {
     console.error('Error getting independent user id:', error.message);
-  } else {
-    // console.log('Independent user id retrieved successfully');
   }
 }
 
@@ -184,8 +169,6 @@ const getUser = async (session_user_id:String) : Promise<DependentUser> => {
   const { data, error } = await supabase.rpc('get_user', { user_id: session_user_id });
   if (error) {
     console.error('Error inserting users data:', error.message);
-  } else {
-    // console.log('Users data inserted successfully');
   }
   return data
 }
@@ -194,8 +177,6 @@ const getDoctor = async (doctor_id : string) : Promise<Doctor> => {
   const { data, error } = await supabase.rpc('get_doctor',{doctor_id: doctor_id});
   if (error) {
     console.error('Error getting doctor data:', error.message);
-  } else {
-    // console.log('Doctor data got successfully');
   }
   return data
 }

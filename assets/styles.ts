@@ -279,7 +279,7 @@ export const styles = StyleSheet.create({
         color: '#2E5829FF',
     },
     buttonContainer: {
-        width: 225, // Ancho deseado para todos los botones
+        width: 225, // Ancho deseado para los botones
         marginVertical: 10,
     },
     infoRow: {
