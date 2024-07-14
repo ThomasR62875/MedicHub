@@ -32,23 +32,25 @@ const Medications: React.FC = ({navigation, route}: any) => {
     const [checkedState, setCheckedState] = useState<boolean[]>([]);
 
 
+    async function fetchData() {
+        if (session) {
+            setMedications(await getMedications());
+            setIsLoading(false);
+            setAdvertisement( await getAdvertisement('BIG'));
+        }
+    }
+
+
+
     useEffect(() => {
         navigation.addListener('focus', () => {
-            async function fetchData() {
-                if (session) {
-                    setMedications(await getMedications());
-                    const dependentUsers = await getAllUsers(await getUserId());
-                    setUsers(dependentUsers);
-                    setAdvertisement( await getAdvertisement('BIG'));
-                    setIsLoading(false);
-                }
-            }
             fetchData();
             if(users){
                 setCheckedState(new Array(users.length).fill(false))
             }
         });
     }, [navigation, session]);
+
 
     const hideFilterDialog = () => setFilterDialog(false);
     const handleCheckboxChange = (user: DependentUser, index: number) => {

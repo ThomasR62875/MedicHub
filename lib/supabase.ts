@@ -15,7 +15,7 @@ import {
 
 import getEnvVars from '../environment';
 
-const { REACT_APP_SUPABASE_URL, REACT_APP_ANON_KEY } = getEnvVars();
+const {REACT_APP_SUPABASE_URL, REACT_APP_ANON_KEY} = getEnvVars();
 
 export const supabase = createClient(REACT_APP_SUPABASE_URL, REACT_APP_ANON_KEY, {
     auth: {
@@ -28,8 +28,8 @@ export const supabase = createClient(REACT_APP_SUPABASE_URL, REACT_APP_ANON_KEY,
 
 
 //Devuelve usuario por id
-export const getUser = async (session_user_id: String) : Promise<DependentUser> => {
-    const { data, error } = await supabase.rpc('get_user', { user_id: session_user_id });
+export const getUser = async (session_user_id: String): Promise<DependentUser> => {
+    const {data, error} = await supabase.rpc('get_user', {user_id: session_user_id});
     if (error) {
         console.error('Error returning users data:', error.message);
     }
@@ -79,8 +79,10 @@ export const signUp = async (user: User, password: string): Promise<{ success: b
 
 // Agrega un appointment recibiendo el appointment como parametro
 export const addAppointment = async (appoint: Appointment): Promise<{ success: boolean; message?: string }> => {
-    const { error } = await supabase.rpc("add_appointment", {datetime_input: appoint.date, description_input: appoint.description,
-        doctor_input: appoint.doctor, user_id: appoint.user_id, observations_input: appoint.observations});
+    const {error} = await supabase.rpc("add_appointment", {
+        datetime_input: appoint.date, description_input: appoint.description,
+        doctor_input: appoint.doctor, user_id: appoint.user_id, observations_input: appoint.observations
+    });
     if (error) {
         return {success: false, message: error.message};
     } else {
@@ -109,9 +111,11 @@ export const addDoctor = async (doctor: Doctor): Promise<{ success: boolean; mes
 
 
 //Agrega un dependent user
-export const addDependentUser = async (user: DependentUser): Promise<{ success: boolean; message?: string }> =>{
-    const { error } = await supabase.rpc("add_dependent_user",{first_name_input: user.first_name,
-        last_name_input : user.last_name, dni_input:user.dni, birthdate_input: user.birthdate, sex_input: user.sex});
+export const addDependentUser = async (user: DependentUser): Promise<{ success: boolean; message?: string }> => {
+    const {error} = await supabase.rpc("add_dependent_user", {
+        first_name_input: user.first_name,
+        last_name_input: user.last_name, dni_input: user.dni, birthdate_input: user.birthdate, sex_input: user.sex
+    });
     if (error) {
         console.error('Error inserting data:', error.message);
         return {success: false, message: error.message};
@@ -216,7 +220,10 @@ export const getDoctorsByUser = async (user_id: string): Promise<Doctor[] | unde
 // Obtiene los doctores por el id del usuario y una especialdiad
 export const getDoctorsBySpecialtyAndUser = async (user_id: string, speciality: string): Promise<Doctor[] | undefined> => {
     let to_return: Doctor[] = []
-    const {data, error} = await supabase.rpc("get_doctors_by_specialty", {user_id: user_id, specialty_input: speciality});
+    const {data, error} = await supabase.rpc("get_doctors_by_specialty", {
+        user_id: user_id,
+        specialty_input: speciality
+    });
     if (error) {
         console.error('Error getting doctor in doctors by speciality data:', error.message);
     }
@@ -277,7 +284,7 @@ export const getAppointments = async (): Promise<Appointment[] | undefined> => {
 
     for (const appoint of data) {
         const user: (DependentUser) = await getUser(appoint.user);
-        const doctor: (Doctor|undefined) = await getDoctor(appoint.doctor);
+        const doctor: (Doctor | undefined) = await getDoctor(appoint.doctor);
 
         const new_appoint: Appointment = {
             id: appoint.id,
@@ -320,10 +327,10 @@ export function getAge(birthdate: Date | null): number | null {
 
 // Obtiene la informacion para las preguntas
 export const getUserData = async (appointment: Appointment): Promise<UserData | null> => {
-    const doctor: (Doctor|undefined) = await getDoctor(appointment.doctor);
+    const doctor: (Doctor | undefined) = await getDoctor(appointment.doctor);
 
-    const { data: lastAppointmentData, error: lastAppointmentError } = await supabase
-        .rpc('get_last_appointment_info', { doctor_id_input: appointment.doctor, user_id: appointment.user_id });
+    const {data: lastAppointmentData, error: lastAppointmentError} = await supabase
+        .rpc('get_last_appointment_info', {doctor_id_input: appointment.doctor, user_id: appointment.user_id});
     if (lastAppointmentError) {
         console.error('Error getting last appointment data:', lastAppointmentError.message);
         return null;
@@ -413,8 +420,10 @@ export const deleteMedication = async (medication: Medication): Promise<{ succes
 
 
 export const updateAppointment = async (appoint: Appointment): Promise<{ success: boolean, message: string }> => {
-    const { error } = await supabase.rpc("update_appointment", {id_input: appoint.id, datetime_input: appoint.date, description_input: appoint.description,
-        doctor_input: appoint.doctor, user_input: appoint.user_id, observations_input: appoint.observations});
+    const {error} = await supabase.rpc("update_appointment", {
+        id_input: appoint.id, datetime_input: appoint.date, description_input: appoint.description,
+        doctor_input: appoint.doctor, user_input: appoint.user_id, observations_input: appoint.observations
+    });
 
     if (error) {
         return {
@@ -430,7 +439,14 @@ export const updateAppointment = async (appoint: Appointment): Promise<{ success
 };
 
 export const updateDependentUser = async (depUser: DependentUser): Promise<{ success: boolean, message: string }> => {
-    const { error } = await supabase.rpc("update_user", {id_input: depUser.id , first_name_input: depUser.first_name, last_name_input: depUser.last_name, dni_input: depUser.dni, birthdate_input: depUser.birthdate, sex_input: depUser.sex});
+    const {error} = await supabase.rpc("update_user", {
+        id_input: depUser.id,
+        first_name_input: depUser.first_name,
+        last_name_input: depUser.last_name,
+        dni_input: depUser.dni,
+        birthdate_input: depUser.birthdate,
+        sex_input: depUser.sex
+    });
     if (error) {
         return {
             success: false,
@@ -487,15 +503,12 @@ export const updateMedication = async (medication: Medication): Promise<{ succes
             message: 'Error updating medication data',
         }
     } else {
-        console.log('update successful')
-
         return {
             success: true,
             message: 'Medication updated successfully',
         }
     }
 };
-
 
 export async function getMedications(): Promise<Medication[] | undefined> {
     let to_return: Medication[] | undefined = undefined
@@ -508,23 +521,26 @@ export async function getMedications(): Promise<Medication[] | undefined> {
     if (error) {
         throw new Error(error.message);
     }
+
     to_return = [];
-    data.forEach((medication: Medication) => {
-        // @ts-ignore
-        to_return.push({
-            id: medication.id,
-            name: medication.name,
-            prescription: medication.prescription,
-            sinceWhen: medication.sinceWhen,
-            untilWhen: medication.untilWhen,
-            howOften: medication.howOften,
-            isForever: medication.isForever,
-            user_id: medication.user_id,
-        });
-    });
+
+    for (const med of data) {
+        const new_med: Medication = {
+            id: med.id,
+            name: med.name,
+            prescription: med.prescription,
+            sinceWhen: med.sincewhen,
+            untilWhen: med.untilwhen,
+            howOften: med.howoften,
+            isForever: med.isforever,
+            user_id: med.user_id
+        }
+        console.log(new_med)
+        to_return.push(new_med);
+
+    }
     return to_return;
 }
-
 
 export const setDependentUser = async (parent_id: string, child_id: string) => {
     const {error: error} = await supabase.rpc('set_dependent_user', {parent_input: parent_id, child_input: child_id});
@@ -541,8 +557,11 @@ export const setDependentUser = async (parent_id: string, child_id: string) => {
     }
 }
 
-export const getUserIdByEmail = async (email_input: string) : Promise<string | undefined> => {
-    const {data: user_id ,error: error} = await supabase.rpc('get_independent_user_by_email', {email_input: email_input});
+export const getUserIdByEmail = async (email_input: string): Promise<string | undefined> => {
+    const {
+        data: user_id,
+        error: error
+    } = await supabase.rpc('get_independent_user_by_email', {email_input: email_input});
     if (!error) {
         return user_id
     }
@@ -550,10 +569,16 @@ export const getUserIdByEmail = async (email_input: string) : Promise<string | u
 }
 
 //Obtiene la informacion necesaria para la publicidad
-export const getAdvertisement = async(banner_type: string) : Promise<Advertisement | undefined> =>{
-    const{data,error} = await supabase.rpc('get_advertisement',{banner_input: banner_type})
-    if(!error){
-        let advertisement: Advertisement = {client: data.id,logo:data.logo,mail:data.mail,name:data.name,image_url:data.image_url}
+export const getAdvertisement = async (banner_type: string): Promise<Advertisement | undefined> => {
+    const {data, error} = await supabase.rpc('get_advertisement', {banner_input: banner_type})
+    if (!error) {
+        let advertisement: Advertisement = {
+            client: data.id,
+            logo: data.logo,
+            mail: data.mail,
+            name: data.name,
+            image_url: data.image_url
+        }
         return advertisement;
     }
     console.error(error)
@@ -571,11 +596,13 @@ export const getRecommendations = async (user_id: string): Promise<Recommendatio
 
 //Obtiene el doctor relacionado de un cliente
 
-export const getClientDoctor= async(client_id:string): Promise<Doctor | undefined> => {
+export const getClientDoctor = async (client_id: string): Promise<Doctor | undefined> => {
     const {data, error} = await supabase.rpc('get_client_doctor', {client_input: client_id});
-    if(!error) {
-        let doc: Doctor= {id:'',name:data.name,email:data.mail,addresses:data.addresses,phone:data.phone,
-            specialty:data.specialty,user_id:''};
+    if (!error) {
+        let doc: Doctor = {
+            id: '', name: data.name, email: data.mail, addresses: data.addresses, phone: data.phone,
+            specialty: data.specialty, user_id: ''
+        };
         return doc;
     }
     console.log(error);

@@ -106,7 +106,6 @@ const EditMedication: React.FC<EditMedicationProps> = ({navigation, route}: any)
 
         sinceDate.setHours(timeSince.getHours())
         sinceDate.setMinutes(timeSince.getMinutes())
-        console.log('done 2')
 
         const medication = {
             id: id,
@@ -121,7 +120,6 @@ const EditMedication: React.FC<EditMedicationProps> = ({navigation, route}: any)
         const result = await updateMedication(medication);
         if (result.success) {
             navigation.navigate('AlertPublicity', { session, msg: 'editMed', screen: 'SingleMedication', meds: medication});
-            console.log('done 2')
         } else {
             Alert.alert('Error', result.message || 'An unknown error occurred');
         }
