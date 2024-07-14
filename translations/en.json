@@ -158,7 +158,7 @@
   "selectTime": "Select how often",
   "selectATime": "Select a time",
   "addnewmed" : "Add new medication",
-  "enterDataForShare": "Enter the data to move this user and their information to a new account."
-
+  "enterDataForShare": "Enter the data to move this user and their information to a new account.",
+  "warn21": "Text is too long."
 }
 

@@ -24,6 +24,7 @@ import {Text as PaperText, HelperText, Button as PaperButton, Dialog, Portal} fr
 import {LogBox} from 'react-native';
 import {styles} from "../assets/styles";
 import ScrollableBg from "../components/ScrollableBg";
+import { validateTextLength } from '../lib/ourlibrary';
 
 LogBox.ignoreLogs(['`timeZoneOffsetInMinutes` is deprecated and will be removed in a future release. Use `timeZoneName` instead.']);
 console.warn = () => {
@@ -48,8 +49,10 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({navigation, route}: any)
     const [showDatePicker, setShowDatePicker] = useState(false);
     const [showTimePicker, setShowTimePicker] = useState(false);
     const [descriptionErrorMessage, setDescriptionErrorMessage] = useState('');
+    const [observationsErrorMessage, setObservationsErrorMessage] = useState('');
+    const descriptionLength= 30;
+    const observationsLength= 100;
     const {t} = useTranslation();
-    const [hasErorrs, setHasErrors] = useState(false)
 
     useEffect(() => {
         if (session_user_id) {
@@ -85,12 +88,16 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({navigation, route}: any)
     const validateDescription = (value: string) => {
         if (value.trim() === '') {
             setDescriptionErrorMessage(t('text7'));
-            setHasErrors(true);
         } else {
-            setDescriptionErrorMessage('');
-            setHasErrors(true);
+            let {result,msg}= validateTextLength(value,descriptionLength);
+            setDescriptionErrorMessage(msg);
         }
     };
+
+    const validateObservations = (value:string) =>{
+        let {result,msg}= validateTextLength(value,observationsLength);
+        setObservationsErrorMessage(msg);
+    }
 
     useEffect(() => {
         if (session) {
@@ -106,13 +113,14 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({navigation, route}: any)
         if (
             doctor.trim() !== '' &&
             user_id.trim() !== '' &&
-            description !== ''
+            descriptionErrorMessage == '' &&
+            observationsErrorMessage == ''
         ) {
             setIsButtonDisabled(false);
         } else {
             setIsButtonDisabled(true);
         }
-    }, [doctor, user_id, description]);
+    }, [doctor, user_id, description,observations]);
 
 
     const handleAddAppointment = async () => {
@@ -236,8 +244,11 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({navigation, route}: any)
                     inputStyle={{color: '#000', fontSize: 14, marginLeft: 10}}
                     onChangeText={(text) => {
                         setObservations(text);
+                        validateObservations(text);
                     }}
                     autoCapitalize={'none'}
+                    errorStyle={{color: 'red'}}
+                    errorMessage={observationsErrorMessage}
                 />
                 <PaperText style={[styles.label2, {paddingLeft: 14}]}>{t('dateTime')}</PaperText>
                 <View style={styles.datePickerContainer}>

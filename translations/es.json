@@ -158,5 +158,6 @@
   "selectTime": "Seleccione cada cuanto",
   "selectATime": "Seleccione una hora",
   "addnewmed" : "Agregar nuevo medicamento",
-  "enterDataForShare": "Ingrese los datos para mover este usario y sus datos a una nueva cuenta"
+  "enterDataForShare": "Ingrese los datos para mover este usario y sus datos a una nueva cuenta",
+  "warn21": "El texto es demasiado largo"
 }

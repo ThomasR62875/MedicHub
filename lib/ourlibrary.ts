@@ -48,3 +48,11 @@ export const getSexGenderName = (value: string) => {
     const option = sexGenderOptions.find(option => option.value === value);
     return option ? option.sex_gender_name : '';
 };
+
+export const validateTextLength= (str:string, length:number): {result:boolean,msg:string} => {
+    if (str.length <= length) {
+        return {result: true, msg: ``};
+      } else {
+        return {result: false,msg: t('warn21')};
+      }
+}

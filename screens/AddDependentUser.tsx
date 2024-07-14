@@ -9,7 +9,7 @@ import {useTranslation} from "react-i18next";
 import DateTimePicker, {DateTimePickerEvent} from "@react-native-community/datetimepicker";
 import {Button as PaperButton, Dialog, Text as PaperText} from "react-native-paper";
 import {Picker} from "@react-native-picker/picker";
-import {getSexGenderName, sexGenderOptions} from "../lib/ourlibrary";
+import {getSexGenderName, sexGenderOptions, validateTextLength} from "../lib/ourlibrary";
 import {styles} from "../assets/styles";
 // @ts-ignore
 import ScrollableBg from "../components/ScrollableBg";
@@ -18,6 +18,7 @@ type AddDependentUserProps = NativeStackScreenProps<RootStackParamList, 'AddDepe
 
 const AddDependentUser:React.FC<AddDependentUserProps> = ({navigation, route} : any) => {
     const session = route.params.session;
+    const textLength= 30;
     const [firstName,setFirstName] = useState('')
     const [lastName,setLastName] = useState('')
     const [dni,setDni]  = useState('')
@@ -54,14 +55,16 @@ const AddDependentUser:React.FC<AddDependentUserProps> = ({navigation, route} : 
         if (value.trim() === '') {
             setFirstNameErrorMessage(t('warn1'));
         } else {
-            setFirstNameErrorMessage('');
+            let {result,msg}=validateTextLength(value,textLength);
+            setFirstNameErrorMessage(msg);
         }
     };
     const validateLastName = (value: string) => {
         if (value.trim() === '') {
             setLastNameErrorMessage(t('warn17'));
         } else {
-            setLastNameErrorMessage('');
+            let {result,msg}= validateTextLength(value,textLength);
+            setLastNameErrorMessage(msg);
         }
     };
     const validateDNI = (value: string) => {
@@ -273,6 +276,7 @@ const AddDependentUser:React.FC<AddDependentUserProps> = ({navigation, route} : 
                         marginTop: 40,
                         marginBottom: 100
                     }}
+                    disabled={isButtonDisabled}
                     titleStyle={{color: '#eef9ed'}}
                     onPress={handleAddDependentUser}
                 />
