@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import {View, Text, Image, TouchableOpacity} from 'react-native'
+import {View, Text, Image, TouchableOpacity, ActivityIndicator} from 'react-native'
 import {getMedications} from '../lib/supabase'
 import MedicationButton from "../components/MedicationButton";
 import {Icon} from "react-native-elements";
@@ -15,12 +15,14 @@ const Medications: React.FC = ({navigation, route}: any) => {
     const [medications, setMedications] = useState<Medication[] | undefined>(undefined)
     const {t} = useTranslation();
     const colors = ['rgba(139,134,190,0.6)', 'rgba(222,176,189,0.6)', 'rgba(236,183,97,0.6)', 'rgba(203,214,144,0.6)']
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         navigation.addListener('focus', () => {
             async function fetchData() {
                 if (session) {
                     setMedications(await getMedications());
+                    setIsLoading(false);
                 }
             }
 
@@ -56,8 +58,9 @@ const Medications: React.FC = ({navigation, route}: any) => {
                           style={{paddingRight: 20, padding: 5}} onPress={() => console.log('Filter')}/>
                 </View>
                 <View style={styles.listCards}>
-                    {
-                        medications && medications.length > 0 ? (
+                    {isLoading ? (
+                        <ActivityIndicator size="small" color="#807d7d" style={{marginVertical: '10%'}}/>
+                    ) : (medications && medications.length > 0 ? (
                             medications.map((medic: Medication, i) => {
                                 return (
                                     <View key={i}>
@@ -87,7 +90,7 @@ const Medications: React.FC = ({navigation, route}: any) => {
                             })
                         ) : (
                             <Text style={[styles.text2, {alignSelf: 'center', padding: 30}]}>{t('text16')}</Text>
-                        )
+                        ))
                     }
                 </View>
             </ScrollableBg>
