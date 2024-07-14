@@ -333,6 +333,17 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
                             </>
                         )}
                     </View>
+                    <View style={[cardStyle.infoRow, {marginTop: "5%", justifyContent: 'center'}]}>
+                        <RNText style={styles.label2}>
+                            {t('text26')}
+                        </RNText>
+                        <Checkbox
+                            style={{marginLeft: "3%"}}
+                            value={isForever}
+                            onValueChange={setIsForever}
+                            color={'#000'}
+                        />
+                    </View>
                     <View style={{marginBottom: "5%", marginTop: "5%"}}>
                         <RNText style={[styles.label2,{marginLeft: '3%'}]}>
                             {t('selectTime')}
@@ -351,17 +362,6 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
                                  contentStyle={{justifyContent: 'flex-start'}} onPress={() => setUserDialog(true)}>
                         {getUserName(user_id)}
                     </PaperButton>
-                    <View style={[cardStyle.infoRow, {marginTop: "5%", justifyContent: 'center'}]}>
-                        <RNText style={styles.label2}>
-                            {t('text26')}
-                        </RNText>
-                        <Checkbox
-                            style={{marginLeft: "3%"}}
-                            value={isForever}
-                            onValueChange={setIsForever}
-                            color={'#000'}
-                        />
-                    </View>
                 </View>
                 <Button
                     title={t('addnewmed')}

@@ -346,6 +346,19 @@ const EditMedication: React.FC<EditMedicationProps> = ({navigation, route}: any)
                         </>
                     )}
                 </View>
+                <View>
+                    <View style={[cardStyle.infoRow, {marginTop: "5%", justifyContent: 'center'}]}>
+                        <RNText style={styles.label2}>
+                            {t('text26')}
+                        </RNText>
+                        <Checkbox
+                            style={{marginLeft: "3%"}}
+                            value={isForever}
+                            onValueChange={setIsForever}
+                            color={'#000'}
+                        />
+                    </View>
+                </View>
                 <View style={{marginBottom: "5%", marginTop: "5%", marginLeft: '4%'}}>
                     <RNText style={styles.label2}>
                         {t('selectTime')}
@@ -364,19 +377,6 @@ const EditMedication: React.FC<EditMedicationProps> = ({navigation, route}: any)
                              contentStyle={{justifyContent: 'flex-start'}} onPress={() => setUserDialog(true)}>
                     {getUserName(user_id)}
                 </PaperButton>
-                <View>
-                    <View style={[cardStyle.infoRow, {marginTop: "5%", justifyContent: 'center'}]}>
-                        <RNText style={styles.label2}>
-                            {t('text26')}
-                        </RNText>
-                        <Checkbox
-                            style={{marginLeft: "3%"}}
-                            value={isForever}
-                            onValueChange={setIsForever}
-                            color={'#000'}
-                        />
-                    </View>
-                </View>
                 <Button
                     title={t('savec')}
                     buttonStyle={{
