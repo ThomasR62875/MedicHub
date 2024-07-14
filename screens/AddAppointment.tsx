@@ -109,11 +109,13 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({navigation, route}: any)
     }, [session]);
 
     useEffect(() => {
+        const today = new Date();
         if (
             doctor.trim() !== '' &&
             user_id.trim() !== '' &&
             descriptionErrorMessage == '' &&
-            observationsErrorMessage == ''
+            observationsErrorMessage == '' &&
+            (date > today)
         ) {
             setIsButtonDisabled(false);
         } else {
@@ -323,14 +325,14 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({navigation, route}: any)
                 <PaperText style={[styles.label2, {paddingLeft: 14}]}>{t('doc')}</PaperText>
                 <PaperButton mode="outlined"
                              style={[styles.input, {padding: 5, marginHorizontal: '3.5%', marginBottom: '5%'}]}
-                             textColor='#000' labelStyle={{textAlign: 'left', display: 'flex'}}
+                             textColor={doctor==='Médico' ? '#A9A9A9' : '#000'} labelStyle={{fontWeight: 'normal', fontSize: 14, fontFamily: 'Roboto-Thin'}}
                              contentStyle={{justifyContent: 'flex-start'}} onPress={() => setDoctorDialog(true)}>
                     {getDoctorName(doctor)}
                 </PaperButton>
                 <PaperText style={[styles.label2, {paddingLeft: 14}]}>{t('user')}</PaperText>
                 <PaperButton mode="outlined"
                              style={[styles.input, {padding: 5, marginHorizontal: '3.5%', marginBottom: '5%'}]}
-                             textColor='#000' labelStyle={{textAlign: 'left', display: 'flex'}}
+                             textColor={user_id ? '#000' : '#A9A9A9'} labelStyle={{fontWeight: 'normal', fontSize: 14, fontFamily: 'Roboto-Thin'}}
                              contentStyle={{justifyContent: 'flex-start'}} onPress={() => setUserDialog(true)}>
                     {getUserName(user_id)}
                 </PaperButton>

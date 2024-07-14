@@ -235,7 +235,9 @@ const EditAccount: React.FC<EditAccountProps> = ({navigation, route}: any) => {
 
                 />
                 <PaperText style={[styles.label2, {paddingLeft: 14}]}>{t('sex')}</PaperText>
-                <PaperButton mode="outlined" style={[styles.input, {padding: 5, marginHorizontal: '3%', marginBottom:'5%'}]} textColor='#000' labelStyle={{textAlign: 'left', display:'flex'}} contentStyle={{justifyContent: 'flex-start'}} onPress={()=> setSexGenderDialog(true)}>
+                <PaperButton mode="outlined" style={[styles.input, {padding: 5, marginHorizontal: '3%', marginBottom:'5%'}]}
+                             textColor='#000' labelStyle={{fontWeight: 'normal', fontSize: 14, fontFamily: 'Roboto-Thin'}}
+                             contentStyle={{justifyContent: 'flex-start'}} onPress={()=> setSexGenderDialog(true)}>
                     {sexGender ? t(sexGender) : t('selSex') }
                 </PaperButton>
 
@@ -298,7 +300,7 @@ const EditAccount: React.FC<EditAccountProps> = ({navigation, route}: any) => {
                     }}
                     containerStyle={{
                         width: 200,
-                        marginVertical: 20,
+                        marginVertical: 10,
                         alignSelf: 'center',
                     }}
                     titleStyle={{color: '#fff'}}

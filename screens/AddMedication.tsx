@@ -334,7 +334,7 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
                         )}
                     </View>
                     <View style={[cardStyle.infoRow, {marginTop: "5%", justifyContent: 'center'}]}>
-                        <RNText style={styles.label2}>
+                        <RNText style={[styles.label2, {flexShrink: 1, flexWrap: 'wrap'}]}>
                             {t('text26')}
                         </RNText>
                         <Checkbox
@@ -350,7 +350,7 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
                         </RNText>
                         <PaperButton mode="outlined"
                              style={[styles.input, {padding: 5, marginHorizontal: '3.5%', marginBottom: '5%'}]}
-                             textColor='#000' labelStyle={{textAlign: 'left', display: 'flex'}}
+                             textColor='#000' labelStyle={{fontWeight: 'normal', fontSize: 14, fontFamily: 'Roboto-Thin'}}
                              contentStyle={{justifyContent: 'flex-start'}} onPress={()=>{setHowOftenDialog(true)}}>
                             {getHowOften()}
                         </PaperButton>
@@ -358,7 +358,7 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
                     <PaperText style={[styles.label2, {paddingLeft: 14}]}>{t("user")}</PaperText>
                     <PaperButton mode="outlined"
                                  style={[styles.input, {padding: 5, marginHorizontal: '3.5%', marginBottom: '5%'}]}
-                                 textColor='#000' labelStyle={{textAlign: 'left', display: 'flex'}}
+                                 textColor={user_id ? '#000' : '#A9A9A9'}  labelStyle={{fontWeight: 'normal', fontSize: 14, fontFamily: 'Roboto-Thin'}}
                                  contentStyle={{justifyContent: 'flex-start'}} onPress={() => setUserDialog(true)}>
                         {getUserName(user_id)}
                     </PaperButton>
