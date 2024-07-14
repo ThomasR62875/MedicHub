@@ -97,7 +97,7 @@ const SingleMedication: React.FC<SingleMedicationProps> = ({navigation, route}: 
                                     <Text style={styles.value}>{t('text25')}</Text>
                                 </View>
                             )}
-                            <Text style={styles.value}>{route.params.meds.untilWhen}</Text>
+                            <Text style={styles.value}>{(new Date(route.params.meds.untilWhen)).toLocaleDateString()}</Text>
                         </View>
                     )}
                     {route.params.meds.howOften && (
