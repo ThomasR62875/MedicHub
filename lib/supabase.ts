@@ -533,7 +533,7 @@ export const getUserIdByEmail = async (email_input: string) : Promise<string | u
 export const getAdvertisement = async(banner_type: string) : Promise<Advertisement | undefined> =>{
     const{data,error} = await supabase.rpc('get_advertisement',{banner_input: banner_type})
     if(!error){
-        let advertisement: Advertisement = {client: data.id,logo:data.logo,mail:data.mail,name:data.name,image_url:data.image_urls}
+        let advertisement: Advertisement = {client: data.id,logo:data.logo,mail:data.mail,name:data.name,image_url:data.image_url}
         return advertisement;
     }
     console.log(error)
