@@ -94,9 +94,9 @@ const SingleDependentUser: React.FC<SingleDependentUserProps> = ({navigation, ro
     }
 
     const handleDayPress = (event: DateTimePickerEvent, selectedDate?: Date) => {
-        if (event.type === "set" && selectedDate) {
-            const birthdateWithTime = new Date(selectedDate);
-            setDate(birthdateWithTime);
+        if (selectedDate) {
+            const localDate = new Date(selectedDate.getTime() - selectedDate.getTimezoneOffset() * 60000);
+            setDate(localDate);
         }
     };
 

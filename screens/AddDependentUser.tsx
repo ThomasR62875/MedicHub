@@ -14,6 +14,7 @@ import {styles} from "../assets/styles";
 // @ts-ignore
 import Header from "../assets/header_violet.png";
 import ScrollableBg from "../components/ScrollableBg";
+import * as events from "node:events";
 
 type AddDependentUserProps = NativeStackScreenProps<RootStackParamList, 'AddDependentUser'>
 
@@ -31,12 +32,7 @@ const AddDependentUser:React.FC<AddDependentUserProps> = ({navigation, route} : 
     const {t} = useTranslation();
     const [birthDateErrorMessage, setBirthDateErrorMessage] = useState<string>('');
     const [genderErrorMessage, setGenderErrorMessage] = useState<string>('');
-    const handleDayPress = (event: DateTimePickerEvent, selectedDate?: Date) => {
-        if (event.type === "set" && selectedDate) {
-            const birthdateWithTime = new Date(selectedDate);
-            setDate(birthdateWithTime);
-        }
-    };
+
 
     useEffect(() => {
         if (
@@ -121,81 +117,103 @@ const AddDependentUser:React.FC<AddDependentUserProps> = ({navigation, route} : 
     };
 
     const hideSexGenderDialog = () => setSexGenderDialog(false);
+    const handleDayPress = (event: DateTimePickerEvent, selectedDate: Date | undefined) => {
+        if (selectedDate) {
+            const localDate = new Date(selectedDate.getTime() - selectedDate.getTimezoneOffset() * 60000);
+            setDate(localDate);
+        }
+    };
 
     return (
         <View style={styles.tab}>
-            <Image source={Header} style={styles.header}/>
-            <View style={{flexDirection: 'row', justifyContent: 'space-between',flex:0, margin: '5%', marginBottom: '2.5%'}}>
-                <Icon iconStyle={{color: 'white', paddingVertical:20}} name={'arrow-left'} type={'material-community'} style={styles.back_arrow} onPress={() => navigation.navigate(t('dusers'))}></Icon>
+            <View style={[styles.header, {backgroundColor: 'rgba(139,134,190,0.6)'}]}>
+                <View style={{
+                    flexDirection: 'row',
+                    marginHorizontal: '10%',
+                    marginVertical: '20%',
+                    alignItems: 'flex-start',
+                }}>
+                    <Icon iconStyle={{color: 'white'}} name={'arrow-left'} type={'material-community'}
+                          style={styles.back_arrow}
+                          onPress={() => navigation.navigate(t('dusers'), {session: session})}></Icon>
+                    <Icon iconStyle={{color: 'white', fontSize: 20}} containerStyle={[styles.circleHeader, {
+                        backgroundColor: 'rgba(139,134,190,0.6)',
+                        marginHorizontal: '35%',
+                        alignSelf: 'center'
+                    }]} name={'account'} type={'material-community'}/>
+                </View>
             </View>
-            <View style={{flexDirection: 'row', paddingTop:'5%', marginLeft:'10%', alignItems: 'center', justifyContent: 'center'}}>
-                <Icon iconStyle={{color: 'white', fontSize: 24}} containerStyle={[styles.circleHeader, {backgroundColor: 'rgba(139,134,190,0.6)', alignSelf: 'center', marginHorizontal: "10%"}]} name={'account'} type={'material-community'}/>
-            </View>
-
-
             <ScrollableBg style={{padding: '10%'}}>
 
-                <PaperText style={styles.text}>{t('name')}</PaperText>
                 <Input
-                    leftIcon={<Icon type="font-awesome" name="user" color={styles.colorIcon.color} iconStyle={{fontSize: 20, paddingLeft: 10}} />}
+                    label={t('name')}
+                    leftIcon={<Icon type="font-awesome" name="user" color={styles.colorIcon.color}
+                                    iconStyle={{fontSize: 20, paddingLeft: 10}}/>}
+                    value={firstName}
                     onChangeText={(text) => {
                         setFirstName(text);
                         validateFirstName(text)
                     }}
-                    value={firstName}
-                    placeholder={t('name')}
-                    inputContainerStyle={[{paddingLeft: 14}, styles.input]}
                     autoCapitalize={'none'}
-                    placeholderTextColor={"#807d7d"}
-                    inputStyle={{color: '#000', fontSize:14, marginLeft: 10}}
-                    errorStyle={{color: 'red'}}
+                    errorStyle={{ color: 'red' }}
                     errorMessage={firstNameErrorMessage}
+                    labelStyle={styles.label2}
+                    placeholder={t('name')}
+                    placeholderTextColor={"#807d7d"}
+                    inputContainerStyle={[{paddingLeft: 10}, styles.input]}
+                    inputStyle={{color: '#000', fontSize: 14, marginLeft: 10}}
                 />
-                <PaperText style={styles.text}>{t('surname')}</PaperText>
+
                 <Input
-                    leftIcon={<Icon type="font-awesome" name="user" color={styles.colorIcon.color}  iconStyle={{fontSize: 20, paddingLeft: 10}} />}
+                    label={t('surname')}
+                    leftIcon={<Icon type="font-awesome" name="user" color={styles.colorIcon.color}
+                                    iconStyle={{fontSize: 20, paddingLeft: 10}}/>}
+                    value={lastName}
                     onChangeText={(text) => {
                         setLastName(text);
                         validateLastName(text)
                     }}
-                    value={lastName}
-                    placeholder={t('surname')}
                     autoCapitalize={'none'}
-                    placeholderTextColor={"#807d7d"}
-                    inputStyle={{color: '#000', fontSize:14, marginLeft: 10}}
-                    inputContainerStyle={[{paddingLeft: 10}, styles.input]}
-                    errorStyle={{color: 'red'}}
+                    errorStyle={{ color: 'red' }}
                     errorMessage={lastNameErrorMessage}
+                    labelStyle={styles.label2}
+                    placeholder={t('surname')}
+                    placeholderTextColor={"#807d7d"}
+                    inputContainerStyle={[{paddingLeft: 10}, styles.input]}
+                    inputStyle={{color: '#000', fontSize: 14, marginLeft: 10}}
                 />
-                <PaperText style={styles.text}>{t('id')}</PaperText>
+
                 <Input
+                    label={t('id')}
                     leftIcon={<Image source={require('../assets/fingerprint.png')} style={styles.icon} />}
+                    value={dni}
                     onChangeText={(text) => {
                         setDni(text);
                         validateDNI(text);
                     }}
-                    value={dni}
-                    placeholder={t('id')}
                     autoCapitalize={'none'}
-                    inputContainerStyle={[{paddingLeft: 14}, styles.input]}
+                    errorStyle={{ color: 'red' }}
+                    labelStyle={styles.label2}
                     placeholderTextColor={"#807d7d"}
-                    inputStyle={{color: '#000', fontSize:14, marginLeft: 10}}
-                    errorStyle={{color: 'red'}}
+                    inputContainerStyle={[{paddingLeft: 10}, styles.input]}
+                    inputStyle={{color: '#000', fontSize: 14, marginLeft: 10}}
+                    placeholder={t('id')}
                     errorMessage={DNIErrorMessage}
                 />
-                <PaperText style={styles.text}>{t('sex')}</PaperText>
+
+                <PaperText style={styles.label2}>{t('sex')}</PaperText>
                 <PaperButton mode="outlined" style={[styles.input, {padding: 5, marginHorizontal: '3%', marginBottom:'5%'}]} textColor='#000' labelStyle={{textAlign: 'left', display:'flex'}} contentStyle={{justifyContent: 'flex-start'}} onPress={()=> setSexGenderDialog(true)}>
                     {getSexGenderName(sexGender)}
                 </PaperButton>
-                <PaperText style={styles.text}>{t('birthdate')}</PaperText>
+                <PaperText style={styles.label2}>{t('birthdate')}</PaperText>
                 <View style={styles.datePicker}>
                     <DateTimePicker testID="dateTimePicker"
                                     value={date || undefined}
                                     mode="date"
                                     display="default"
-                                    onChange={(event, date) => {
-                                        handleDayPress(event, date);
-                                        validateBirthDate(date)
+                                    onChange={(event, selectedDate) => {
+                                        handleDayPress(event, selectedDate);
+                                        validateBirthDate(selectedDate);
                                     }}/>
                 </View>
                 <Button
