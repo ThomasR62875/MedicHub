@@ -75,6 +75,8 @@ const SingleDependentUser: React.FC<SingleDependentUserProps> = ({navigation, ro
 
     const handleUserSharing = async () => {
         const parent_id = await getUserIdByEmail(shareEmail);
+
+        console.log({parent_id: parent_id, email: shareEmail});
         if (parent_id === undefined) {
             console.warn('Parent user not found');
             return;
@@ -84,6 +86,8 @@ const SingleDependentUser: React.FC<SingleDependentUserProps> = ({navigation, ro
         if (!result) {
             console.error('Failed to set user sharing');
         }
+        setShareEmail('')
+        setShareDialog(false)
     }
 
     const handleDayPress = (event: DateTimePickerEvent, selectedDate?: Date) => {
@@ -304,7 +308,7 @@ const SingleDependentUser: React.FC<SingleDependentUserProps> = ({navigation, ro
                     onDismiss={() => setNewIndepUserDialog(false)}>
                 <Dialog.Actions>
                     <ScrollableBg>
-                        <Text style={[styles.text3, {fontWeight: 'bold'}]}>Ingrese los datos para mover este usario y sus datos a una nueva cuenta</Text>
+                        <Text style={[styles.text3, {fontWeight: 'bold'}]}>{t('enterDataForShare')}</Text>
                         <Input
                             label={t('name')}
                             labelStyle={{color: '#000000', paddingBottom: 10, paddingLeft: 5, fontWeight: 'normal', fontSize: 14, fontFamily: 'Roboto-Thin'}}
@@ -518,4 +522,5 @@ const SingleDependentUser: React.FC<SingleDependentUserProps> = ({navigation, ro
     );
 };
 
+// @ts-ignore
 export default SingleDependentUser;

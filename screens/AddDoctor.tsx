@@ -184,7 +184,7 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}:any) => {
                 <Button
                     title={t('addoctor')}
                     buttonStyle={{
-                        backgroundColor: '#86abba',
+                        backgroundColor: '#86ABBA',
                         borderWidth: 2,
                         borderColor: 'white',
                         borderRadius: 30,

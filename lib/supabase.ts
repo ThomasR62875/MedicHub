@@ -245,7 +245,7 @@ export const getAllUsers = async (session_user_id: String): Promise<DependentUse
 }
 
 // Devuelve tods los usuarios dependiendo de un user_id
-export const getDependentUsers = async (session_user_id: String): Promise<DependentUser[] | undefined> => {
+export const getDependentUsers = async (): Promise<DependentUser[] | undefined> => {
     let to_return: DependentUser[] = []
     const {data, error} = await supabase.rpc('get_dependent_users');
     if (error) {
@@ -524,7 +524,7 @@ export async function getMedications(): Promise<Medication[] | undefined> {
 
 
 export const setDependentUser = async (parent_id: string, child_id: string) => {
-    const {error: error} = await supabase.rpc('set_dependent_user', {parent: parent_id, child_id: child_id});
+    const {error: error} = await supabase.rpc('set_dependent_user', {parent_input: parent_id, child_input: child_id});
     if (error) {
         return {
             success: false,
