@@ -5,7 +5,7 @@ import {Button, Icon, Input} from 'react-native-elements'
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
 import {useTranslation} from "react-i18next";
-import {Button as PaperButton, Dialog, Portal, Text as PaperText} from "react-native-paper";
+import {Button as PaperButton, Dialog, Text as PaperText} from "react-native-paper";
 import {Picker} from "@react-native-picker/picker";
 import ScrollableBg from '../components/ScrollableBg';
 import DateTimePicker, {DateTimePickerEvent} from "@react-native-community/datetimepicker";
