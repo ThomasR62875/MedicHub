@@ -97,7 +97,7 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
             untilWhen:dateUntil,
             howOften:howOften,
             isForever:isForever,
-            user_id:user_id,
+            user_id: user_id,
         }
         const result = await addMedication(medication);
         if (result.success) {

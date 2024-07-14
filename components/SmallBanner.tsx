@@ -3,7 +3,7 @@ import {
     Text,
     Image,
     View,
-    TouchableOpacity, ImageStyle, ViewStyle,
+    TouchableOpacity, ImageStyle, StyleSheet,
 } from 'react-native';
 import { styles } from '../assets/styles';
 import {useTranslation} from "react-i18next";
@@ -19,15 +19,17 @@ export const SmallBanner: React.FC<BannerProps> = (params:BannerProps)=>{
     return (
         <View>
             {params.advertisement && (
-                <View style={[styles.cards,{flexDirection: 'row',borderColor:'#86abba',borderWidth:3}]}>
-                    <Image source={{uri: params.advertisement.image_url}} style={smallStyles.imageStyle}/>
-                    <View style={{flexDirection: 'column', paddingHorizontal: 14}}>
-                        <Text style={[{fontSize: 14, paddingVertical: 7}]}>{params.advertisement.name}</Text>
-                        <Text style={[styles.text2, {fontSize: 12, width: '150%', paddingBottom: 5}]}>{params.advertisement.mail}</Text>
+                <View style={[styles.cards,{flexDirection: 'row',borderColor:'#86abba',borderWidth:3, justifyContent: 'space-between'}]}>
+                    <View style={{flexDirection: 'row'}}>
+                        <Image source={{uri: params.advertisement.image_url}} style={smallStyles.imageStyle}/>
+                        <View style={{flexDirection: 'column', paddingHorizontal: 14}}>
+                            <Text style={[{fontSize: 14, paddingVertical: 7}]}>{params.advertisement.name}</Text>
+                            <Text style={[styles.text2, {fontSize: 12, width: '150%', paddingBottom: 5}]}>{params.advertisement.mail}</Text>
+                        </View>
                     </View>
-                    <View>
+                    <View style={{alignItems: 'flex-end', justifyContent: 'center'}}>
                         <TouchableOpacity style={[styles.addButton, smallStyles.ownButton]} onPress={()=>{handleOnPress(params.advertisement)}}>
-                            <Text style={[styles.buttonText,{fontSize:14, textAlign: 'center'}]}>{t('addoctor')}</Text>
+                            <Text style={[styles.buttonText,{fontSize:12, textAlign: 'center'}]}>{t('addoctor')}</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -37,15 +39,16 @@ export const SmallBanner: React.FC<BannerProps> = (params:BannerProps)=>{
 }
 
 
-const smallStyles={
+const smallStyles = StyleSheet.create({
     imageStyle: {
-        height: 50,
-        width: 50,
+        height: '80%',
+        width: '20%',
         resizeMode:'cover' as ImageStyle['resizeMode'],
         borderRadius:50,
+        alignSelf: 'center'
     },
     ownButton:{
         backgroundColor:'#86abba',
-        width: '90%',
-    } as ViewStyle,
-} 
+        width: '100%',
+    }
+} )
