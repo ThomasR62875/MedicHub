@@ -1,11 +1,12 @@
 import React from 'react';
-import { TouchableOpacity, View, Text, StyleSheet } from 'react-native';
+import { TouchableOpacity, Text, StyleSheet, View } from 'react-native';
+import { Icon } from 'react-native-elements';
 
 interface MyCheckBoxProps {
     value: boolean;
     disabled?: boolean;
     onValueChange: (newValue: boolean) => void;
-    text?: string; // Nuevo prop para el texto dentro del checkbox
+    text: string;
 }
 
 const MyCheckBox: React.FC<MyCheckBoxProps> = ({ value, disabled = false, onValueChange, text }) => {
@@ -17,37 +18,51 @@ const MyCheckBox: React.FC<MyCheckBoxProps> = ({ value, disabled = false, onValu
 
     return (
         <TouchableOpacity
-            style={[styles.checkbox, { backgroundColor: value ? '#007AFF' : '#FFF' }]}
+            style={[
+                styles.checkboxContainer,
+                {
+                    borderColor: value ? '#86ABBA' : '#000',
+                    borderBottomWidth: value ? 4 : 1,
+                    borderWidth: value ? 4 : 1,
+                },
+            ]}
             onPress={handlePress}
             disabled={disabled}
         >
-            {value && <View style={styles.innerCheckbox}><Text style={styles.checkboxText}>{text}</Text></View>}
+            <Icon
+                type="font-awesome"
+                name="check"
+                color={value ? '#86ABBA' : 'transparent'}
+                iconStyle={styles.icon}
+            />
+                <Text style={styles.checkboxText} >{text}</Text>
         </TouchableOpacity>
     );
 };
 
 const styles = StyleSheet.create({
-    checkbox: {
-        width: 24,
-        height: 24,
-        borderWidth: 1,
-        borderColor: '#007AFF',
-        borderRadius: 5,
-        justifyContent: 'center',
+    checkboxContainer: {
+        flexDirection: 'row',
         alignItems: 'center',
-        marginRight: 10,
+        padding: 10,
+        marginHorizontal: '3.5%',
+        marginBottom: '5%',
+        backgroundColor: '#ffffff',
+        borderBottomWidth: 4,
+        borderRadius: 15,
+        height: 50,
+        width: '90%',
     },
-    innerCheckbox: {
-        width: 16,
-        height: 16,
-        backgroundColor: '#007AFF',
-        borderRadius: 3,
-        justifyContent: 'center',
-        alignItems: 'center',
+    icon: {
+        fontSize: 14,
+        marginRight: 10,
+        alignSelf: 'flex-start',
     },
     checkboxText: {
-        color: '#FFF',
-        fontSize: 12,
+    color: '#000',
+    fontSize: 14,
+    marginLeft: 10,
+    textAlign: 'center'
     },
 });
 

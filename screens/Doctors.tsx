@@ -16,7 +16,7 @@ import {styles} from "../assets/styles";
 import Squiggle from "../assets/squiggle_pink.png";
 import ScrollableBg from "../components/ScrollableBg";
 import {SmallBanner} from "../components/SmallBanner"
-import {Dialog, Portal} from "react-native-paper";
+import {Dialog} from "react-native-paper";
 import MyCheckBox from "../components/CheckBox";
 
 const Doctors: React.FC = ({navigation, route}: any) => {
@@ -77,9 +77,15 @@ const Doctors: React.FC = ({navigation, route}: any) => {
 
 
     const handleFilter = async () => {
-        const doctorsAux = await filterDoctorsByUsers(selectedUserIds)
-        setDoctors(doctorsAux)
-    }
+        if (selectedUserIds.length === 0) {
+            setDoctors(await getDoctors())
+        } else{
+            const doctorsAux = await filterDoctorsByUsers(selectedUserIds);
+            setDoctors(doctorsAux);
+        }
+        hideFilterDialog();
+    };
+
 
     return (
         <View style={styles.tab}>
@@ -126,43 +132,42 @@ const Doctors: React.FC = ({navigation, route}: any) => {
                     <SmallBanner advertisement={advertisement} onPress={(doc:Doctor | undefined)=>navigation.navigate({name:'AddDoctor',params:{base_doctor:doc}})}/>
                 </View>
             </ScrollableBg>
-            <Portal>
                 <Dialog style={styles.dialog} visible={filterDialog} onDismiss={hideFilterDialog}>
-                    <Text style={styles.dialogTitle}>{t("selectUsers")}</Text>
-                    {users?.map((item, index) => (
-                        <View key={item.id} style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10, paddingLeft: 50 }}>
-                            <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
-                                <MyCheckBox
-                                    disabled={false}
-                                    value={checkedState[index]}
-                                    onValueChange={() => handleCheckboxChange(item, index)}
-                                />
-                                <Text style={{ marginLeft: 10 }}>{item.first_name}</Text>
-                            </View>
-                        </View>
-                    ))}
-                    <Button
-                        title={t('filter')}
-                        buttonStyle={{
-                            backgroundColor: '#86ABBA',
-                            borderWidth: 2,
-                            borderColor: 'white',
-                            borderRadius: 30,
-                            minHeight: 50
-                        }}
-                        containerStyle={{
-                            width: 200,
-                            marginHorizontal: '20%',
-                            marginVertical: 10,
-                            marginTop: 20,
-                            alignContent: 'center'
-                        }}
-                        titleStyle={{ color: '#fff' }}
-                        onPress={handleFilter}
-                    />
+                    <Dialog.Actions>
+                        <ScrollableBg>
+                            <Text style={styles.dialogTitle}>{t("selectUsers")}</Text>
+                            {users?.map((item, index) => (
+                                <View key={item.id} style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10, paddingLeft: 20 }}>
+                                    <MyCheckBox
+                                        disabled={false}
+                                        value={checkedState[index]}
+                                        onValueChange={() => handleCheckboxChange(item, index)}
+                                        text={item.first_name + ' ' + item.last_name}
+                                    />
+                                </View>
+                            ))}
+                            <Button
+                                title={t('filter')}
+                                buttonStyle={{
+                                    backgroundColor: '#86ABBA',
+                                    borderWidth: 2,
+                                    borderColor: 'white',
+                                    borderRadius: 30,
+                                    minHeight: 50
+                                }}
+                                containerStyle={{
+                                    width: 200,
+                                    marginHorizontal: '13%',
+                                    marginVertical: 10,
+                                    marginTop: 20,
+                                    alignContent: 'center'
+                                }}
+                                titleStyle={{ color: '#fff' }}
+                                onPress={handleFilter}
+                            />
+                        </ScrollableBg>
+                    </Dialog.Actions>
                 </Dialog>
-            </Portal>
-
 
         </View>
     )
