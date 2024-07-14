@@ -479,8 +479,8 @@ export const styles = StyleSheet.create({
         justifyContent: 'center',
         marginLeft: '10%',
         marginRight: '15%',
-        marginTop: '10%',
-        marginBottom: '10%'
+        marginTop: '5%',
+        marginBottom: '5%'
     },
     text6: {
         fontSize: 12,

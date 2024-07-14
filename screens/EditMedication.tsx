@@ -348,7 +348,7 @@ const EditMedication: React.FC<EditMedicationProps> = ({navigation, route}: any)
                 </View>
                 <View>
                     <View style={[cardStyle.infoRow, {marginTop: "5%", justifyContent: 'center'}]}>
-                        <RNText style={styles.label2}>
+                        <RNText style={[styles.label2, {flexShrink: 1, flexWrap: 'wrap'}]}>
                             {t('text26')}
                         </RNText>
                         <Checkbox
@@ -359,13 +359,13 @@ const EditMedication: React.FC<EditMedicationProps> = ({navigation, route}: any)
                         />
                     </View>
                 </View>
-                <View style={{marginBottom: "5%", marginTop: "5%", marginLeft: '4%'}}>
-                    <RNText style={styles.label2}>
+                <View style={{marginBottom: "5%", marginTop: "5%"}}>
+                    <RNText style={[styles.label2, {marginLeft: "2%"}]}>
                         {t('selectTime')}
                     </RNText>
                     <PaperButton mode="outlined"
                              style={[styles.input, {padding: 5, marginHorizontal: '3.5%', marginBottom: '5%'}]}
-                             textColor='#000' labelStyle={{textAlign: 'left', display: 'flex'}}
+                             textColor='#000' labelStyle={{fontWeight: 'normal', fontSize: 14, fontFamily: 'Roboto-Thin'}}
                              contentStyle={{justifyContent: 'flex-start'}} onPress={()=>{setHowOftenDialog(true)}}>
                             {getHowOften()}
                     </PaperButton>
@@ -373,7 +373,7 @@ const EditMedication: React.FC<EditMedicationProps> = ({navigation, route}: any)
                 <PaperText style={[styles.label2, {paddingLeft: 14}]}>{t("user")}</PaperText>
                 <PaperButton mode="outlined"
                              style={[styles.input, {padding: 5, marginHorizontal: '3.5%', marginBottom: '5%'}]}
-                             textColor='#000' labelStyle={{textAlign: 'left', display: 'flex'}}
+                             textColor='#000' labelStyle={{fontWeight: 'normal', fontSize: 14, fontFamily: 'Roboto-Thin'}}
                              contentStyle={{justifyContent: 'flex-start'}} onPress={() => setUserDialog(true)}>
                     {getUserName(user_id)}
                 </PaperButton>
