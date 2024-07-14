@@ -22,7 +22,8 @@ export const AIView: React.FC<AIViewProps> = (params:AIViewProps) => {
     const [visibleAI,setVisibleAI] = useState(params.visible);
     const [recommendation,setRecommendation] = useState('');
     const [displayedText, setDisplayedText] = useState('');
-        
+    const {t} = useTranslation();
+
     useEffect(()=>{
         setVisibleAI(params.visible);
         setDisplayedText('');
@@ -57,7 +58,7 @@ export const AIView: React.FC<AIViewProps> = (params:AIViewProps) => {
                 </View>
             </View>
             <ScrollableBg>
-                <Text style={styles.titleText}>IA</Text>
+                <Text style={styles.titleText}>{t('ia_title')}</Text>
                 <Divider style={styles.divider}></Divider>
 
                 <View style={{padding: '10%'}}>

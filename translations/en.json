@@ -162,7 +162,7 @@
   "warnPhone": "Must enter a valid phone number. Ex: 11 2222 3333.",
   "warnDocName": "Must enter doctor's name.",
   "filter": "Filter",
-  "selectUsers": "Select users"
-
+  "selectUsers": "Select users",
+  "ia_title": "Artificial Intelligence's recommendation"
 }
 
