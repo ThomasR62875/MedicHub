@@ -1,10 +1,10 @@
 import React, {useState, useEffect} from 'react'
-import {updateMedication} from '../lib/supabase'
+import {getAllUsers, getUserId, updateMedication} from '../lib/supabase'
 import {
     View,
     Alert,
     Platform,
-    Text as RNText,
+    Text as RNText, Text,
 } from 'react-native'
 import {Button, Icon, Input} from 'react-native-elements'
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
@@ -14,12 +14,13 @@ import DateTimePicker, {DateTimePickerEvent} from "@react-native-community/datet
 import Checkbox from "expo-checkbox";
 import {cardStyle} from "../styles/global";
 import {Picker} from '@react-native-picker/picker';
-import {Button as PaperButton} from "react-native-paper";
+import {Button as PaperButton, Dialog, Text as PaperText} from "react-native-paper";
 import {styles} from "../assets/styles";
 // @ts-ignore
 import Header from "../assets/header_pink.png";
 import ScrollableBg from "../components/ScrollableBg";
 import {validateTextLength} from "../lib/ourlibrary";
+import {DependentUser} from "../lib/types";
 
 type EditMedicationProps = NativeStackScreenProps<RootStackParamList, 'EditMedication'>;
 
@@ -29,6 +30,14 @@ const EditMedication: React.FC<EditMedicationProps> = ({navigation, route}: any)
     const [name, setName] = useState(route.params.medication.name)
     const [prescription, setPrescription] = useState(route.params.medication.prescription);
     const [dateSince, setDateSince] = useState<Date>(route.params.medication.sinceWhen ? new Date(route.params.medication.sinceWhen) : new Date());
+    const [user_id, setUserId] = useState('')
+    const [all_users, setAllUsers] = useState<DependentUser[] | undefined>(undefined)
+    const [userDialog, setUserDialog] = useState(false);
+
+    const getUserName = (id: string): string => {
+        let user = all_users?.find(user => user.id === id);
+        return user ? user.first_name : '';
+    }
 
     let aux = new Date(route.params.medication.sinceWhen);  //horripilante pero funciona
     aux.setHours(aux.getHours() - 3)
@@ -63,6 +72,7 @@ const EditMedication: React.FC<EditMedicationProps> = ({navigation, route}: any)
             setName(route.params.medication.name)
             setPrescription(route.params.medication.prescription)
             setDateSince(route.params.medication.sinceWhen ? new Date(route.params.medication.sinceWhen) : new Date())
+            setUserId(route.params.medication.user_id)
 
             let aux = new Date(route.params.medication.sinceWhen);
             aux.setHours(aux.getHours() - 3)
@@ -105,6 +115,7 @@ const EditMedication: React.FC<EditMedicationProps> = ({navigation, route}: any)
             untilWhen: dateUntil,
             howOften: howOften,
             isForever: isForever,
+            user_id: user_id
         }
         const result = await updateMedication(medication);
         if (result.success) {
@@ -115,6 +126,15 @@ const EditMedication: React.FC<EditMedicationProps> = ({navigation, route}: any)
         }
     };
 
+
+    useEffect(() => {
+        if (session){
+            async function fetchData() {
+                setAllUsers(await getAllUsers(await getUserId()))
+            }
+            fetchData()
+        }
+    }, [session])
 
     const validateName = (value: string) => {
         let {result,msg}= validateTextLength(value,nameLength);
@@ -334,6 +354,13 @@ const EditMedication: React.FC<EditMedicationProps> = ({navigation, route}: any)
                         ))}
                     </Picker>
                 </View>
+                <PaperText style={[styles.label2, {paddingLeft: 14}]}>{t("user")}</PaperText>
+                <PaperButton mode="outlined"
+                             style={[styles.input, {padding: 5, marginHorizontal: '3.5%', marginBottom: '5%'}]}
+                             textColor='#000' labelStyle={{textAlign: 'left', display: 'flex'}}
+                             contentStyle={{justifyContent: 'flex-start'}} onPress={() => setUserDialog(true)}>
+                    {getUserName(user_id)}
+                </PaperButton>
                 <View>
                     <View style={[cardStyle.infoRow, {marginTop: "5%", justifyContent: 'center'}]}>
                         <RNText style={styles.label2}>
@@ -367,6 +394,22 @@ const EditMedication: React.FC<EditMedicationProps> = ({navigation, route}: any)
                     onPress={handleUpdateMedication}
                 />
             </ScrollableBg>
+
+
+            <Dialog style={styles.dialog} visible={userDialog} onDismiss={() => setUserDialog(false)}>
+                <Text style={styles.dialogTitle}>{t('selectUser')}</Text>
+                <Picker
+                    mode='dropdown'
+                    selectedValue={user_id}
+                    onValueChange={(value: string) => setUserId(value)}
+                    enabled={true}
+                    itemStyle={styles.pickerStyle}
+                >
+                    {all_users?.map((item) => (
+                        <Picker.Item key={item.id} label={item.first_name} value={item.id} />
+                    ))}
+                </Picker>
+            </Dialog>
         </View>
     )
 }

@@ -1,15 +1,16 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { View, Text} from 'react-native';
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
 import {Button, Icon} from "react-native-elements";
 import {useTranslation} from "react-i18next";
 import {Button as PaperButton, Dialog, Divider} from "react-native-paper";
-import { deleteDoctor} from "../lib/supabase";
+import {deleteDoctor, getAllUsers, getUser, getUserId} from "../lib/supabase";
 import {styles} from "../assets/styles";
 // @ts-ignore
 import Header from "../assets/header_blue.png";
 import ScrollableBg from "../components/ScrollableBg";
+import {DependentUser} from "../lib/types";
 
 
 type SingleDoctorProps = NativeStackScreenProps<RootStackParamList, 'SingleDoctor'>
@@ -20,6 +21,14 @@ const SingleDoctor: React.FC<SingleDoctorProps> = ({navigation, route}: any) => 
     const hideDialog = () => setVisible(false);
     const showDialog = () => setVisible(true);
     const {t} = useTranslation();
+    const [user, setUser] = React.useState<DependentUser | undefined>(undefined);
+
+    useEffect(() => {
+            async function fetchData() {
+                setUser(await getUser(route.params.doc.user_id));
+            }
+            fetchData()
+    }, [route.params.doc]);
 
     const handleDeleteDoctor = async () => {
         const session = route.params.session;
@@ -27,7 +36,6 @@ const SingleDoctor: React.FC<SingleDoctorProps> = ({navigation, route}: any) => 
         await deleteDoctor(doctor.id);
         navigation.navigate('Doctors', {session: session})
     };
-
 
     return (
         <View style={styles.tab}>
@@ -56,7 +64,7 @@ const SingleDoctor: React.FC<SingleDoctorProps> = ({navigation, route}: any) => 
                         <Text style={styles.value}>{route.params.doc.specialty}</Text>
                     </View>
                     <View style={styles.detailRow}>
-                        <Text style={styles.label}>Mail:</Text>
+                        <Text style={styles.label}>{t('email')}:</Text>
                         <Text style={styles.value}>{route.params.doc.email}</Text>
                     </View>
                     <View style={styles.detailRow}>
@@ -66,6 +74,10 @@ const SingleDoctor: React.FC<SingleDoctorProps> = ({navigation, route}: any) => 
                     <View style={styles.detailRow}>
                         <Text style={styles.label}>{t('address')}:</Text>
                         <Text style={styles.value}>{route.params.doc.addresses}</Text>
+                    </View>
+                    <View style={styles.detailRow}>
+                        <Text style={styles.label}>{t('user')}:</Text>
+                        <Text style={styles.value}>{user?.first_name ? user.first_name : '-'}</Text>
                     </View>
                     <View style={styles.screen}>
                         <View style={{alignItems: 'center', width: 'auto'}}>
