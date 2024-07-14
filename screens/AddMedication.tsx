@@ -120,11 +120,11 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
     };
 
     const getDateSince = () => {
-        return dateSince ? dateSince.toLocaleDateString() : 'Seleccione una fecha';
+        return dateSince ? dateSince.toLocaleDateString() : t('selectDate');
     };
 
     const getTime = () => {
-        return timeSince ? timeSince.toLocaleTimeString() : 'Seleccione una hora';
+        return timeSince ? timeSince.toLocaleTimeString() : t('selectTime');
     };
 
     const onChange2 = (event: DateTimePickerEvent, selectedDate?: Date | undefined): void => {
@@ -136,8 +136,9 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
     };
 
     const getDateUntil = () => {
-        return dateUntil ? dateUntil.toLocaleDateString() : 'Seleccione una fecha';
+        return dateUntil ? dateUntil.toLocaleDateString() : t('selectDate');
     };
+
     const onChange3 = (value : boolean) => {
         setIsForever(!isForever);
     }
