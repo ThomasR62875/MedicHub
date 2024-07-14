@@ -1,14 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import {
     Text,
     Image,
-    Pressable,
-    StyleSheet,
     View,
-    TouchableOpacity,
-    Modal
+    TouchableOpacity, ImageStyle, ViewStyle,
 } from 'react-native';
-import { Icon } from 'react-native-elements';
 import { styles } from '../assets/styles';
 import {useTranslation} from "react-i18next";
 import { Advertisement, BannerProps,Doctor } from '../lib/types';
@@ -29,31 +25,27 @@ export const SmallBanner: React.FC<BannerProps> = (params:BannerProps)=>{
                         <Text style={[{fontSize: 14, paddingVertical: 7}]}>{params.advertisement.name}</Text>
                         <Text style={[styles.text2, {fontSize: 12, width: '150%', paddingBottom: 5}]}>{params.advertisement.mail}</Text>
                     </View>
-                    <TouchableOpacity style={[styles.addButton,smallStyles.ownButton,smallStyles.color]} onPress={()=>{handleOnPress(params.advertisement)}}>
-                        <Text style={[styles.buttonText,{fontSize:14}]}>{t('addoctor')}</Text>
-                    </TouchableOpacity>
+                    <View>
+                        <TouchableOpacity style={[styles.addButton, smallStyles.ownButton]} onPress={()=>{handleOnPress(params.advertisement)}}>
+                            <Text style={[styles.buttonText,{fontSize:14, textAlign: 'center'}]}>{t('addoctor')}</Text>
+                        </TouchableOpacity>
+                    </View>
                 </View>
             )}
         </View>
     );
 }
 
-const smallStyles={
-    color:{
-        backgroundColor:'#86abba',
-    },
 
+const smallStyles={
     imageStyle: {
         height: 50,
         width: 50,
-        resizeMode:'cover',
+        resizeMode:'cover' as ImageStyle['resizeMode'],
         borderRadius:50,
-        justifyContent:'start'
     },
-
     ownButton:{
-        height: '90%',
-        width: '40%',
-        justifyContent:'right',
-    }
+        backgroundColor:'#86abba',
+        width: '90%',
+    } as ViewStyle,
 } 
