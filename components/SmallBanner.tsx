@@ -58,4 +58,4 @@ const smallStyles = StyleSheet.create({
         alignItems: 'flex-end',
         paddingRight: 10,
     } as ViewStyle,
-} 
+})
