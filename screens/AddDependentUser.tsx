@@ -19,6 +19,7 @@ type AddDependentUserProps = NativeStackScreenProps<RootStackParamList, 'AddDepe
 const AddDependentUser:React.FC<AddDependentUserProps> = ({navigation, route} : any) => {
     const session = route.params.session;
     const textLength= 30;
+    const dniLength= 8;
     const [firstName,setFirstName] = useState('')
     const [lastName,setLastName] = useState('')
     const [dni,setDni]  = useState('')
@@ -69,11 +70,14 @@ const AddDependentUser:React.FC<AddDependentUserProps> = ({navigation, route} : 
     };
     const validateDNI = (value: string) => {
         const containsLetterOrSymbol = /([a-zA-Z!@#$%^&*()_+{}\[\]:;<>,.?\/\\|'"`~-])/.test(value);
-        if(value === ''){
+        let {result, msg} = validateTextLength(value, dniLength);
+        if (value === '') {
             setDNIErrorMessage(t('warn18'));
         }
         if (containsLetterOrSymbol) {
             setDNIErrorMessage(t('warn3'));
+        } else if (!result) {
+            setDNIErrorMessage(msg);
         } else {
             setDNIErrorMessage('');
         }
