@@ -36,18 +36,12 @@ export function formatDateV2(dateString: string | number | Date) {
     return `${day+1} de ${month}`;
 }
 export const sexGenderOptions: SexGenderOption[] = [
-    { sex_gender_name: t('male'), value: 'male' },
-    { sex_gender_name: t('female'), value: 'female' },
-    { sex_gender_name: t('non-binary'), value: 'non-binary' },
-    { sex_gender_name: t('other'), value: 'other' },
+    { name: 'male' },
+    { name: 'female' },
+    { name: 'non-binary' },
+    { name: 'other' },
 ];
 
-export const getSexGenderName = (value: string) => {
-    if(value == null)
-        return ''
-    const option = sexGenderOptions.find(option => option.value === value);
-    return option ? option.sex_gender_name : '';
-};
 
 export const validateTextLength= (str:string, length:number): {result:boolean,msg:string} => {
     if (str.length <= length) {
