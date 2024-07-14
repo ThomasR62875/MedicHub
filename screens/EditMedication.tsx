@@ -71,30 +71,7 @@ const EditMedication: React.FC<EditMedicationProps> = ({navigation, route}: any)
         }
     }, [session])
 
-    useEffect(() => {
-        if (session) {
-            setIsButtonDisabled(false);
-        } else {
-            setIsButtonDisabled(true);
-        }
 
-    }, [session]);
-
-    useEffect(() => {
-        if (
-            name.trim() !== '' &&
-            prescription.trim() !== '' &&
-            nameErrorMessage === '' &&
-            prescriptionErrorMessage === ''
-        ) {
-            setIsButtonDisabled(false);
-        } else {
-            setIsButtonDisabled(true);
-        }
-
-    }, [name, prescription, dateSince, dateUntil, howOften, isForever]);
-
-    const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(true);
 
     const handleUpdateMedication = async () => {
         const sinceDate = new Date(dateSince);
@@ -102,6 +79,7 @@ const EditMedication: React.FC<EditMedicationProps> = ({navigation, route}: any)
 
         sinceDate.setHours(timeSince.getHours())
         sinceDate.setMinutes(timeSince.getMinutes())
+        console.log('done 2')
 
         const medication = {
             id: id,
@@ -114,7 +92,8 @@ const EditMedication: React.FC<EditMedicationProps> = ({navigation, route}: any)
         }
         const result = await updateMedication(medication);
         if (result.success) {
-            //navigation.navigate('AlertPublicity', { session, msg: 'editMed', screen: 'SingleMedication', meds: medication});  //tira error a veces xd todo
+            navigation.navigate('AlertPublicity', { session, msg: 'editMed', screen: 'SingleMedication', meds: medication});
+            console.log('done 2')
         } else {
             Alert.alert('Error', result.message || 'An unknown error occurred');
         }
@@ -152,9 +131,7 @@ const EditMedication: React.FC<EditMedicationProps> = ({navigation, route}: any)
         return dateSince ? dateSince.toLocaleDateString() : t('selectDate');
     };
 
-    const getTime = () => {
-        return timeSince ? timeSince.toLocaleTimeString() : t('selectTime');
-    };
+
 
     const onChange2 = (event: DateTimePickerEvent, selectedDate?: Date | undefined): void => {
         if (selectedDate) {
@@ -164,9 +141,6 @@ const EditMedication: React.FC<EditMedicationProps> = ({navigation, route}: any)
         }
     };
 
-    const getDateUntil = () => {
-        return dateUntil ? dateUntil.toLocaleDateString() : t('selectDate');
-    };
 
     return (
         <View style={styles.tab}>
@@ -252,7 +226,7 @@ const EditMedication: React.FC<EditMedicationProps> = ({navigation, route}: any)
                                          labelStyle={{textAlign: 'left', display: 'flex'}}
                                          contentStyle={{justifyContent: 'flex-start'}}
                                          onPress={() => setShowDatePickerSince(true)}>
-                                {getDateSince()}
+                                {(new Date(dateSince)).toLocaleDateString()}
                             </PaperButton>
                             <PaperButton mode="outlined" style={[styles.input, {
                                 padding: 5,
@@ -261,7 +235,7 @@ const EditMedication: React.FC<EditMedicationProps> = ({navigation, route}: any)
                             }]} textColor='#000' labelStyle={{textAlign: 'left', display: 'flex'}}
                                          contentStyle={{justifyContent: 'flex-start'}}
                                          onPress={() => setShowTimePicker(true)}>
-                                {getTime()}
+                                {(new Date(timeSince)).toLocaleTimeString()}
                             </PaperButton>
                             {showDatePickerSince && (
                                 <DateTimePicker
@@ -310,7 +284,7 @@ const EditMedication: React.FC<EditMedicationProps> = ({navigation, route}: any)
                             }]} textColor='#000' labelStyle={{textAlign: 'left', display: 'flex'}}
                                          contentStyle={{justifyContent: 'flex-start'}}
                                          onPress={() => setShowDatePickerUntil(true)}>
-                                {getDateUntil()}
+                                {(new Date(dateUntil)).toLocaleDateString()}
                             </PaperButton>
                             {showDatePickerUntil && (
                                 <DateTimePicker
@@ -368,7 +342,6 @@ const EditMedication: React.FC<EditMedicationProps> = ({navigation, route}: any)
                         alignContent: 'center'
                     }}
                     titleStyle={{color: '#fff'}}
-                    disabled={isButtonDisabled}
                     onPress={handleUpdateMedication}
                 />
             </ScrollableBg>
