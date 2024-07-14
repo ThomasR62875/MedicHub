@@ -93,7 +93,7 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
     const validateName = (value: string) => {
         let {result,msg}= validateTextLength(value,nameLength);
         if (value.trim() === '') {
-            setNameErrorMessage(t('warnMed'));
+            setNameErrorMessage(t('warnNameMed'));
         } else if (!result) {
             setNameErrorMessage(msg);
         } else {
