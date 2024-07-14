@@ -108,7 +108,7 @@ const SingleAppointment: React.FC<SingleAppointmentProps> = ({ navigation, route
                     </View>
                     <View style={styles.detailRow}>
                         <Text style={styles.label}>{t('doc')}:</Text>
-                        <Text style={styles.value}>{doctor ? `${doctor.name} (especialidad: ${doctor.specialty})` : 'Sin datos de doctor'}</Text>
+                        <Text style={styles.value}>{doctor ? `${doctor.name} (especialidad: ${t(doctor.specialty)})` : 'Sin datos de doctor'}</Text>
                     </View>
                     <View style={styles.detailRow}>
                         <Text style={styles.label}>{t('observations')}:</Text>
