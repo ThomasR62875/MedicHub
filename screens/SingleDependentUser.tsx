@@ -308,7 +308,7 @@ const SingleDependentUser: React.FC<SingleDependentUserProps> = ({navigation, ro
                     onDismiss={() => setNewIndepUserDialog(false)}>
                 <Dialog.Actions>
                     <ScrollableBg>
-                        <Text style={[styles.text3, {fontWeight: 'bold'}]}>Ingrese los datos para mover este usario y sus datos a una nueva cuenta</Text>
+                        <Text style={[styles.text3, {fontWeight: 'bold'}]}>{t('enterDataForShare')}</Text>
                         <Input
                             label={t('name')}
                             labelStyle={{color: '#000000', paddingBottom: 10, paddingLeft: 5, fontWeight: 'normal', fontSize: 14, fontFamily: 'Roboto-Thin'}}
@@ -522,4 +522,5 @@ const SingleDependentUser: React.FC<SingleDependentUserProps> = ({navigation, ro
     );
 };
 
+// @ts-ignore
 export default SingleDependentUser;
