@@ -4,6 +4,7 @@ import {
     Image,
     View,
     TouchableOpacity,
+    StyleSheet
 } from 'react-native';
 import { Advertisement, BannerProps, Doctor } from '../lib/types';
 import { styles } from '../assets/styles';
