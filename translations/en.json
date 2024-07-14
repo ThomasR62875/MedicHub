@@ -160,6 +160,9 @@
   "enterDataForShare": "Enter the data to move this user and their information to a new account.",
   "warn21": "Text is too long.",
   "warnPhone": "Must enter a valid phone number. Ex: 11 2222 3333.",
-  "warnDocName": "Must enter doctor's name."
+  "warnDocName": "Must enter doctor's name.",
+  "filter": "Filter",
+  "selectUsers": "Select users"
+
 }
 

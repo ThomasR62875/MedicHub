@@ -236,7 +236,7 @@ export const getDoctorsBySpecialtyAndUser = async (user_id: string, speciality: 
 }
 
 // Devuelve tods los usuarios dependiendo de un user_id incluyendo el usuario independiente
-export const getAllUsers = async (session_user_id: String): Promise<DependentUser[] | undefined> => {
+export const getAllUsers = async (session_user_id: string): Promise<DependentUser[] | undefined> => {
     const {data, error} = await supabase.rpc('get_all_users', {user_id: session_user_id});
     if (error) {
         console.error('Error getting users data:', error.message);
