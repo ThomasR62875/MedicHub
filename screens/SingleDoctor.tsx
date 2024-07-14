@@ -24,7 +24,7 @@ const SingleDoctor: React.FC<SingleDoctorProps> = ({navigation, route}: any) => 
     const handleDeleteDoctor = async () => {
         const session = route.params.session;
         const doctor = route.params.doc;
-        await deleteDoctor(doctor);
+        await deleteDoctor(doctor.id);
         navigation.navigate('Doctors', {session: session})
     };
 
