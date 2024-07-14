@@ -37,7 +37,6 @@ const Account: React.FC = ({ navigation, route } : any) => {
                     setSexGender(data.sex)
                     const dniString = String(data.dni);
                     if (dniString && dniString.length >= 8) {
-                        console.log(dniString.length)
                         const dniNumber = parseInt(dniString.slice(0, 8), 10);
                         setDni(dniNumber);
                     } else {
