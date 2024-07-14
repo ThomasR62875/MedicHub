@@ -11,6 +11,7 @@ import {
 import { Icon } from 'react-native-elements';
 import { styles } from '../assets/styles';
 import {useTranslation} from "react-i18next";
+import { BannerProps } from '../lib/types';
 
 export const ScreenBanner: React.FC<BannerProps> = (params:BannerProps)=>{
     const [visible,setVisible]= useState(params.visible);
@@ -29,7 +30,7 @@ export const ScreenBanner: React.FC<BannerProps> = (params:BannerProps)=>{
                         <Image source={{uri: params.advertisement.image_url}} style={screenStyles.imageStyle}/>
                         <View paddingTop='2%'>
                             <TouchableOpacity style={[styles.addButton,screenStyles.ownButton,screenStyles.color]}>
-                            <Text style={[styles.buttonText,{fontSize:16}]}>{t('addoctor')}</Text>
+                                <Text style={[styles.buttonText,{fontSize:16}]}>{t('addoctor')}</Text>
                             </TouchableOpacity>
                         </View>
                     </View>

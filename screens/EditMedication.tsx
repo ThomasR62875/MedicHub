@@ -3,7 +3,7 @@ import {updateMedication} from '../lib/supabase'
 import {
     View,
     Alert,
-    Platform, Image,
+    Platform,
     Text as RNText,
 } from 'react-native'
 import {Button, Icon, Input} from 'react-native-elements'
@@ -141,22 +141,22 @@ const EditMedication: React.FC<EditMedicationProps> = ({navigation, route}: any)
 
     return (
         <View style={styles.tab}>
-            <Image source={Header} style={styles.header}/>
-
-            <Icon iconStyle={{color: 'white', paddingVertical: 20}} name={'arrow-left'} type={'material-community'}
-                  style={styles.back_arrow}
-                  onPress={() => navigation.navigate('SingleMedication', {meds: route.params.medication})}></Icon>
-            <View style={{
-                flexDirection: 'row',
-                paddingTop: '5%',
-                alignItems: 'center',
-                justifyContent: 'center'
-            }}>
-                <Icon iconStyle={{color: 'white', fontSize: 24}} containerStyle={[styles.circleHeader, {
-                    backgroundColor: 'rgba(222,176,189,0.6)',
-                    alignSelf: 'center',
-                    marginHorizontal: "10%"
-                }]} name={'pill'} type={'material-community'}/>
+            <View style={[styles.header, {backgroundColor: 'rgba(222,176,189,0.6)'}]}>
+                <View style={{
+                    flexDirection: 'row',
+                    marginVertical: '20%',
+                    marginHorizontal: '10%',
+                    alignItems: 'flex-start',
+                }}>
+                    <Icon iconStyle={{color: 'white'}} name={'arrow-left'} type={'material-community'}
+                          style={styles.back_arrow}
+                          onPress={() => navigation.navigate('SingleMedication', {meds: route.params.medication})}></Icon>
+                    <Icon iconStyle={{color: 'white', fontSize: 20}} containerStyle={[styles.circleHeader, {
+                        backgroundColor: 'rgba(222,176,189,0.6)',
+                        alignSelf: 'center',
+                        marginHorizontal: '35%'
+                    }]} name={'pill'} type={'material-community'}/>
+                </View>
             </View>
             <ScrollableBg style={{padding: '10%'}}>
                 <Input

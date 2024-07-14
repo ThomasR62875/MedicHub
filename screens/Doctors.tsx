@@ -1,19 +1,20 @@
 import React, {useState, useEffect} from 'react'
-import {getDoctors} from '../lib/supabase'
+import {getDoctors, getAdvertisement} from '../lib/supabase'
 import { View, Text, Image, TouchableOpacity} from 'react-native'
 import { Icon} from "react-native-elements";
 import {useTranslation} from "react-i18next";
 import DoctorButton from "../components/DoctorButton";
-import {Doctor} from '../lib/types';
+import {Advertisement, Doctor} from '../lib/types';
 import {styles} from "../assets/styles";
 // @ts-ignore
 import Squiggle from "../assets/squiggle_pink.png";
 import ScrollableBg from "../components/ScrollableBg";
-
+import {SmallBanner} from "../components/SmallBanner"
 
 const Doctors: React.FC = ({navigation, route}: any) => {
     const {session} = route.params;
     const [doctors, setDoctors] = useState<Doctor[] | undefined>(undefined)
+    const [advertisement,setAdvertisement] = useState<Advertisement | undefined>()
     const {t} = useTranslation();
     const colors = [ 'rgba(139,134,190,0.6)','rgba(222,176,189,0.6)','rgba(236,183,97,0.6)','rgba(203,214,144,0.6)']
 
@@ -23,6 +24,7 @@ const Doctors: React.FC = ({navigation, route}: any) => {
             async function fetchData() {
                 if (session) {
                     setDoctors(await getDoctors());
+                    setAdvertisement( await getAdvertisement('BIG'));
                 }
             }
 
@@ -71,6 +73,7 @@ const Doctors: React.FC = ({navigation, route}: any) => {
                         <Text style={[styles.text2,{alignSelf: 'center', padding: 30}]}>{t('text17')}</Text>
                     )
                     }
+                    <SmallBanner advertisement={advertisement} onPress={null}/>
                 </View>
             </ScrollableBg>
         </View>
