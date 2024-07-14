@@ -147,6 +147,8 @@
   "selectUser": "Select patient",
   "title": "Title",
   "selectDoctor": "Select doctor",
-  "confirmationemailnotification": "Check the inbox of the entered email for the user to verify the email!"
+  "confirmationemailnotification": "Check the inbox of the entered email for the user to verify the email!",
+  "warnNameMed": "You must enter the name of the medication",
+  "warnEnterPrescr": "You must enter the prescription."
 }
 
