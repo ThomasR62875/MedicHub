@@ -156,6 +156,7 @@
   "text27": "No appointments in the near future",
   "selectDate": "Select a date",
   "selectTime": "Select how often",
+  "selectATime": "Select a time",
   "addnewmed" : "Add new medication"
 
 }

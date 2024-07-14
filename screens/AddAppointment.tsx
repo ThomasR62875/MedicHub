@@ -1,5 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import {addAppointment, getAllDoctorsByUser, getAllUsers, getDoctorsBySpecialty, getUserId} from '../lib/supabase';
+import {
+    addAppointment,
+    getAllDoctorsByUser,
+    getAllUsers, getDoctors,
+    getDoctorsBySpecialtyAndUser, getDoctorsByUser,
+    getUserId
+} from '../lib/supabase';
 import {
     Alert,
     View,
@@ -50,10 +56,10 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({navigation, route}: any)
             async function getInfo() {
                 if (recommendation) {
                     recommendation.date = new Date(recommendation.date);
-                    setDoctors(await getDoctorsBySpecialty(session_user_id, recommendation.specialty));
+                    setUserId(recommendation.user_id);
+                    setDoctors(await getDoctorsBySpecialtyAndUser(recommendation.user_id, recommendation.specialty));
                     setDate(recommendation.date);
                     setTime(recommendation.date);
-                    setUserId(recommendation.user_id);
                     setDoctor(recommendation.doctor);
                     setDescription(t('addRecommendationAppointmentDescription') + t(recommendation.specialty))
                 } else {
@@ -65,6 +71,16 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({navigation, route}: any)
             getInfo();
         }
     }, [session_user_id]);
+
+    useEffect(() => {
+        console.log("cambia", user_id)
+        if (user_id) {
+            async function getDoctorsInfo() {
+                setDoctors(await getDoctorsByUser(user_id));
+            }
+            getDoctorsInfo();
+        }
+    }, [user_id]);
 
     const validateDescription = (value: string) => {
         if (value.trim() === '') {
@@ -165,11 +181,11 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({navigation, route}: any)
     };
 
     const getDate = () => {
-        return date ? date.toLocaleDateString() : 'Seleccione una fecha';
+        return date ? date.toLocaleDateString() : t('selectDate');
     };
 
     const getTime = () => {
-        return time ? time.toLocaleTimeString() : 'Seleccione una hora';
+        return time ? time.toLocaleTimeString() : t('selectATime');
     };
 
     return (

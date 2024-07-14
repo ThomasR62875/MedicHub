@@ -156,5 +156,6 @@
   "doctor": "Doctor",
   "selectDate": "Seleccione una fecha",
   "selectTime": "Seleccione cada cuanto",
+  "selectATime": "Seleccione una hora",
   "addnewmed" : "Agregar nuevo medicamento"
 }
