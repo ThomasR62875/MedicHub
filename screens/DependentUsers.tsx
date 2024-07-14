@@ -37,7 +37,7 @@ return(
         <Text style={[styles.tabTitle]}>
             {t('depus')}
         </Text>
-        <ScrollableBg style={{paddingHorizontal: 10}}>
+        <ScrollableBg >
             <View style={{flexDirection: 'row', justifyContent: 'space-between',flex:0, margin: '5%', marginBottom: '2.5%'}}>
                 <TouchableOpacity
                     style={styles.addButton}

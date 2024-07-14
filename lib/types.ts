@@ -36,6 +36,7 @@ export type Medication = {
     untilWhen : Date | null;
     howOften : Date | null;
     isForever : boolean;
+    user_id: string;
 }
 
 export type Doctor = {

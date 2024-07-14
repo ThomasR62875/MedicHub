@@ -96,8 +96,7 @@ const Calender: React.FC = ({ navigation, route } : any) => {
                 />
             </View>
             <Divider style={styles.divider}/>
-
-            <ScrollableBg style={{paddingLeft: 16}}>
+            <ScrollableBg >
                 <View style={{flexDirection:'row', justifyContent: 'space-between'}}>
                     <Text style={[styles.text, {paddingVertical: 30, paddingHorizontal: 20}]}>{formatDateV2(selectedDate)}</Text>
                     <Button
@@ -132,7 +131,6 @@ const Calender: React.FC = ({ navigation, route } : any) => {
                             <Text style={[styles.text2, {paddingVertical: 10, paddingHorizontal: 25}]}>{t('text13')}</Text>
                     ))}
                     <SmallBanner advertisement={advertisement} onPress={(doc:Doctor)=>navigation.navigate({name:'AddDoctor',params:{base_doctor:doc}})}/>
-
                 </View>
             </ScrollableBg>
         </View>
