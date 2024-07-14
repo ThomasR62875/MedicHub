@@ -620,3 +620,27 @@ export const filterDoctorsBySpeciality = async (user_id: string, specialities:st
     });
     return to_return
 }
+
+export const filterMedicationsByUsers = async (users: string[]): Promise<Medication[] | undefined> => {
+    let to_return: Medication[] | undefined = undefined
+    const {data, error} = await supabase.rpc("filter_medications_by_users", {all_users: users});
+
+    if (error) {
+        console.error('Error getting medications by users data:', error.message);
+    }
+
+    to_return = [];
+    data.forEach((medication: Medication) => {
+        // @ts-ignore
+        to_return.push({
+            id: medication.id,
+            name: medication.name,
+            prescription: medication.prescription,
+            sinceWhen: medication.sinceWhen,
+            untilWhen: medication.untilWhen,
+            howOften: medication.howOften,
+            isForever: medication.isForever
+        });
+    });
+    return to_return;
+}
