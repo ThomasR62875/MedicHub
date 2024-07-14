@@ -19,6 +19,7 @@ import {styles} from "../assets/styles";
 // @ts-ignore
 import Header from "../assets/header_pink.png";
 import ScrollableBg from "../components/ScrollableBg";
+import {validateTextLength} from "../lib/ourlibrary";
 
 type EditMedicationProps = NativeStackScreenProps<RootStackParamList, 'EditMedication'>;
 
@@ -42,6 +43,8 @@ const EditMedication: React.FC<EditMedicationProps> = ({navigation, route}: any)
     const [nameErrorMessage, setNameErrorMessage] = useState('')
     const [prescriptionErrorMessage, setPrescriptionErrorMessage] = useState('');
     const {t} = useTranslation();
+    const nameLength= 20;
+    const prescriptionLength= 70;
     const times = [
         '02:00:00',
         '04:00:00',
@@ -71,7 +74,20 @@ const EditMedication: React.FC<EditMedicationProps> = ({navigation, route}: any)
         }
     }, [session])
 
-
+    useEffect(() => {
+        if (
+            name.trim() !== '' &&
+            prescription.trim() !== '' &&
+            nameErrorMessage === '' &&
+            prescriptionErrorMessage === '' &&
+            ((dateUntil < dateSince && isForever) || (dateUntil > dateSince))
+        ) {
+            setIsButtonDisabled(false);
+        } else {
+            setIsButtonDisabled(true);
+        }
+    }, [name, prescription, dateUntil, isForever, dateSince]);
+    const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(true);
 
     const handleUpdateMedication = async () => {
         const sinceDate = new Date(dateSince);
@@ -101,15 +117,21 @@ const EditMedication: React.FC<EditMedicationProps> = ({navigation, route}: any)
 
 
     const validateName = (value: string) => {
+        let {result,msg}= validateTextLength(value,nameLength);
         if (value.trim() === '') {
             setNameErrorMessage(t('warnNameMed'));
+        } else if (!result) {
+            setNameErrorMessage(msg);
         } else {
             setNameErrorMessage('');
         }
     };
     const validatePrescription = (value: string) => {
+        let {result,msg}= validateTextLength(value,prescriptionLength);
         if (value.trim() === '') {
-            setPrescriptionErrorMessage(t('warnEnterPrescr'));
+            setPrescriptionErrorMessage(t('warn11'));
+        } else if (!result) {
+            setPrescriptionErrorMessage(msg);
         } else {
             setPrescriptionErrorMessage('');
         }
