@@ -9,7 +9,7 @@ import {
     Text as RNText, ScrollView, Platform
 } from 'react-native';
 import {addMedication} from "../lib/supabase";
-import {Button, Input} from "react-native-elements";
+import {Button, Icon, Input} from "react-native-elements";
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
 import {Medication} from '../lib/types';
@@ -20,6 +20,8 @@ import UnderlinedText from '../components/UnderlinedText';
 import Checkbox from 'expo-checkbox';
 import {cardStyle} from "../styles/global"
 import {Button as PaperButton} from "react-native-paper";
+import {styles} from "../assets/styles";
+import ScrollableBg from "../components/ScrollableBg";
 
 type AddMedicationProps = NativeStackScreenProps<RootStackParamList, 'AddMedication'>
 
@@ -126,9 +128,11 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
     };
 
     const onChange2 = (event: DateTimePickerEvent, selectedDate?: Date | undefined): void => {
-        const currentDate = selectedDate || dateUntil;
-        setShowDatePickerUntil(Platform.OS === 'ios');
-        setDateUntil(currentDate);
+        if (selectedDate) {
+            const localDate = new Date(selectedDate.getTime() - selectedDate.getTimezoneOffset() * 60000);
+            setShowDatePickerUntil(Platform.OS === 'ios');
+            setDateUntil(localDate);
+        }
     };
 
     const getDateUntil = () => {
@@ -149,7 +153,220 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
     };
 
     return (
-        <View style={styles.containerTotal}>
+        <View style={styles.tab}>
+            <View style={[styles.header, {backgroundColor: 'rgba(222,176,189,0.6)'}]}>
+                <View style={{
+                    flexDirection: 'row',
+                    marginVertical: '20%',
+                    marginHorizontal: '10%',
+                    alignItems: 'flex-start',
+                }}>
+                    <Icon iconStyle={{color: 'white'}} name={'arrow-left'} type={'material-community'}
+                          style={styles.back_arrow}
+                          onPress={() => navigation.navigate('Medications', {session: session})}></Icon>
+                    <Icon iconStyle={{color: 'white', fontSize: 20}} containerStyle={[styles.circleHeader, {
+                        backgroundColor: 'rgba(222,176,189,0.6)',
+                        alignSelf: 'center',
+                        marginHorizontal: '35%'
+                    }]} name={'pill'} type={'material-community'}/>
+                </View>
+            </View>
+
+            <ScrollableBg style={{padding: '10%'}}>
+                <Input
+                    label={t('name')}
+                    value={name}
+                    onChangeText={(text) => {
+                        setName(text);
+                        validateName(text)
+                    }}
+                    errorStyle={{color: 'red'}}
+                    labelStyle={styles.label2}
+                    placeholderTextColor={"#807d7d"}
+                    inputContainerStyle={[{paddingLeft: 10}, styles.input]}
+                    inputStyle={{color: '#000', fontSize: 14, marginLeft: 10}}
+                    errorMessage={nameErrorMessage}/>
+                <Input
+                    label={t('prescription')}
+                    value={prescription}
+                    onChangeText={(text) => {
+                        setPrescription(text);
+                        validatePrescription(text)
+                    }}
+                    errorStyle={{color: 'red'}}
+                    labelStyle={styles.label2}
+                    placeholderTextColor={"#807d7d"}
+                    inputContainerStyle={[{paddingLeft: 10}, styles.input]}
+                    inputStyle={{color: '#000', fontSize: 14, marginLeft: 10}}
+                    errorMessage={prescriptionErrorMessage}
+                />
+                <RNText style={[styles.label2, {marginLeft: '5%'}]}>
+                    {t('text22')}
+                </RNText>
+                <View style={styles.datePickerContainer}>
+                    {Platform.OS === 'ios' ? (
+                        <>
+                            <DateTimePicker
+                                testID="datePicker"
+                                value={dateSince}
+                                mode="date"
+                                minimumDate={new Date()}
+                                display="default"
+                                style={{backgroundColor: 'transparent'}}
+                                onChange={onSDateChange}
+                            />
+                            <DateTimePicker
+                                testID="timePicker"
+                                value={timeSince}
+                                mode="time"
+                                display="default"
+                                textColor='#cbe4c9'
+                                onChange={onSTimeChange}
+                                timeZoneOffsetInMinutes={0}
+                            />
+                        </>
+                    ) : (
+                        <>
+                            <PaperButton mode="outlined"
+                                         style={[styles.input, {
+                                             padding: 5,
+                                             marginHorizontal: '3.5%',
+                                             marginBottom: '5%'
+                                         }]}
+                                         textColor='#000'
+                                         labelStyle={{textAlign: 'left', display: 'flex'}}
+                                         contentStyle={{justifyContent: 'flex-start'}}
+                                         onPress={() => setShowDatePickerSince(true)}>
+                                {getDateSince()}
+                            </PaperButton>
+                            <PaperButton mode="outlined" style={[styles.input, {
+                                padding: 5,
+                                marginHorizontal: '3.5%',
+                                marginBottom: '5%'
+                            }]} textColor='#000' labelStyle={{textAlign: 'left', display: 'flex'}}
+                                         contentStyle={{justifyContent: 'flex-start'}}
+                                         onPress={() => setShowTimePicker(true)}>
+                                {getTime()}
+                            </PaperButton>
+                            {showDatePickerSince && (
+                                <DateTimePicker
+                                    testID="datePicker"
+                                    value={dateSince}
+                                    minimumDate={new Date()}
+                                    mode="date"
+                                    display="default"
+                                    onChange={onSDateChange}
+                                />
+                            )}
+                            {showTimePicker && (
+                                <DateTimePicker
+                                    testID="timePicker"
+                                    value={timeSince}
+                                    mode="time"
+                                    display="default"
+                                    onChange={onSTimeChange}
+                                />
+                            )}
+                        </>
+                    )}
+                </View>
+                <View style={{marginBottom: "5%", marginTop: "5%"}}>
+                    <RNText style={styles.label2}>
+                        {t('text20')}
+                    </RNText>
+                    <Picker
+                        mode="dropdown"
+                        selectedValue={howOften}
+                        onValueChange={(value) => setHowOften(value)}>
+                        {timesList.map((item, index) => (
+                            <Picker.Item label={item.label} value={item.value}/>
+                        ))}
+                    </Picker>
+                </View>
+                <View>
+                    <RNText style={[styles.label2, {marginLeft: '5%'}]}>
+                        {t('text21')}
+                    </RNText>
+                    <View style={styles.datePickerContainer}>
+                        {Platform.OS === 'ios' ? (
+                            <>
+                                <DateTimePicker
+                                    testID="datePicker"
+                                    value={dateUntil}
+                                    minimumDate={dateSince}
+                                    mode="date"
+                                    display="default"
+                                    style={{backgroundColor: 'transparent'}}
+                                    onChange={onChange2}
+                                />
+                            </>
+                        ) : (
+                            <>
+                                <PaperButton mode="outlined" style={[styles.input, {
+                                    padding: 5,
+                                    marginHorizontal: '3.5%',
+                                    marginBottom: '5%'
+                                }]} textColor='#000' labelStyle={{textAlign: 'left', display: 'flex'}}
+                                             contentStyle={{justifyContent: 'flex-start'}}
+                                             onPress={() => setShowDatePickerUntil(true)}>
+                                    {getDateUntil()}
+                                </PaperButton>
+                                {showDatePickerUntil && (
+                                    <DateTimePicker
+                                        testID="datePicker"
+                                        value={dateUntil}
+                                        minimumDate={dateSince}
+                                        mode="date"
+                                        display="default"
+                                        onChange={onChange2}
+                                    />
+                                )}
+                            </>
+                        )}
+                    </View>
+                    <View style={[cardStyle.infoRow, {marginTop: "5%", justifyContent: 'center'}]}>
+                        <RNText style={styles.label2}>
+                            {t('text26')}
+                        </RNText>
+                        <Checkbox
+                            style={{marginLeft: "3%"}}
+                            value={isForever}
+                            onValueChange={setIsForever}
+                            color={'#000'}
+                        />
+                    </View>
+                </View>
+                <Button
+                    title={t('addnewmed')}
+                    buttonStyle={{
+                        backgroundColor: '#deb0bd',
+                        borderWidth: 2,
+                        borderColor: 'white',
+                        borderRadius: 30,
+                        minHeight: 50
+                    }}
+                    containerStyle={{
+                        width: 270,
+                        marginHorizontal: 20,
+                        marginVertical: 10,
+                        marginTop: 40,
+                        alignContent: 'center'
+                    }}
+                    titleStyle={{color: '#fff'}}
+                    disabled={isButtonDisabled}
+                    onPress={handleAddMedication}
+                />
+            </ScrollableBg>
+
+
+        </View>
+    );
+};
+
+export default AddMedication;
+
+/*
+<View style={styles.containerTotal}>
         <ScrollView>
         <KeyboardAvoidingView style={styles.container}>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
@@ -359,58 +576,4 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
         </KeyboardAvoidingView>
         </ScrollView>
         </View>
-    );
-};
-
-export default AddMedication;
-
-
-const styles = StyleSheet.create({
-    container: {
-        marginTop: 30,
-        padding: 12,
-    },
-    text: {
-        fontFamily: 'Roboto-Thin',
-        fontSize: 17,
-        marginTop: "1%",
-        color: "#245e1e"
-    },
-    containerTotal:{
-        backgroundColor: '#e9f4e9',
-        height: '100%',
-        marginLeft: 10,
-        marginRight: 10,
-        alignContent: 'center'
-    },
-    verticallySpaced: {
-        alignSelf: 'stretch',
-    },
-    buttons: {
-        alignItems: "flex-start"
-    },
-    datePicker: {
-      alignSelf: 'center',
-      marginTop: "5%",
-    },
-    titleB : {
-        fontFamily: 'Roboto-Thin',
-        alignSelf: 'center',
-        color: '#12210f',
-        fontSize: 18,
-    },
-    datePickerContainer: {
-        flexDirection: 'row',
-        display: 'flex',
-        justifyContent: 'center',
-        marginLeft: '10%',
-        marginRight: '15%',
-        marginTop: '10%',
-        marginBottom: '10%'
-    },
-    pickerButton: {
-        borderRadius: 6,
-        marginLeft: '5%',
-        marginRight: '5%',
-    },
- });
+ */

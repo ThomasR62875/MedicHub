@@ -153,5 +153,8 @@
   "next": "Próximamente",
   "date&time": "Fecha y hora",
   "text27": "No hay tienes próximos turnos",
-  "doctor": "Doctor"
+  "doctor": "Doctor",
+  "selectDate": "Seleccione una fecha",
+  "selectTime": "Seleccione una hora",
+  "addnewmed" : "Agregar nuevo medicamento"
 }

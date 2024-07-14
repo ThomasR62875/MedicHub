@@ -275,14 +275,7 @@ const App = () => {
                     <Stack.Screen name="AddMedication"
                                   component={AddMedication}
                                   initialParams={{session: session}}
-                                  options={{
-                                    title: '',
-                                      headerStyle: {
-                                          backgroundColor: '#2E5829',
-                                      },
-                                    headerTintColor: '#ABD2A8',
-                                    headerBackTitle: 'Medicamentos',
-                                  }}/>
+                                  options={{ headerShown: false }}/>
                       <Stack.Screen name="SingleMedication"
                                     component={SingleMedication}
                                     initialParams={{session: session}}

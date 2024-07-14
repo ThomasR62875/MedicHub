@@ -122,21 +122,23 @@ const EditMedication: React.FC<EditMedicationProps> = ({navigation, route}: any)
     };
 
     const getDateSince = () => {
-        return dateSince ? dateSince.toLocaleDateString() : 'Seleccione una fecha';
+        return dateSince ? dateSince.toLocaleDateString() : t('selectDate');
     };
 
     const getTime = () => {
-        return timeSince ? timeSince.toLocaleTimeString() : 'Seleccione una hora';
+        return timeSince ? timeSince.toLocaleTimeString() : t('selectTime');
     };
 
     const onChange2 = (event: DateTimePickerEvent, selectedDate?: Date | undefined): void => {
-        const currentDate = selectedDate || dateUntil;
-        setShowDatePickerUntil(Platform.OS === 'ios');
-        setDateUntil(currentDate);
+        if (selectedDate) {
+            const localDate = new Date(selectedDate.getTime() - selectedDate.getTimezoneOffset() * 60000);
+            setShowDatePickerUntil(Platform.OS === 'ios');
+            setDateUntil(localDate);
+        }
     };
 
     const getDateUntil = () => {
-        return dateUntil ? dateUntil.toLocaleDateString() : 'Seleccione una fecha';
+        return dateUntil ? dateUntil.toLocaleDateString() : t('selectDate');
     };
 
     return (
@@ -344,50 +346,7 @@ const EditMedication: React.FC<EditMedicationProps> = ({navigation, route}: any)
                 />
             </ScrollableBg>
         </View>
-        // <View style={styles.container} >
-        //     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-        //         <ScrollView>
-        //         <View style={styles.window}>
-
-
-        //         </View>
-        //         </ScrollView>
-        //     </TouchableWithoutFeedback>
-        // </View>
     )
 }
 
 export default EditMedication
-//
-// const styles = StyleSheet.create({
-//     container: {
-//         backgroundColor: '#e9f4e9',
-//         height: '100%',
-//         alignContent: 'center'
-//     },
-//     window: {
-//         alignItems: 'center',
-//         marginTop: '20%',
-//         marginLeft: '5%',
-//         marginRight: '5%'
-//     },
-//     text: {
-//         fontFamily: 'Roboto-Thin',
-//         fontSize: 17,
-//         marginTop: "1%",
-//         color: "#245e1e"
-//     },
-//     buttons: {
-//         alignItems: "flex-start"
-//     },
-//     datePicker: {
-//         alignSelf: 'center',
-//         marginTop: "5%",
-//     },
-
-//     pickerButton: {
-//         borderRadius: 6,
-//         marginLeft: '5%',
-//         marginRight: '5%',
-//     },
-// })
