@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from "react";
 import {ActivityIndicator, Image, Text, View} from "react-native";
-import {Appointment} from "../lib/types";
+import {Advertisement, Appointment, Doctor} from "../lib/types";
 import {Calendar} from "react-native-calendars";
 import TurnoContainer from "../components/TurnoContainer";
-import {getAppointments} from "../lib/supabase";
+import {getAdvertisement, getAppointments} from "../lib/supabase";
 import {Button} from "react-native-elements";
 import {useTranslation} from "react-i18next";
 import {styles} from "../assets/styles";
@@ -12,10 +12,12 @@ import Squiggle from "../assets/tabAsset.png";
 import ScrollableBg from "../components/ScrollableBg";
 import {Divider} from "react-native-paper";
 import {formatDateV2} from "../lib/ourlibrary";
+import { SmallBanner } from "../components/SmallBanner";
 
 const Calender: React.FC = ({ navigation, route } : any) => {
     const {session} = route.params;
     const [appointments,setAppointments]= useState<Appointment[] | undefined>(undefined)
+    const [advertisement,setAdvertisement] = useState<Advertisement | undefined>()
     const {t} = useTranslation();
     const [isLoading, setIsLoading] = useState(true);
 
@@ -24,6 +26,7 @@ const Calender: React.FC = ({ navigation, route } : any) => {
             async function fetchData() {
                 setAppointments(await getAppointments())
                 setIsLoading(false)
+                setAdvertisement( await getAdvertisement('BIG'));
             }
             fetchData()
         });
@@ -111,7 +114,7 @@ const Calender: React.FC = ({ navigation, route } : any) => {
                         titleStyle={{ color: '#fff',fontSize: 15, margin: 5, fontWeight: 'bold'}}
                         onPress={() => navigation.navigate('AddAppointment', {session: session})}/>
                 </View>
-                <View style={{flexDirection: 'column'}}>
+                <View style={[styles.listCards,{flexDirection: 'column'}]}>
                     {isLoading ? (
                         <ActivityIndicator size="small" color="#807d7d" style={{marginVertical: '10%'}}/>
                     ) : (filteredData && filteredData.length > 0 ? (
@@ -121,13 +124,15 @@ const Calender: React.FC = ({ navigation, route } : any) => {
                                     key={index}
                                     date={turno.date}
                                     turno={turno}
-                                    styleExterior={[styles.cards,{width: "85%", marginHorizontal: '5%'}]}
+                                    styleExterior={styles.cards}
                                     onPress={() => {navigation.navigate('SingleAppointment', {session: session, appointment: turno})}}
                                 />
                             )
                         })) :  (
                             <Text style={[styles.text2, {paddingVertical: 10, paddingHorizontal: 25}]}>{t('text13')}</Text>
                     ))}
+                    <SmallBanner advertisement={advertisement} onPress={(doc:Doctor)=>navigation.navigate({name:'AddDoctor',params:{base_doctor:doc}})}/>
+
                 </View>
             </ScrollableBg>
         </View>

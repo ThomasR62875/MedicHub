@@ -1,14 +1,15 @@
 import React, {useState, useEffect} from 'react'
 import {View, Text, Image, TouchableOpacity, ActivityIndicator} from 'react-native'
-import {getMedications} from '../lib/supabase'
+import {getAdvertisement, getMedications} from '../lib/supabase'
 import MedicationButton from "../components/MedicationButton";
 import {Icon} from "react-native-elements";
 import {useTranslation} from "react-i18next";
-import {Medication} from '../lib/types';
+import {Advertisement, Doctor, Medication} from '../lib/types';
 import {styles} from "../assets/styles";
 // @ts-ignore
 import Squiggle from "../assets/squiggle_pink.png";
 import ScrollableBg from "../components/ScrollableBg";
+import { SmallBanner } from '../components/SmallBanner';
 
 const Medications: React.FC = ({navigation, route}: any) => {
     const session = route.params.session;
@@ -16,13 +17,14 @@ const Medications: React.FC = ({navigation, route}: any) => {
     const {t} = useTranslation();
     const colors = ['rgba(139,134,190,0.6)', 'rgba(222,176,189,0.6)', 'rgba(236,183,97,0.6)', 'rgba(203,214,144,0.6)']
     const [isLoading, setIsLoading] = useState(true);
-
+    const [advertisement,setAdvertisement] = useState<Advertisement | undefined>()
     useEffect(() => {
         navigation.addListener('focus', () => {
             async function fetchData() {
                 if (session) {
                     setMedications(await getMedications());
                     setIsLoading(false);
+                    setAdvertisement( await getAdvertisement('BIG'));
                 }
             }
 
@@ -92,6 +94,8 @@ const Medications: React.FC = ({navigation, route}: any) => {
                             <Text style={[styles.text2, {alignSelf: 'center', padding: 30}]}>{t('text16')}</Text>
                         ))
                     }
+                    <SmallBanner advertisement={advertisement} onPress={(doc:Doctor)=>navigation.navigate({name:'AddDoctor',params:{base_doctor:doc}})}/>
+
                 </View>
             </ScrollableBg>
         </View>

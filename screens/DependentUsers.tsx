@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react'
-import { getDependentUsers} from '../lib/supabase'
+import { getAdvertisement, getDependentUsers} from '../lib/supabase'
 import {View, Text, Image, TouchableOpacity, ActivityIndicator} from 'react-native'
 import { Icon} from "react-native-elements";
 import {useTranslation} from "react-i18next";
 import DependentUserButton from "../components/DependentUsertButton";
-import { DependentUser } from '../lib/types';
+import { Advertisement, DependentUser, Doctor } from '../lib/types';
 import {styles} from '../assets/styles'
 // @ts-ignore
 import Squiggle from "../assets/tabAsset.png";
 import ScrollableBg from "../components/ScrollableBg";
+import { SmallBanner } from '../components/SmallBanner';
 
 const DependentUsers: React.FC = ({navigation, route} : any) => {
     const {session} = route.params;
@@ -16,11 +17,13 @@ const DependentUsers: React.FC = ({navigation, route} : any) => {
     const {t} = useTranslation();
     const colors = [ 'rgba(139,134,190,0.6)','rgba(222,176,189,0.6)','rgba(236,183,97,0.6)','rgba(203,214,144,0.6)']
     const [isLoading, setIsLoading] = useState(true);
+    const [advertisement,setAdvertisement] = useState<Advertisement | undefined>()
 
     useEffect(() => {
         navigation.addListener('focus', () => {
             async function fetchData() {
                 setDependentUsers(await getDependentUsers())
+                setAdvertisement( await getAdvertisement('BIG'));
                 setIsLoading(false)
             }  
             fetchData()
@@ -64,6 +67,7 @@ return(
                         <Text  style={[styles.text2,{alignSelf: 'center', padding: 30}]}>{t('text18')}</Text>
 
                 )}
+                <SmallBanner advertisement={advertisement} onPress={(doc:Doctor)=>navigation.navigate({name:'AddDoctor',params:{base_doctor:doc}})}/>
             </View>)}
         </ScrollableBg>
     </View>
