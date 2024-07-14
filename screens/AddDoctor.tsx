@@ -76,7 +76,7 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}:any) => {
         } else {
             setIsButtonDisabled(true);
         }
-    }, [name, specialty, user_id]);
+    }, [name, specialty, user_id,phone,addresses]);
 
     const validateName = (value: string) => {
         let {result,msg}= validateTextLength(value,nameLength);
@@ -260,7 +260,7 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}:any) => {
                     }}
                     containerStyle={{
                         width: 200,
-                        marginHorizontal: 50,
+                        marginHorizontal: '20%',
                         marginVertical: 10,
                         marginTop: 40,
                         alignContent: 'center'
