@@ -31,9 +31,10 @@ const EditDependentUser: React.FC<EditDependentUserProps> = ({navigation, route}
     const [genderErrorMessage, setGenderErrorMessage] = useState<string>('');
 
     const handleDateChange = (event: any, selectedDate?: Date) => {
-        const currentDate = selectedDate || date;
-
-        setDate(currentDate);
+        if (selectedDate) {
+            const localDate = new Date(selectedDate.getTime() - selectedDate.getTimezoneOffset() * 60000);
+            setDate(localDate);
+        }
     };
 
     useEffect(() => {
