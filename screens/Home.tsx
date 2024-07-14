@@ -148,12 +148,14 @@ const Home: React.FC = ({ navigation, route }: any) => {
                 <View style={[styles.listCards]}>
                     {isAppointments ? (
                         <View>
+                            {turno1 && date1 ? (
                             <TurnoContainer
                                 turno={turno1}
                                 date={turno1.date}
                                 styleExterior={[styles.cards]}
                                 onPress={() => {navigation.navigate('SingleAppointment', {session: session, appointment: turno1})}}
                             />
+                            ) : (<View/>)}
                             {turno2 && date2 ? (
                                 <TurnoContainer
                                     styleExterior={[styles.cards]}
