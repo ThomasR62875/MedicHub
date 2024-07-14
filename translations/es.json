@@ -161,5 +161,5 @@
   "enterDataForShare": "Ingrese los datos para mover este usario y sus datos a una nueva cuenta",
   "warn21": "El texto es demasiado largo",
   "warnPhone": "Debe ingresar un teléfono válido. Ej: 11 2222 3333.",
-  "warnMed": "Debe ingresar el nombre del medicamento."
+  "warnDocName": "Debe ingresar el nombre del médico."
 }

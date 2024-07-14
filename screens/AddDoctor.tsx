@@ -79,38 +79,35 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}:any) => {
     }, [name, specialty, user_id]);
 
     const validateName = (value: string) => {
+        let {result,msg}= validateTextLength(value,nameLength);
         if (value.trim() === '') {
-            setNameErrorMessage(t('warn1'));
+            setNameErrorMessage(t('warnDocName'));
+        } else if (!result) {
+            setNameErrorMessage(msg);
         } else {
             setNameErrorMessage('');
         }
     };
-    const validateNameLength = (value: string) => {
-        let {result,msg}= validateTextLength(value,nameLength);
-        setNameErrorMessage(msg);
-    };
     const validatePhone = (value: string) => {
         const containsLetterOrSymbol = /([a-zA-Z!@#$%^&*()_+{}\[\]:;<>,.?\/\\|'"`~-])/.test(value);
+        let {result,msg}= validateTextLength(value,phoneLength);
         if (containsLetterOrSymbol) {
             setPhoneErrorMessage(t('warnPhone'));
+        } else if (!result) {
+            setPhoneErrorMessage(msg);
         } else {
             setPhoneErrorMessage('');
         }
     };
-    const validatePhoneLength = (value: string) => {
-        let {result,msg}= validateTextLength(value,phoneLength);
-        setPhoneErrorMessage(msg);
-    };
     const validateEmail = (value: string) => {
+        let {result,msg}= validateTextLength(value,emailLength);
         if (value.trim() === '' || !value.includes("@") || !(value.includes(".edu") || value.includes(".com") || value.includes(".ar"))) {
             setMailErrorMessage(t('warn4'));
+        } else if (!result) {
+            setMailErrorMessage(msg);
         } else {
             setMailErrorMessage('');
         }
-    };
-    const validateEmailLength = (value: string) => {
-        let {result,msg}= validateTextLength(value,emailLength);
-        setMailErrorMessage(msg);
     };
 
     const validateAddressLength = (value: string) => {
@@ -174,7 +171,6 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}:any) => {
                     onChangeText={(text) => {
                         setName(text);
                         validateName(text);
-                        validateNameLength(text);
                     }}
                     value={name}
                     placeholder={t('name')}
@@ -197,7 +193,6 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}:any) => {
                     onChangeText={(text) => {
                         setPhone(text)
                         validatePhone(text);
-                        validatePhoneLength(text);
                     }}
                     value={phone}
                     placeholder={t('phone')}
@@ -216,7 +211,6 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}:any) => {
                     onChangeText={(text) => {
                         setEmail(text);
                         validateEmail(text);
-                        validateEmailLength(text);
                     }}
                     value={email}
                     placeholder="Mail"
