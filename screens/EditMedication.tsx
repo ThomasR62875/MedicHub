@@ -14,7 +14,7 @@ import DateTimePicker, {DateTimePickerEvent} from "@react-native-community/datet
 import Checkbox from "expo-checkbox";
 import {cardStyle} from "../styles/global";
 import {Picker} from '@react-native-picker/picker';
-import {Button as PaperButton} from "react-native-paper";
+import {Dialog, Button as PaperButton, Portal} from "react-native-paper";
 import {styles} from "../assets/styles";
 // @ts-ignore
 import Header from "../assets/header_pink.png";
@@ -42,6 +42,7 @@ const EditMedication: React.FC<EditMedicationProps> = ({navigation, route}: any)
     const [showDatePickerUntil, setShowDatePickerUntil] = useState(false);
     const [nameErrorMessage, setNameErrorMessage] = useState('')
     const [prescriptionErrorMessage, setPrescriptionErrorMessage] = useState('');
+    const [showHowOftenDialog,setHowOftenDialog]= useState(false);
     const {t} = useTranslation();
     const nameLength= 20;
     const prescriptionLength= 70;
@@ -86,7 +87,7 @@ const EditMedication: React.FC<EditMedicationProps> = ({navigation, route}: any)
         } else {
             setIsButtonDisabled(true);
         }
-    }, [name, prescription, dateUntil, isForever, dateSince]);
+    }, [name, prescription, dateUntil, isForever, dateSince,howOften]);
     const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(true);
 
     const handleUpdateMedication = async () => {
@@ -163,7 +164,11 @@ const EditMedication: React.FC<EditMedicationProps> = ({navigation, route}: any)
         }
     };
 
+    const getHowOften= () => {
+        return howOften?.toString();
+    }
 
+    const hideUserDialog = () => setHowOftenDialog(false);
     return (
         <View style={styles.tab}>
             <View style={[styles.header, {backgroundColor: 'rgba(222,176,189,0.6)'}]}>
@@ -325,14 +330,12 @@ const EditMedication: React.FC<EditMedicationProps> = ({navigation, route}: any)
                     <RNText style={styles.label2}>
                         {t('selectTime')}
                     </RNText>
-                    <Picker
-                        mode="dropdown"
-                        selectedValue={howOften}
-                        onValueChange={(value) => setHowOften(value)}>
-                        {timesList.map((item, index) => (
-                            <Picker.Item label={item.label} value={item.value} key={index}/>
-                        ))}
-                    </Picker>
+                    <PaperButton mode="outlined"
+                             style={[styles.input, {padding: 5, marginHorizontal: '3.5%', marginBottom: '5%'}]}
+                             textColor='#000' labelStyle={{textAlign: 'left', display: 'flex'}}
+                             contentStyle={{justifyContent: 'flex-start'}} onPress={()=>{setHowOftenDialog(true)}}>
+                            {getHowOften()}
+                    </PaperButton>
                 </View>
                 <View>
                     <View style={[cardStyle.infoRow, {marginTop: "5%", justifyContent: 'center'}]}>
@@ -364,9 +367,25 @@ const EditMedication: React.FC<EditMedicationProps> = ({navigation, route}: any)
                         alignContent: 'center'
                     }}
                     titleStyle={{color: '#fff'}}
+                    disabled={isButtonDisabled}
                     onPress={handleUpdateMedication}
                 />
             </ScrollableBg>
+            <Portal>
+                <Dialog style={styles.dialog} visible={showHowOftenDialog} onDismiss={hideUserDialog}>
+                    <RNText style={styles.dialogTitle}>{t('selectTime')}</RNText>
+                    <Picker
+                        mode="dropdown"
+                        selectedValue={howOften}
+                        itemStyle={styles.pickerStyle}
+                        placeholder={t('time')}
+                        onValueChange={(value) => setHowOften(value)}>
+                        {timesList.map((item, index) => (
+                            <Picker.Item label={item.label} value={item.value} key={index}/>
+                        ))}
+                    </Picker>
+                </Dialog>
+            </Portal>
         </View>
     )
 }

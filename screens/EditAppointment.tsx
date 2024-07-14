@@ -101,13 +101,16 @@ const EditAppointment: React.FC<EditAppointmentProps> = ({navigation, route}: an
 
     useEffect(() => {
         if (
-            description !== ''
+            doctor.trim() !== '' &&
+            user_id.trim() !== '' &&
+            descriptionErrorMessage == '' &&
+            observationsErrorMessage == ''
         ) {
             setIsButtonDisabled(false);
         } else {
             setIsButtonDisabled(true);
         }
-    }, [description]);
+    }, [description,doctor,user_id,observations]);
 
 
     const handleUpdateAppointment = async () => {
@@ -367,7 +370,7 @@ const EditAppointment: React.FC<EditAppointmentProps> = ({navigation, route}: an
                         mode='dropdown'
                         selectedValue={user_id}
                         onValueChange={(value: string) => setUserId(value)}
-                        placeholder='Usuario'
+                        placeholder={t('user')}
                         enabled={true}
                         itemStyle={styles.pickerStyle}
                     >

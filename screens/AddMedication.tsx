@@ -14,7 +14,7 @@ import {Picker} from '@react-native-picker/picker'
 import DateTimePicker, {DateTimePickerEvent} from '@react-native-community/datetimepicker';
 import Checkbox from 'expo-checkbox';
 import {cardStyle} from "../styles/global"
-import {Button as PaperButton} from "react-native-paper";
+import {Button as PaperButton, Portal,Dialog} from "react-native-paper";
 import {styles} from "../assets/styles";
 import ScrollableBg from "../components/ScrollableBg";
 import {validateTextLength} from "../lib/ourlibrary";
@@ -35,6 +35,7 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
     const [showDatePickerSince, setShowDatePickerSince] = useState(false);
     const [showTimePicker, setShowTimePicker] = useState(false);
     const [showDatePickerUntil, setShowDatePickerUntil] = useState(false);
+    const [showHowOftenDialog,setHowOftenDialog]= useState(false);
     const {t} = useTranslation();
     const nameLength= 20;
     const prescriptionLength= 70;
@@ -62,7 +63,7 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
         } else {
             setIsButtonDisabled(true);
         }
-    }, [name, prescription, dateUntil, isForever, dateSince]);
+    }, [name, prescription, dateUntil, isForever, dateSince,howOften]);
 
     const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(true);
 
@@ -142,6 +143,11 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
         return dateUntil ? dateUntil.toLocaleDateString() : t('selectDate');
     };
 
+    const getHowOften= () => {
+        return howOften?.toString();
+    }
+
+    const hideUserDialog = () => setHowOftenDialog(false);
     return (
         <View style={styles.tab}>
             <View style={[styles.header, {backgroundColor: 'rgba(222,176,189,0.6)'}]}>
@@ -308,14 +314,12 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
                         <RNText style={[styles.label2,{marginLeft: '3%'}]}>
                             {t('selectTime')}
                         </RNText>
-                        <Picker
-                            mode="dropdown"
-                            selectedValue={howOften}
-                            onValueChange={(value) => setHowOften(value)}>
-                            {timesList.map((item, index) => (
-                                <Picker.Item label={item.label} value={item.value} key={index}/>
-                            ))}
-                        </Picker>
+                        <PaperButton mode="outlined"
+                             style={[styles.input, {padding: 5, marginHorizontal: '3.5%', marginBottom: '5%'}]}
+                             textColor='#000' labelStyle={{textAlign: 'left', display: 'flex'}}
+                             contentStyle={{justifyContent: 'flex-start'}} onPress={()=>{setHowOftenDialog(true)}}>
+                            {getHowOften()}
+                        </PaperButton>
                     </View>
                     <View style={[cardStyle.infoRow, {marginTop: "5%", justifyContent: 'center'}]}>
                         <RNText style={styles.label2}>
@@ -348,22 +352,23 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
                     titleStyle={{color: '#fff'}}
                     disabled={isButtonDisabled}
                     onPress={handleAddMedication}
-                    /*onPress={() => {
-                        if(dateUntil === null){
-                            Alert.alert(t('warning'), t('warn14') ,
-                                [{ text: 'Cancel', onPress: () => {setIsButtonDisabled(true);}},
-                                    { text: 'Ok', onPress: () => [handleAddMedication(), navigation.navigate('Medications', { session: session })]}])
-                        }
-                        else if(howOften === null){
-                            Alert.alert(t('warning') , t('warn13'),
-                                [{ text: 'Cancel', onPress: () => {setIsButtonDisabled(true);}},
-                                    { text: 'Ok', onPress: () => [handleAddMedication(), navigation.navigate('Medications', { session: session })]}])
-                        }
-                        else{handleAddMedication()}
-                    }}*/
                 />
             </ScrollableBg>
-
+            <Portal>
+                <Dialog style={styles.dialog} visible={showHowOftenDialog} onDismiss={hideUserDialog}>
+                    <RNText style={styles.dialogTitle}>{t('selectTime')}</RNText>
+                    <Picker
+                        mode="dropdown"
+                        selectedValue={howOften}
+                        itemStyle={styles.pickerStyle}
+                        placeholder={t('time')}
+                        onValueChange={(value) => setHowOften(value)}>
+                        {timesList.map((item, index) => (
+                            <Picker.Item label={item.label} value={item.value} key={index}/>
+                        ))}
+                    </Picker>
+                </Dialog>
+            </Portal>
 
         </View>
     );
