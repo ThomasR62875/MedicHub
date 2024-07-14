@@ -216,7 +216,7 @@ const SingleDependentUser: React.FC<SingleDependentUserProps> = ({navigation, ro
                     </View>
                     <View style={styles.detailRow}>
                         <Text style={styles.label}>{t('sex')}:</Text>
-                        <Text style={styles.value}>{t(route.params.du.sex)}</Text>
+                        <Text style={styles.value}>{route.params.du.sex ? t(route.params.du.sex) : '' }</Text>
                     </View>
                     <View style={styles.screen}>
                         <View style={{alignItems: 'center', width: 'auto'}}>
@@ -381,7 +381,7 @@ const SingleDependentUser: React.FC<SingleDependentUserProps> = ({navigation, ro
 
                         <PaperText style={[styles.text4,{fontWeight: 'normal'}]}>{t('sex')}</PaperText>
                         <PaperButton mode="outlined" style={[styles.input, {padding: 5, marginHorizontal: '3%', marginBottom:'5%'}]} textColor='#000' labelStyle={{textAlign: 'left', display:'flex'}} contentStyle={{justifyContent: 'flex-start'}} onPress={()=> setSexGenderDialog(true)}>
-                            {t(sexGender)}
+                            {sexGender ? t(sexGender) : t('selSex') }
                         </PaperButton>
 
                         <View style={{marginBottom: "5%", marginTop: "5%"}}>
