@@ -381,8 +381,8 @@ export const deleteDependentUser = async (user: DependentUser): Promise<{ succes
     }
 }
 
-export const deleteDoctor = async (doc: Doctor): Promise<{ success: boolean, message: string }> => {
-    const {error} = await supabase.rpc('delete_doctor_by_id', {input_id: doc.id});
+export const deleteDoctor = async (doc_id: string): Promise<{ success: boolean, message: string }> => {
+    const {error} = await supabase.rpc('delete_doctor_by_id', {input_id: doc_id});
     if (error) {
         return {
             success: false,

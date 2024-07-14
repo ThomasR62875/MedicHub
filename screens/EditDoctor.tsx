@@ -44,7 +44,7 @@ const EditDoctor: React.FC<EditDoctorProps> = ({navigation, route}: any) => {
     const emailLength= 30;
     const addressLength= 30;
 
-    let doc = {
+    const doc = {
         id: id,
         name: name,
         specialty: specialty,
@@ -171,7 +171,7 @@ const EditDoctor: React.FC<EditDoctorProps> = ({navigation, route}: any) => {
                 }}>
                     <Icon iconStyle={{color: 'white'}} name={'arrow-left'} type={'material-community'}
                           style={styles.back_arrow}
-                          onPress={() => navigation.navigate('SingleDoctor', {doc: doc})}></Icon>
+                          onPress={() => navigation.navigate('SingleDoctor', {doc: route.params.doc})}></Icon>
                     <Icon iconStyle={{color: 'white', fontSize: 20}} containerStyle={[styles.circleHeader, {
                         backgroundColor: 'rgba(134,171,186,0.6)',
                         alignSelf: 'center',
