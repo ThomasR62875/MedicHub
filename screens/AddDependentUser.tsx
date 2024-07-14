@@ -9,7 +9,7 @@ import {useTranslation} from "react-i18next";
 import DateTimePicker, {DateTimePickerEvent} from "@react-native-community/datetimepicker";
 import {Button as PaperButton, Dialog, Text as PaperText} from "react-native-paper";
 import {Picker} from "@react-native-picker/picker";
-import {getSexGenderName, sexGenderOptions, validateTextLength} from "../lib/ourlibrary";
+import {sexGenderOptions, validateTextLength} from "../lib/ourlibrary";
 import {styles} from "../assets/styles";
 // @ts-ignore
 import ScrollableBg from "../components/ScrollableBg";
@@ -210,7 +210,7 @@ const AddDependentUser:React.FC<AddDependentUserProps> = ({navigation, route} : 
 
                 <PaperText style={styles.label2}>{t('sex')}</PaperText>
                 <PaperButton mode="outlined" style={[styles.input, {padding: 5, marginHorizontal: '3%', marginBottom:'5%'}]} textColor='#000' labelStyle={{textAlign: 'left', display:'flex'}} contentStyle={{justifyContent: 'flex-start'}} onPress={()=> setSexGenderDialog(true)}>
-                    {getSexGenderName(sexGender) ? getSexGenderName(sexGender) : '' }
+                    {t(sexGender) ? t(sexGender) : '' }
                 </PaperButton>
 
 
@@ -295,7 +295,7 @@ const AddDependentUser:React.FC<AddDependentUserProps> = ({navigation, route} : 
                     itemStyle={styles.pickerStyle}
                 >
                     {sexGenderOptions?.map((item) => (
-                        <Picker.Item key={item.value} label={item.sex_gender_name} value={item.value} />
+                        <Picker.Item key={item.name} label={t(item.name)} value={item.name} />
                     ))}
                 </Picker>
             </Dialog>

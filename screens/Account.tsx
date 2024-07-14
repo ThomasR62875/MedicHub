@@ -7,7 +7,6 @@ import {DependentUser} from "../lib/types";
 import {Dialog, Text, Button as PaperButton, Divider} from "react-native-paper";
 import {useTranslation} from "react-i18next";
 import {styles} from "../assets/styles";
-import { getSexGenderName } from '../lib/ourlibrary'
 
 
 const Account: React.FC = ({ navigation, route } : any) => {
@@ -113,7 +112,7 @@ const Account: React.FC = ({ navigation, route } : any) => {
                     <Text style={styles.title}>{t('birthdate')}:</Text>
                     <Text style={styles.text2}>{date ? date.toISOString().split('T')[0] : ' '}</Text>
                     <Text style={styles.title}>{t('sex')}:</Text>
-                    <Text style={styles.text2}>{getSexGenderName(sexGender)}</Text>
+                    <Text style={styles.text2}>{t(sexGender)}</Text>
                 </View>
                 <View style={{alignItems: 'center', width: 'auto', alignSelf: 'center'}}>
                     <Button

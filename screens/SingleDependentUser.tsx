@@ -13,7 +13,7 @@ import {styles} from "../assets/styles";
 import Header from "../assets/header_violet.png";
 import DateTimePicker, {DateTimePickerEvent} from "@react-native-community/datetimepicker";
 import {Picker} from "@react-native-picker/picker";
-import {getSexGenderName, sexGenderOptions} from "../lib/ourlibrary";
+import {sexGenderOptions} from "../lib/ourlibrary";
 
 type SingleDependentUserProps = NativeStackScreenProps<RootStackParamList, 'SingleDependentUser'>
 
@@ -216,7 +216,7 @@ const SingleDependentUser: React.FC<SingleDependentUserProps> = ({navigation, ro
                     </View>
                     <View style={styles.detailRow}>
                         <Text style={styles.label}>{t('sex')}:</Text>
-                        <Text style={styles.value}>{getSexGenderName(route.params.du.sex)}</Text>
+                        <Text style={styles.value}>{t(route.params.du.sex)}</Text>
                     </View>
                     <View style={styles.screen}>
                         <View style={{alignItems: 'center', width: 'auto'}}>
@@ -381,7 +381,7 @@ const SingleDependentUser: React.FC<SingleDependentUserProps> = ({navigation, ro
 
                         <PaperText style={[styles.text4,{fontWeight: 'normal'}]}>{t('sex')}</PaperText>
                         <PaperButton mode="outlined" style={[styles.input, {padding: 5, marginHorizontal: '3%', marginBottom:'5%'}]} textColor='#000' labelStyle={{textAlign: 'left', display:'flex'}} contentStyle={{justifyContent: 'flex-start'}} onPress={()=> setSexGenderDialog(true)}>
-                            {getSexGenderName(sexGender)}
+                            {t(sexGender)}
                         </PaperButton>
 
                         <View style={{marginBottom: "5%", marginTop: "5%"}}>
@@ -447,7 +447,7 @@ const SingleDependentUser: React.FC<SingleDependentUserProps> = ({navigation, ro
                                     itemStyle={styles.pickerStyle}
                                 >
                                     {sexGenderOptions?.map((item) => (
-                                        <Picker.Item key={item.value} label={item.sex_gender_name} value={item.value} />
+                                        <Picker.Item key={item.name} label={t(item.name)} value={item.name} />
                                     ))}
                                 </Picker>
                                 <Dialog.Actions style={{ justifyContent: 'space-between' }}>

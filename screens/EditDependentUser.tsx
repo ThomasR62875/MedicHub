@@ -9,7 +9,7 @@ import {Button as PaperButton, Dialog, Portal, Text as PaperText} from "react-na
 import {Picker} from "@react-native-picker/picker";
 import ScrollableBg from '../components/ScrollableBg';
 import DateTimePicker from "@react-native-community/datetimepicker";
-import {getSexGenderName, sexGenderOptions} from "../lib/ourlibrary";
+import {sexGenderOptions} from "../lib/ourlibrary";
 import {styles} from "../assets/styles";
 
 type EditDependentUserProps = NativeStackScreenProps<RootStackParamList, 'EditDependentUser'>;
@@ -191,7 +191,7 @@ const EditDependentUser: React.FC<EditDependentUserProps> = ({navigation, route}
                              style={[styles.input, {padding: 5, marginHorizontal: '3.5%', marginBottom: '5%'}]}
                              textColor='#000' labelStyle={{textAlign: 'left', display: 'flex'}}
                              contentStyle={{justifyContent: 'flex-start'}} onPress={() => setSexGenderDialog(true)}>
-                    {getSexGenderName(sexGender)}
+                    {t(sexGender)}
                 </PaperButton>
 
 
@@ -281,7 +281,7 @@ const EditDependentUser: React.FC<EditDependentUserProps> = ({navigation, route}
                         itemStyle={styles.pickerStyle}
                     >
                         {sexGenderOptions?.map((item) => (
-                            <Picker.Item key={item.value} label={item.sex_gender_name} value={item.value} />
+                            <Picker.Item key={item.name} label={t(item.name)} value={item.name} />
                         ))}
                     </Picker>
                     <Dialog.Actions style={{ justifyContent: 'space-between' }}>

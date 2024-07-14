@@ -11,12 +11,12 @@ import {Input, Icon, Button} from "react-native-elements";
 import Logo from '../assets/icon_black.png'
 import {useTranslation} from "react-i18next";
 import ScrollableBg from "../components/ScrollableBg";
-import {User} from '../lib/types';
+import {SexGenderOption, Specialty, User} from '../lib/types';
 import {Button as PaperButton, Dialog, Text as PaperText} from "react-native-paper";
 import {Picker} from "@react-native-picker/picker";
 import DateTimePicker, {DateTimePickerEvent} from "@react-native-community/datetimepicker";
-import {getSexGenderName, sexGenderOptions} from "../lib/ourlibrary";
 import {styles} from "../assets/styles";
+import {sexGenderOptions} from "../lib/ourlibrary";
 
 
 const Register: React.FC = ({navigation}: any) => {
@@ -39,7 +39,6 @@ const Register: React.FC = ({navigation}: any) => {
     const [birthDateErrorMessage, setBirthDateErrorMessage] = useState<string>('');
     const [genderErrorMessage, setGenderErrorMessage] = useState<string>('');
     const [showDatePickerUntil, setShowDatePickerUntil] = useState(false);
-
 
     useEffect(() => {
         if (
@@ -240,12 +239,12 @@ const Register: React.FC = ({navigation}: any) => {
                 />
                 <PaperText style={styles.text4}>{t('sex')}</PaperText>
                 <PaperButton mode="outlined" style={[styles.input, {padding: 5, marginHorizontal: '3%', marginBottom:'5%'}]} textColor='#000' labelStyle={{textAlign: 'left', display:'flex'}} contentStyle={{justifyContent: 'flex-start'}} onPress={()=> setSexGenderDialog(true)}>
-                    {getSexGenderName(sexGender)}
+                    {t(sexGender)}
                 </PaperButton>
 
 
                 <View style={{marginBottom: "5%", marginTop: "5%"}}>
-                    <RNText style={styles.label2}>
+                    <RNText style={styles.text4}>
                         {t('birthdate')}
                     </RNText>
                     <View style={styles.datePickerContainer}>
@@ -378,7 +377,7 @@ const Register: React.FC = ({navigation}: any) => {
                     itemStyle={styles.pickerStyle}
                 >
                     {sexGenderOptions?.map((item) => (
-                        <Picker.Item key={item.value} label={item.sex_gender_name} value={item.value} />
+                        <Picker.Item key={item.name} label={t(item.name)} value={item.name} />
                     ))}
                 </Picker>
             </Dialog>
