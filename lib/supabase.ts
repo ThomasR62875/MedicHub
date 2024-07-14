@@ -487,6 +487,8 @@ export const updateMedication = async (medication: Medication): Promise<{ succes
             message: 'Error updating medication data',
         }
     } else {
+        console.log('update successful')
+
         return {
             success: true,
             message: 'Medication updated successfully',

@@ -3,7 +3,10 @@ import {
     Text,
     Image,
     View,
-    TouchableOpacity, ImageStyle, ViewStyle,
+    TouchableOpacity,
+    ImageStyle,
+    StyleSheet,
+    ViewStyle,
 } from 'react-native';
 import { styles } from '../assets/styles';
 import {useTranslation} from "react-i18next";
@@ -19,7 +22,7 @@ export const SmallBanner: React.FC<BannerProps> = (params:BannerProps)=>{
     return (
         <View>
             {params.advertisement && (
-                <View style={[styles.cards,{flexDirection: 'row',borderColor:'#86abba',borderWidth:3}]}>
+                <View style={[styles.cards,{flexDirection: 'row',borderColor:'#86abba',borderWidth:3, justifyContent: 'space-between'}]}>
                     <Image source={{uri: params.advertisement.image_url}} style={smallStyles.imageStyle}/>
                     <View style={{flexDirection: 'column', paddingHorizontal: 14}}>
                         <Text style={[{fontSize: 14, paddingVertical: 7}]}>{params.advertisement.name}</Text>
@@ -27,7 +30,7 @@ export const SmallBanner: React.FC<BannerProps> = (params:BannerProps)=>{
                     </View>
                     <View style={smallStyles.buttonContainer}>
                         <TouchableOpacity style={[styles.addButton, smallStyles.ownButton]} onPress={()=>{handleOnPress(params.advertisement)}}>
-                            <Text style={[styles.buttonText,{fontSize:14, textAlign: 'center'}]}>{t('addoctor')}</Text>
+                            <Text style={[styles.buttonText,{fontSize:12, textAlign: 'center'}]}>{t('addoctor')}</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -37,12 +40,13 @@ export const SmallBanner: React.FC<BannerProps> = (params:BannerProps)=>{
 }
 
 
-const smallStyles={
+const smallStyles = StyleSheet.create({
     imageStyle: {
         height: 50,
         width: 50,
         resizeMode:'cover' as ImageStyle['resizeMode'],
         borderRadius:50,
+        alignSelf: 'center'
     },
     ownButton:{
         backgroundColor:'#86abba',
