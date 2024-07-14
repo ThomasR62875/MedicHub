@@ -41,8 +41,8 @@ export const SmallBanner: React.FC<BannerProps> = (params:BannerProps)=>{
 
 const smallStyles = StyleSheet.create({
     imageStyle: {
-        height: '80%',
-        width: '20%',
+        height: '90%',
+        width: '22%',
         resizeMode:'cover' as ImageStyle['resizeMode'],
         borderRadius:50,
         alignSelf: 'center'
