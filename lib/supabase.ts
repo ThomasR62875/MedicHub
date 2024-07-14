@@ -14,7 +14,6 @@ import {
 } from './types';
 
 import getEnvVars from '../environment';
-import app from "../App";
 
 const { REACT_APP_SUPABASE_URL, REACT_APP_ANON_KEY } = getEnvVars();
 
@@ -226,7 +225,7 @@ export const getAllUsers = async (session_user_id: String): Promise<DependentUse
 }
 
 // Devuelve todos los usuarios dependiendo de un user_id
-export const getDependentUsers = async (session_user_id: String): Promise<DependentUser[] | undefined> => {
+export const getDependentUsers = async (): Promise<DependentUser[] | undefined> => {
     let to_return: DependentUser[] = []
     const {data, error} = await supabase.rpc('get_dependent_users');
     if (error) {
@@ -393,11 +392,10 @@ export const deleteMedication = async (medication: Medication): Promise<{ succes
 }
 
 
-// editar
-
 export const updateAppointment = async (appoint: Appointment): Promise<{ success: boolean, message: string }> => {
-    const { error } = await supabase.rpc("update_appointment", {id_input: appoint.id, date_input: appoint.date, description_input: appoint.description,
+    const { error } = await supabase.rpc("update_appointment", {id_input: appoint.id, datetime_input: appoint.date, description_input: appoint.description,
         doctor_input: appoint.doctor, user_input: appoint.user_id, observations_input: appoint.observations});
+
     if (error) {
         return {
             success: false,
