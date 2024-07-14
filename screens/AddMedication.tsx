@@ -34,7 +34,6 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
     const [showDatePickerSince, setShowDatePickerSince] = useState(false);
     const [showTimePicker, setShowTimePicker] = useState(false);
     const [showDatePickerUntil, setShowDatePickerUntil] = useState(false);
-
     const {t} = useTranslation();
     const times = [
         '02:00:00',
@@ -53,13 +52,14 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
             name.trim() !== '' &&
             prescription.trim() !== '' &&
             nameErrorMessage === '' &&
-            prescriptionErrorMessage === ''
+            prescriptionErrorMessage === '' &&
+            ((dateUntil < dateSince && isForever) || (dateUntil > dateSince))
         ) {
             setIsButtonDisabled(false);
         } else {
             setIsButtonDisabled(true);
         }
-    }, [name, prescription]);
+    }, [name, prescription, dateUntil, isForever, dateSince]);
 
     const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(true);
 
@@ -134,7 +134,9 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
         return dateUntil ? dateUntil.toLocaleDateString() : t('selectDate');
     };
 
-
+    const resetForm = () => {
+      console.log("reset")
+    };
 
     return (
         <View style={styles.tab}>
@@ -341,7 +343,20 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
                     }}
                     titleStyle={{color: '#fff'}}
                     disabled={isButtonDisabled}
-                    onPress={handleAddMedication}
+                    //onPress={handleAddMedication}
+                    onPress={() => {
+                        if(dateUntil === null){
+                            Alert.alert(t('warning'), t('warn14') ,
+                                [{ text: 'Cancel', onPress: () => {setIsButtonDisabled(true);  resetForm();}},
+                                    { text: 'Ok', onPress: () => [handleAddMedication(), navigation.navigate('Medications', { session: session })]}])
+                        }
+                        else if(howOften === null){
+                            Alert.alert(t('warning') , t('warn13'),
+                                [{ text: 'Cancel', onPress: () => {setIsButtonDisabled(true);  resetForm();}},
+                                    { text: 'Ok', onPress: () => [handleAddMedication(), navigation.navigate('Medications', { session: session })]}])
+                        }
+                        else{handleAddMedication()}
+                    }}
                 />
             </ScrollableBg>
 
@@ -351,216 +366,3 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
 };
 
 export default AddMedication;
-
-/*
-<View style={styles.containerTotal}>
-        <ScrollView>
-        <KeyboardAvoidingView style={styles.container}>
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-                <View>
-                    <View style={styles.verticallySpaced}>
-                        <Input
-                            leftIcon={{ type: 'font-awesome', name: 'user' }}
-                            onChangeText={(text) => {
-                                setName(text);
-                                validateName(text)
-                            }}
-                            value={name}
-                            placeholder={t('name')}
-                            autoCapitalize={'none'}
-                            errorStyle={{ color: 'red' }}
-                            errorMessage={nameErrorMessage}
-                        />
-                    </View>
-                    <View style={styles.verticallySpaced}>
-                        <Input
-                            leftIcon={{ type: 'font-awesome', name: 'envelope' }}
-                            onChangeText={(text) => {
-                                setPrescription(text);
-                                validatePrescription(text)
-                            }}
-                            value={prescription}
-                            placeholder={t('prescription')}
-                            autoCapitalize={'none'}
-                            errorStyle={{ color: 'red' }}
-                            errorMessage={nameErrorMessage}
-                        />
-                    </View>
-                    <View>
-                        <RNText style={styles.buttons} >
-                            <UnderlinedText>{t('text22')}</UnderlinedText>
-                        </RNText>
-                        <View style={styles.datePickerContainer}>
-                            {Platform.OS === 'ios' ? (
-                                <>
-                                    <DateTimePicker
-                                        testID="datePicker"
-                                        value={dateSince}
-                                        mode="date"
-                                        minimumDate={new Date()}
-                                        display="default"
-                                        style={{ backgroundColor: 'transparent' }}
-                                        onChange={onSDateChange}
-                                    />
-                                    <DateTimePicker
-                                        testID="timePicker"
-                                        value={timeSince}
-                                        mode="time"
-                                        display="default"
-                                        textColor='#cbe4c9'
-                                        onChange={onSTimeChange}
-                                        timeZoneOffsetInMinutes={0}
-                                    />
-                                </>
-                            ) : (
-                                <>
-                                    <PaperButton
-                                        mode="outlined"
-                                        style={styles.pickerButton}
-                                        textColor='#2E5829'
-                                        labelStyle={{ textAlign: 'left', display: 'flex' }}
-                                        onPress={() => setShowDatePickerSince(true)}
-                                    >
-                                        {getDateSince()}
-                                    </PaperButton>
-                                    <PaperButton
-                                        mode="outlined"
-                                        style={styles.pickerButton}
-                                        textColor='#2E5829'
-                                        labelStyle={{ textAlign: 'left', display: 'flex' }}
-                                        onPress={() => setShowTimePicker(true)}
-                                    >
-                                        {getTime()}
-                                    </PaperButton>
-                                    {showDatePickerSince && (
-                                        <DateTimePicker
-                                            testID="datePicker"
-                                            value={dateSince}
-                                            minimumDate={new Date()}
-                                            mode="date"
-                                            display="default"
-                                            onChange={onSDateChange}
-                                        />
-                                    )}
-                                    {showTimePicker && (
-                                        <DateTimePicker
-                                            testID="timePicker"
-                                            value={timeSince}
-                                            mode="time"
-                                            display="default"
-                                            onChange={onSTimeChange}
-                                        />
-                                    )}
-                                </>
-                            )}
-                        </View>
-                    </View>
-                    <View style={{marginBottom: "5%", marginTop: "5%"}}>
-                        <RNText style={styles.buttons} >
-                            <UnderlinedText>  {t('text20')} </UnderlinedText>
-                        </RNText>
-                        <Picker
-                            mode="dropdown"
-                            selectedValue={howOften}
-                            onValueChange={(value) => setHowOften(value)}>
-                            {timesList.map((item, index) => (
-                                <Picker.Item label={item.label} value={item.value}/>
-                            ))}
-                        </Picker>
-                    </View>
-                    <View>
-                        <RNText style={styles.buttons}>
-                            <UnderlinedText>{t('text21')}</UnderlinedText>
-                        </RNText>
-                        <View style={styles.datePickerContainer}>
-                            {Platform.OS === 'ios' ? (
-                                    <>
-                                    <DateTimePicker
-                                        testID="datePicker"
-                                        value={dateUntil}
-                                        minimumDate={dateSince}
-                                        mode="date"
-                                        display="default"
-                                        style={{ backgroundColor: 'transparent' }}
-                                        onChange={onChange2}
-                                    />
-                                    </>
-                            ) : (
-                                <>
-                                    <PaperButton
-                                        mode="outlined"
-                                        style={styles.pickerButton}
-                                        textColor='#2E5829'
-                                        labelStyle={{ textAlign: 'left', display: 'flex' }}
-                                        onPress={() => setShowDatePickerUntil(true)}
-                                    >
-                                        {getDateUntil()}
-                                    </PaperButton>
-                                    {showDatePickerUntil && (
-                                        <DateTimePicker
-                                            testID="datePicker"
-                                            value={dateUntil}
-                                            minimumDate={dateSince}
-                                            mode="date"
-                                            display="default"
-                                            onChange={onChange2}
-                                        />
-                                    )}
-                                </>
-                            )}
-                        </View>
-                        <View style={[cardStyle.infoRow, {marginTop: "5%"}]}>
-                            <RNText style={styles.text}>
-                               {t('text26')}
-                            </RNText>
-                            <Checkbox
-                                style={{marginLeft: "3%", marginTop: "1.5%"}}
-                                value={isForever}
-                                onValueChange={onChange3}
-                                color={'#2E5829'}
-                            />
-                        </View>
-                    </View>
-                    <View>
-                        <View style={[styles.verticallySpaced, {marginTop : "5%"}]}>
-                            <Button
-                                title={t('add')}
-                                disabled={isButtonDisabled}
-                                buttonStyle={{
-                                    backgroundColor: '#2E5829',
-                                    borderWidth: 2,
-                                    borderColor: 'white',
-                                    borderRadius: 30,
-                                    minHeight: 50
-                                }}
-                                containerStyle={{
-                                    width: 150,
-                                    marginHorizontal: 50,
-                                    marginVertical: 10,
-                                    marginTop: 40,
-                                    alignSelf: 'center',
-                                }}
-                                titleStyle={{ color: '#eef9ed' }}
-                                onPress={() => {
-                                    if(dateUntil === null){
-                                        Alert.alert(t('warning'), t('warn14') ,
-                                            [{ text: 'Cancel', onPress: () => {setIsButtonDisabled(true);  resetForm();}},
-                                                { text: 'Ok', onPress: () => [handleAddMedication(), navigation.navigate('Medications', { session: session })]}])
-                                    }
-                                    else if(howOften === null){
-                                        Alert.alert(t('warning') , t('warn13'),
-                                            [{ text: 'Cancel', onPress: () => {setIsButtonDisabled(true);  resetForm();}},
-                                                { text: 'Ok', onPress: () => [handleAddMedication(), navigation.navigate('Medications', { session: session })]}])
-                                    }
-                                    else{handleAddMedication()}
-                                    }
-                                }
-                            />
-                    </View>
-                    </View>
-                </View>
-        </TouchableWithoutFeedback>
-        </KeyboardAvoidingView>
-        </ScrollView>
-        </View>
- */
