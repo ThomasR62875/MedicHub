@@ -578,3 +578,45 @@ export const getClientDoctor= async(client_id:string): Promise<Doctor | undefine
     console.log(error);
     return undefined;
 }
+
+export const filterDoctorsByUsers = async (users: string[]): Promise<Doctor[] | undefined> => {
+    let to_return: Doctor[] = []
+    const {data, error} = await supabase.rpc("filter_doctors_by_users", {all_users: users});
+    if (error) {
+        console.error('Error getting doctor by users data:', error.message);
+    }
+    data.forEach((doctor: Doctor) => {
+        // @ts-ignore
+        to_return.push({
+            name: doctor.name,
+            specialty: doctor.specialty,
+            phone: doctor.phone,
+            email: doctor.email,
+            addresses: doctor.addresses,
+            user_id: doctor.user_id,
+            id: doctor.id
+        });
+    });
+    return to_return
+}
+
+export const filterDoctorsBySpeciality = async (user_id: string, specialities:string[]): Promise<Doctor[] | undefined> => {
+    let to_return: Doctor[] = []
+    const {data, error} = await supabase.rpc("filter_doctors_by_users", {user_id: user_id, all_specialties: specialities});
+    if (error) {
+        console.error('Error getting doctor by speciality data:', error.message);
+    }
+    data.forEach((doctor: Doctor) => {
+        // @ts-ignore
+        to_return.push({
+            name: doctor.name,
+            specialty: doctor.specialty,
+            phone: doctor.phone,
+            email: doctor.email,
+            addresses: doctor.addresses,
+            user_id: doctor.user_id,
+            id: doctor.id
+        });
+    });
+    return to_return
+}
