@@ -89,7 +89,7 @@
   "warn13" : "Si no completas el dato 'Cada cuanto' no podremos notificarte cuando tomarlo",
   "warn14" : "Si no completas el dato 'Hasta cuando' no podremos notificarte cuando tomarlo",
   "text23" : "Cada: ",
-  "ai": "Preguntar a AI",
+  "ai": "Preguntas personalizadas",
   "text24" : " horas",
   "text25" : "No especificó una fecha de finalización",
   "delete" : "Eliminar",
@@ -150,5 +150,6 @@
   "confirmationemailnotification": "¡Revise la bandeja de entrada del mail ingresado para el usuario para verificar el mail!",
   "warnNameMed": "Debe ingresar el nombre del medicamento",
   "warnEnterPrescr": "Debe ingresar la prescripción."
-
+  "date&time": "Fecha y hora",
+  "doctor": "Doctor"
 }

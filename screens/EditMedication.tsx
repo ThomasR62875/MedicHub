@@ -213,11 +213,14 @@ const EditMedication: React.FC<EditMedicationProps> = ({navigation, route}: any)
                         </>
                     ) : (
                         <>
-                            <PaperButton mode="outlined" style={[styles.input, {
-                                padding: 5,
-                                marginHorizontal: '3.5%',
-                                marginBottom: '5%'
-                            }]} textColor='#000' labelStyle={{textAlign: 'left', display: 'flex'}}
+                            <PaperButton mode="outlined"
+                                         style={[styles.input, {
+                                             padding: 5,
+                                             marginHorizontal: '3.5%',
+                                             marginBottom: '5%'
+                                         }]}
+                                         textColor='#000'
+                                         labelStyle={{textAlign: 'left', display: 'flex'}}
                                          contentStyle={{justifyContent: 'flex-start'}}
                                          onPress={() => setShowDatePickerSince(true)}>
                                 {getDateSince()}
