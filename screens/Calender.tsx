@@ -72,7 +72,6 @@ const Calender: React.FC = ({ navigation, route } : any) => {
             selectedColor: '#cbd690',
             ...(markedDatesString[selectedDate] || {})
         },
-        //acá faltaria agregar para que se marquen los días de toma de medicamentos, esto lo hariamos con "period"s todo
     }
 
     const customTheme = {
