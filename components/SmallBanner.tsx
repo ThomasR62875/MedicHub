@@ -25,7 +25,7 @@ export const SmallBanner: React.FC<BannerProps> = (params:BannerProps)=>{
                         <Text style={[{fontSize: 14, paddingVertical: 7}]}>{params.advertisement.name}</Text>
                         <Text style={[styles.text2, {fontSize: 12, width: '150%', paddingBottom: 5}]}>{params.advertisement.mail}</Text>
                     </View>
-                    <View>
+                    <View style={smallStyles.buttonContainer}>
                         <TouchableOpacity style={[styles.addButton, smallStyles.ownButton]} onPress={()=>{handleOnPress(params.advertisement)}}>
                             <Text style={[styles.buttonText,{fontSize:14, textAlign: 'center'}]}>{t('addoctor')}</Text>
                         </TouchableOpacity>
@@ -47,5 +47,11 @@ const smallStyles={
     ownButton:{
         backgroundColor:'#86abba',
         width: '90%',
+    } as ViewStyle,
+    buttonContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'flex-end',
+        paddingRight: 10,
     } as ViewStyle,
 } 
