@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {Alert, View,} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {Alert, Platform, Text as RNText, View,} from 'react-native';
 import {addDependentUser} from "../lib/supabase";
 import {Button, Icon, Input, Text} from "react-native-elements";
 import {Image} from 'react-native';
@@ -30,7 +30,25 @@ const AddDependentUser:React.FC<AddDependentUserProps> = ({navigation, route} : 
     const {t} = useTranslation();
     const [birthDateErrorMessage, setBirthDateErrorMessage] = useState<string>('');
     const [genderErrorMessage, setGenderErrorMessage] = useState<string>('');
+    const [showDatePickerUntil, setShowDatePickerUntil] = useState(false);
 
+
+    useEffect(() => {
+        if (
+            firstName.trim() !== '' &&
+            lastName.trim() !== '' &&
+            firstNameErrorMessage === '' &&
+            lastNameErrorMessage === '' &&
+            birthDateErrorMessage === '' &&
+            sexGender !== ''
+        ) {
+            setIsButtonDisabled(false);
+        } else {
+            setIsButtonDisabled(true);
+        }
+    }, [firstName, lastName, dni, date, birthDateErrorMessage, sexGender, genderErrorMessage]);
+
+    const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(true);
 
     const validateFirstName = (value: string) => {
         if (value.trim() === '') {
@@ -101,8 +119,13 @@ const AddDependentUser:React.FC<AddDependentUserProps> = ({navigation, route} : 
     const handleDayPress = (event: DateTimePickerEvent, selectedDate: Date | undefined) => {
         if (selectedDate) {
             const localDate = new Date(selectedDate.getTime() - selectedDate.getTimezoneOffset() * 60000);
+            setShowDatePickerUntil(Platform.OS === 'ios');
             setDate(localDate);
         }
+    };
+
+    const getBirthdate = () => {
+        return date ? date.toLocaleDateString() : t('selectDate');
     };
 
     return (
@@ -186,16 +209,53 @@ const AddDependentUser:React.FC<AddDependentUserProps> = ({navigation, route} : 
                 <PaperButton mode="outlined" style={[styles.input, {padding: 5, marginHorizontal: '3%', marginBottom:'5%'}]} textColor='#000' labelStyle={{textAlign: 'left', display:'flex'}} contentStyle={{justifyContent: 'flex-start'}} onPress={()=> setSexGenderDialog(true)}>
                     {getSexGenderName(sexGender)}
                 </PaperButton>
-                <PaperText style={styles.label2}>{t('birthdate')}</PaperText>
-                <View style={styles.datePicker}>
-                    <DateTimePicker testID="dateTimePicker"
+
+
+                <View style={{marginBottom: "5%", marginTop: "5%"}}>
+                    <RNText style={styles.label2}>
+                        {t('birthdate')}
+                    </RNText>
+                    <View style={styles.datePickerContainer}>
+                        {Platform.OS === 'ios' ? (
+                            <>
+                                <DateTimePicker
+                                    testID="datePicker"
                                     value={date || undefined}
                                     mode="date"
                                     display="default"
+                                    style={{backgroundColor: 'transparent'}}
                                     onChange={(event, selectedDate) => {
                                         handleDayPress(event, selectedDate);
                                         validateBirthDate(selectedDate);
-                                    }}/>
+                                    }}
+                                />
+                            </>
+                        ) : (
+                            <>
+                                <PaperButton mode="outlined" style={[styles.input, {
+                                    padding: 5,
+                                    marginHorizontal: '3.5%',
+                                    marginBottom: '5%'
+                                }]} textColor='#000' labelStyle={{textAlign: 'left', display: 'flex'}}
+                                             contentStyle={{justifyContent: 'flex-start'}}
+                                             onPress={() => setShowDatePickerUntil(true)}>
+                                    {getBirthdate()}
+                                </PaperButton>
+                                {showDatePickerUntil && (
+                                    <DateTimePicker
+                                        testID="datePicker"
+                                        value={date || undefined}
+                                        mode="date"
+                                        display="default"
+                                        onChange={(event, selectedDate) => {
+                                            handleDayPress(event, selectedDate);
+                                            validateBirthDate(selectedDate);
+                                        }}
+                                    />
+                                )}
+                            </>
+                        )}
+                    </View>
                 </View>
                 <Button
                     title={t('addnewu')}

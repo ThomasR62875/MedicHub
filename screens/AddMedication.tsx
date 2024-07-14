@@ -300,7 +300,7 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
                     </View>
                     <View style={{marginBottom: "5%", marginTop: "5%"}}>
                         <RNText style={[styles.label2,{marginLeft: '3%'}]}>
-                            {t('text20')}
+                            {t('selectTime')}
                         </RNText>
                         <Picker
                             mode="dropdown"

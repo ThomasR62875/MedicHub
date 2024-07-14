@@ -542,8 +542,6 @@ export const getRecommendations = async (user_id: string): Promise<Recommendatio
     const {data, error} = await supabase.rpc('generate_recommendations', {user_id: user_id});
     if (error) {
         console.error('Error generating the recommendations:', error.message);
-    } else {
-        console.log('Recommendations generated successfully');
     }
     return data
 }
