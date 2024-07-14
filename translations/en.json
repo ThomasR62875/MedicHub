@@ -151,6 +151,10 @@
   "selectDoctor": "Select doctor",
   "confirmationemailnotification": "Check the inbox of the entered email for the user to verify the email!",
   "warnNameMed": "You must enter the name of the medication",
-  "warnEnterPrescr": "You must enter the prescription."
+  "warnEnterPrescr": "You must enter the prescription.",
+  "selectDate": "Select a date",
+  "selectTime": "Select a time",
+  "addnewmed" : "Add new medication"
+
 }
 
