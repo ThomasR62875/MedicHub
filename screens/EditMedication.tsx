@@ -294,7 +294,7 @@ const EditMedication: React.FC<EditMedicationProps> = ({navigation, route}: any)
                         selectedValue={howOften}
                         onValueChange={(value) => setHowOften(value)}>
                         {timesList.map((item, index) => (
-                            <Picker.Item label={item.label} value={item.value}/>
+                            <Picker.Item label={item.label} value={item.value} key={index}/>
                         ))}
                     </Picker>
                 </View>
