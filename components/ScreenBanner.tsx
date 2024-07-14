@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     Text,
     Image,
@@ -13,18 +13,34 @@ import {useTranslation} from "react-i18next";
 import { BannerProps, Doctor, Advertisement} from '../lib/types';
 import { getClientDoctor } from '../lib/supabase';
 
-export const ScreenBanner: React.FC<BannerProps> = (params:BannerProps)=>{
+interface ScreenBannerProps extends BannerProps{
+    onDismiss: (()=>void);
+}
+
+export const ScreenBanner: React.FC<ScreenBannerProps> = (params:ScreenBannerProps)=>{
     const [visible,setVisible]= useState(params.visible);
     const {t} = useTranslation();
     const handleOnPress = async (advertisement:Advertisement) => {
         const doc:(Doctor| undefined) = await getClientDoctor(advertisement.client);
         params.onPress(doc);
     };
+
+    useEffect(()=>{
+        setVisible(params.visible);
+    },[params.visible])
+    
+    const handleOnDismiss= ()=>{
+        if(params.onDismiss != undefined) {
+            params.onDismiss();
+        }
+        setVisible(false);
+        
+    }
     return(
-        <Modal visible={visible} onDismiss={() => {setVisible(false)}} animationType='fade'>
+        <Modal visible={visible} animationType='fade'>
                 <View style={screenStyles.modalOverlay}>
                     <View style={screenStyles.closeButton}>
-                        <TouchableOpacity  onPress={()=> {setVisible(false)}} >
+                        <TouchableOpacity  onPress={()=>{handleOnDismiss()}} >
                             <Icon name="close" size={40} color="white" type='ionicon' borderRadius={30} style={screenStyles.color}/>
                         </TouchableOpacity>
                     </View>
