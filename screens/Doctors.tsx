@@ -32,18 +32,20 @@ const Doctors: React.FC = ({navigation, route}: any) => {
 
     const [checkedState, setCheckedState] = useState<boolean[]>([]);
 
+    async function fetchData() {
+        if (session) {
+            setDoctors(await getDoctors());
+            const dependentUsers = await getAllUsers(await getUserId());
+            setUsers(dependentUsers);
+            // @ts-ignore
+            setAdvertisement( await getAdvertisement('BIG'));
+            setIsLoading(false);
+        }
+    }
+
+
     useEffect(() => {
         navigation.addListener('focus', () => {
-            async function fetchData() {
-                if (session) {
-                    setDoctors(await getDoctors());
-                    const dependentUsers = await getAllUsers(await getUserId());
-                    setUsers(dependentUsers);
-                    // @ts-ignore
-                    setAdvertisement( await getAdvertisement('BIG'));
-                    setIsLoading(false);
-                }
-            }
             fetchData();
             if(users){
                 setCheckedState(new Array(users.length).fill(false))
@@ -51,6 +53,13 @@ const Doctors: React.FC = ({navigation, route}: any) => {
         });
 
     }, [navigation, session]);
+
+
+    useEffect(() => {
+        if (route.params?.refresh) {
+            fetchData()
+        }
+    }, [route.params?.refresh]);
 
     const hideFilterDialog = () => setFilterDialog(false);
     const handleCheckboxChange = (user: DependentUser, index: number) => {
@@ -114,7 +123,7 @@ const Doctors: React.FC = ({navigation, route}: any) => {
                         <Text style={[styles.text2,{alignSelf: 'center', padding: 30}]}>{t('text17')}</Text>
                     )
                     )}
-                    <SmallBanner advertisement={advertisement} onPress={(doc:Doctor)=>navigation.navigate({name:'AddDoctor',params:{base_doctor:doc}})}/>
+                    <SmallBanner advertisement={advertisement} onPress={(doc:Doctor | undefined)=>navigation.navigate({name:'AddDoctor',params:{base_doctor:doc}})}/>
                 </View>
             </ScrollableBg>
             <Portal>
