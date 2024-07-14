@@ -198,8 +198,8 @@ const EditDependentUser: React.FC<EditDependentUserProps> = ({navigation, route}
                 />
                 <PaperText style={[styles.label2, {paddingLeft: 14}]}>{t('sex')}</PaperText>
                 <PaperButton mode="outlined"
-                             style={[styles.input, {padding: 5, marginHorizontal: '3.5%', marginBottom: '5%'}]}
-                             textColor='#000' labelStyle={{textAlign: 'left', display: 'flex'}}
+                             style={[styles.input, {marginHorizontal: '3.5%', marginBottom: '5%'}]}
+                             textColor='#000' labelStyle={{fontWeight: 'normal', fontSize: 14, fontFamily: 'Roboto-Thin'}}
                              contentStyle={{justifyContent: 'flex-start'}} onPress={() => setSexGenderDialog(true)}>
                     {sexGender ? t(sexGender) : t('selSex') }
                 </PaperButton>

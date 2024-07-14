@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
     Text,
     Image,
-    Pressable,
     StyleSheet,
     View,
     TouchableOpacity,
@@ -48,7 +47,7 @@ export const ScreenBanner: React.FC<ScreenBannerProps> = (params:ScreenBannerPro
                     {params.advertisement &&(
                         <View accessibilityRole='image' style={screenStyles.imageView}>
                             <Image source={{uri: params.advertisement.image_url}} style={screenStyles.imageStyle}/>
-                            <View paddingTop='2%'>
+                            <View >
                                 <TouchableOpacity style={[styles.addButton,screenStyles.ownButton,screenStyles.color]} onPress={()=>{handleOnPress(params.advertisement)}}>
                                     <Text style={[styles.buttonText,{fontSize:16}]}>{t('addoctor')}</Text>
                                 </TouchableOpacity>
@@ -60,7 +59,7 @@ export const ScreenBanner: React.FC<ScreenBannerProps> = (params:ScreenBannerPro
     );
 }
 
-const screenStyles={
+const screenStyles= StyleSheet.create({
     color:{
         backgroundColor:'#86abba',
     },
@@ -69,15 +68,15 @@ const screenStyles={
     },
     closeButton: {
         flexDirection:'row', 
-        justifyContent: 'start',
-        alingItems:'left',
+        justifyContent: 'flex-start',
+        alignItems: 'flex-start',
         paddingTop:'20%',
         paddingLeft:'5%'
     },
     
     imageStyle: {
-        height: '80%',
-        width: '90%',
+        height: '65%',
+        width: '80%',
         resizeMode:'cover',
         borderRadius:50,
     },
@@ -88,8 +87,8 @@ const screenStyles={
     },
 
     ownButton:{
-        activeOpacity: 0.9,
-        height: 50,
-        width: 200,
+        height: '23%',
+        width: '150%',
+        margin: '5%'
     }
-}
+})

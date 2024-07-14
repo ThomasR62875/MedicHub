@@ -72,7 +72,6 @@ const Calender: React.FC = ({ navigation, route } : any) => {
             selectedColor: '#cbd690',
             ...(markedDatesString[selectedDate] || {})
         },
-        //acá faltaria agregar para que se marquen los días de toma de medicamentos, esto lo hariamos con "period"s todo
     }
 
     const customTheme = {
@@ -128,9 +127,9 @@ const Calender: React.FC = ({ navigation, route } : any) => {
                                 />
                             )
                         })) :  (
-                            <Text style={[styles.text2, {paddingVertical: 10, paddingHorizontal: 25}]}>{t('text13')}</Text>
+                            <Text style={[styles.text2, {paddingVertical: '5%',  textAlign: 'center', paddingBottom: '15%'}]}>{t('text13')}</Text>
                     ))}
-                    <SmallBanner advertisement={advertisement} onPress={(doc:Doctor)=>navigation.navigate({name:'AddDoctor',params:{base_doctor:doc}})}/>
+                    <SmallBanner advertisement={advertisement} onPress={(doc:Doctor | undefined)=>navigation.navigate({name:'AddDoctor',params:{base_doctor:doc}})}/>
                 </View>
             </ScrollableBg>
         </View>

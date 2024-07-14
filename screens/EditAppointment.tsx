@@ -315,14 +315,14 @@ const EditAppointment: React.FC<EditAppointmentProps> = ({navigation, route}: an
                 <PaperText style={[styles.label2, {paddingLeft: 14}]}>{t('doc')}</PaperText>
                 <PaperButton mode="outlined"
                              style={[styles.input, {padding: 5, marginHorizontal: '3.5%', marginBottom: '5%'}]}
-                             textColor='#000' labelStyle={{textAlign: 'left', display: 'flex'}}
+                             textColor='#000' labelStyle={{fontWeight: 'normal', fontSize: 14, fontFamily: 'Roboto-Thin'}}
                              contentStyle={{justifyContent: 'flex-start'}} onPress={() => setDoctorDialog(true)}>
                     {getDoctorName(doctor)}
                 </PaperButton>
                 <PaperText style={[styles.label2, {paddingLeft: 14}]}>{t('user')}</PaperText>
                 <PaperButton mode="outlined"
                              style={[styles.input, {padding: 5, marginHorizontal: '3.5%', marginBottom: '5%'}]}
-                             textColor='#000' labelStyle={{textAlign: 'left', display: 'flex'}}
+                             textColor='#000' labelStyle={{fontWeight: 'normal', fontSize: 14, fontFamily: 'Roboto-Thin'}}
                              contentStyle={{justifyContent: 'flex-start'}} onPress={() => setUserDialog(true)}>
                     {getUserName(user_id)}
                 </PaperButton>

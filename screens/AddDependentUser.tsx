@@ -212,7 +212,9 @@ const AddDependentUser:React.FC<AddDependentUserProps> = ({navigation, route} : 
                 />
 
                 <PaperText style={styles.label2}>{t('sex')}</PaperText>
-                <PaperButton mode="outlined" style={[styles.input, {padding: 5, marginHorizontal: '3%', marginBottom:'5%'}]} textColor='#000' labelStyle={{textAlign: 'left', display:'flex'}} contentStyle={{justifyContent: 'flex-start'}} onPress={()=> setSexGenderDialog(true)}>
+                <PaperButton mode="outlined" style={[styles.input, {padding: 5, marginHorizontal: '3%', marginBottom:'5%'}]}
+                             textColor={sexGender ? '#000' : '#A9A9A9'}  labelStyle={{fontWeight: 'normal', fontSize: 14, fontFamily: 'Roboto-Thin'}}
+                             contentStyle={{justifyContent: 'flex-start'}} onPress={()=> setSexGenderDialog(true)}>
                     {sexGender ? t(sexGender) : t('selSex') }
                 </PaperButton>
 

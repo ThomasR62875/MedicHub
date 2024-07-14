@@ -44,8 +44,8 @@ const SingleAppointment: React.FC<SingleAppointmentProps> = ({ navigation, route
     const handleDeleteAppointment = async () => {
         try {
             const session = route.params.session;
-            const {message} =  await deleteAppointment(route.params.appointment.id);
-            Alert.alert(message,'',[{text: 'Ok', onPress: () => navigation.navigate(t('calendar'), {session: session})}])
+            await deleteAppointment(route.params.appointment.id);
+            navigation.navigate(t('calendar'), {session: session})
 
         } catch (error) {
             console.error('Error deleting appointment:', error);

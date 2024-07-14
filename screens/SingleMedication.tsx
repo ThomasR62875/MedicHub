@@ -3,7 +3,7 @@ import {View, Text, Alert} from 'react-native';
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
 import {Button, Icon} from "react-native-elements";
-import {deleteMedication, getUser} from "../lib/supabase";
+import {deleteAppointment, deleteMedication, getUser} from "../lib/supabase";
 import {useTranslation} from "react-i18next";
 import {Button as PaperButton, Dialog, Divider} from "react-native-paper";
 import {styles} from "../assets/styles";
@@ -29,19 +29,13 @@ const SingleMedication: React.FC<SingleMedicationProps> = ({navigation, route}: 
     }, [route.params.meds.user_id]);
 
     const handleDeleteMedication = async () => {
-        const session = route.params.session;
-        const medication = route.params.meds;
-        const result = await deleteMedication(medication);
-        if (result.success) {
-            Alert.alert(
-                'El Medicamento fue eliminado correctamente',
-                '',
-                [
-                    {text: 'Ok', onPress: () => navigation.navigate('Medications', {session: session})}
-                ]
-            );
-        } else {
-            Alert.alert('Error', result.message || 'An unknown error occurred');
+        try {
+            const session = route.params.session;
+            const medication = route.params.meds;
+            await deleteMedication(medication);
+            navigation.navigate('Medications', {session: session})
+        } catch (error) {
+            console.error('Error deleting medication:', error);
         }
     };
 
@@ -96,7 +90,7 @@ const SingleMedication: React.FC<SingleMedicationProps> = ({navigation, route}: 
                     {route.params.meds.sinceWhen && (
                         <View style={styles.detailRow}>
                             <Text style={styles.label}>{t('text22')}:</Text>
-                            <Text style={styles.value}>{since}</Text>
+                            <Text style={styles.value}>{(new Date(since)).toLocaleDateString()}</Text>
                         </View>
                     )}
                     {route.params.meds.untilWhen && route.params.meds.isForever === false && (
