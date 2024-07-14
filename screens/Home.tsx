@@ -157,7 +157,7 @@ const Home: React.FC = ({ navigation, route }: any) => {
                         </View>
                     ) : (
                         <View style={{alignItems: 'center'}}>
-                            <Text style={[styles.text2, {paddingHorizontal: 30}]}>{t('text13')}</Text>
+                            <Text style={[styles.text2, {alignSelf: 'center'}]}>{t('text27')}</Text>
                         </View>
                     )}
                 </View>
@@ -166,7 +166,7 @@ const Home: React.FC = ({ navigation, route }: any) => {
 
                 <View style={[styles.listCards]}>
                     {isLoading ? (
-                        <ActivityIndicator size="large" color="#2E5829" />
+                        <ActivityIndicator size="small" color="#807d7d" style={{marginVertical: '10%'}}/>
                     ) : (
                         appointmentRecommendations && appointmentRecommendations.length > 0 ? (
                             appointmentRecommendations.map((appointment: RecommendationAppointment, i) => {
@@ -181,7 +181,7 @@ const Home: React.FC = ({ navigation, route }: any) => {
                                 )})
                         ) : (
                             <View style={{alignItems: 'center'}}>
-                                <Text style={[styles.text2, {paddingHorizontal: 30}]}>{t('text13')}</Text>
+                                <Text style={[styles.text2, {alignSelf: 'center'}]}>{t('text13')}</Text>
                             </View>
                         ))}
                 </View>
