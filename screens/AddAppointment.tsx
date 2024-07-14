@@ -8,9 +8,9 @@ import {
     Text,
     ScrollView,
     Keyboard,
-    SafeAreaView, Platform
+    SafeAreaView, Platform, Image
 } from 'react-native';
-import {Button} from "react-native-elements";
+import {Button, Icon, Input} from "react-native-elements";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../App";
 import {DependentUser, RecommendationAppointment} from "../lib/types";
@@ -19,7 +19,13 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { Picker } from "@react-native-picker/picker";
 import { useTranslation } from "react-i18next";
 import {TextInput, Text as PaperText, HelperText, Button as PaperButton, Dialog, Portal} from "react-native-paper";
+import { LogBox } from 'react-native';
+import {styles} from "../assets/styles";
+import Header from "../assets/header_green.png";
+import ScrollableBg from "../components/ScrollableBg";
 
+LogBox.ignoreLogs(['`timeZoneOffsetInMinutes` is deprecated and will be removed in a future release. Use `timeZoneName` instead.']);
+console.warn = () => {};  //atentos a esto todo
 
 type AddAppointmentProps = NativeStackScreenProps<RootStackParamList, 'AddAppointment'>;
 
@@ -97,9 +103,8 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
 
     const handleAddAppointment = async () => {
         const appointmentDate = new Date(date)
-        appointmentDate.setHours(time.getHours()-3)
+        appointmentDate.setHours(time.getHours())
         appointmentDate.setMinutes(time.getMinutes())
-        console.log("date q se pasa a la func de supabase: ", appointmentDate)
 
         const appointment = { date: appointmentDate, description, user_name: '', doctor, user_id, id: '', observations: observations};
         const result = await addAppointment(appointment);
@@ -154,7 +159,133 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
     };
 
     return (
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+        <View style={styles.tab}>
+            <View style={[styles.header, {backgroundColor: 'rgba(203,214,144,0.6)'}]}>
+                <View style={{flexDirection: 'row', marginHorizontal:'10%', marginVertical:'20%', alignItems: 'center', justifyContent: 'space-between'}}>
+                    <Icon iconStyle={{color: 'white'}} name={'arrow-left'} type={'material-community'} style={styles.back_arrow}
+                          onPress={() => navigation.navigate(t('calendar'))}></Icon>
+                    <Icon iconStyle={{color: 'white', fontSize: 20}} containerStyle={[styles.circleHeader, {backgroundColor: 'rgba(203,214,144,0.6)', alignSelf: 'center'}]} name={'calendar-month-outline'} type={'material-community'}/>
+                </View>
+            </View>
+
+            <ScrollableBg style={{padding: '10%'}}>
+                {description ? (
+                    <PaperText style={styles.text}>{t('title')}</PaperText>
+                ) : null}
+                <Input
+                    onChangeText={(text) => {
+                        setDescription(text);
+                        validateDescription(text);
+                    }}
+                    value={description}
+                    placeholder={t('title')}
+                    autoCapitalize='none'
+                    errorStyle={{color: 'red'}}
+                    errorMessage={descriptionErrorMessage}
+                />
+
+                {observations ? (
+                    <PaperText style={styles.text}>{t('observations')}</PaperText>
+                ) : null}
+                <Input
+                    onChangeText={(text) => {
+                        setObservations(text);
+                    }}
+                    value={observations}
+                    placeholder={t('observations')}
+                    autoCapitalize={'none'}
+                />
+
+                <PaperText style={styles.text}>{t('dateTime')}</PaperText>
+                <View style={styles.datePickerContainer}>
+                    <DateTimePicker  testID="datePicker"
+                                    value={date || undefined}
+                                    mode="date"
+                                    display="default"
+                                    style={[{backgroundColor: 'transparent'}, { marginRight: 10 }]}
+                                    onChange={onDateChange}/>
+
+                    <DateTimePicker testID="timePicker"
+                                    value={time || undefined}
+                                    mode="time"
+                                    display="default"
+                                    style={{ backgroundColor: 'transparent' }}
+                                    onChange={onTimeChange}
+                                    timeZoneOffsetInMinutes={0}/>
+                </View>
+
+                <PaperText style={styles.text}>{t('doc')}</PaperText>
+                <PaperButton mode="outlined" style={styles.pickerButton} textColor='#2E5829' labelStyle={{textAlign: 'left', display: 'flex'}} onPress={()=> setDoctorDialog(true)}>
+                    {getDoctorName(doctor)}
+                </PaperButton>
+
+                <View style={{ height: 24 }} />
+
+                <PaperText style={styles.text}>{t("user")}</PaperText>
+                <PaperButton mode="outlined" style={styles.pickerButton} textColor='#2E5829' labelStyle={{textAlign: 'left', display: 'flex'}} onPress={() => setUserDialog(true)}>
+                    {getUserName(user_id)}
+                </PaperButton>
+
+                <Button
+                    title={t('adappointment')}
+                    buttonStyle={{
+                        backgroundColor: '#CBD690',
+                        borderWidth: 2,
+                        borderColor: 'white',
+                        borderRadius: 30,
+                        minHeight: 50
+                    }}
+                    containerStyle={{
+                        width: 210,
+                        marginHorizontal: 50,
+                        marginVertical: 10,
+                        marginTop: 40
+                    }}
+                    titleStyle={{ color: '#fff' }}
+                    disabled={isButtonDisabled}
+                    onPress={handleAddAppointment}
+                />
+            </ScrollableBg>
+            <Portal>
+                <Dialog style={styles.dialog} visible={doctorDialog} onDismiss={hideDoctorDialog}>
+                    <Text style={styles.dialogTitle}>{t('selectDoctor')}</Text>
+                    <Picker
+                        mode='dropdown'
+                        selectedValue={doctor}
+                        onValueChange={(value: string) => setDoctor(value)}
+                        enabled={true}
+                        itemStyle={styles.pickerStyle}
+                    >
+                        {doctorsList?.map((item) => (
+                            <Picker.Item key={item.value} label={item.label} value={item.value} />
+                        ))}
+                    </Picker>
+                </Dialog>
+
+                <Dialog style={styles.dialog} visible={userDialog} onDismiss={hideUserDialog}>
+                    <Text style={styles.dialogTitle}>{t('selectUser')}</Text>
+                    <Picker
+                        mode='dropdown'
+                        selectedValue={user_id}
+                        onValueChange={(value: string) => setUserId(value)}
+                        enabled={true}
+                        itemStyle={styles.pickerStyle}
+                    >
+                        {all_users?.map((item) => (
+                            <Picker.Item key={item.id} label={item.first_name} value={item.id} />
+                        ))}
+                    </Picker>
+                </Dialog>
+            </Portal>
+
+        </View>
+    );
+}
+
+export default AddAppointment;
+
+/*
+<TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
             <SafeAreaView style={styles.container}>
                 <ScrollView >
                     <View>
@@ -174,6 +305,8 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
                                 underlineColor='#2E5829FF'
                                 activeUnderlineColor='#2E5829FF'
                             />
+
+
                             <TextInput
                                 style={{backgroundColor: "#e9f4e9", marginTop: "10%", textAlign: 'center', marginLeft:'5%' , marginRight: '5%'}}
                                 label={t('observations')}
@@ -185,10 +318,14 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
                                 underlineColor='#2E5829FF'
                                 activeUnderlineColor='#2E5829FF'
                             />
+
+
                             <HelperText type="error" visible={hasErorrs}>
                                 {descriptionErrorMessage}
                             </HelperText>
                         </View>
+
+
                         <PaperText style={styles.text}>{t('dateTime')}:</PaperText>
                         <View style={styles.datePickerContainer}>
                             {Platform.OS === 'ios' ? (
@@ -196,6 +333,7 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
                                     <DateTimePicker
                                         testID="datePicker"
                                         value={date}
+                                        minimumDate={new Date()}
                                         mode="date"
                                         display="default"
                                         style={{ backgroundColor: 'transparent' }}
@@ -208,6 +346,7 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
                                         display="default"
                                         textColor='#cbe4c9'
                                         onChange={onTimeChange}
+                                        timeZoneOffsetInMinutes={0}
                                     />
                                 </>
                             ) : (
@@ -234,6 +373,7 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
                                         <DateTimePicker
                                             testID="datePicker"
                                             value={date}
+                                            minimumDate={new Date()}
                                             mode="date"
                                             display="default"
                                             onChange={onDateChange}
@@ -251,14 +391,21 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
                                 </>
                             )}
                         </View>
+
+
                         <PaperText style={styles.text}>Doctor</PaperText>
                         <PaperButton mode="outlined" style={styles.pickerButton} textColor='#2E5829' labelStyle={{textAlign: 'left', display:'flex'}} onPress={()=> setDoctorDialog(true)}>
                             {getDoctorName(doctor)}
                         </PaperButton>
+
+
+
                         <PaperText style={styles.text}>{t('user')}</PaperText>
                         <PaperButton mode="outlined" style={styles.pickerButton} textColor='#2E5829' labelStyle={{textAlign: 'left', display:'flex'}} onPress={()=> setUserDialog(true)}>
                             {getUserName(user_id)}
                         </PaperButton>
+
+
                         <View style={{alignItems: 'center'}}>
                             <Button
                                 title={t('add')}
@@ -316,87 +463,4 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({ navigation, route }) =>
                 </Portal>
             </SafeAreaView>
         </TouchableWithoutFeedback>
-
-    );
-}
-
-export default AddAppointment;
-
-const styles = StyleSheet.create({
-    containerTotal: {
-        backgroundColor: '#e9f4e9',
-        height: '100%',
-        alignContent: 'center'
-    },
-    verticallySpaced: {
-        paddingTop: 2,
-        paddingBottom: 2,
-        alignSelf: 'stretch',
-    },
-    pickerStyle: {
-        marginBottom: 20,
-    },
-    topContent: {
-        marginTop: '15%',
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    text: {
-        fontFamily: 'Roboto-Thin',
-        fontSize: 14,
-        marginTop: "3%",
-        marginLeft: '4%',
-        marginBottom: '4%',
-        color: "#2E5829FF",
-        width: "60%"
-    },
-    titleText: {
-        fontFamily: 'Roboto-Thin',
-        fontSize: 25,
-        textAlign: 'center',
-        fontWeight: 'bold',
-        marginTop: "1%",
-        color: "#2E5829FF",
-        width: "70%"
-    },
-    container: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: "#e9f4e9",
-        height: '200%',
-        display: 'flex'
-    },
-    window: {
-        marginTop: "10%",
-        marginLeft: "5%",
-        marginRight: "5%",
-    },
-    datePickerContainer: {
-        flexDirection: 'row',
-        display: 'flex',
-        justifyContent: 'center',
-        marginLeft: '10%',
-        marginRight: '15%',
-        marginTop: '10%',
-        marginBottom: '10%'
-    },
-    pickerButton: {
-        borderRadius: 6,
-        marginLeft: '5%',
-        marginRight: '5%',
-    },
-    dialog: {
-        backgroundColor: "#e9f4e9"
-    },
-    dialogTitle: {
-        fontFamily: 'Roboto-Thin',
-        fontSize: 25,
-        textAlign: 'center',
-        fontWeight: 'bold',
-        margin: "5%",
-        marginLeft: '15%',
-        color: "#2E5829FF",
-        width: "70%"
-    }
-});
+ */

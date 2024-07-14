@@ -21,9 +21,20 @@ export function formatDate(dateString: string | number | Date) {
     const date = new Date(dateString);
     const day = date.getDate();
     const month = months[date.getMonth()];
-    return `${day+1} de ${month}`;
+    return `${day} de ${month}`;
 }
 
+export function formatDateV2(dateString: string | number | Date) {
+    const months = [
+        "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+        "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+    ];
+
+    const date = new Date(dateString);
+    const day = date.getDate();
+    const month = months[date.getMonth()];
+    return `${day+1} de ${month}`;
+}
 export const sexGenderOptions: SexGenderOption[] = [
     { sex_gender_name: t('male'), value: 'male' },
     { sex_gender_name: t('female'), value: 'female' },

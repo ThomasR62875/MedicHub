@@ -1,11 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, Image, Alert} from 'react-native';
+import {View, Text, Alert} from 'react-native';
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
 import {Button, Icon} from "react-native-elements";
 import {useTranslation} from "react-i18next";
 import {Button as PaperButton, Dialog, Divider} from "react-native-paper";
-import {deleteAppointment, deleteDependentUser, getDoctor, getUserData} from "../lib/supabase";
+import {deleteAppointment, getDoctor, getUserData} from "../lib/supabase";
 import {Doctor} from "../lib/types";
 import {recommendQuestionsForAppointment} from "../lib/openai";
 import {styles} from "../assets/styles";
@@ -38,6 +38,7 @@ const SingleAppointment: React.FC<SingleAppointmentProps> = ({ navigation, route
     const handleDeleteAppointment = async () => {
         try {
             const session = route.params.session;
+            console.log("Esta es el id del appointments: ", route.params.appointment.id);
             const {message} =  await deleteAppointment(route.params.appointment.id);
 
             Alert.alert(message,'',[{text: 'Ok', onPress: () => navigation.navigate(t('calendar'), {session: session})}])
@@ -73,30 +74,19 @@ const SingleAppointment: React.FC<SingleAppointmentProps> = ({ navigation, route
     // @ts-ignore
     return (
         <View style={styles.tab}>
-            <Image source={Header} style={styles.header}/>
-
-            <Icon iconStyle={{color: 'white', paddingVertical: 20}} name={'arrow-left'} type={'material-community'}
-                  style={styles.back_arrow}
-                  onPress={() => navigation.navigate('HomeTabs')}></Icon>
-            <View style={{
-                flexDirection: 'row',
-                paddingTop: '5%',
-                marginLeft: '10%',
-                alignItems: 'center',
-                justifyContent: 'center'
-            }}>
-                <Icon iconStyle={{color: 'white', fontSize: 24}} containerStyle={[styles.circleHeader, {
-                    backgroundColor: 'rgba(203,214,144,0.6)',
-                    alignSelf: 'center',
-                    marginHorizontal: "10%"
-                }]} name={'calendar-month-outline'} type={'material-community'}/>
-                <Icon
-                    name='pencil'
-                    iconStyle={{color: '#fff', paddingLeft: 20, paddingBottom: 25}}
-                    type='ionicon'
-                    size={25}
-                    onPress={() => navigation.navigate('EditAppointment', {appointment: route.params.appointment})}
-                />
+            <View style={[styles.header, {backgroundColor: 'rgba(203,214,144,0.6)'}]}>
+                <View style={{flexDirection: 'row', marginHorizontal:'10%', marginVertical:'20%', alignItems: 'center', justifyContent: 'space-between'}}>
+                    <Icon iconStyle={{color: 'white'}} name={'arrow-left'} type={'material-community'} style={styles.back_arrow}
+                          onPress={() => navigation.navigate('HomeTabs')}></Icon>
+                    <Icon iconStyle={{color: 'white', fontSize: 20}} containerStyle={[styles.circleHeader, {backgroundColor: 'rgba(203,214,144,0.6)', alignSelf: 'center'}]} name={'calendar-month-outline'} type={'material-community'}/>
+                    <Icon
+                        name='pencil'
+                        iconStyle={{color: '#fff'}}
+                        type='ionicon'
+                        size={25}
+                        onPress={() => navigation.navigate('EditAppointment', {appointment: route.params.appointment})}
+                    />
+                </View>
             </View>
             <ScrollableBg>
                 <Text style={styles.titleText}>{route.params.appointment.description}</Text>
