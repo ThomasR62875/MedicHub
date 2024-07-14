@@ -10,7 +10,7 @@ import {
     Medication,
     Advertisement,
     UserData,
-    AppointmentInfo, RecommendationAppointment
+    AppointmentInfo, RecommendationAppointment,
 } from './types';
 
 import getEnvVars from '../environment';

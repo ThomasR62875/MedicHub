@@ -1,15 +1,15 @@
 import React, {useState, useEffect} from 'react'
 import {getUserSession, updateDependentUser} from '../lib/supabase'
-import {View, Alert, Text as RNText, Platform} from 'react-native'
+import {View, Alert, Text as RNText, Platform, Text} from 'react-native'
 import {Button, Icon, Input} from 'react-native-elements'
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
 import {useTranslation} from "react-i18next";
-import {Button as PaperButton, Dialog, Portal, Text as PaperText} from "react-native-paper";
+import {Button as PaperButton, Dialog, Text as PaperText} from "react-native-paper";
 import {Picker} from "@react-native-picker/picker";
 import ScrollableBg from '../components/ScrollableBg';
 import DateTimePicker, {DateTimePickerEvent} from "@react-native-community/datetimepicker";
-import {getSexGenderName, sexGenderOptions} from "../lib/ourlibrary";
+import {sexGenderOptions, validateTextLength} from "../lib/ourlibrary";
 import {styles} from "../assets/styles";
 
 
@@ -18,6 +18,8 @@ type EditAccountProps = NativeStackScreenProps<RootStackParamList, 'EditAccount'
 
 const EditAccount: React.FC<EditAccountProps> = ({navigation, route}: any) => {
     const {session} = route.params;
+    const textLength= 30;
+    const dniLength= 8;
     const [id, setId] = useState('');
     const [first_name, setFirstName] = useState('');
     const [last_name, setLastName] = useState('');
@@ -90,21 +92,29 @@ const EditAccount: React.FC<EditAccountProps> = ({navigation, route}: any) => {
 
     const validateFirstName = (value: string) => {
         if (value.trim() === '') {
-            setFirstNameErrorMessage(t('warn16'));
+            setFirstNameErrorMessage(t('warn1'));
         } else {
-            setFirstNameErrorMessage('');
+            let {result,msg}=validateTextLength(value,textLength);
+            setFirstNameErrorMessage(msg);
         }
     };
     const validateLastName = (value: string) => {
         if (value.trim() === '') {
             setLastNameErrorMessage(t('warn17'));
         } else {
-            setLastNameErrorMessage('');
+            let {result,msg}= validateTextLength(value,textLength);
+            setLastNameErrorMessage(msg);
         }
     };
     const validateDNI = (value: string) => {
-        if (value.trim() === '') {
+        const containsLetterOrSymbol = /([a-zA-Z!@#$%^&*()_+{}\[\]:;<>,.?\/\\|'"`~-])/.test(value);
+        let {result, msg} = validateTextLength(value, dniLength);
+        if (value === '') {
             setDniErrorMessage(t('warn18'));
+        } else if (containsLetterOrSymbol) {
+            setDniErrorMessage(t('warn3'));
+        } else if (!result) {
+            setDniErrorMessage(msg);
         } else {
             setDniErrorMessage('');
         }
@@ -225,11 +235,8 @@ const EditAccount: React.FC<EditAccountProps> = ({navigation, route}: any) => {
 
                 />
                 <PaperText style={[styles.label2, {paddingLeft: 14}]}>{t('sex')}</PaperText>
-                <PaperButton mode="outlined"
-                             style={[styles.input, {padding: 5, marginHorizontal: '3.5%', marginBottom: '5%'}]}
-                             textColor='#000' labelStyle={{textAlign: 'left', display: 'flex'}}
-                             contentStyle={{justifyContent: 'flex-start'}} onPress={() => setSexGenderDialog(true)}>
-                    {getSexGenderName(sexGender)}
+                <PaperButton mode="outlined" style={[styles.input, {padding: 5, marginHorizontal: '3%', marginBottom:'5%'}]} textColor='#000' labelStyle={{textAlign: 'left', display:'flex'}} contentStyle={{justifyContent: 'flex-start'}} onPress={()=> setSexGenderDialog(true)}>
+                    {t(sexGender)}
                 </PaperButton>
 
 
@@ -299,34 +306,24 @@ const EditAccount: React.FC<EditAccountProps> = ({navigation, route}: any) => {
                     onPress={handleUpdateUser}
                 />
             </ScrollableBg>
-            <Portal>
-                <Dialog style={{backgroundColor: '#E9F4E9FF'}}
-                        visible={sexGenderDialog}
-                        onDismiss={hideSexGenderDialog}>
-                    <Picker
-                        mode='dropdown'
-                        selectedValue={sexGender}
-                        onValueChange={(value: string) => {
-                            setSexGender(value)
-                            validateGender(value)
-                        }}
-                        placeholder='sex'
-                        enabled={true}
-                        itemStyle={styles.pickerStyle}
-                    >
-                        {sexGenderOptions?.map((item) => (
-                            <Picker.Item key={item.value} label={item.sex_gender_name} value={item.value}/>
-                        ))}
-                    </Picker>
-                    <Dialog.Actions style={{justifyContent: 'space-between'}}>
-                        <PaperButton textColor="#2E5829FF"
-                                     onPress={hideSexGenderDialog}>
-                            {t("close")}
-                        </PaperButton>
-                    </Dialog.Actions>
-                </Dialog>
-            </Portal>
-
+            <Dialog style={styles.dialog} visible={sexGenderDialog} onDismiss={hideSexGenderDialog}>
+                <Text style={styles.dialogTitle}>{t("selSex")}</Text>
+                <Picker
+                    mode='dropdown'
+                    selectedValue={sexGender}
+                    onValueChange={(value: string) => {
+                        setSexGender(value);
+                        validateGender(value);
+                    }}
+                    placeholder='sex'
+                    enabled={true}
+                    itemStyle={styles.pickerStyle}
+                >
+                    {sexGenderOptions?.map((item) => (
+                        <Picker.Item key={item.name} label={t(item.name)} value={item.name} />
+                    ))}
+                </Picker>
+            </Dialog>
         </View>
     )
 }

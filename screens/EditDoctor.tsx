@@ -288,6 +288,7 @@ const EditDoctor: React.FC<EditDoctorProps> = ({navigation, route}: any) => {
                     disabled={isButtonDisabled}
                     onPress={handleUpdateDoctor}
                 />
+                <View style={{paddingBottom: 45}}/>
             </ScrollableBg>
             <Portal>
                 <Dialog style={styles.dialog} visible={userDialog} onDismiss={hideUserDialog}>

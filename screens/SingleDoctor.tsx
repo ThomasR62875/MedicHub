@@ -61,7 +61,7 @@ const SingleDoctor: React.FC<SingleDoctorProps> = ({navigation, route}: any) => 
                 <View style={{padding: '10%'}}>
                     <View style={styles.detailRow}>
                         <Text style={styles.label}>{t('specialty')}:</Text>
-                        <Text style={styles.value}>{route.params.doc.specialty}</Text>
+                        <Text style={styles.value}>{t(route.params.doc.specialty)}</Text>
                     </View>
                     <View style={styles.detailRow}>
                         <Text style={styles.label}>{t('email')}:</Text>

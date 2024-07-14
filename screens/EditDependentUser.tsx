@@ -9,13 +9,15 @@ import {Button as PaperButton, Dialog, Portal, Text as PaperText} from "react-na
 import {Picker} from "@react-native-picker/picker";
 import ScrollableBg from '../components/ScrollableBg';
 import DateTimePicker from "@react-native-community/datetimepicker";
-import {getSexGenderName, sexGenderOptions} from "../lib/ourlibrary";
+import {sexGenderOptions, validateTextLength} from "../lib/ourlibrary";
 import {styles} from "../assets/styles";
 
 type EditDependentUserProps = NativeStackScreenProps<RootStackParamList, 'EditDependentUser'>;
 
 const EditDependentUser: React.FC<EditDependentUserProps> = ({navigation, route}: any) => {
     const {session} = route.params;
+    const textLength= 30;
+    const dniLength= 8;
     const [id, setId] = useState('');
     const [first_name, setFirstName] = useState('');
     const [last_name, setLastName] = useState('');
@@ -74,21 +76,29 @@ const EditDependentUser: React.FC<EditDependentUserProps> = ({navigation, route}
 
     const validateFirstName = (value: string) => {
         if (value.trim() === '') {
-            setFirstNameErrorMessage(t('warn17'));
+            setFirstNameErrorMessage(t('warn1'));
         } else {
-            setFirstNameErrorMessage('');
+            let {result,msg}=validateTextLength(value,textLength);
+            setFirstNameErrorMessage(msg);
         }
     };
     const validateLastName = (value: string) => {
         if (value.trim() === '') {
-            setLastNameErrorMessage(t('warn18'));
+            setLastNameErrorMessage(t('warn17'));
         } else {
-            setLastNameErrorMessage('');
+            let {result,msg}= validateTextLength(value,textLength);
+            setLastNameErrorMessage(msg);
         }
     };
     const validateDNI = (value: string) => {
-        if (value.trim() === '') {
-            setDniErrorMessage(t('warn19'));
+        const containsLetterOrSymbol = /([a-zA-Z!@#$%^&*()_+{}\[\]:;<>,.?\/\\|'"`~-])/.test(value);
+        let {result, msg} = validateTextLength(value, dniLength);
+        if (value === '') {
+            setDniErrorMessage(t('warn18'));
+        } else if (containsLetterOrSymbol) {
+            setDniErrorMessage(t('warn3'));
+        } else if (!result) {
+            setDniErrorMessage(msg);
         } else {
             setDniErrorMessage('');
         }
@@ -166,7 +176,7 @@ const EditDependentUser: React.FC<EditDependentUserProps> = ({navigation, route}
                         validateLastName(text)
                     }}
                     errorStyle={{ color: 'red' }}
-                    errorMessage={firstNameErrorMessage}
+                    errorMessage={lastNameErrorMessage}
                     labelStyle={styles.label2}
                     placeholderTextColor={"#807d7d"}
                     inputContainerStyle={[{paddingLeft: 10}, styles.input]}
@@ -191,7 +201,7 @@ const EditDependentUser: React.FC<EditDependentUserProps> = ({navigation, route}
                              style={[styles.input, {padding: 5, marginHorizontal: '3.5%', marginBottom: '5%'}]}
                              textColor='#000' labelStyle={{textAlign: 'left', display: 'flex'}}
                              contentStyle={{justifyContent: 'flex-start'}} onPress={() => setSexGenderDialog(true)}>
-                    {getSexGenderName(sexGender)}
+                    {t(sexGender)}
                 </PaperButton>
 
 
@@ -281,7 +291,7 @@ const EditDependentUser: React.FC<EditDependentUserProps> = ({navigation, route}
                         itemStyle={styles.pickerStyle}
                     >
                         {sexGenderOptions?.map((item) => (
-                            <Picker.Item key={item.value} label={item.sex_gender_name} value={item.value} />
+                            <Picker.Item key={item.name} label={t(item.name)} value={item.name} />
                         ))}
                     </Picker>
                     <Dialog.Actions style={{ justifyContent: 'space-between' }}>

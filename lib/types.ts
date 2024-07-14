@@ -91,8 +91,7 @@ export type UserData = {
 }
 
 export type SexGenderOption = {
-    sex_gender_name: string;
-    value: string;
+    name: string;
 }
 
 export interface BannerProps extends ModalBaseProps{
