@@ -29,7 +29,6 @@ const Doctors: React.FC = ({navigation, route}: any) => {
     const [filterDialog, setFilterDialog] = useState(false);
     const [selectedUserIds, setSelectedUserIds] = useState<string[]>([]);
     const [users, setUsers] = useState<DependentUser[] | undefined>(undefined)
-
     const [checkedState, setCheckedState] = useState<boolean[]>([]);
 
     async function fetchData() {
@@ -37,7 +36,6 @@ const Doctors: React.FC = ({navigation, route}: any) => {
             setDoctors(await getDoctors());
             const dependentUsers = await getAllUsers(await getUserId());
             setUsers(dependentUsers);
-            // @ts-ignore
             setAdvertisement( await getAdvertisement('BIG'));
             setIsLoading(false);
         }

@@ -30,7 +30,6 @@ export const supabase = createClient(REACT_APP_SUPABASE_URL, REACT_APP_ANON_KEY,
 //Devuelve usuario por id
 export const getUser = async (session_user_id: String) : Promise<DependentUser> => {
     const { data, error } = await supabase.rpc('get_user', { user_id: session_user_id });
-    console.log(data)
     if (error) {
         console.error('Error returning users data:', error.message);
     }
@@ -505,11 +504,10 @@ export async function getMedications(): Promise<Medication[] | undefined> {
     if (user_data_error)
         throw new Error(user_data_error.message);
 
-    const {data, error} = await supabase.rpc("get_all_medications_by_user", {user_id: user_id});
+    const {data, error} = await supabase.rpc("get_medications_by_user", {user_input: user_id});
     if (error) {
         throw new Error(error.message);
     }
-
     to_return = [];
     data.forEach((medication: Medication) => {
         // @ts-ignore
@@ -521,7 +519,7 @@ export async function getMedications(): Promise<Medication[] | undefined> {
             untilWhen: medication.untilWhen,
             howOften: medication.howOften,
             isForever: medication.isForever,
-            user_id: user_id
+            user_id: medication.user_id,
         });
     });
     return to_return;
