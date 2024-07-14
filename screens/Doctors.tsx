@@ -23,10 +23,6 @@ const Doctors: React.FC = ({navigation, route}: any) => {
     async function fetchData() {
         if (session) {
             setDoctors(await getDoctors());
-            console.log("DOCTORES!!!! " )
-            doctors?.forEach((doc) => {
-                console.log(doc)
-            })
             setAdvertisement( await getAdvertisement('BIG'));
             setIsLoading(false);
         }

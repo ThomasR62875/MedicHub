@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import {View, Text, Image, TouchableOpacity, ActivityIndicator} from 'react-native'
-import {getAdvertisement, getMedications} from '../lib/supabase'
+import {getAdvertisement, getMedications, getUserId} from '../lib/supabase'
 import MedicationButton from "../components/MedicationButton";
 import {Icon} from "react-native-elements";
 import {useTranslation} from "react-i18next";
@@ -18,18 +18,25 @@ const Medications: React.FC = ({navigation, route}: any) => {
     const colors = ['rgba(139,134,190,0.6)', 'rgba(222,176,189,0.6)', 'rgba(236,183,97,0.6)', 'rgba(203,214,144,0.6)']
     const [isLoading, setIsLoading] = useState(true);
     const [advertisement,setAdvertisement] = useState<Advertisement | undefined>()
+
+    async function fetchData() {
+        if (session) {
+            setMedications(await getMedications());
+            setIsLoading(false);
+            setAdvertisement( await getAdvertisement('BIG'));
+        }
+    }
+
+
+
     useEffect(() => {
         navigation.addListener('focus', () => {
-            async function fetchData() {
-                if (session) {
-                    setMedications(await getMedications());
-                    setIsLoading(false);
-                    setAdvertisement( await getAdvertisement('BIG'));
-                }
-            }
-
             fetchData();
         });
+
+        console.log('MEDICINA EN MEDICINA')
+
+        console.log(medications)
     }, [navigation, session]);
 
 
@@ -94,7 +101,7 @@ const Medications: React.FC = ({navigation, route}: any) => {
                             <Text style={[styles.text2, {alignSelf: 'center', padding: 30}]}>{t('text16')}</Text>
                         ))
                     }
-                    <SmallBanner advertisement={advertisement} onPress={(doc:Doctor)=>navigation.navigate({name:'AddDoctor',params:{base_doctor:doc}})}/>
+                    <SmallBanner advertisement={advertisement} onPress={(doc:Doctor | undefined)=>navigation.navigate({name:'AddDoctor',params:{base_doctor:doc}})}/>
 
                 </View>
             </ScrollableBg>

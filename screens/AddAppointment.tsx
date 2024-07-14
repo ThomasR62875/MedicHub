@@ -76,7 +76,6 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({navigation, route}: any)
     }, [session_user_id]);
 
     useEffect(() => {
-        console.log("cambia", user_id)
         if (user_id) {
             async function getDoctorsInfo() {
                 setDoctors(await getDoctorsByUser(user_id));

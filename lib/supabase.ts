@@ -30,7 +30,6 @@ export const supabase = createClient(REACT_APP_SUPABASE_URL, REACT_APP_ANON_KEY,
 //Devuelve usuario por id
 export const getUser = async (session_user_id: String) : Promise<DependentUser> => {
     const { data, error } = await supabase.rpc('get_user', { user_id: session_user_id });
-    console.log(data)
     if (error) {
         console.error('Error returning users data:', error.message);
     }
@@ -488,15 +487,12 @@ export const updateMedication = async (medication: Medication): Promise<{ succes
             message: 'Error updating medication data',
         }
     } else {
-        console.log('update successful')
-
         return {
             success: true,
             message: 'Medication updated successfully',
         }
     }
 };
-
 
 export async function getMedications(): Promise<Medication[] | undefined> {
     let to_return: Medication[] | undefined = undefined
@@ -505,28 +501,47 @@ export async function getMedications(): Promise<Medication[] | undefined> {
     if (user_data_error)
         throw new Error(user_data_error.message);
 
-    const {data, error} = await supabase.rpc("get_all_medications_by_user", {user_id: user_id});
+    const {data, error} = await supabase.rpc("get_medications_by_user", {user_input: user_id});
     if (error) {
         throw new Error(error.message);
     }
 
+    console.log('this is data' , data)
     to_return = [];
-    data.forEach((medication: Medication) => {
-        // @ts-ignore
-        to_return.push({
-            id: medication.id,
-            name: medication.name,
-            prescription: medication.prescription,
-            sinceWhen: medication.sinceWhen,
-            untilWhen: medication.untilWhen,
-            howOften: medication.howOften,
-            isForever: medication.isForever,
-            user_id: user_id
-        });
-    });
+
+    for(const med of data) {
+        const new_med: Medication = {
+            id: med.id,
+            name: med.name,
+            prescription: med.prescription,
+            sinceWhen: med.sincewhen,
+            untilWhen: med.untilwhen,
+            howOften: med.howoften,
+            isForever: med.isforever,
+            user_id: med.user_id
+        }
+        console.log(new_med)
+        to_return.push(new_med);
+
+    }
+
+    //
+    // data.forEach((medication: Medication) => {
+    //     console.log(medication.sinceWhen)
+    //     // @ts-ignore
+    //     to_return.push({
+    //         id: medication.id,
+    //         name: medication.name,
+    //         prescription: medication.prescription,
+    //         sinceWhen: medication.sinceWhen,
+    //         untilWhen: medication.untilWhen,
+    //         howOften: medication.howOften,
+    //         isForever: medication.isForever,
+    //         user_id: medication.user_id,
+    //     });
+    // });
     return to_return;
 }
-
 
 export const setDependentUser = async (parent_id: string, child_id: string) => {
     const {error: error} = await supabase.rpc('set_dependent_user', {parent_input: parent_id, child_input: child_id});
