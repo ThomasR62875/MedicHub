@@ -120,8 +120,6 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}:any) => {
             name:name, specialty:specialty, phone:phone, email:email, addresses:
             addresses, user_id:user_id, id:''
         };
-
-
             const result = await addDoctor(doctor);
             if (result.success) {
                 navigation.navigate('AlertPublicity', { session, msg: 'text10', screen: 'Doctors', appointment: null, du: null, doc: null, meds: null });
@@ -182,7 +180,7 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}:any) => {
                 <PaperText style={[styles.label2, {paddingLeft: 14}]}>{t('specialty')}</PaperText>
                 <PaperButton mode="outlined"
                              style={[styles.input, {padding: 5, marginHorizontal: '3.5%', marginBottom: '5%'}]}
-                             textColor='#000' labelStyle={{textAlign: 'left', display: 'flex'}}
+                             textColor={specialty ? '#000' : '#A9A9A9'}  labelStyle={{fontWeight: 'normal', fontSize: 14, fontFamily: 'Roboto-Thin'}}
                              contentStyle={{justifyContent: 'flex-start'}} onPress={() => setSpecialtyDialog(true)}>
                     {specialty ? t(specialty) : t('specialty')}
                 </PaperButton>
@@ -242,9 +240,9 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}:any) => {
                 <PaperText style={[styles.label2, {paddingLeft: 14}]}>{t('user')}</PaperText>
                 <PaperButton mode="outlined"
                     style={[styles.input, {padding: 5, marginHorizontal: '3.5%', marginBottom: '5%'}]}
-                    textColor='#000' labelStyle={{textAlign: 'left', display: 'flex'}}
+                    textColor={user_id ? '#000' : '#A9A9A9'}  labelStyle={{fontWeight: 'normal', fontSize: 14, fontFamily: 'Roboto-Thin'}}
                     contentStyle={{justifyContent: 'flex-start'}} onPress={() => setUserDialog(true)}>
-                    {t('user')}
+                    {getUserName(user_id)}
                 </PaperButton>
                 <Button
                     title={t('addoctor')}

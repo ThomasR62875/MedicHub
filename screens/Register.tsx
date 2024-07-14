@@ -251,7 +251,7 @@ const Register: React.FC = ({navigation}: any) => {
                 />
                 <PaperText style={styles.text4}>{t('sex')}</PaperText>
                 <PaperButton mode="outlined" style={[styles.input, {padding: 5, marginHorizontal: '3%', marginBottom:'5%'}]} textColor='#000' labelStyle={{textAlign: 'left', display:'flex'}} contentStyle={{justifyContent: 'flex-start'}} onPress={()=> setSexGenderDialog(true)}>
-                    {t(sexGender)}
+                    {sexGender ? t(sexGender) : t('selSex') }
                 </PaperButton>
 
 
