@@ -35,12 +35,12 @@ const Medications: React.FC = ({navigation, route}: any) => {
     async function fetchData() {
         if (session) {
             setMedications(await getMedications());
+            const dependentUsers = await getAllUsers(await getUserId());
+            setUsers(dependentUsers);
             setIsLoading(false);
             setAdvertisement( await getAdvertisement('BIG'));
         }
     }
-
-
 
     useEffect(() => {
         navigation.addListener('focus', () => {
@@ -50,7 +50,6 @@ const Medications: React.FC = ({navigation, route}: any) => {
             }
         });
     }, [navigation, session]);
-
 
     const hideFilterDialog = () => setFilterDialog(false);
     const handleCheckboxChange = (user: DependentUser, index: number) => {

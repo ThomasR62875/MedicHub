@@ -18,6 +18,10 @@ const Account: React.FC = ({ navigation, route } : any) => {
     const [sexGender,setSexGender]= useState('');
     const [visible, setVisible] = React.useState(false);
     const {t} = useTranslation();
+    const [filterDialog, setFilterDialog] = useState(false);
+    const [selectedUserIds, setSelectedUserIds] = useState<string[]>([]);
+    const [users, setUsers] = useState<DependentUser[] | undefined>(undefined)
+    const [checkedState, setCheckedState] = useState<boolean[]>([]);
 
 
     useEffect(() => {

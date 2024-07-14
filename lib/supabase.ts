@@ -535,7 +535,6 @@ export async function getMedications(): Promise<Medication[] | undefined> {
             isForever: med.isforever,
             user_id: med.user_id
         }
-        console.log(new_med)
         to_return.push(new_med);
 
     }
