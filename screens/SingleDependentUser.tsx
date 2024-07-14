@@ -75,6 +75,8 @@ const SingleDependentUser: React.FC<SingleDependentUserProps> = ({navigation, ro
 
     const handleUserSharing = async () => {
         const parent_id = await getUserIdByEmail(shareEmail);
+
+        console.log({parent_id: parent_id, email: shareEmail});
         if (parent_id === undefined) {
             console.warn('Parent user not found');
             return;
@@ -84,6 +86,8 @@ const SingleDependentUser: React.FC<SingleDependentUserProps> = ({navigation, ro
         if (!result) {
             console.error('Failed to set user sharing');
         }
+        setShareEmail('')
+        setShareDialog(false)
     }
 
     const handleDayPress = (event: DateTimePickerEvent, selectedDate?: Date) => {
