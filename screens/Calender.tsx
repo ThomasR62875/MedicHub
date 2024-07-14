@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from "react";
-import { Image, Text, View} from "react-native";
+import {ActivityIndicator, Image, Text, View} from "react-native";
 import {Appointment} from "../lib/types";
 import {Calendar} from "react-native-calendars";
 import TurnoContainer from "../components/TurnoContainer";
-import {getAppointments, getDependentUsers} from "../lib/supabase";
+import {getAppointments} from "../lib/supabase";
 import {Button} from "react-native-elements";
 import {useTranslation} from "react-i18next";
 import {styles} from "../assets/styles";
@@ -17,12 +17,13 @@ const Calender: React.FC = ({ navigation, route } : any) => {
     const {session} = route.params;
     const [appointments,setAppointments]= useState<Appointment[] | undefined>(undefined)
     const {t} = useTranslation();
-
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         navigation.addListener('focus', () => {
             async function fetchData() {
                 setAppointments(await getAppointments())
+                setIsLoading(false)
             }
             fetchData()
         });
@@ -111,7 +112,9 @@ const Calender: React.FC = ({ navigation, route } : any) => {
                         onPress={() => navigation.navigate('AddAppointment', {session: session})}/>
                 </View>
                 <View style={{flexDirection: 'column'}}>
-                    {filteredData && filteredData.length > 0 ? (
+                    {isLoading ? (
+                        <ActivityIndicator size="small" color="#807d7d" style={{marginVertical: '10%'}}/>
+                    ) : (filteredData && filteredData.length > 0 ? (
                         filteredData.map((turno: Appointment, index) => {
                             return(
                                 <TurnoContainer
@@ -124,7 +127,7 @@ const Calender: React.FC = ({ navigation, route } : any) => {
                             )
                         })) :  (
                             <Text style={[styles.text2, {paddingVertical: 10, paddingHorizontal: 25}]}>{t('text13')}</Text>
-                    )}
+                    ))}
                 </View>
             </ScrollableBg>
         </View>
@@ -132,34 +135,3 @@ const Calender: React.FC = ({ navigation, route } : any) => {
 }
 
 export default Calender;
-
-/*
-Esto lo use para encontrar errores, asiq queda acá por si se vuelve a necesitar
-
-<View style={{marginTop:60}}>
-                        {!filteredData && <Text>filteredData is undefined</Text>}
-                        {filteredData && (
-                            <>
-                                <Text>Contenido de filteredData:</Text>
-                                <Text>{filteredData.length}</Text>
-                                {filteredData.map((item, index) => (
-                                    <Text key={index}>{item.date.toString()}</Text>
-                                ))}
-                            </>
-                        )}
-                        {appointments && appointments.length > 0 ? (
-                            <>
-                                <Text> el targetDate {targetDate}</Text>
-                                <Text>Contenido de appointments:</Text>
-                                {appointments.map((item, index) => (
-                                    <View key={index}>
-                                        <Text>{item.date.toString().slice(0,10)} === {targetDate}</Text>
-                                    </View>
-
-                                ))}
-                            </>
-                        ) : (
-                            <Text>No hay citas disponibles</Text>
-                        )}
-                    </View>
- */

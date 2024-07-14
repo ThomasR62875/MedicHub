@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import {getDoctors, getAdvertisement} from '../lib/supabase'
-import { View, Text, Image, TouchableOpacity} from 'react-native'
+import {View, Text, Image, TouchableOpacity, ActivityIndicator} from 'react-native'
 import { Icon} from "react-native-elements";
 import {useTranslation} from "react-i18next";
 import DoctorButton from "../components/DoctorButton";
@@ -17,7 +17,7 @@ const Doctors: React.FC = ({navigation, route}: any) => {
     const [advertisement,setAdvertisement] = useState<Advertisement | undefined>()
     const {t} = useTranslation();
     const colors = [ 'rgba(139,134,190,0.6)','rgba(222,176,189,0.6)','rgba(236,183,97,0.6)','rgba(203,214,144,0.6)']
-
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         navigation.addListener('focus', () => {
@@ -25,6 +25,7 @@ const Doctors: React.FC = ({navigation, route}: any) => {
                 if (session) {
                     setDoctors(await getDoctors());
                     setAdvertisement( await getAdvertisement('BIG'));
+                    setIsLoading(false);
                 }
             }
 
@@ -53,7 +54,9 @@ const Doctors: React.FC = ({navigation, route}: any) => {
                     <Icon name={'filter-variant'} type={'material-community'} color={'#000000'} size={30} style={{paddingRight: 20, padding: 5}} onPress={() => console.log('Filter')}/>
                 </View>
                 <View style={styles.listCards}>
-                    {doctors && doctors?.length > 0  ? (
+                    {isLoading ? (
+                        <ActivityIndicator size="small" color="#807d7d" style={{marginVertical: '10%'}}/>
+                    ) : (doctors && doctors?.length > 0  ? (
                         doctors.map((doc: Doctor, i) => {
                             return (
                                 <View key={i}>
@@ -72,7 +75,7 @@ const Doctors: React.FC = ({navigation, route}: any) => {
                     ) : (
                         <Text style={[styles.text2,{alignSelf: 'center', padding: 30}]}>{t('text17')}</Text>
                     )
-                    }
+                    )}
                     <SmallBanner advertisement={advertisement} onPress={null}/>
                 </View>
             </ScrollableBg>

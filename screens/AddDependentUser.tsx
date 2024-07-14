@@ -12,9 +12,7 @@ import {Picker} from "@react-native-picker/picker";
 import {getSexGenderName, sexGenderOptions} from "../lib/ourlibrary";
 import {styles} from "../assets/styles";
 // @ts-ignore
-import Header from "../assets/header_violet.png";
 import ScrollableBg from "../components/ScrollableBg";
-import * as events from "node:events";
 
 type AddDependentUserProps = NativeStackScreenProps<RootStackParamList, 'AddDependentUser'>
 

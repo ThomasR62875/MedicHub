@@ -1,12 +1,11 @@
 import React, {useState, useEffect} from 'react'
-import {getAppointments, getUser, getUserId, supabase} from '../lib/supabase'
+import {getUser, getUserId, supabase} from '../lib/supabase'
 import { View} from 'react-native'
 import {Button, Icon} from 'react-native-elements'
 import LanguageButton from '../components/LanguageButton'
 import {DependentUser} from "../lib/types";
 import {Dialog, Text, Button as PaperButton, Divider} from "react-native-paper";
 import {useTranslation} from "react-i18next";
-import ScrollableBg from '../components/ScrollableBg'
 import {styles} from "../assets/styles";
 import { getSexGenderName } from '../lib/ourlibrary'
 
@@ -38,6 +37,7 @@ const Account: React.FC = ({ navigation, route } : any) => {
                     setSexGender(data.sex)
                     const dniString = String(data.dni);
                     if (dniString && dniString.length >= 8) {
+                        console.log(dniString.length)
                         const dniNumber = parseInt(dniString.slice(0, 8), 10);
                         setDni(dniNumber);
                     } else {
@@ -137,7 +137,7 @@ const Account: React.FC = ({ navigation, route } : any) => {
                         titleStyle={{color: '#ffffff', fontWeight: 'bold', fontSize: 16}}
                         onPress={() => showDialog()}/>
                 </View>
-            <Dialog style={{backgroundColor: '#E9F4E9FF'}}
+            <Dialog style={{backgroundColor: '#fff'}}
                     visible={visible}
                     onDismiss={hideDialog}>
                 <Dialog.Content>
