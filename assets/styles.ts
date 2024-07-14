@@ -91,6 +91,9 @@ export const styles = StyleSheet.create({
     back_arrow: {
         paddingVertical: '15%',
     },
+    back_arrow_p: {
+        paddingTop: '15%',
+    },
     stackTitle: {
         color: 'black',
         fontSize: 24,
