@@ -396,7 +396,7 @@ export const deleteMedication = async (medication: Medication): Promise<{ succes
 // editar
 
 export const updateAppointment = async (appoint: Appointment): Promise<{ success: boolean, message: string }> => {
-    const { error } = await supabase.rpc("update_appointment", {id_input: appoint.id, date_input: appoint.date, description_input: appoint.description,
+    const { error } = await supabase.rpc("update_appointment", {id_input: appoint.id, datetime_input: appoint.date, description_input: appoint.description,
         doctor_input: appoint.doctor, user_input: appoint.user_id, observations_input: appoint.observations});
     if (error) {
         return {
