@@ -75,7 +75,7 @@ const EditAccount: React.FC<EditAccountProps> = ({navigation, route}: any) => {
             navigation.navigate('AlertPublicity', {
                 session,
                 msg: 'editUser',
-                screen: 'Perfil',
+                screen: 'HomeTabs',
                 appointment: null,
                 du: null,
                 doc: null,

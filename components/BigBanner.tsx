@@ -1,21 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import {
     Text,
     Image,
-    Pressable,
     StyleSheet,
     View,
     TouchableOpacity,
-    Modal,
-    ProgressBarAndroidComponent
 } from 'react-native';
-import { Advertisement, BannerProps } from '../lib/types';
-import { Icon } from 'react-native-elements';
+import { BannerProps } from '../lib/types';
 import { styles } from '../assets/styles';
 import {useTranslation} from "react-i18next";
 
 export const BigBanner: React.FC<BannerProps>= (params:BannerProps) => {
-    const [visible,setVisible]= useState(params.visible);
     const {t} = useTranslation();
 
     return(
@@ -34,17 +29,15 @@ export const BigBanner: React.FC<BannerProps>= (params:BannerProps) => {
     );
 }
 
-const bigStyles={
+const bigStyles=StyleSheet.create({
     color:{
         backgroundColor:'#86abba',
     },
     imageStyle: {
-        height: 250,
-        width: '100%',
+        height: 300,
+        width: 300,
         resizeMode:'stretch',
         borderRadius:20,
-        padding:0,
-        margin:0
     },
 
     container:{
@@ -55,9 +48,8 @@ const bigStyles={
     },
 
     button:{
-        alingItems:'center',        
         justifyContent: 'center',
         borderBottomRightRadius:20,
         borderBottomLeftRadius:20,
     }
-}
+});

@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react'
-import { supabase} from './lib/supabase'
-import { Session } from '@supabase/supabase-js'
+import {useState, useEffect, useRef} from 'react'
+import {supabase} from './lib/supabase'
+import {Session} from '@supabase/supabase-js'
 import React from 'react';
 import AddAppointment from "./screens/AddAppointment"
 import LoginScreen from "./screens/LogIn";
@@ -33,35 +33,43 @@ import 'react-native-reanimated'
 import {Ionicons} from "@expo/vector-icons";
 import {StatusBar} from "react-native";
 import {useTranslation} from "react-i18next";
-import { Provider } from 'react-native-paper';
-import { AppRegistry } from 'react-native';
+import {Provider} from 'react-native-paper';
+import {AppRegistry} from 'react-native';
 import {Appointment, DependentUser, Doctor, Medication} from "./lib/types";
 
 export type RootStackParamList = {
-  HomeTabs: { session: Session | null };
-  Home: { session: Session | null };
-  Login: {session: Session | null};
-  Register: undefined;
-  Account: { session: Session | null };
-  Appointments: { session: Session | null };
-  EditAccount: {session: Session | null};
-  AddAppointment: {session: Session | null};
-  AddDoctor: {session: Session | null};
-  Doctors: {session: Session | null};
-  DependentUsers: {session: Session | null};
-  AddDependentUser: {session: Session | null};
-  Medications: {session: Session | null};
-  AddMedication: {session: Session | null};
-  Calendar: {session : Session | null};
-  SingleAppointment: {session : Session | null};
-  EditAppointment: {session : Session | null};
-  SingleMedication: {session : Session | null};
-  EditMedication: {session : Session | null};
-  SingleDoctor: {session : Session | null};
-  EditDoctor: {session : Session | null};
-  SingleDependentUser: {session : Session | null};
-  EditDependentUser: {session : Session | null};
-  AlertPublicity: {session : Session | null, msg: string, screen: string, appointment: Appointment | null , du: DependentUser | null, doc: Doctor | null, meds: Medication | null};
+    HomeTabs: { session: Session | null };
+    Home: { session: Session | null };
+    Login: { session: Session | null };
+    Register: undefined;
+    Account: { session: Session | null };
+    Appointments: { session: Session | null };
+    EditAccount: { session: Session | null };
+    AddAppointment: { session: Session | null };
+    AddDoctor: { session: Session | null };
+    Doctors: { session: Session | null };
+    DependentUsers: { session: Session | null };
+    AddDependentUser: { session: Session | null };
+    Medications: { session: Session | null };
+    AddMedication: { session: Session | null };
+    Calendar: { session: Session | null };
+    SingleAppointment: { session: Session | null };
+    EditAppointment: { session: Session | null };
+    SingleMedication: { session: Session | null };
+    EditMedication: { session: Session | null };
+    SingleDoctor: { session: Session | null };
+    EditDoctor: { session: Session | null };
+    SingleDependentUser: { session: Session | null };
+    EditDependentUser: { session: Session | null };
+    AlertPublicity: {
+        session: Session | null,
+        msg: string,
+        screen: string,
+        appointment: Appointment | null,
+        du: DependentUser | null,
+        doc: Doctor | null,
+        meds: Medication | null
+    };
 };
 
 AppRegistry.registerComponent('main', () => App);
@@ -89,7 +97,14 @@ function HomeTabs({route}: Props) {
 
     return (
         <Tab.Navigator screenOptions={{
-            tabBarStyle: {backgroundColor: "#ffffff", borderRadius:30, padding: 10, position: 'absolute', borderColor: '#d5d4d4', borderWidth: 1},
+            tabBarStyle: {
+                backgroundColor: "#ffffff",
+                borderRadius: 30,
+                padding: 10,
+                position: 'absolute',
+                borderColor: '#d5d4d4',
+                borderWidth: 1
+            },
             tabBarActiveTintColor: "#8b86be",
             tabBarInactiveTintColor: "#ababab",
         }}>
@@ -99,8 +114,8 @@ function HomeTabs({route}: Props) {
                 initialParams={{session: session}}
                 options={{
                     title: t('home'),
-                    tabBarIcon: ({ color, size }) => (
-                        <Ionicons name="home" color={color} size={size} />
+                    tabBarIcon: ({color, size}) => (
+                        <Ionicons name="home" color={color} size={size}/>
                     ),
                     headerShown: false
                 }}
@@ -111,8 +126,8 @@ function HomeTabs({route}: Props) {
                 initialParams={{session: session}}
                 options={{
                     title: t('calendar'),
-                    tabBarIcon: ({ color, size }) => (
-                        <Ionicons name="calendar" color={color} size={size} />
+                    tabBarIcon: ({color, size}) => (
+                        <Ionicons name="calendar" color={color} size={size}/>
                     ),
                     headerShown: false
                 }
@@ -124,8 +139,8 @@ function HomeTabs({route}: Props) {
                 initialParams={{session: session}}
                 options={{
                     title: t('dusers'),
-                    tabBarIcon: ({ color, size }) => (
-                        <Ionicons name="people" color={color} size={size} />
+                    tabBarIcon: ({color, size}) => (
+                        <Ionicons name="people" color={color} size={size}/>
                     ),
                     headerShown: false
                 }}/>
@@ -135,13 +150,13 @@ function HomeTabs({route}: Props) {
                 initialParams={{session: session}}
                 options={{
                     title: t('account'),
-                    tabBarIcon: ({ color, size }) => (
-                        <Ionicons name="person" color={color} size={size} />
+                    tabBarIcon: ({color, size}) => (
+                        <Ionicons name="person" color={color} size={size}/>
                     ),
                     headerShown: false
                 }}/>
         </Tab.Navigator>
-  );
+    );
 }
 
 const App = () => {

@@ -2,11 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {
     View,
     Alert,
-    StyleSheet,
-    TouchableWithoutFeedback,
-    Keyboard,
-    KeyboardAvoidingView,
-    Text as RNText, ScrollView, Platform
+    Text as RNText, Platform
 } from 'react-native';
 import {addMedication} from "../lib/supabase";
 import {Button, Icon, Input} from "react-native-elements";
@@ -16,7 +12,6 @@ import {Medication} from '../lib/types';
 import {useTranslation} from "react-i18next";
 import {Picker} from '@react-native-picker/picker'
 import DateTimePicker, {DateTimePickerEvent} from '@react-native-community/datetimepicker';
-import UnderlinedText from '../components/UnderlinedText';
 import Checkbox from 'expo-checkbox';
 import {cardStyle} from "../styles/global"
 import {Button as PaperButton} from "react-native-paper";
@@ -120,11 +115,11 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
     };
 
     const getDateSince = () => {
-        return dateSince ? dateSince.toLocaleDateString() : 'Seleccione una fecha';
+        return dateSince ? dateSince.toLocaleDateString() : t('selectDate');
     };
 
     const getTime = () => {
-        return timeSince ? timeSince.toLocaleTimeString() : 'Seleccione una hora';
+        return timeSince ? timeSince.toLocaleTimeString() : t('selectTime');
     };
 
     const onChange2 = (event: DateTimePickerEvent, selectedDate?: Date | undefined): void => {
@@ -136,21 +131,10 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
     };
 
     const getDateUntil = () => {
-        return dateUntil ? dateUntil.toLocaleDateString() : 'Seleccione una fecha';
+        return dateUntil ? dateUntil.toLocaleDateString() : t('selectDate');
     };
-    const onChange3 = (value : boolean) => {
-        setIsForever(!isForever);
-    }
-    const resetForm = () => {
-        //poner todos los datos todo
-        setName('');
-        setPrescription('');
-        setDateSince(new Date());
-        setDateUntil(new Date());
-        setHowOften(null);
-        setNameErrorMessage('');
-        setPrescriptionErrorMessage('');
-    };
+
+
 
     return (
         <View style={styles.tab}>
@@ -175,6 +159,7 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
             <ScrollableBg style={{padding: '10%'}}>
                 <Input
                     label={t('name')}
+                    placeholder={t('name')}
                     value={name}
                     onChangeText={(text) => {
                         setName(text);
@@ -188,6 +173,7 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
                     errorMessage={nameErrorMessage}/>
                 <Input
                     label={t('prescription')}
+                    placeholder={t('prescription')}
                     value={prescription}
                     onChangeText={(text) => {
                         setPrescription(text);
@@ -279,7 +265,7 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
                         selectedValue={howOften}
                         onValueChange={(value) => setHowOften(value)}>
                         {timesList.map((item, index) => (
-                            <Picker.Item label={item.label} value={item.value}/>
+                            <Picker.Item label={item.label} value={item.value} key={index}/>
                         ))}
                     </Picker>
                 </View>

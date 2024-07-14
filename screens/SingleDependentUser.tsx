@@ -209,7 +209,7 @@ const SingleDependentUser: React.FC<SingleDependentUserProps> = ({navigation, ro
                     </View>
                     <View style={styles.detailRow}>
                         <Text style={styles.label}>{t('birthdate')}:</Text>
-                        <Text style={styles.value}>{route.params.du.birthdate}</Text>
+                        <Text style={styles.value}>{new Date(route.params.du.birthdate).toLocaleDateString()}</Text>
                     </View>
                     <View style={styles.detailRow}>
                         <Text style={styles.label}>{t('sex')}:</Text>
