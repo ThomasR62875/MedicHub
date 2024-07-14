@@ -28,7 +28,7 @@ const Home: React.FC = ({ navigation, route }: any) => {
     const [date2, setDate2] = useState<Date | null>(null);
     const [userId, setUserId] = useState('');
     const [isLoading, setIsLoading] = useState(true);
-    const [isLoadingNextApp, setIsLoadingNextApp] = useState(true);
+    const [isAppointments, setIsAppointments] = useState(false);
     const { t } = useTranslation();
 
     useEffect(() => {
@@ -86,7 +86,7 @@ const Home: React.FC = ({ navigation, route }: any) => {
                 setTurno2(futureAppointments[1]);
                 setDate2(new Date(futureAppointments[1].date));
             }
-            setIsLoadingNextApp(false);
+            setIsAppointments(true);
         }
     }, [appointments]);
 
@@ -142,16 +142,13 @@ const Home: React.FC = ({ navigation, route }: any) => {
                 </View>
                 <Text style={styles.subtitles}>{t('text12')}</Text>
                 <View style={[styles.listCards]}>
-                    {isLoadingNextApp ? (
-                        <ActivityIndicator size="small" color="#807d7d" style={{marginVertical: '10%'}}/>
-                    ) : (turno1 && date1 ? (
+                    {isAppointments ? (
                         <View>
                             <TurnoContainer
                                 turno={turno1}
                                 date={turno1.date}
                                 styleExterior={[styles.cards]}
                                 onPress={() => {navigation.navigate('SingleAppointment', {session: session, appointment: turno1})}}
-
                             />
                             {turno2 && date2 ? (
                                 <TurnoContainer
@@ -166,11 +163,9 @@ const Home: React.FC = ({ navigation, route }: any) => {
                         <View style={{alignItems: 'center'}}>
                             <Text style={[styles.text2, {alignSelf: 'center'}]}>{t('text27')}</Text>
                         </View>
-                    ))}
+                    )}
                 </View>
                 <Text style={styles.subtitles}>{t('text15')}</Text>
-
-
                 <View style={[styles.listCards]}>
                     {isLoading ? (
                         <ActivityIndicator size="small" color="#807d7d" style={{marginVertical: '10%'}}/>

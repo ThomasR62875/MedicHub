@@ -134,10 +134,6 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
         return dateUntil ? dateUntil.toLocaleDateString() : t('selectDate');
     };
 
-    const resetForm = () => {
-      console.log("reset")
-    };
-
     return (
         <View style={styles.tab}>
             <View style={[styles.header, {backgroundColor: 'rgba(222,176,189,0.6)'}]}>
@@ -343,20 +339,20 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
                     }}
                     titleStyle={{color: '#fff'}}
                     disabled={isButtonDisabled}
-                    //onPress={handleAddMedication}
-                    onPress={() => {
+                    onPress={handleAddMedication}
+                    /*onPress={() => {
                         if(dateUntil === null){
                             Alert.alert(t('warning'), t('warn14') ,
-                                [{ text: 'Cancel', onPress: () => {setIsButtonDisabled(true);  resetForm();}},
+                                [{ text: 'Cancel', onPress: () => {setIsButtonDisabled(true);}},
                                     { text: 'Ok', onPress: () => [handleAddMedication(), navigation.navigate('Medications', { session: session })]}])
                         }
                         else if(howOften === null){
                             Alert.alert(t('warning') , t('warn13'),
-                                [{ text: 'Cancel', onPress: () => {setIsButtonDisabled(true);  resetForm();}},
+                                [{ text: 'Cancel', onPress: () => {setIsButtonDisabled(true);}},
                                     { text: 'Ok', onPress: () => [handleAddMedication(), navigation.navigate('Medications', { session: session })]}])
                         }
                         else{handleAddMedication()}
-                    }}
+                    }}*/
                 />
             </ScrollableBg>
 
