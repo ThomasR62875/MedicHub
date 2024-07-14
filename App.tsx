@@ -277,14 +277,7 @@ const App = () => {
                       <Stack.Screen name="EditDependentUser"
                                     component={EditDependentUser}
                                     initialParams={{session: session}}
-                                    options={{
-                                        title: '',
-                                        headerStyle: {
-                                            backgroundColor: '#2E5829',
-                                        },
-                                        headerTintColor: '#ABD2A8',
-                                        headerBackTitle: 'Volver',
-                                    }}/>
+                                    options={{ headerShown: false }}/>
                     <Stack.Screen name="AddMedication"
                                   component={AddMedication}
                                   initialParams={{session: session}}
