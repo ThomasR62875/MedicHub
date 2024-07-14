@@ -148,4 +148,7 @@
   "title": "Título",
   "selectDoctor": "Seleccionar médico",
   "confirmationemailnotification": "¡Revise la bandeja de entrada del mail ingresado para el usuario para verificar el mail!",
+  "warnNameMed": "Debe ingresar el nombre del medicamento",
+  "warnEnterPrescr": "Debe ingresar la prescripción."
+
 }

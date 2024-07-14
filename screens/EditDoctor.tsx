@@ -179,7 +179,6 @@ const EditDoctor: React.FC<EditDoctorProps> = ({navigation, route}: any) => {
                     inputContainerStyle={[{paddingLeft: 10}, styles.input]}
                     inputStyle={{color: '#000', fontSize: 14, marginLeft: 10}}
                 />
-
                 <Input
                     label={t('email')}
                     leftIcon={{type: 'font-awesome', name: 'envelope'}}

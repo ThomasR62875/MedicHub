@@ -68,13 +68,16 @@ export type RecommendationAppointment = {
 
 export type AppointmentInfo = {
     specialty: string | null;
-    observations: string,
+    observations: string;
     date: string;
     description: string;
 }
 
 export type Advertisement = {
     client: string;
+    logo:string;
+    mail:string;
+    name:string;
     image_url: string;
 }
 

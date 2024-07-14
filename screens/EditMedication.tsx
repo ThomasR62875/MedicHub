@@ -27,8 +27,10 @@ const EditMedication: React.FC<EditMedicationProps> = ({navigation, route}: any)
     const [name, setName] = useState(route.params.medication.name)
     const [prescription, setPrescription] = useState(route.params.medication.prescription);
     const [dateSince, setDateSince] = useState<Date>(route.params.medication.sinceWhen ? new Date(route.params.medication.sinceWhen) : new Date());
+
     let aux = new Date(route.params.medication.sinceWhen);  //horripilante pero funciona
     aux.setHours(aux.getHours() - 3)
+
     const [timeSince, setTimeSince] = useState<Date>(route.params.medication.sinceWhen ? aux : new Date());
     const [dateUntil, setDateUntil] = useState<Date>(route.params.medication.untilWhen ? new Date(route.params.medication.untilWhen) : new Date());
     const [howOften, setHowOften] = useState<Date | null>(route.params.medication.howOften);
@@ -94,14 +96,14 @@ const EditMedication: React.FC<EditMedicationProps> = ({navigation, route}: any)
 
     const validateName = (value: string) => {
         if (value.trim() === '') {
-            setNameErrorMessage('Debe ingresar el nombre del medicamento.');
+            setNameErrorMessage(t('warnNameMed'));
         } else {
             setNameErrorMessage('');
         }
     };
     const validatePrescription = (value: string) => {
         if (value.trim() === '') {
-            setPrescriptionErrorMessage('Debe ingresar la prescripción.');
+            setPrescriptionErrorMessage(t('warnEnterPrescr'));
         } else {
             setPrescriptionErrorMessage('');
         }
