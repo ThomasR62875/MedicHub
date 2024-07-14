@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {Alert, View,} from 'react-native';
 import {addDependentUser} from "../lib/supabase";
 import {Button, Icon, Input, Text} from "react-native-elements";
@@ -31,23 +31,6 @@ const AddDependentUser:React.FC<AddDependentUserProps> = ({navigation, route} : 
     const [birthDateErrorMessage, setBirthDateErrorMessage] = useState<string>('');
     const [genderErrorMessage, setGenderErrorMessage] = useState<string>('');
 
-
-    useEffect(() => {
-        if (
-            firstName.trim() !== '' &&
-            lastName.trim() !== '' &&
-            firstNameErrorMessage === '' &&
-            lastNameErrorMessage === '' &&
-            birthDateErrorMessage === '' &&
-            sexGender !== ''
-        ) {
-            setIsButtonDisabled(false);
-        } else {
-            setIsButtonDisabled(true);
-        }
-    }, [firstName, lastName, dni, date, birthDateErrorMessage, sexGender, genderErrorMessage]);
-
-    const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(true);
 
     const validateFirstName = (value: string) => {
         if (value.trim() === '') {
@@ -231,7 +214,6 @@ const AddDependentUser:React.FC<AddDependentUserProps> = ({navigation, route} : 
                         marginBottom: 100
                     }}
                     titleStyle={{color: '#eef9ed'}}
-                    disabled={isButtonDisabled}
                     onPress={handleAddDependentUser}
                 />
             </ScrollableBg>
