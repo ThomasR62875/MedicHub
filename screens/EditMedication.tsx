@@ -61,7 +61,7 @@ const EditMedication: React.FC<EditMedicationProps> = ({navigation, route}: any)
             setPrescription(route.params.medication.prescription)
             setDateSince(route.params.medication.sinceWhen ? new Date(route.params.medication.sinceWhen) : new Date())
 
-            let aux = new Date(route.params.medication.sinceWhen);  //horripilante pero funciona
+            let aux = new Date(route.params.medication.sinceWhen);
             aux.setHours(aux.getHours() - 3)
 
             setTimeSince(route.params.medication.sinceWhen ? aux : new Date())
