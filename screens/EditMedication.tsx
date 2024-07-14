@@ -23,7 +23,8 @@ import ScrollableBg from "../components/ScrollableBg";
 type EditMedicationProps = NativeStackScreenProps<RootStackParamList, 'EditMedication'>;
 
 const EditMedication: React.FC<EditMedicationProps> = ({navigation, route}: any) => {
-    const [id] = useState(route.params.medication.id)
+    const {session} = route.params;
+    const [id, setId] = useState(route.params.medication.id)
     const [name, setName] = useState(route.params.medication.name)
     const [prescription, setPrescription] = useState(route.params.medication.prescription);
     const [dateSince, setDateSince] = useState<Date>(route.params.medication.sinceWhen ? new Date(route.params.medication.sinceWhen) : new Date());
@@ -54,6 +55,32 @@ const EditMedication: React.FC<EditMedicationProps> = ({navigation, route}: any)
     }));
 
     useEffect(() => {
+        if (session) {
+            setId(route.params.medication.id)
+            setName(route.params.medication.name)
+            setPrescription(route.params.medication.prescription)
+            setDateSince(route.params.medication.sinceWhen ? new Date(route.params.medication.sinceWhen) : new Date())
+
+            let aux = new Date(route.params.medication.sinceWhen);  //horripilante pero funciona
+            aux.setHours(aux.getHours() - 3)
+
+            setTimeSince(route.params.medication.sinceWhen ? aux : new Date())
+            setDateUntil(route.params.medication.untilWhen ? new Date(route.params.medication.untilWhen) : new Date())
+            setHowOften(route.params.medication.howOften);
+            setIsForever(route.params.medication.isForever);
+        }
+    }, [session])
+
+    useEffect(() => {
+        if (session) {
+            setIsButtonDisabled(false);
+        } else {
+            setIsButtonDisabled(true);
+        }
+
+    }, [session]);
+
+    useEffect(() => {
         if (
             name.trim() !== '' &&
             prescription.trim() !== '' &&
@@ -71,16 +98,16 @@ const EditMedication: React.FC<EditMedicationProps> = ({navigation, route}: any)
 
     const handleUpdateMedication = async () => {
         const sinceDate = new Date(dateSince);
+        const localDate = new Date(dateSince.getTime() - dateSince.getTimezoneOffset() * 60000);
+
         sinceDate.setHours(timeSince.getHours())
         sinceDate.setMinutes(timeSince.getMinutes())
-        //osea el horario nunca se toca en dateUntil, pero nos sirve tenerlo bien para mandar las notis
-        dateUntil.setHours(dateUntil.getHours() - 3) //UTC acomodo, esta bien?? o queremos q sea siempre hasta las 23:59 ?? todo
 
         const medication = {
             id: id,
             name: name,
             prescription: prescription,
-            sinceWhen: sinceDate,
+            sinceWhen: localDate,
             untilWhen: dateUntil,
             howOften: howOften,
             isForever: isForever,

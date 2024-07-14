@@ -179,98 +179,157 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({navigation, route}: any)
                     flexDirection: 'row',
                     marginHorizontal: '10%',
                     marginVertical: '20%',
-                    alignItems: 'center',
-                    justifyContent: 'space-between'
+                    alignItems: 'flex-start',
                 }}>
-                    <Icon iconStyle={{color: 'white'}}
-                          name={'arrow-left'} type={'material-community'} style={styles.back_arrow}
-                          onPress={() => navigation.navigate('HomeTabs')}></Icon>
+                    <Icon iconStyle={{color: 'white'}} name={'arrow-left'} type={'material-community'}
+                          style={styles.back_arrow}
+                          onPress={() => navigation.navigate(t('calendar'), {session: session})}></Icon>
                     <Icon iconStyle={{color: 'white', fontSize: 20}} containerStyle={[styles.circleHeader, {
                         backgroundColor: 'rgba(203,214,144,0.6)',
-                        alignSelf: 'center'
+                        alignSelf: 'center',
+                        marginHorizontal: '35%'
                     }]} name={'calendar-month-outline'} type={'material-community'}/>
+
                 </View>
             </View>
 
             <ScrollableBg style={{padding: '10%'}}>
-                {description ? (
-                    <PaperText style={styles.text}>{t('title')}</PaperText>
-                ) : null}
                 <Input
+                    label={t('title')}
+                    placeholder={t('title')}
+                    value={description}
+                    autoCapitalize={'none'}
                     onChangeText={(text) => {
                         setDescription(text);
                         validateDescription(text);
                     }}
-                    value={description}
-                    placeholder={t('title')}
-                    autoCapitalize='none'
+                    labelStyle={styles.label2}
+                    placeholderTextColor={"#807d7d"}
+                    inputContainerStyle={[{paddingLeft: 10}, styles.input]}
+                    inputStyle={{color: '#000', fontSize: 14, marginLeft: 10}}
                     errorStyle={{color: 'red'}}
                     errorMessage={descriptionErrorMessage}
                 />
-
-                {observations ? (
-                    <PaperText style={styles.text}>{t('observations')}</PaperText>
-                ) : null}
                 <Input
+                    label={t('observations')}
+                    placeholder={t('observations')}
+                    value={observations}
+                    labelStyle={styles.label2}
+                    placeholderTextColor={"#807d7d"}
+                    inputContainerStyle={[{paddingLeft: 10}, styles.input]}
+                    inputStyle={{color: '#000', fontSize: 14, marginLeft: 10}}
                     onChangeText={(text) => {
                         setObservations(text);
                     }}
-                    value={observations}
-                    placeholder={t('observations')}
                     autoCapitalize={'none'}
                 />
-
-                <PaperText style={styles.text}>{t('dateTime')}</PaperText>
+                <PaperText style={[styles.label2, {paddingLeft: 14}]}>{t('dateTime')}</PaperText>
                 <View style={styles.datePickerContainer}>
-                    <DateTimePicker testID="datePicker"
-                                    value={date || undefined}
+                    {Platform.OS === 'ios' ? (
+                        <>
+                            <DateTimePicker
+                                testID="datePicker"
+                                value={date}
+                                minimumDate={new Date()}
+                                mode="date"
+                                display="default"
+                                style={{backgroundColor: 'transparent'}}
+                                onChange={onDateChange}
+                            />
+                            <DateTimePicker
+                                testID="timePicker"
+                                value={time}
+                                mode="time"
+                                display="default"
+                                textColor='#cbe4c9'
+                                onChange={onTimeChange}
+                                timeZoneOffsetInMinutes={0}
+                            />
+                        </>
+                    ) : (
+                        <>
+                            <PaperButton mode="outlined"
+                                         style={[styles.input, {
+                                             padding: 5,
+                                             marginHorizontal: '3.5%',
+                                             marginBottom: '5%'
+                                         }]}
+                                         textColor='#000'
+                                         labelStyle={{textAlign: 'left', display: 'flex'}}
+                                         contentStyle={{justifyContent: 'flex-start'}}
+                                         onPress={() => setShowDatePicker(true)}>
+                                {getDate()}
+                            </PaperButton>
+                            <PaperButton mode="outlined"
+                                         style={[styles.input, {
+                                             padding: 5,
+                                             marginHorizontal: '3.5%',
+                                             marginBottom: '5%'
+                                         }]}
+                                         textColor='#000'
+                                         labelStyle={{textAlign: 'left', display: 'flex'}}
+                                         contentStyle={{justifyContent: 'flex-start'}}
+                                         onPress={() => setShowTimePicker(true)}>
+                                {getTime()}
+                            </PaperButton>
+                            {showDatePicker && (
+                                <DateTimePicker
+                                    testID="datePicker"
+                                    value={date}
+                                    minimumDate={new Date()}
                                     mode="date"
                                     display="default"
-                                    style={[{backgroundColor: 'transparent'}, {marginRight: 10}]}
-                                    onChange={onDateChange}/>
-
-                    <DateTimePicker testID="timePicker"
-                                    value={time || undefined}
+                                    onChange={onDateChange}
+                                />
+                            )}
+                            {showTimePicker && (
+                                <DateTimePicker
+                                    testID="timePicker"
+                                    value={time}
                                     mode="time"
                                     display="default"
-                                    style={{backgroundColor: 'transparent'}}
                                     onChange={onTimeChange}
-                                    timeZoneOffsetInMinutes={0}/>
+                                />
+                            )}
+                        </>
+                    )}
                 </View>
-
-                <PaperText style={styles.text}>{t('doc')}</PaperText>
-                <PaperButton mode="outlined" style={styles.pickerButton} textColor='#2E5829'
-                             labelStyle={{textAlign: 'left', display: 'flex'}} onPress={() => setDoctorDialog(true)}>
+                <PaperText style={[styles.label2, {paddingLeft: 14}]}>{t('doc')}</PaperText>
+                <PaperButton mode="outlined"
+                             style={[styles.input, {padding: 5, marginHorizontal: '3.5%', marginBottom: '5%'}]}
+                             textColor='#000' labelStyle={{textAlign: 'left', display: 'flex'}}
+                             contentStyle={{justifyContent: 'flex-start'}} onPress={() => setDoctorDialog(true)}>
                     {getDoctorName(doctor)}
                 </PaperButton>
-
-                <View style={{height: 24}}/>
-
-                <PaperText style={styles.text}>{t("user")}</PaperText>
-                <PaperButton mode="outlined" style={styles.pickerButton} textColor='#2E5829'
-                             labelStyle={{textAlign: 'left', display: 'flex'}} onPress={() => setUserDialog(true)}>
+                <PaperText style={[styles.label2, {paddingLeft: 14}]}>{t('user')}</PaperText>
+                <PaperButton mode="outlined"
+                             style={[styles.input, {padding: 5, marginHorizontal: '3.5%', marginBottom: '5%'}]}
+                             textColor='#000' labelStyle={{textAlign: 'left', display: 'flex'}}
+                             contentStyle={{justifyContent: 'flex-start'}} onPress={() => setUserDialog(true)}>
                     {getUserName(user_id)}
                 </PaperButton>
-
-                <Button
-                    title={t('adappointment')}
-                    buttonStyle={{
-                        backgroundColor: '#CBD690',
-                        borderWidth: 2,
-                        borderColor: 'white',
-                        borderRadius: 30,
-                        minHeight: 50
-                    }}
-                    containerStyle={{
-                        width: 210,
-                        marginHorizontal: 50,
-                        marginVertical: 10,
-                        marginTop: 40
-                    }}
-                    titleStyle={{color: '#fff'}}
-                    disabled={isButtonDisabled}
-                    onPress={handleAddAppointment}
-                />
+                <View style={{alignItems: 'center'}}>
+                    <Button
+                        title={t('adappointment')}
+                        buttonStyle={{
+                            backgroundColor: '#cbd690',
+                            borderWidth: 2,
+                            borderColor: 'white',
+                            borderRadius: 30,
+                            minHeight: 50
+                        }}
+                        containerStyle={{
+                            width: 200,
+                            marginHorizontal: 50,
+                            marginVertical: 10,
+                            marginTop: 40,
+                            alignContent: 'center'
+                        }}
+                        titleStyle={{color: '#fff'}}
+                        disabled={isButtonDisabled}
+                        onPress={handleAddAppointment}
+                    />
+                </View>
             </ScrollableBg>
             <Portal>
                 <Dialog style={styles.dialog} visible={doctorDialog} onDismiss={hideDoctorDialog}>
@@ -287,23 +346,22 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({navigation, route}: any)
                         ))}
                     </Picker>
                 </Dialog>
-
                 <Dialog style={styles.dialog} visible={userDialog} onDismiss={hideUserDialog}>
                     <Text style={styles.dialogTitle}>{t('selectUser')}</Text>
                     <Picker
                         mode='dropdown'
                         selectedValue={user_id}
                         onValueChange={(value: string) => setUserId(value)}
+                        placeholder='Usuario'
                         enabled={true}
                         itemStyle={styles.pickerStyle}
                     >
-                        {all_users?.map((item) => (
-                            <Picker.Item key={item.id} label={item.first_name} value={item.id}/>
+                        {userList?.map((item) => (
+                            <Picker.Item key={item.value} label={item.label} value={item.value}/>
                         ))}
                     </Picker>
                 </Dialog>
             </Portal>
-
         </View>
     );
 }
