@@ -16,7 +16,10 @@ import { BannerProps } from '../lib/types';
 export const ScreenBanner: React.FC<BannerProps> = (params:BannerProps)=>{
     const [visible,setVisible]= useState(params.visible);
     const {t} = useTranslation();
-
+    const handleOnPress = async (advertisement:Advertisement) => {
+        const doc:(Doctor| undefined) = await getClientDoctor(advertisement.client);
+        params.onPress(doc);
+    };
     return(
         <Modal visible={visible} onDismiss={() => setVisible(false)} animationType='fade'>
             {params.advertisement && (
@@ -29,7 +32,7 @@ export const ScreenBanner: React.FC<BannerProps> = (params:BannerProps)=>{
                     <View accessibilityRole='image' style={screenStyles.imageView}>
                         <Image source={{uri: params.advertisement.image_url}} style={screenStyles.imageStyle}/>
                         <View paddingTop='2%'>
-                            <TouchableOpacity style={[styles.addButton,screenStyles.ownButton,screenStyles.color]}>
+                            <TouchableOpacity style={[styles.addButton,screenStyles.ownButton,screenStyles.color]} onPress={()=>{handleOnPress(params.advertisement)}}>
                                 <Text style={[styles.buttonText,{fontSize:16}]}>{t('addoctor')}</Text>
                             </TouchableOpacity>
                         </View>

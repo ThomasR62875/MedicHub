@@ -11,10 +11,15 @@ import {
 import { Icon } from 'react-native-elements';
 import { styles } from '../assets/styles';
 import {useTranslation} from "react-i18next";
-import { BannerProps } from '../lib/types';
+import { Advertisement, BannerProps,Doctor } from '../lib/types';
+import { getClientDoctor } from '../lib/supabase';
 
 export const SmallBanner: React.FC<BannerProps> = (params:BannerProps)=>{
     const {t} = useTranslation();
+    const handleOnPress = async (advertisement:Advertisement) => {
+        const doc:(Doctor| undefined) = await getClientDoctor(advertisement.client);
+        params.onPress(doc);
+    };
     return (
         <View>
             {params.advertisement && (
@@ -24,7 +29,7 @@ export const SmallBanner: React.FC<BannerProps> = (params:BannerProps)=>{
                         <Text style={[{fontSize: 14, paddingVertical: 7}]}>{params.advertisement.name}</Text>
                         <Text style={[styles.text2, {fontSize: 12, width: '150%', paddingBottom: 5}]}>{params.advertisement.mail}</Text>
                     </View>
-                    <TouchableOpacity style={[styles.addButton,smallStyles.ownButton,smallStyles.color]}>
+                    <TouchableOpacity style={[styles.addButton,smallStyles.ownButton,smallStyles.color]} onPress={()=>{handleOnPress(params.advertisement)}}>
                         <Text style={[styles.buttonText,{fontSize:14}]}>{t('addoctor')}</Text>
                     </TouchableOpacity>
                 </View>
