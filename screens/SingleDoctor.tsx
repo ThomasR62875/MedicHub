@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import { View, Text} from 'react-native';
+import {View, Text} from 'react-native';
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
 import {Button, Icon} from "react-native-elements";
@@ -24,10 +24,11 @@ const SingleDoctor: React.FC<SingleDoctorProps> = ({navigation, route}: any) => 
     const [user, setUser] = React.useState<DependentUser | undefined>(undefined);
 
     useEffect(() => {
-            async function fetchData() {
-                setUser(await getUser(route.params.doc.user_id));
-            }
-            fetchData()
+        async function fetchData() {
+            setUser(await getUser(route.params.doc.user_id))
+        }
+
+        fetchData()
     }, [route.params.doc]);
 
     const handleDeleteDoctor = async () => {
@@ -37,13 +38,31 @@ const SingleDoctor: React.FC<SingleDoctorProps> = ({navigation, route}: any) => 
         navigation.navigate('Doctors', {session: session})
     };
 
+
+    const getUserName = (id: string) => {
+        async function getUserData() {
+            setUser(await getUser(id))
+        }
+        getUserData()
+    };
+
     return (
         <View style={styles.tab}>
             <View style={[styles.header, {backgroundColor: 'rgba(134,171,186,0.6)'}]}>
-                <View style={{flexDirection: 'row', marginHorizontal:'10%', marginVertical:'20%', alignItems: 'center', justifyContent: 'space-between'}}>
-                    <Icon iconStyle={{color: 'white'}} name={'arrow-left'} type={'material-community'} style={styles.back_arrow}
+                <View style={{
+                    flexDirection: 'row',
+                    marginHorizontal: '10%',
+                    marginVertical: '20%',
+                    alignItems: 'center',
+                    justifyContent: 'space-between'
+                }}>
+                    <Icon iconStyle={{color: 'white'}} name={'arrow-left'} type={'material-community'}
+                          style={styles.back_arrow}
                           onPress={() => navigation.navigate('Doctors')}></Icon>
-                    <Icon iconStyle={{color: 'white', fontSize: 20}} containerStyle={[styles.circleHeader, {backgroundColor: 'rgba(134,171,186,0.6)', alignSelf: 'center'}]} name={'stethoscope'} type={'material-community'}/>
+                    <Icon iconStyle={{color: 'white', fontSize: 20}} containerStyle={[styles.circleHeader, {
+                        backgroundColor: 'rgba(134,171,186,0.6)',
+                        alignSelf: 'center'
+                    }]} name={'stethoscope'} type={'material-community'}/>
                     <Icon
                         name='pencil'
                         iconStyle={{color: '#fff'}}
@@ -77,7 +96,7 @@ const SingleDoctor: React.FC<SingleDoctorProps> = ({navigation, route}: any) => 
                     </View>
                     <View style={styles.detailRow}>
                         <Text style={styles.label}>{t('user')}:</Text>
-                        <Text style={styles.value}>{user?.first_name ? user.first_name : '-'}</Text>
+                        <Text style={styles.value}>{user?.first_name}</Text>
                     </View>
                     <View style={styles.screen}>
                         <View style={{alignItems: 'center', width: 'auto'}}>

@@ -19,20 +19,32 @@ const Doctors: React.FC = ({navigation, route}: any) => {
     const colors = [ 'rgba(139,134,190,0.6)','rgba(222,176,189,0.6)','rgba(236,183,97,0.6)','rgba(203,214,144,0.6)']
     const [isLoading, setIsLoading] = useState(true);
 
+
+    async function fetchData() {
+        if (session) {
+            setDoctors(await getDoctors());
+            console.log("DOCTORES!!!! " )
+            doctors?.forEach((doc) => {
+                console.log(doc)
+            })
+            setAdvertisement( await getAdvertisement('BIG'));
+            setIsLoading(false);
+        }
+    }
+
     useEffect(() => {
         navigation.addListener('focus', () => {
-            async function fetchData() {
-                if (session) {
-                    setDoctors(await getDoctors());
-                    setAdvertisement( await getAdvertisement('BIG'));
-                    setIsLoading(false);
-                }
-            }
-
             fetchData();
         });
 
     }, [navigation, session]);
+
+
+    useEffect(() => {
+        if (route.params?.refresh) {
+            fetchData()
+        }
+    }, [route.params?.refresh]);
 
     return (
         <View style={styles.tab}>
@@ -76,7 +88,7 @@ const Doctors: React.FC = ({navigation, route}: any) => {
                         <Text style={[styles.text2,{alignSelf: 'center', padding: 30}]}>{t('text17')}</Text>
                     )
                     )}
-                    <SmallBanner advertisement={advertisement} onPress={(doc:Doctor)=>navigation.navigate({name:'AddDoctor',params:{base_doctor:doc}})}/>
+                    <SmallBanner advertisement={advertisement} onPress={(doc:Doctor | undefined)=>navigation.navigate({name:'AddDoctor',params:{base_doctor:doc}})}/>
                 </View>
             </ScrollableBg>
         </View>

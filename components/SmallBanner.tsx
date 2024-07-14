@@ -12,7 +12,7 @@ import { getClientDoctor } from '../lib/supabase';
 
 export const SmallBanner: React.FC<BannerProps> = (params:BannerProps)=>{
     const {t} = useTranslation();
-    const handleOnPress = async (advertisement:Advertisement) => {
+    const handleOnPress = async (advertisement: Advertisement) => {
         const doc:(Doctor| undefined) = await getClientDoctor(advertisement.client);
         params.onPress(doc);
     };
@@ -28,7 +28,7 @@ export const SmallBanner: React.FC<BannerProps> = (params:BannerProps)=>{
                         </View>
                     </View>
                     <View style={{alignItems: 'flex-end', justifyContent: 'center'}}>
-                        <TouchableOpacity style={[styles.addButton, smallStyles.ownButton]} onPress={()=>{handleOnPress(params.advertisement)}}>
+                        <TouchableOpacity style={[styles.addButton, smallStyles.ownButton]} onPress={()=>{ if(params.advertisement) handleOnPress(params.advertisement)}}>
                             <Text style={[styles.buttonText,{fontSize:12, textAlign: 'center'}]}>{t('addoctor')}</Text>
                         </TouchableOpacity>
                     </View>
