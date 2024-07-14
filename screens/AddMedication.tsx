@@ -256,6 +256,9 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
                         </>
                     )}
                 </View>
+
+
+
                 <View style={{marginBottom: "5%", marginTop: "5%"}}>
                     <RNText style={styles.label2}>
                         {t('text20')}
@@ -310,6 +313,8 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
                             </>
                         )}
                     </View>
+
+
                     <View style={[cardStyle.infoRow, {marginTop: "5%", justifyContent: 'center'}]}>
                         <RNText style={styles.label2}>
                             {t('text26')}

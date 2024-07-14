@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import {updateDependentUser} from '../lib/supabase'
-import {View, Alert} from 'react-native'
+import {View, Alert, Text as RNText, Platform} from 'react-native'
 import {Button, Icon, Input, Text} from 'react-native-elements'
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
@@ -29,6 +29,7 @@ const EditDependentUser: React.FC<EditDependentUserProps> = ({navigation, route}
     const [dniErrorMessage, setDniErrorMessage] = useState('')
     const [birthDateErrorMessage, setBirthDateErrorMessage] = useState<string>('');
     const [genderErrorMessage, setGenderErrorMessage] = useState<string>('');
+    const [showDatePickerUntil, setShowDatePickerUntil] = useState(false);
 
     const handleDateChange = (event: any, selectedDate?: Date) => {
         if (selectedDate) {
@@ -137,6 +138,9 @@ const EditDependentUser: React.FC<EditDependentUserProps> = ({navigation, route}
     };
     const hideSexGenderDialog = () => setSexGenderDialog(false);
 
+    const getBirthdate = () => {
+        return date ? date.toLocaleDateString() : t('selectDate');
+    };
 
     return (
         <View style={styles.tab}>
@@ -207,18 +211,58 @@ const EditDependentUser: React.FC<EditDependentUserProps> = ({navigation, route}
                              contentStyle={{justifyContent: 'flex-start'}} onPress={() => setSexGenderDialog(true)}>
                     {getSexGenderName(sexGender)}
                 </PaperButton>
-                <PaperText style={[styles.label2, {paddingLeft: 14}]}>{t('birthdate')}</PaperText>
-                <View style={styles.datePicker}>
-                    <DateTimePicker testID="dateTimePicker"
-                                    value= {date}
+
+
+                <View style={{marginBottom: "5%", marginTop: "5%"}}>
+                    <RNText style={styles.label2}>
+                        {t('birthdate')}
+                    </RNText>
+                    <View style={styles.datePickerContainer}>
+                        {Platform.OS === 'ios' ? (
+                            <>
+                                <DateTimePicker
+                                    testID="datePicker"
+                                    value={date || undefined}
                                     mode="date"
                                     display="default"
+                                    style={{backgroundColor: 'transparent'}}
                                     onChange={(event, selectedDate) => {
-                                        handleDateChange(event, selectedDate)
+                                        handleDateChange(event, selectedDate);
                                         validateBirthDate(selectedDate);
                                     }}
-                    />
+                                />
+                            </>
+                        ) : (
+                            <>
+                                <PaperButton mode="outlined" style={[styles.input, {
+                                    padding: 5,
+                                    marginHorizontal: '3.5%',
+                                    marginBottom: '5%'
+                                }]} textColor='#000' labelStyle={{textAlign: 'left', display: 'flex'}}
+                                             contentStyle={{justifyContent: 'flex-start'}}
+                                             onPress={() => setShowDatePickerUntil(true)}>
+                                    {getBirthdate()}
+                                </PaperButton>
+                                {showDatePickerUntil && (
+                                    <DateTimePicker
+                                        testID="datePicker"
+                                        value={date || undefined}
+                                        mode="date"
+                                        display="default"
+                                        onChange={(event, selectedDate) => {
+                                            handleDateChange(event, selectedDate);
+                                            validateBirthDate(selectedDate);
+                                        }}
+                                    />
+                                )}
+                            </>
+                        )}
+                    </View>
+
                 </View>
+
+
+
                 <View style={{alignItems: 'center'}}>
                     <Button
                         title={t('savec')}

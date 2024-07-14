@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import { View, Text, Image, Alert} from 'react-native';
+import {View, Text, Image, Alert, Text as RNText, Platform} from 'react-native';
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
 import {Icon, Button, Input} from "react-native-elements";
@@ -22,11 +22,8 @@ const SingleDependentUser: React.FC<SingleDependentUserProps> = ({navigation, ro
     const [visible, setVisible] = React.useState(false);
     const hideDialog = () => setVisible(false);
     const showDialog = () => setVisible(true);
-
     const [shareDialog, setShareDialog] = React.useState(false);
     const [shareEmail, setShareEmail] = React.useState("");
-
-
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [confirmed_password, setConfirmedPassword] = useState('')
@@ -35,12 +32,9 @@ const SingleDependentUser: React.FC<SingleDependentUserProps> = ({navigation, ro
     const [lastName, setLastName] = useState('')
     const [dni, setDni] = useState<string>('')
     const [newIndepUserDialog, setNewIndepUserDialog] = React.useState(false);
-
     const [date, setDate] = useState(new Date());
     const [sexGender,setSexGender]= useState('');
     const [sexGenderDialog, setSexGenderDialog] = useState(false);
-
-
     const [nameErrorMessage, setNameErrorMessage] = useState<string>('');
     const [lastNameErrorMessage, setLastNameErrorMessage] = useState<string>('');
     const [DNIErrorMessage, setDNIErrorMessage] = useState<string>('');
@@ -48,6 +42,7 @@ const SingleDependentUser: React.FC<SingleDependentUserProps> = ({navigation, ro
     const [passwordErrorMessage, setPasswordErrorMessage] = useState<string>('');
     const [birthDateErrorMessage, setBirthDateErrorMessage] = useState<string>('');
     const [genderErrorMessage, setGenderErrorMessage] = useState<string>('');
+    const [showDatePickerUntil, setShowDatePickerUntil] = useState(false);
 
 
     useEffect(() => {
@@ -182,6 +177,10 @@ const SingleDependentUser: React.FC<SingleDependentUserProps> = ({navigation, ro
         if (success) Alert.alert(t('confirmationemailnotification'),)
         setLoading(false)
 
+    };
+
+    const getBirthdate = () => {
+        return date ? date.toLocaleDateString() : t('selectDate');
     };
 
     return (
@@ -382,17 +381,53 @@ const SingleDependentUser: React.FC<SingleDependentUserProps> = ({navigation, ro
                         <PaperButton mode="outlined" style={[styles.input, {padding: 5, marginHorizontal: '3%', marginBottom:'5%'}]} textColor='#000' labelStyle={{textAlign: 'left', display:'flex'}} contentStyle={{justifyContent: 'flex-start'}} onPress={()=> setSexGenderDialog(true)}>
                             {getSexGenderName(sexGender)}
                         </PaperButton>
-                        <PaperText style={styles.text5}>{t('birthdate')}</PaperText>
-                        <View style={styles.datePicker}>
-                            <DateTimePicker testID="dateTimePicker"
+
+                        <View style={{marginBottom: "5%", marginTop: "5%"}}>
+                            <RNText style={styles.label2}>
+                                {t('birthdate')}
+                            </RNText>
+                            <View style={styles.datePickerContainer}>
+                                {Platform.OS === 'ios' ? (
+                                    <>
+                                        <DateTimePicker
+                                            testID="datePicker"
                                             value={date || undefined}
                                             mode="date"
                                             display="default"
+                                            style={{backgroundColor: 'transparent'}}
                                             onChange={(event, selectedDate) => {
-                                                handleDayPress(event, selectedDate)
+                                                handleDayPress(event, selectedDate);
                                                 validateBirthDate(selectedDate);
                                             }}
-                            />
+                                        />
+                                    </>
+                                ) : (
+                                    <>
+                                        <PaperButton mode="outlined" style={[styles.input, {
+                                            padding: 5,
+                                            marginHorizontal: '3.5%',
+                                            marginBottom: '5%'
+                                        }]} textColor='#000' labelStyle={{textAlign: 'left', display: 'flex'}}
+                                                     contentStyle={{justifyContent: 'flex-start'}}
+                                                     onPress={() => setShowDatePickerUntil(true)}>
+                                            {getBirthdate()}
+                                        </PaperButton>
+                                        {showDatePickerUntil && (
+                                            <DateTimePicker
+                                                testID="datePicker"
+                                                value={date || undefined}
+                                                mode="date"
+                                                display="default"
+                                                onChange={(event, selectedDate) => {
+                                                    handleDayPress(event, selectedDate);
+                                                    validateBirthDate(selectedDate);
+                                                }}
+                                            />
+                                        )}
+                                    </>
+                                )}
+                            </View>
+
                         </View>
 
                         <Portal>
