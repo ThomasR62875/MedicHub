@@ -138,7 +138,7 @@ export const addMedication = async (medication: Medication): Promise<{ success: 
         return {success: true};
     }
 }
-// Devuelve todos los Doctores por usuario
+// Devuelve tods los Doctores por usuario
 export const getAllDoctorsByUser = async (session_user_id: String): Promise<Doctor [] | undefined> => {
     const {data, error} = await supabase.rpc('get_all_doctors_by_user', {user_id: session_user_id});
     if (error) {
@@ -192,11 +192,31 @@ export const getDoctors = async (): Promise<Doctor[] | undefined> => {
     return to_return
 }
 
-// Obtiene los doctores por el id del usuario y una especialdiad
-export const getDoctorsBySpecialty = async (session_user_id: string, speciality: string): Promise<Doctor[] | undefined> => {
+export const getDoctorsByUser = async (user_id: string): Promise<Doctor[] | undefined> => {
     let to_return: Doctor[] = []
-    const id: string = await getUserId();
-    const {data, error} = await supabase.rpc("get_doctors_by_specialty", {user_id: id, specialty_input: speciality});
+    const {data, error} = await supabase.rpc("get_doctors_by_user", {user_id: user_id});
+    if (error) {
+        console.error('Error getting doctor data:', error.message);
+    }
+    data.forEach((doctor: Doctor) => {
+        // @ts-ignore
+        to_return.push({
+            name: doctor.name,
+            specialty: doctor.specialty,
+            phone: doctor.phone,
+            email: doctor.email,
+            addresses: doctor.addresses,
+            user_id: user_id,
+            id: doctor.id
+        });
+    });
+    return to_return
+}
+
+// Obtiene los doctores por el id del usuario y una especialdiad
+export const getDoctorsBySpecialtyAndUser = async (user_id: string, speciality: string): Promise<Doctor[] | undefined> => {
+    let to_return: Doctor[] = []
+    const {data, error} = await supabase.rpc("get_doctors_by_specialty", {user_id: user_id, specialty_input: speciality});
     if (error) {
         console.error('Error getting doctor in doctors by speciality data:', error.message);
     }
@@ -208,14 +228,14 @@ export const getDoctorsBySpecialty = async (session_user_id: string, speciality:
             phone: doctor.phone,
             email: doctor.email,
             addresses: doctor.addresses,
-            user_id: id,
+            user_id: user_id,
             id: doctor.id
         });
     });
     return to_return
 }
 
-// Devuelve todos los usuarios dependiendo de un user_id incluyendo el usuario independiente
+// Devuelve tods los usuarios dependiendo de un user_id incluyendo el usuario independiente
 export const getAllUsers = async (session_user_id: String): Promise<DependentUser[] | undefined> => {
     const {data, error} = await supabase.rpc('get_all_users', {user_id: session_user_id});
     if (error) {
@@ -224,7 +244,7 @@ export const getAllUsers = async (session_user_id: String): Promise<DependentUse
     return data
 }
 
-// Devuelve todos los usuarios dependiendo de un user_id
+// Devuelve tods los usuarios dependiendo de un user_id
 export const getDependentUsers = async (): Promise<DependentUser[] | undefined> => {
     let to_return: DependentUser[] = []
     const {data, error} = await supabase.rpc('get_dependent_users');
@@ -504,7 +524,7 @@ export async function getMedications(): Promise<Medication[] | undefined> {
 
 
 export const setDependentUser = async (parent_id: string, child_id: string) => {
-    const {error: error} = await supabase.rpc('set_dependent_user', {parent: parent_id, child_id: child_id});
+    const {error: error} = await supabase.rpc('set_dependent_user', {parent_input: parent_id, child_input: child_id});
     if (error) {
         return {
             success: false,
@@ -533,7 +553,7 @@ export const getAdvertisement = async(banner_type: string) : Promise<Advertiseme
         let advertisement: Advertisement = {client: data.id,logo:data.logo,mail:data.mail,name:data.name,image_url:data.image_url}
         return advertisement;
     }
-    console.log(error)
+    console.error(error)
     return undefined;
 }
 
@@ -542,8 +562,6 @@ export const getRecommendations = async (user_id: string): Promise<Recommendatio
     const {data, error} = await supabase.rpc('generate_recommendations', {user_id: user_id});
     if (error) {
         console.error('Error generating the recommendations:', error.message);
-    } else {
-        console.log('Recommendations generated successfully');
     }
     return data
 }

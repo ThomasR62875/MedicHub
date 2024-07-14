@@ -45,7 +45,7 @@ return(
                 >
                     <Text style={styles.buttonText}>{t('add')}</Text>
                 </TouchableOpacity>
-                <Icon name={'filter-variant'} type={'material-community'} color={'#000000'} size={30} style={{paddingRight: 20, padding: 5}} onPress={() => console.log('Filter')}/>
+                <Icon name={'filter-variant'} type={'material-community'} color={'#000000'} size={30} style={{paddingRight: 20, padding: 5}}/>
             </View>
             {isLoading ? (
                 <ActivityIndicator size="small" color="#807d7d" style={{marginVertical: '10%'}}/>

@@ -1,4 +1,4 @@
-import {useState, useEffect, useRef} from 'react'
+import {useState, useEffect} from 'react'
 import {supabase} from './lib/supabase'
 import {Session} from '@supabase/supabase-js'
 import React from 'react';
@@ -29,12 +29,13 @@ import {createNativeStackNavigator} from "@react-navigation/native-stack";
 import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
 import {StackNavigationProp} from "@react-navigation/stack";
 import 'react-native-reanimated'
-import * as Animatable from 'react-native-animatable'
 import 'react-native-reanimated'
 import {Ionicons} from "@expo/vector-icons";
 import {StatusBar} from "react-native";
 import {useTranslation} from "react-i18next";
 import {Provider} from 'react-native-paper';
+import {AppRegistry} from 'react-native';
+import {Appointment, DependentUser, Doctor, Medication} from "./lib/types";
 
 export type RootStackParamList = {
     HomeTabs: { session: Session | null };
@@ -45,7 +46,7 @@ export type RootStackParamList = {
     Appointments: { session: Session | null };
     EditAccount: { session: Session | null };
     AddAppointment: { session: Session | null };
-    AddDoctor: { session: Session | null };
+    AddDoctor: { session: Session | null, base_doctor: Doctor | null };
     Doctors: { session: Session | null };
     DependentUsers: { session: Session | null };
     AddDependentUser: { session: Session | null };
@@ -71,9 +72,6 @@ export type RootStackParamList = {
     };
 };
 
-import {AppRegistry} from 'react-native';
-import {Appointment, DependentUser, Doctor, Medication} from "./lib/types";
-
 AppRegistry.registerComponent('main', () => App);
 
 const Tab = createBottomTabNavigator();
@@ -86,8 +84,6 @@ type Props = {
     navigation: HomeTabsNavigationProp
 };
 
-
-// https://www.youtube.com/watch?v=XiutL0uLICg&list=PLhRhTJaArVFugDgTSvXTUaqJWY9Kpp-gV  tutorial de la bottomBar todo
 function HomeTabs({route}: Props) {
     const {session} = route.params;
     const {t} = useTranslation();
@@ -96,56 +92,8 @@ function HomeTabs({route}: Props) {
     const [selectedTab] = useState<number | null>(0);
     useEffect(() => {
         if (selectedTab !== null) {
-            console.log('Selected tab:', selectedTab);
         }
     }, [selectedTab]);
-
-
-    //cosas de animation
-    const viewRef0 = useRef<Animatable.View | null>(null);
-    useEffect(() => {
-        if (viewRef0.current) {
-            if (selectedTab == 0) {
-                viewRef0.current.animate({
-                    0: {scaleX: .5, transform: [{rotate: '0deg'}]},
-                    1: {scaleX: 1.5, transform: [{rotate: '360deg'}]}
-                });
-            }
-        }
-    },)
-    const viewRef1 = useRef<Animatable.View | null>(null);
-    useEffect(() => {
-        if (viewRef1.current) {
-            if (selectedTab == 1) {
-                viewRef1.current.animate({
-                    0: {scaleX: .5, transform: [{rotate: '0deg'}]},
-                    1: {scaleX: 1.5, transform: [{rotate: '360deg'}]}
-                });
-            }
-        }
-    },)
-    const viewRef2 = useRef<Animatable.View | null>(null);
-    useEffect(() => {
-        if (viewRef2.current) {
-            if (selectedTab == 2) {
-                viewRef2.current.animate({
-                    0: {scaleX: .5, transform: [{rotate: '0deg'}]},
-                    1: {scaleX: 1.5, transform: [{rotate: '360deg'}]}
-                });
-            }
-        }
-    },)
-    const viewRef3 = useRef<Animatable.View | null>(null);
-    useEffect(() => {
-        if (viewRef3.current) {
-            if (selectedTab == 3) {
-                viewRef3.current.animate({
-                    0: {scaleX: .5, transform: [{rotate: '0deg'}]},
-                    1: {scaleX: 1.5, transform: [{rotate: '360deg'}]}
-                });
-            }
-        }
-    },)
 
     return (
         <Tab.Navigator screenOptions={{
@@ -211,23 +159,18 @@ function HomeTabs({route}: Props) {
     );
 }
 
-
 const App = () => {
     const [session, setSession] = useState<Session | null>(null)
-
     const Stack = createNativeStackNavigator<RootStackParamList>();
 
     useEffect(() => {
         supabase.auth.getSession().then(({data: {session}}) => {
             setSession(session)
         })
-
         supabase.auth.onAuthStateChange((_event, session) => {
             setSession(session)
         })
-
     }, []);
-
 
     return (
         <Provider>
@@ -257,7 +200,6 @@ const App = () => {
                                           component={AlertPublicity}
                                           initialParams={{session: session, msg: 'successful addition', screen: 'Home'}}
                                           options={{headerShown: false}}/>
-
                             <Stack.Screen name="AddAppointment"
                                           component={AddAppointment}
                                           initialParams={{session: session}}
@@ -314,7 +256,6 @@ const App = () => {
                                           component={EditAccount}
                                           initialParams={{session: session}}
                                           options={{headerShown: false}}/>
-
                             <Stack.Screen name="Medications"
                                           component={Medications}
                                           initialParams={{session: session}}

@@ -3,7 +3,7 @@ import {
     View,
     Text,
     Alert,
-    Image
+    Image, Text as RNText, Platform
 } from 'react-native';
 import {signUp} from "../lib/supabase";
 import {Input, Icon, Button} from "react-native-elements";
@@ -38,6 +38,8 @@ const Register: React.FC = ({navigation}: any) => {
     const [passwordErrorMessage, setPasswordErrorMessage] = useState<string>('');
     const [birthDateErrorMessage, setBirthDateErrorMessage] = useState<string>('');
     const [genderErrorMessage, setGenderErrorMessage] = useState<string>('');
+    const [showDatePickerUntil, setShowDatePickerUntil] = useState(false);
+
 
     useEffect(() => {
         if (
@@ -138,6 +140,10 @@ const Register: React.FC = ({navigation}: any) => {
             }
     };
 
+    const getBirthdate = () => {
+        return date ? date.toLocaleDateString() : t('selectDate');
+    };
+
     return (
         <View style={{flex: 1, backgroundColor: '#fff', marginBottom: 0}}>
             {/* Burbuja 1 */}
@@ -236,17 +242,57 @@ const Register: React.FC = ({navigation}: any) => {
                 <PaperButton mode="outlined" style={[styles.input, {padding: 5, marginHorizontal: '3%', marginBottom:'5%'}]} textColor='#000' labelStyle={{textAlign: 'left', display:'flex'}} contentStyle={{justifyContent: 'flex-start'}} onPress={()=> setSexGenderDialog(true)}>
                     {getSexGenderName(sexGender)}
                 </PaperButton>
-                <PaperText style={styles.text4}>{t('birthdate')}</PaperText>
-                <View style={styles.datePicker}>
-                    <DateTimePicker testID="dateTimePicker"
+
+
+                <View style={{marginBottom: "5%", marginTop: "5%"}}>
+                    <RNText style={styles.label2}>
+                        {t('birthdate')}
+                    </RNText>
+                    <View style={styles.datePickerContainer}>
+                        {Platform.OS === 'ios' ? (
+                            <>
+                                <DateTimePicker
+                                    testID="datePicker"
                                     value={date || undefined}
                                     mode="date"
                                     display="default"
-                                    onChange={() => {
-                                        handleDateChange;
-                                        validateBirthDate(date)
-                                    }}/>
+                                    style={{backgroundColor: 'transparent'}}
+                                    onChange={(event, selectedDate) => {
+                                        handleDateChange(event, selectedDate);
+                                        validateBirthDate(date);
+                                    }}
+                                />
+                            </>
+                        ) : (
+                            <>
+                                <PaperButton mode="outlined" style={[styles.input, {
+                                    padding: 5,
+                                    marginHorizontal: '3.5%',
+                                    marginBottom: '5%'
+                                }]} textColor='#000' labelStyle={{textAlign: 'left', display: 'flex'}}
+                                             contentStyle={{justifyContent: 'flex-start'}}
+                                             onPress={() => setShowDatePickerUntil(true)}>
+                                    {getBirthdate()}
+                                </PaperButton>
+                                {showDatePickerUntil && (
+                                    <DateTimePicker
+                                        testID="datePicker"
+                                        value={date || undefined}
+                                        mode="date"
+                                        display="default"
+                                        onChange={(event, selectedDate) => {
+                                            handleDateChange(event, selectedDate);
+                                            validateBirthDate(date);
+                                        }}
+                                    />
+                                )}
+                            </>
+                        )}
+                    </View>
+
                 </View>
+
+
                 <Input
                     label="Mail"
                     labelStyle={{color: '#000000', paddingBottom: 10, paddingLeft: 5}}

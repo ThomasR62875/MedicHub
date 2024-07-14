@@ -109,7 +109,6 @@ const EditAppointment: React.FC<EditAppointmentProps> = ({navigation, route}: an
         const appointmentDate = new Date(date);
         appointmentDate.setHours(time.getHours());
         appointmentDate.setMinutes(time.getMinutes())
-        console.log("date q se pasa a la func de supabase: ", appointmentDate)
 
         const appointment = {
             id: id, date: appointmentDate, description: description,

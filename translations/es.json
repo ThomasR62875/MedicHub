@@ -152,9 +152,11 @@
   "warnEnterPrescr": "Debe ingresar la prescripción.",
   "next": "Próximamente",
   "date&time": "Fecha y hora",
-  "text27": "No hay tienes próximos turnos",
+  "text27": "No tienes turnos proximamente",
   "doctor": "Doctor",
   "selectDate": "Seleccione una fecha",
-  "selectTime": "Seleccione una hora",
-  "addnewmed" : "Agregar nuevo medicamento"
+  "selectTime": "Seleccione cada cuanto",
+  "selectATime": "Seleccione una hora",
+  "addnewmed" : "Agregar nuevo medicamento",
+  "enterDataForShare": "Ingrese los datos para mover este usario y sus datos a una nueva cuenta"
 }

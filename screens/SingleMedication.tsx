@@ -97,7 +97,13 @@ const SingleMedication: React.FC<SingleMedicationProps> = ({navigation, route}: 
                                     <Text style={styles.value}>{t('text25')}</Text>
                                 </View>
                             )}
-                            <Text style={styles.value}>{route.params.meds.untilWhen}</Text>
+                            <Text style={styles.value}>{(new Date(route.params.meds.untilWhen)).toLocaleDateString()}</Text>
+                        </View>
+                    )}
+                    {route.params.meds.isForever === true && (
+                        <View style={[styles.detailRow]}>
+                            <Text style={styles.label}>{t('text21')}:</Text>
+                            <Text style={styles.value}>{t('text25')}</Text>
                         </View>
                     )}
                     {route.params.meds.howOften && (
@@ -105,12 +111,6 @@ const SingleMedication: React.FC<SingleMedicationProps> = ({navigation, route}: 
                             <Text style={styles.label}>{t('text23')}</Text>
                             <Text
                                 style={styles.value}>{parseInt(route.params.meds.howOften.toString().split(':')[0], 10)}{t('text24')} </Text>
-                        </View>
-                    )}
-                    {route.params.meds.isForever === true && (
-                        <View style={[styles.detailRow]}>
-                            <Text style={styles.label}>{t('text21').slice(2, -2)}:</Text>
-                            <Text style={styles.value}>{t('text25')}</Text>
                         </View>
                     )}
                     <View style={styles.screen}>

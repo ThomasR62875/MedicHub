@@ -1,5 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import {addAppointment, getAllDoctorsByUser, getAllUsers, getDoctorsBySpecialty, getUserId} from '../lib/supabase';
+import {
+    addAppointment,
+    getAllDoctorsByUser,
+    getAllUsers, getDoctors,
+    getDoctorsBySpecialtyAndUser, getDoctorsByUser,
+    getUserId
+} from '../lib/supabase';
 import {
     Alert,
     View,
@@ -50,10 +56,10 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({navigation, route}: any)
             async function getInfo() {
                 if (recommendation) {
                     recommendation.date = new Date(recommendation.date);
-                    setDoctors(await getDoctorsBySpecialty(session_user_id, recommendation.specialty));
+                    setUserId(recommendation.user_id);
+                    setDoctors(await getDoctorsBySpecialtyAndUser(recommendation.user_id, recommendation.specialty));
                     setDate(recommendation.date);
                     setTime(recommendation.date);
-                    setUserId(recommendation.user_id);
                     setDoctor(recommendation.doctor);
                     setDescription(t('addRecommendationAppointmentDescription') + t(recommendation.specialty))
                 } else {
@@ -65,6 +71,16 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({navigation, route}: any)
             getInfo();
         }
     }, [session_user_id]);
+
+    useEffect(() => {
+        console.log("cambia", user_id)
+        if (user_id) {
+            async function getDoctorsInfo() {
+                setDoctors(await getDoctorsByUser(user_id));
+            }
+            getDoctorsInfo();
+        }
+    }, [user_id]);
 
     const validateDescription = (value: string) => {
         if (value.trim() === '') {
@@ -165,11 +181,11 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({navigation, route}: any)
     };
 
     const getDate = () => {
-        return date ? date.toLocaleDateString() : 'Seleccione una fecha';
+        return date ? date.toLocaleDateString() : t('selectDate');
     };
 
     const getTime = () => {
-        return time ? time.toLocaleTimeString() : 'Seleccione una hora';
+        return time ? time.toLocaleTimeString() : t('selectATime');
     };
 
     return (
@@ -367,184 +383,3 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({navigation, route}: any)
 }
 
 export default AddAppointment;
-
-/*
-<TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-            <SafeAreaView style={styles.container}>
-                <ScrollView >
-                    <View>
-                        <View style={styles.topContent}>
-                            <Text style={styles.titleText}>{t('adappointment')}</Text>
-                        </View>
-                        <View>
-                            <TextInput
-                                style={{backgroundColor: "#e9f4e9", marginTop: "10%", textAlign: 'center', marginLeft:'5%' , marginRight: '5%'}}
-                                label={t('title')}
-                                value={description}
-                                onChangeText={(text) => {
-                                    setDescription(text);
-                                    validateDescription(text);
-                                }}
-                                mode='flat'
-                                underlineColor='#2E5829FF'
-                                activeUnderlineColor='#2E5829FF'
-                            />
-
-
-                            <TextInput
-                                style={{backgroundColor: "#e9f4e9", marginTop: "10%", textAlign: 'center', marginLeft:'5%' , marginRight: '5%'}}
-                                label={t('observations')}
-                                value={observations}
-                                onChangeText={(text) => {
-                                    setObservations(text);
-                                }}
-                                mode='flat'
-                                underlineColor='#2E5829FF'
-                                activeUnderlineColor='#2E5829FF'
-                            />
-
-
-                            <HelperText type="error" visible={hasErorrs}>
-                                {descriptionErrorMessage}
-                            </HelperText>
-                        </View>
-
-
-                        <PaperText style={styles.text}>{t('dateTime')}:</PaperText>
-                        <View style={styles.datePickerContainer}>
-                            {Platform.OS === 'ios' ? (
-                                <>
-                                    <DateTimePicker
-                                        testID="datePicker"
-                                        value={date}
-                                        minimumDate={new Date()}
-                                        mode="date"
-                                        display="default"
-                                        style={{ backgroundColor: 'transparent' }}
-                                        onChange={onDateChange}
-                                    />
-                                    <DateTimePicker
-                                        testID="timePicker"
-                                        value={time}
-                                        mode="time"
-                                        display="default"
-                                        textColor='#cbe4c9'
-                                        onChange={onTimeChange}
-                                        timeZoneOffsetInMinutes={0}
-                                    />
-                                </>
-                            ) : (
-                                <>
-                                    <PaperButton
-                                        mode="outlined"
-                                        style={styles.pickerButton}
-                                        textColor='#2E5829'
-                                        labelStyle={{ textAlign: 'left', display: 'flex' }}
-                                        onPress={() => setShowDatePicker(true)}
-                                    >
-                                        {getDate()}
-                                    </PaperButton>
-                                    <PaperButton
-                                        mode="outlined"
-                                        style={styles.pickerButton}
-                                        textColor='#2E5829'
-                                        labelStyle={{ textAlign: 'left', display: 'flex' }}
-                                        onPress={() => setShowTimePicker(true)}
-                                    >
-                                        {getTime()}
-                                    </PaperButton>
-                                    {showDatePicker && (
-                                        <DateTimePicker
-                                            testID="datePicker"
-                                            value={date}
-                                            minimumDate={new Date()}
-                                            mode="date"
-                                            display="default"
-                                            onChange={onDateChange}
-                                        />
-                                    )}
-                                    {showTimePicker && (
-                                        <DateTimePicker
-                                            testID="timePicker"
-                                            value={time}
-                                            mode="time"
-                                            display="default"
-                                            onChange={onTimeChange}
-                                        />
-                                    )}
-                                </>
-                            )}
-                        </View>
-
-
-                        <PaperText style={styles.text}>Doctor</PaperText>
-                        <PaperButton mode="outlined" style={styles.pickerButton} textColor='#2E5829' labelStyle={{textAlign: 'left', display:'flex'}} onPress={()=> setDoctorDialog(true)}>
-                            {getDoctorName(doctor)}
-                        </PaperButton>
-
-
-
-                        <PaperText style={styles.text}>{t('user')}</PaperText>
-                        <PaperButton mode="outlined" style={styles.pickerButton} textColor='#2E5829' labelStyle={{textAlign: 'left', display:'flex'}} onPress={()=> setUserDialog(true)}>
-                            {getUserName(user_id)}
-                        </PaperButton>
-
-
-                        <View style={{alignItems: 'center'}}>
-                            <Button
-                                title={t('add')}
-                                disabled={isButtonDisabled}
-                                buttonStyle={{
-                                    backgroundColor: '#2E5829',
-                                    borderWidth: 2,
-                                    borderColor: 'white',
-                                    borderRadius: 30,
-                                    minHeight: 50
-                                }}
-                                containerStyle={{
-                                    width: 150,
-                                    marginHorizontal: 50,
-                                    marginVertical: 10,
-                                    marginTop: 40,
-                                }}
-                                titleStyle={{ color: '#eef9ed' }}
-
-                                onPress={handleAddAppointment}
-                            />
-                        </View>
-                    </View>
-                </ScrollView>
-                <Portal>
-                    <Dialog style={styles.dialog} visible={doctorDialog} onDismiss={hideDoctorDialog}>
-                        <Text style={styles.dialogTitle}>{t('selectDoctor')}</Text>
-                        <Picker
-                            mode='dropdown'
-                            selectedValue={doctor}
-                            onValueChange={(value: string) => setDoctor(value)}
-                            enabled={true}
-                            itemStyle={styles.pickerStyle}
-                        >
-                            {doctorsList?.map((item) => (
-                                <Picker.Item key={item.value} label={item.label} value={item.value} />
-                            ))}
-                        </Picker>
-                    </Dialog>
-                    <Dialog style={styles.dialog} visible={userDialog} onDismiss={hideUserDialog}>
-                        <Text style={styles.dialogTitle}>{t('selectUser')}</Text>
-                        <Picker
-                            mode='dropdown'
-                            selectedValue={user_id}
-                            onValueChange={(value: string) => setUserId(value)}
-                            placeholder='Usuario'
-                            enabled={true}
-                            itemStyle={styles.pickerStyle}
-                        >
-                            {userList?.map((item) => (
-                                <Picker.Item key={item.value} label={item.label} value={item.value} />
-                            ))}
-                        </Picker>
-                    </Dialog>
-                </Portal>
-            </SafeAreaView>
-        </TouchableWithoutFeedback>
- */

@@ -49,8 +49,8 @@ const Calender: React.FC = ({ navigation, route } : any) => {
     };
 
     let targetDate = selectedDate;
-    let filteredData : Appointment[] | undefined = undefined; //es un array donde se guardan todos los appointments los cuales su date coinciden con el día seleccionado en el calendario (targeDate)
-    let markedDates : string[] = []; //Es un array donde se guardan todos los dates de appointments, en formato string YYYY-MM-DD porq es lo q usa el calendar
+    let filteredData : Appointment[] | undefined = undefined; //es un array donde se guardan tods los appointments los cuales su date coinciden con el día seleccionado en el calendario (targeDate)
+    let markedDates : string[] = []; //Es un array donde se guardan tods los dates de appointments, en formato string YYYY-MM-DD porq es lo q usa el calendar
     if(appointments){
         filteredData = appointments.filter(item => {
             return item.date.toString().slice(0,10) === targetDate;
