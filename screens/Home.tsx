@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {View, Text, Image, ScrollView, TouchableOpacity, ActivityIndicator} from 'react-native';
 import {
-    getAppointments,
+    getAppointments, getDependentUsers,
     getRecommendations,
     getUserSession
 } from "../lib/supabase";
@@ -32,21 +32,26 @@ const Home: React.FC = ({ navigation, route }: any) => {
     const { t } = useTranslation();
 
     useEffect(() => {
-        if (session) {
-            async function fetchData() {
-                try {
-                    const user = await getUserSession(session.user.id);
-                    setFirstName(user.first_name);
-                    setUserId(user.id);
-                    const fetchedAppointments = await getAppointments();
-                    setAppointments(fetchedAppointments);
-                } catch (error) {
-                    console.error('Error fetching data:', error);
+        if(session){
+            setIsLoading(true);
+            navigation.addListener('focus', () => {
+                async function fetchData() {
+                    try {
+                        const user = await getUserSession(session.user.id);
+                        setFirstName(user.first_name);
+                        setUserId(user.id);
+                        const fetchedAppointments = await getAppointments();
+                        setAppointments(fetchedAppointments);
+                    } catch (error) {
+                        console.error('Error fetching data:', error);
+                    }
                 }
-            }
-            fetchData();
+                fetchData()
+                setIsLoading(false);
+            });
         }
-    }, [session]);
+
+    }, [navigation, session]);
 
 
     useEffect(() => {

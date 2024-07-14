@@ -529,9 +529,9 @@ export const getUserIdByEmail = async (email_input: string) : Promise<string | u
 //Obtiene la informacion necesaria para la publicidad
 export const getAdvertisement = async(banner_type: string) : Promise<Advertisement | undefined> =>{
     const{data,error} = await supabase.rpc('get_advertisement',{banner_input: banner_type})
-
     if(!error){
-        return data;
+        let advertisement: Advertisement = {client: data.id,logo:data.logo,mail:data.mail,name:data.name,image_url:data.image_url}
+        return advertisement;
     }
     console.error(error)
     return undefined;
@@ -548,3 +548,15 @@ export const getRecommendations = async (user_id: string): Promise<Recommendatio
     return data
 }
 
+//Obtiene el doctor relacionado de un cliente
+
+export const getClientDoctor= async(client_id:string): Promise<Doctor | undefined> => {
+    const {data, error} = await supabase.rpc('get_client_doctor', {client_input: client_id});
+    if(!error) {
+        let doc: Doctor= {id:'',name:data.name,email:data.mail,addresses:data.addresses,phone:data.phone,
+            specialty:data.specialty,user_id:''};
+        return doc;
+    }
+    console.log(error);
+    return undefined;
+}

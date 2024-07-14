@@ -20,7 +20,7 @@ const DependentUsers: React.FC = ({navigation, route} : any) => {
     useEffect(() => {
         navigation.addListener('focus', () => {
             async function fetchData() {
-                setDependentUsers(await getDependentUsers(session.id))
+                setDependentUsers(await getDependentUsers())
                 setIsLoading(false)
             }  
             fetchData()
