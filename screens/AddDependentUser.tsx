@@ -73,8 +73,7 @@ const AddDependentUser:React.FC<AddDependentUserProps> = ({navigation, route} : 
         let {result, msg} = validateTextLength(value, dniLength);
         if (value === '') {
             setDNIErrorMessage(t('warn18'));
-        }
-        if (containsLetterOrSymbol) {
+        } else if (containsLetterOrSymbol) {
             setDNIErrorMessage(t('warn3'));
         } else if (!result) {
             setDNIErrorMessage(msg);
