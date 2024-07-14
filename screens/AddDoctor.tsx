@@ -15,6 +15,7 @@ import {Picker} from "@react-native-picker/picker";
 import { Specialty } from '../lib/types';
 import ScrollableBg from "../components/ScrollableBg";
 import {styles} from "../assets/styles";
+import { validateTextLength } from '../lib/ourlibrary';
 // @ts-ignore
 type AddDoctorProps = NativeStackScreenProps<RootStackParamList, 'AddDoctor'>
 
@@ -34,7 +35,14 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}:any) => {
     const {t} = useTranslation();
     const [specialtyDialog, setSpecialtyDialog] = useState(false);
     const [userDialog, setUserDialog] = useState(false);
-
+    const [phoneErrorMessage, setPhoneErrorMessage] = useState<string>('');
+    const [mailErrorMessage, setMailErrorMessage] = useState<string>('');
+    const [addressErrorMessage, setAddressErrorMessage] = useState<string>('');
+    const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(true);
+    const nameLength= 30;
+    const phoneLength= 10;
+    const emailLength= 30;
+    const addressLength= 30;
 
     useEffect(() => {
         if (session){
@@ -54,12 +62,60 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}:any) => {
         }
     }, [session])
 
+    useEffect(() => {
+        if (
+            name.trim() !== '' &&
+            specialty.trim() !== '' &&
+            user_id.trim() !== '' &&
+            nameErrorMessage === '' &&
+            phoneErrorMessage === '' &&
+            mailErrorMessage === '' &&
+            addressErrorMessage === ''
+        ) {
+            setIsButtonDisabled(false);
+        } else {
+            setIsButtonDisabled(true);
+        }
+    }, [name, specialty, user_id]);
+
     const validateName = (value: string) => {
         if (value.trim() === '') {
             setNameErrorMessage(t('warn1'));
         } else {
             setNameErrorMessage('');
         }
+    };
+    const validateNameLength = (value: string) => {
+        let {result,msg}= validateTextLength(value,nameLength);
+        setNameErrorMessage(msg);
+    };
+    const validatePhone = (value: string) => {
+        const containsLetterOrSymbol = /([a-zA-Z!@#$%^&*()_+{}\[\]:;<>,.?\/\\|'"`~-])/.test(value);
+        if (containsLetterOrSymbol) {
+            setPhoneErrorMessage(t('warnPhone'));
+        } else {
+            setPhoneErrorMessage('');
+        }
+    };
+    const validatePhoneLength = (value: string) => {
+        let {result,msg}= validateTextLength(value,phoneLength);
+        setPhoneErrorMessage(msg);
+    };
+    const validateEmail = (value: string) => {
+        if (value.trim() === '' || !value.includes("@") || !(value.includes(".edu") || value.includes(".com") || value.includes(".ar"))) {
+            setMailErrorMessage(t('warn4'));
+        } else {
+            setMailErrorMessage('');
+        }
+    };
+    const validateEmailLength = (value: string) => {
+        let {result,msg}= validateTextLength(value,emailLength);
+        setMailErrorMessage(msg);
+    };
+
+    const validateAddressLength = (value: string) => {
+        let {result,msg}= validateTextLength(value,addressLength);
+        setAddressErrorMessage(msg);
     };
 
     const handleAddDoctor = async () => {
@@ -118,6 +174,7 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}:any) => {
                     onChangeText={(text) => {
                         setName(text);
                         validateName(text);
+                        validateNameLength(text);
                     }}
                     value={name}
                     placeholder={t('name')}
@@ -137,7 +194,11 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}:any) => {
                 <Input
                     label={t('phone')}
                     leftIcon={{type: 'font-awesome', name: 'phone'}}
-                    onChangeText={(text) => setPhone(text)}
+                    onChangeText={(text) => {
+                        setPhone(text)
+                        validatePhone(text);
+                        validatePhoneLength(text);
+                    }}
                     value={phone}
                     placeholder={t('phone')}
                     autoCapitalize={'none'}
@@ -145,12 +206,18 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}:any) => {
                     placeholderTextColor={"#807d7d"}
                     inputContainerStyle={[{paddingLeft: 10}, styles.input]}
                     inputStyle={{color: '#000', fontSize: 14, marginLeft: 10}}
+                    errorStyle={{color: 'red'}}
+                    errorMessage={phoneErrorMessage}
                 />
 
                 <Input
                     label={t('email')}
                     leftIcon={{type: 'font-awesome', name: 'envelope'}}
-                    onChangeText={(text) => setEmail(text)}
+                    onChangeText={(text) => {
+                        setEmail(text);
+                        validateEmail(text);
+                        validateEmailLength(text);
+                    }}
                     value={email}
                     placeholder="Mail"
                     autoCapitalize={'none'}
@@ -158,13 +225,18 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}:any) => {
                     placeholderTextColor={"#807d7d"}
                     inputContainerStyle={[{paddingLeft: 10}, styles.input]}
                     inputStyle={{color: '#000', fontSize: 14, marginLeft: 10}}
+                    errorStyle={{color: 'red'}}
+                    errorMessage={mailErrorMessage}
                 />
 
 
                 <Input
                     label={t('address')}
                     leftIcon={{type: 'font-awesome', name: 'map-marker'}}
-                    onChangeText={(text) => setAddresses([text])}
+                    onChangeText={(text) => {
+                        setAddresses([text]);
+                        validateAddressLength(text);
+                    }}
                     value={addresses[0] || ''}
                     placeholder={t('address')}
                     autoCapitalize={'none'}
@@ -172,6 +244,8 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}:any) => {
                     placeholderTextColor={"#807d7d"}
                     inputContainerStyle={[{paddingLeft: 10}, styles.input]}
                     inputStyle={{color: '#000', fontSize: 14, marginLeft: 10}}
+                    errorStyle={{color: 'red'}}
+                    errorMessage={addressErrorMessage}
                 />
 
                 <PaperText style={[styles.label2, {paddingLeft: 14}]}>{t("user")}</PaperText>
@@ -198,6 +272,7 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}:any) => {
                         alignContent: 'center'
                     }}
                     titleStyle={{color: '#fff'}}
+                    disabled={isButtonDisabled}
                     onPress={handleAddDoctor}
                 />
             </ScrollableBg>

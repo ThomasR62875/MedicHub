@@ -159,6 +159,7 @@
   "selectATime": "Select a time",
   "addnewmed" : "Add new medication",
   "enterDataForShare": "Enter the data to move this user and their information to a new account.",
-  "warn21": "Text is too long."
+  "warn21": "Text is too long.",
+  "warnPhone": "Must enter a valid phone number. Ex: 11 2222 3333."
 }
 
