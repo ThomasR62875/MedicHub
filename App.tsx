@@ -1,4 +1,4 @@
-import {useState, useEffect, useRef} from 'react'
+import {useState, useEffect} from 'react'
 import {supabase} from './lib/supabase'
 import {Session} from '@supabase/supabase-js'
 import React from 'react';
@@ -46,7 +46,7 @@ export type RootStackParamList = {
     Appointments: { session: Session | null };
     EditAccount: { session: Session | null };
     AddAppointment: { session: Session | null };
-    AddDoctor: { session: Session | null };
+    AddDoctor: { session: Session | null, base_doctor: Doctor | null };
     Doctors: { session: Session | null };
     DependentUsers: { session: Session | null };
     AddDependentUser: { session: Session | null };
@@ -77,23 +77,23 @@ AppRegistry.registerComponent('main', () => App);
 const Tab = createBottomTabNavigator();
 
 type HomeTabsRouteProp = RouteProp<RootStackParamList, 'HomeTabs'>;
-type HomeTabsNavigationProp= StackNavigationProp<RootStackParamList, 'HomeTabs'>;
+type HomeTabsNavigationProp = StackNavigationProp<RootStackParamList, 'HomeTabs'>;
 
 type Props = {
-  route: HomeTabsRouteProp;
-  navigation: HomeTabsNavigationProp
+    route: HomeTabsRouteProp;
+    navigation: HomeTabsNavigationProp
 };
 
 function HomeTabs({route}: Props) {
-  const {session} = route.params;
-  const {t} = useTranslation();
+    const {session} = route.params;
+    const {t} = useTranslation();
 
-  //para saber q tab esta seleccionada
-  const [selectedTab] = useState<number | null>(0);
-  useEffect(() => {
-    if (selectedTab !== null) {
-    }
-  }, [selectedTab]);
+    //para saber q tab esta seleccionada
+    const [selectedTab] = useState<number | null>(0);
+    useEffect(() => {
+        if (selectedTab !== null) {
+        }
+    }, [selectedTab]);
 
     return (
         <Tab.Navigator screenOptions={{
@@ -160,118 +160,112 @@ function HomeTabs({route}: Props) {
 }
 
 const App = () => {
-  const [session, setSession] = useState<Session | null>(null)
-  const Stack = createNativeStackNavigator<RootStackParamList>();
+    const [session, setSession] = useState<Session | null>(null)
+    const Stack = createNativeStackNavigator<RootStackParamList>();
 
-  useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session)
-    })
-    supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session)
-    })
-  }, []);
+    useEffect(() => {
+        supabase.auth.getSession().then(({data: {session}}) => {
+            setSession(session)
+        })
+        supabase.auth.onAuthStateChange((_event, session) => {
+            setSession(session)
+        })
+    }, []);
 
-  return (
-      <Provider>
-          <StatusBar barStyle="dark-content" backgroundColor="transparent" />
-          <NavigationContainer>
-            <Stack.Navigator>
-              {!session ? (
-                  <>
-                    <Stack.Screen name="Login"
-                                  component={LoginScreen}
-                                  initialParams={{session: session}}
-                                  options={{ headerShown: false }}
-                    />
-                    <Stack.Screen name="Register"
-                                  component={Register}
-                                  options={{
-                                    title: '',headerShown: false
-                                    }}/>
-                  </>
-              ) : (
-                  <>
-                    <Stack.Screen name="HomeTabs"
-                                  component={HomeTabs}
-                                  initialParams={{session: session}}
-                                  options={{ headerShown: false}}/>
-                    <Stack.Screen name="AlertPublicity"
-                                component={AlertPublicity}
-                                initialParams={{session: session, msg: 'successful addition', screen: 'Home'}}
-                                options={{
-                                    title: '',
-                                    headerStyle: {
-                                        backgroundColor: '#2E5829',
-                                    },
-                                    headerTintColor: '#2E5829',
-                                }}/>
-                    <Stack.Screen name="AddAppointment"
-                                  component={AddAppointment}
-                                  initialParams={{session: session}}
-                                  options={{ headerShown: false }}/>
-                      <Stack.Screen name="SingleAppointment"
-                                    component={SingleAppointment}
-                                    initialParams={{session: session}}
-                                    options={{ headerShown: false }}/>
-                      <Stack.Screen name="EditAppointment"
-                                    component={EditAppointment}
-                                    initialParams={{session: session}}
-                                    options={{ headerShown: false }}/>
+    return (
+        <Provider>
+            <StatusBar barStyle="dark-content" backgroundColor="transparent"/>
+            <NavigationContainer>
+                <Stack.Navigator>
+                    {!session ? (
+                        <>
+                            <Stack.Screen name="Login"
+                                          component={LoginScreen}
+                                          initialParams={{session: session}}
+                                          options={{headerShown: false}}
+                            />
+                            <Stack.Screen name="Register"
+                                          component={Register}
+                                          options={{
+                                              title: '', headerShown: false
+                                          }}/>
+                        </>
+                    ) : (
+                        <>
+                            <Stack.Screen name="HomeTabs"
+                                          component={HomeTabs}
+                                          initialParams={{session: session}}
+                                          options={{headerShown: false}}/>
+                            <Stack.Screen name="AlertPublicity"
+                                          component={AlertPublicity}
+                                          initialParams={{session: session, msg: 'successful addition', screen: 'Home'}}
+                                          options={{headerShown: false}}/>
+                            <Stack.Screen name="AddAppointment"
+                                          component={AddAppointment}
+                                          initialParams={{session: session}}
+                                          options={{headerShown: false}}/>
+                            <Stack.Screen name="SingleAppointment"
+                                          component={SingleAppointment}
+                                          initialParams={{session: session}}
+                                          options={{headerShown: false}}/>
+                            <Stack.Screen name="EditAppointment"
+                                          component={EditAppointment}
+                                          initialParams={{session: session}}
+                                          options={{headerShown: false}}/>
 
-                      <Stack.Screen name="AddDoctor"
-                                  component={AddDoctor}
-                                  initialParams={{session: session}}
-                                  options={{ headerShown: false }}/>
-                      <Stack.Screen name="SingleDoctor"
-                                    component={SingleDoctor}
-                                    initialParams={{session: session}}
-                                    options={{ headerShown: false }}/>
-                      <Stack.Screen name="EditDoctor"
-                                    component={EditDoctor}
-                                    initialParams={{session: session}}
-                                    options={{ headerShown: false }}/>
-                    <Stack.Screen name="AddDependentUser"
-                                  component={AddDependentUser}
-                                  initialParams={{session: session}}
-                                  options={{ headerShown: false }}/>
-                      <Stack.Screen name="SingleDependentUser"
-                                    component={SingleDependentUser}
-                                    initialParams={{session: session}}
-                                    options={{ headerShown: false }}/>
-                      <Stack.Screen name="EditDependentUser"
-                                    component={EditDependentUser}
-                                    initialParams={{session: session}}
-                                    options={{ headerShown: false }}/>
-                    <Stack.Screen name="AddMedication"
-                                  component={AddMedication}
-                                  initialParams={{session: session}}
-                                  options={{ headerShown: false }}/>
-                      <Stack.Screen name="SingleMedication"
-                                    component={SingleMedication}
-                                    initialParams={{session: session}}
-                                    options={{ headerShown: false }}/>
-                      <Stack.Screen name="EditMedication"
-                                    component={EditMedication}
-                                    initialParams={{session: session}}
-                                    options={{ headerShown: false }}/>
-                     <Stack.Screen name="Doctors"
-                                   component={Doctors} initialParams={{session: session}}
-                                   options={{ headerShown: false }}/>
-                    <Stack.Screen name="EditAccount"
-                                    component={EditAccount}
-                                    initialParams={{session: session}}
-                                  options={{ headerShown: false }}/>
-                      <Stack.Screen name="Medications"
-                                    component={Medications}
-                                    initialParams={{session: session}}
-                                    options={{ headerShown: false }}/>
-                  </>
-              )}
-            </Stack.Navigator>
-          </NavigationContainer>
-      </Provider>
-  );
+                            <Stack.Screen name="AddDoctor"
+                                          component={AddDoctor}
+                                          initialParams={{session: session}}
+                                          options={{headerShown: false}}/>
+                            <Stack.Screen name="SingleDoctor"
+                                          component={SingleDoctor}
+                                          initialParams={{session: session}}
+                                          options={{headerShown: false}}/>
+                            <Stack.Screen name="EditDoctor"
+                                          component={EditDoctor}
+                                          initialParams={{session: session}}
+                                          options={{headerShown: false}}/>
+                            <Stack.Screen name="AddDependentUser"
+                                          component={AddDependentUser}
+                                          initialParams={{session: session}}
+                                          options={{headerShown: false}}/>
+                            <Stack.Screen name="SingleDependentUser"
+                                          component={SingleDependentUser}
+                                          initialParams={{session: session}}
+                                          options={{headerShown: false}}/>
+                            <Stack.Screen name="EditDependentUser"
+                                          component={EditDependentUser}
+                                          initialParams={{session: session}}
+                                          options={{headerShown: false}}/>
+                            <Stack.Screen name="AddMedication"
+                                          component={AddMedication}
+                                          initialParams={{session: session}}
+                                          options={{headerShown: false}}/>
+                            <Stack.Screen name="SingleMedication"
+                                          component={SingleMedication}
+                                          initialParams={{session: session}}
+                                          options={{headerShown: false}}/>
+                            <Stack.Screen name="EditMedication"
+                                          component={EditMedication}
+                                          initialParams={{session: session}}
+                                          options={{headerShown: false}}/>
+                            <Stack.Screen name="Doctors"
+                                          component={Doctors} initialParams={{session: session}}
+                                          options={{headerShown: false}}/>
+                            <Stack.Screen name="EditAccount"
+                                          component={EditAccount}
+                                          initialParams={{session: session}}
+                                          options={{headerShown: false}}/>
+                            <Stack.Screen name="Medications"
+                                          component={Medications}
+                                          initialParams={{session: session}}
+                                          options={{headerShown: false}}/>
+                        </>
+                    )}
+                </Stack.Navigator>
+            </NavigationContainer>
+        </Provider>
+    );
 }
 
 export default App;

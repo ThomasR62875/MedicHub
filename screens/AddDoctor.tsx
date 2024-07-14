@@ -3,7 +3,6 @@ import {
     View,
     Alert,
     Text,
-    Image
 } from 'react-native';
 import {addDoctor, getAllUsers, getSpecialties, getUserId} from "../lib/supabase";
 import {Button, Icon, Input} from "react-native-elements";
@@ -17,13 +16,12 @@ import { Specialty } from '../lib/types';
 import ScrollableBg from "../components/ScrollableBg";
 import {styles} from "../assets/styles";
 // @ts-ignore
-import Header from "../assets/header_blue.png";
 type AddDoctorProps = NativeStackScreenProps<RootStackParamList, 'AddDoctor'>
 
 
-const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}) => {
+const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}:any) => {
     const session = route.params.session;
-    const baseDoctor:Doctor = route.params.base_doctor;
+    const baseDoctor: Doctor = route.params.base_doctor;
     const [email, setEmail] = useState('')
     const [name, setName] = useState('')
     const [specialties, setSpecialties] = useState<Specialty[] | null>(null);
@@ -37,18 +35,6 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}) => {
     const [specialtyDialog, setSpecialtyDialog] = useState(false);
     const [userDialog, setUserDialog] = useState(false);
 
-    useEffect(() => {
-        if (
-            name.trim() !== '' &&
-            nameErrorMessage === ''
-        ) {
-            setIsButtonDisabled(false);
-        } else {
-            setIsButtonDisabled(true);
-        }
-    }, [name, specialty]);
-
-    const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(true);
 
     useEffect(() => {
         if (session){
@@ -198,7 +184,7 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}) => {
                 <Button
                     title={t('addoctor')}
                     buttonStyle={{
-                        backgroundColor: '#2E5829',
+                        backgroundColor: '#86abba',
                         borderWidth: 2,
                         borderColor: 'white',
                         borderRadius: 30,
@@ -212,7 +198,6 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}) => {
                         alignContent: 'center'
                     }}
                     titleStyle={{color: '#fff'}}
-                    disabled={isButtonDisabled}
                     onPress={handleAddDoctor}
                 />
             </ScrollableBg>
