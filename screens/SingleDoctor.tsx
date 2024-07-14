@@ -70,7 +70,7 @@ const SingleDoctor: React.FC<SingleDoctorProps> = ({navigation, route}: any) => 
                     <View style={styles.screen}>
                         <View style={{alignItems: 'center', width: 'auto'}}>
                             <Button
-                                title="Eliminar"
+                                title={t('delete')}
                                 buttonStyle={{
                                     backgroundColor: '#86ABBA',
                                     borderWidth: 2,
