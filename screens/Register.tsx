@@ -15,11 +15,13 @@ import {User} from '../lib/types';
 import {Button as PaperButton, Dialog, Text as PaperText} from "react-native-paper";
 import {Picker} from "@react-native-picker/picker";
 import DateTimePicker, {DateTimePickerEvent} from "@react-native-community/datetimepicker";
-import {getSexGenderName, sexGenderOptions} from "../lib/ourlibrary";
+import {getSexGenderName, sexGenderOptions, validateTextLength} from "../lib/ourlibrary";
 import {styles} from "../assets/styles";
 
 
 const Register: React.FC = ({navigation}: any) => {
+    const textLength= 30;
+    const dniLength= 8;
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [confirmed_password, setConfirmedPassword] = useState('')
@@ -61,31 +63,41 @@ const Register: React.FC = ({navigation}: any) => {
         }
     }, [firstName, lastName, dni, email, password, confirmed_password, date, sexGender, birthDateErrorMessage]);
 
-    const validateName = (value: string) => {
+    const validateFirstName = (value: string) => {
         if (value.trim() === '') {
             setNameErrorMessage(t('warn1'));
         } else {
-            setNameErrorMessage('');
+            let {result,msg}=validateTextLength(value,textLength);
+            setNameErrorMessage(msg);
         }
     };
     const validateLastName = (value: string) => {
         if (value.trim() === '') {
-            setLastNameErrorMessage(t('warn2'));
+            setLastNameErrorMessage(t('warn17'));
         } else {
-            setLastNameErrorMessage('');
+            let {result,msg}= validateTextLength(value,textLength);
+            setLastNameErrorMessage(msg);
         }
     };
     const validateDNI = (value: string) => {
-        const containsLetterOrSymbol = /[a-zA-Z!@#$%^&*()_+{}\[\]:;<>,.?\/\\|'"`~-]/.test(value);
-        if (containsLetterOrSymbol) {
+        const containsLetterOrSymbol = /([a-zA-Z!@#$%^&*()_+{}\[\]:;<>,.?\/\\|'"`~-])/.test(value);
+        let {result, msg} = validateTextLength(value, dniLength);
+        if (value === '') {
+            setDNIErrorMessage(t('warn18'));
+        } else if (containsLetterOrSymbol) {
             setDNIErrorMessage(t('warn3'));
+        } else if (!result) {
+            setDNIErrorMessage(msg);
         } else {
             setDNIErrorMessage('');
         }
     };
     const validateEmail = (value: string) => {
+        let {result,msg}= validateTextLength(value,textLength);
         if (value.trim() === '' || !value.includes("@") || !(value.includes(".edu") || value.includes(".com") || value.includes(".ar"))) {
             setMailErrorMessage(t('warn4'));
+        } else if (!result) {
+            setMailErrorMessage(msg);
         } else {
             setMailErrorMessage('');
         }
@@ -193,7 +205,7 @@ const Register: React.FC = ({navigation}: any) => {
                     leftIcon={<Icon type="font-awesome" name="user" color={styles.colorIcon.color} iconStyle={{fontSize: 20, paddingLeft: 10}} />}
                     onChangeText={(text) => {
                         setFirstName(text);
-                        validateName(text)
+                        validateFirstName(text)
                     }}
                     value={firstName}
                     placeholder={t('name')}

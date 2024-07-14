@@ -9,7 +9,7 @@ import {Button as PaperButton, Dialog, Portal, Text as PaperText} from "react-na
 import {Picker} from "@react-native-picker/picker";
 import ScrollableBg from '../components/ScrollableBg';
 import DateTimePicker, {DateTimePickerEvent} from "@react-native-community/datetimepicker";
-import {getSexGenderName, sexGenderOptions} from "../lib/ourlibrary";
+import {getSexGenderName, sexGenderOptions, validateTextLength} from "../lib/ourlibrary";
 import {styles} from "../assets/styles";
 
 
@@ -18,6 +18,8 @@ type EditAccountProps = NativeStackScreenProps<RootStackParamList, 'EditAccount'
 
 const EditAccount: React.FC<EditAccountProps> = ({navigation, route}: any) => {
     const {session} = route.params;
+    const textLength= 30;
+    const dniLength= 8;
     const [id, setId] = useState('');
     const [first_name, setFirstName] = useState('');
     const [last_name, setLastName] = useState('');
@@ -90,21 +92,29 @@ const EditAccount: React.FC<EditAccountProps> = ({navigation, route}: any) => {
 
     const validateFirstName = (value: string) => {
         if (value.trim() === '') {
-            setFirstNameErrorMessage(t('warn16'));
+            setFirstNameErrorMessage(t('warn1'));
         } else {
-            setFirstNameErrorMessage('');
+            let {result,msg}=validateTextLength(value,textLength);
+            setFirstNameErrorMessage(msg);
         }
     };
     const validateLastName = (value: string) => {
         if (value.trim() === '') {
             setLastNameErrorMessage(t('warn17'));
         } else {
-            setLastNameErrorMessage('');
+            let {result,msg}= validateTextLength(value,textLength);
+            setLastNameErrorMessage(msg);
         }
     };
     const validateDNI = (value: string) => {
-        if (value.trim() === '') {
+        const containsLetterOrSymbol = /([a-zA-Z!@#$%^&*()_+{}\[\]:;<>,.?\/\\|'"`~-])/.test(value);
+        let {result, msg} = validateTextLength(value, dniLength);
+        if (value === '') {
             setDniErrorMessage(t('warn18'));
+        } else if (containsLetterOrSymbol) {
+            setDniErrorMessage(t('warn3'));
+        } else if (!result) {
+            setDniErrorMessage(msg);
         } else {
             setDniErrorMessage('');
         }

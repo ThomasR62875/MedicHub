@@ -17,6 +17,7 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import {Picker} from "@react-native-picker/picker";
 import {styles} from "../assets/styles";
 import ScrollableBg from "../components/ScrollableBg";
+import {validateTextLength} from "../lib/ourlibrary";
 
 type EditAppointmentProps = NativeStackScreenProps<RootStackParamList, 'EditAppointment'>;
 
@@ -38,8 +39,10 @@ const EditAppointment: React.FC<EditAppointmentProps> = ({navigation, route}: an
     const [userDialog, setUserDialog] = useState(false);
     const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(true);
     const [descriptionErrorMessage, setDescriptionErrorMessage] = useState('');
+    const [observationsErrorMessage, setObservationsErrorMessage] = useState('');
+    const descriptionLength= 30;
+    const observationsLength= 100;
     const {t} = useTranslation();
-    const [hasErorrs, setHasErrors] = useState(false)
 
     useEffect(() => {
         if (session) {
@@ -64,13 +67,16 @@ const EditAppointment: React.FC<EditAppointmentProps> = ({navigation, route}: an
     const validateDescription = (value: string) => {
         if (value.trim() === '') {
             setDescriptionErrorMessage(t('text7'));
-            setHasErrors(true);
         } else {
-            setDescriptionErrorMessage('');
-            setHasErrors(true);
-
+            let {result,msg}= validateTextLength(value,descriptionLength);
+            setDescriptionErrorMessage(msg);
         }
     };
+
+    const validateObservations = (value:string) =>{
+        let {result,msg}= validateTextLength(value,observationsLength);
+        setObservationsErrorMessage(msg);
+    }
 
     useEffect(() => {
         if (session) {
@@ -226,8 +232,11 @@ const EditAppointment: React.FC<EditAppointmentProps> = ({navigation, route}: an
                     inputStyle={{color: '#000', fontSize: 14, marginLeft: 10}}
                     onChangeText={(text) => {
                         setObservations(text);
+                        validateObservations(text);
                     }}
                     autoCapitalize={'none'}
+                    errorStyle={{color: 'red'}}
+                    errorMessage={observationsErrorMessage}
                 />
                 <PaperText style={[styles.label2, {paddingLeft: 14}]}>{t('dateTime')}</PaperText>
                 <View style={styles.datePickerContainer}>
