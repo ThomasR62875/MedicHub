@@ -42,7 +42,7 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}:any) => {
     const nameLength= 30;
     const phoneLength= 10;
     const emailLength= 30;
-    const addressLength= 30;
+    const addressLength= 50;
 
     useEffect(() => {
         if (session){
