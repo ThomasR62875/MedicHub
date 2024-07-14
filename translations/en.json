@@ -155,7 +155,7 @@
   "warnEnterPrescr": "You must enter the prescription.",
   "text27": "No appointments in the near future",
   "selectDate": "Select a date",
-  "selectTime": "Select a time",
+  "selectTime": "Select how often",
   "addnewmed" : "Add new medication"
 
 }

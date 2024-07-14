@@ -327,7 +327,7 @@ const EditMedication: React.FC<EditMedicationProps> = ({navigation, route}: any)
                 </View>
                 <View style={{marginBottom: "5%", marginTop: "5%", marginLeft: '4%'}}>
                     <RNText style={styles.label2}>
-                        {t('text20')}
+                        {t('selectTime')}
                     </RNText>
                     <Picker
                         mode="dropdown"
