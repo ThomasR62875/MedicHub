@@ -184,7 +184,7 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}:any) => {
                              style={[styles.input, {padding: 5, marginHorizontal: '3.5%', marginBottom: '5%'}]}
                              textColor='#000' labelStyle={{textAlign: 'left', display: 'flex'}}
                              contentStyle={{justifyContent: 'flex-start'}} onPress={() => setSpecialtyDialog(true)}>
-                    {t(specialty)}
+                    {specialty ? t(specialty) : t('specialty')}
                 </PaperButton>
 
                 <Input
@@ -289,7 +289,7 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}:any) => {
                         mode='dropdown'
                         selectedValue={specialty}
                         onValueChange={(value: string) => setSpecialty(value)}
-                        placeholder='user'
+                        placeholder={t('user')}
                         enabled={true}
                         itemStyle={styles.pickerStyle}
                     >
