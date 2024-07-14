@@ -112,7 +112,7 @@ const Account: React.FC = ({ navigation, route } : any) => {
                     <Text style={styles.title}>{t('birthdate')}:</Text>
                     <Text style={styles.text2}>{date ? date.toISOString().split('T')[0] : ' '}</Text>
                     <Text style={styles.title}>{t('sex')}:</Text>
-                    <Text style={styles.text2}>{t(sexGender)}</Text>
+                    <Text style={styles.text2}>{sexGender? t(sexGender) : ''}</Text>
                 </View>
                 <View style={{alignItems: 'center', width: 'auto', alignSelf: 'center'}}>
                     <Button

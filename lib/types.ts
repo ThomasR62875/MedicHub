@@ -36,6 +36,7 @@ export type Medication = {
     untilWhen : Date | null;
     howOften : Date | null;
     isForever : boolean;
+    user_id: string;
 }
 
 export type Doctor = {
@@ -94,6 +95,6 @@ export type SexGenderOption = {
 }
 
 export interface BannerProps extends ModalBaseProps{
-    advertisement: Advertisement | undefined;
-    onPress: (doc:(Doctor))=>void;
+    advertisement: Advertisement;
+    onPress: (doc: Doctor | undefined)=>void;
 }

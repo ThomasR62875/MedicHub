@@ -28,10 +28,10 @@ export const supabase = createClient(REACT_APP_SUPABASE_URL, REACT_APP_ANON_KEY,
 
 
 //Devuelve usuario por id
-export const getUser = async (session_user_id:String) : Promise<DependentUser> => {
+export const getUser = async (session_user_id: String) : Promise<DependentUser> => {
     const { data, error } = await supabase.rpc('get_user', { user_id: session_user_id });
     if (error) {
-        console.error('Error inserting users data:', error.message);
+        console.error('Error returning users data:', error.message);
     }
     return data
 }
@@ -129,7 +129,7 @@ export const addMedication = async (medication: Medication): Promise<{ success: 
             since_input: medication.sinceWhen,
             until_input: medication.untilWhen,
             how_often_input: medication.howOften,
-            is_forever_input: medication.isForever
+            is_forever_input: medication.isForever,
         });
     if (error) {
         console.error('Error inserting data:', error.message);
@@ -478,7 +478,8 @@ export const updateMedication = async (medication: Medication): Promise<{ succes
             since_input: medication.sinceWhen,
             until_input: medication.untilWhen,
             how_often_input: medication.howOften,
-            is_forever_input: medication.isForever
+            is_forever_input: medication.isForever,
+            user_id_input: medication.user_id
         });
     if (error) {
         return {
@@ -486,6 +487,8 @@ export const updateMedication = async (medication: Medication): Promise<{ succes
             message: 'Error updating medication data',
         }
     } else {
+        console.log('update successful')
+
         return {
             success: true,
             message: 'Medication updated successfully',
@@ -516,7 +519,8 @@ export async function getMedications(): Promise<Medication[] | undefined> {
             sinceWhen: medication.sinceWhen,
             untilWhen: medication.untilWhen,
             howOften: medication.howOften,
-            isForever: medication.isForever
+            isForever: medication.isForever,
+            user_id: user_id
         });
     });
     return to_return;
