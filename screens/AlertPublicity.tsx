@@ -5,7 +5,7 @@ import {RootStackParamList} from "../App";
 import {useTranslation} from "react-i18next";
 import { getAdvertisement } from "../lib/supabase";
 import {Button} from "react-native-elements";
-import { Advertisement, Doctor } from '../lib/types';
+import { Advertisement } from '../lib/types';
 import { BigBanner } from '../components/BigBanner';
 type AlertPublicityProps = NativeStackScreenProps<RootStackParamList, 'AlertPublicity'>
 
@@ -41,7 +41,7 @@ const AlertPublicity: React.FC<AlertPublicityProps> = ({navigation, route} ) => 
             <View style={ownStyles.titleContainer}>
                 <Text style={ownStyles.titleText}>{t(msg)}</Text>
             </View>
-            <BigBanner advertisement={advertisement} visible={publicity} onPress={(doc:Doctor)=>navigation.navigate({name:'AddDoctor',params:{base_doctor:doc}})}/>
+            <BigBanner advertisement={advertisement} visible={publicity} onPress={() => navigation.navigate('AddDoctor', {session: session, base_doctor: doc})}/> //TODO: necesitamos que cuando se presione el banner se redirija a la pantalla de AddDoctor pero con la informacion del doctro de al publicidad
             <View style={{alignItems: 'center', marginTop:0}}>
                 <Button
                     title={t('ok')}
@@ -78,6 +78,7 @@ const ownStyles = StyleSheet.create({
         fontWeight: 'bold',
         alignSelf: 'center',
         marginBottom: '15%',
+        marginHorizontal: '15%',
     },
     titleText: {
         fontSize: 25,
