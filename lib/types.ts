@@ -36,6 +36,7 @@ export type Medication = {
     untilWhen : Date | null;
     howOften : Date | null;
     isForever : boolean;
+    user_id: string;
 }
 
 export type Doctor = {
@@ -90,8 +91,7 @@ export type UserData = {
 }
 
 export type SexGenderOption = {
-    sex_gender_name: string;
-    value: string;
+    name: string;
 }
 
 export interface BannerProps extends ModalBaseProps{

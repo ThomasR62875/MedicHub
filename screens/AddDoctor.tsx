@@ -67,16 +67,16 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}:any) => {
             name.trim() !== '' &&
             specialty.trim() !== '' &&
             user_id.trim() !== '' &&
-            nameErrorMessage === '' &&
-            phoneErrorMessage === '' &&
-            mailErrorMessage === '' &&
-            addressErrorMessage === ''
+            nameErrorMessage == '' &&
+            phoneErrorMessage == '' &&
+            mailErrorMessage == '' &&
+            addressErrorMessage == ''
         ) {
             setIsButtonDisabled(false);
         } else {
             setIsButtonDisabled(true);
         }
-    }, [name, specialty, user_id,phone,addresses]);
+    }, [name, email ,specialty, user_id,phone,addresses]);
 
     const validateName = (value: string) => {
         let {result,msg}= validateTextLength(value,nameLength);
@@ -239,12 +239,12 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}:any) => {
                     errorStyle={{color: 'red'}}
                     errorMessage={addressErrorMessage}
                 />
-                <PaperText style={[styles.label2, {paddingLeft: 14}]}>{t("user")}</PaperText>
+                <PaperText style={[styles.label2, {paddingLeft: 14}]}>{t('user')}</PaperText>
                 <PaperButton mode="outlined"
-                             style={[styles.input, {padding: 5, marginHorizontal: '3.5%', marginBottom: '5%'}]}
-                             textColor='#000' labelStyle={{textAlign: 'left', display: 'flex'}}
-                             contentStyle={{justifyContent: 'flex-start'}} onPress={() => setUserDialog(true)}>
-                    {getUserName(user_id)}
+                    style={[styles.input, {padding: 5, marginHorizontal: '3.5%', marginBottom: '5%'}]}
+                    textColor='#000' labelStyle={{textAlign: 'left', display: 'flex'}}
+                    contentStyle={{justifyContent: 'flex-start'}} onPress={() => setUserDialog(true)}>
+                    {t('user')}
                 </PaperButton>
                 <Button
                     title={t('addoctor')}
@@ -284,12 +284,12 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}:any) => {
                     </Picker>
                 </Dialog>
                 <Dialog style={styles.dialog} visible={specialtyDialog} onDismiss={hideSpecialtyDialog}>
-                    <Text style={styles.dialogTitle}>{t("selSpec")}</Text>
+                    <Text style={styles.dialogTitle}>{t('selSpec')}</Text>
                     <Picker
                         mode='dropdown'
                         selectedValue={specialty}
                         onValueChange={(value: string) => setSpecialty(value)}
-                        placeholder='Usuario'
+                        placeholder='user'
                         enabled={true}
                         itemStyle={styles.pickerStyle}
                     >
