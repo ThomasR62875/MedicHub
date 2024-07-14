@@ -42,7 +42,7 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}:any) => {
     const nameLength= 30;
     const phoneLength= 10;
     const emailLength= 30;
-    const addressLength= 30;
+    const addressLength= 50;
 
     useEffect(() => {
         if (session){
@@ -76,7 +76,7 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}:any) => {
         } else {
             setIsButtonDisabled(true);
         }
-    }, [name, specialty, user_id]);
+    }, [name, specialty, user_id,phone,addresses]);
 
     const validateName = (value: string) => {
         let {result,msg}= validateTextLength(value,nameLength);
@@ -222,8 +222,6 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}:any) => {
                     errorStyle={{color: 'red'}}
                     errorMessage={mailErrorMessage}
                 />
-
-
                 <Input
                     label={t('address')}
                     leftIcon={{type: 'font-awesome', name: 'map-marker'}}
@@ -241,7 +239,6 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}:any) => {
                     errorStyle={{color: 'red'}}
                     errorMessage={addressErrorMessage}
                 />
-
                 <PaperText style={[styles.label2, {paddingLeft: 14}]}>{t("user")}</PaperText>
                 <PaperButton mode="outlined"
                              style={[styles.input, {padding: 5, marginHorizontal: '3.5%', marginBottom: '5%'}]}
@@ -260,7 +257,7 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}:any) => {
                     }}
                     containerStyle={{
                         width: 200,
-                        marginHorizontal: 50,
+                        marginHorizontal: '20%',
                         marginVertical: 10,
                         marginTop: 40,
                         alignContent: 'center'
@@ -269,6 +266,7 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}:any) => {
                     disabled={isButtonDisabled}
                     onPress={handleAddDoctor}
                 />
+                <View style={{paddingBottom: 40}}/>
             </ScrollableBg>
             <Portal>
                 <Dialog style={styles.dialog} visible={userDialog} onDismiss={hideUserDialog}>
