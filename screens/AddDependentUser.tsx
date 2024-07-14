@@ -257,9 +257,6 @@ const AddDependentUser:React.FC<AddDependentUserProps> = ({navigation, route} : 
                         )}
                     </View>
                 </View>
-
-
-
                 <Button
                     title={t('addnewu')}
                     buttonStyle={{
@@ -277,7 +274,6 @@ const AddDependentUser:React.FC<AddDependentUserProps> = ({navigation, route} : 
                         marginBottom: 100
                     }}
                     titleStyle={{color: '#eef9ed'}}
-                    disabled={isButtonDisabled}
                     onPress={handleAddDependentUser}
                 />
             </ScrollableBg>
@@ -305,14 +301,3 @@ const AddDependentUser:React.FC<AddDependentUserProps> = ({navigation, route} : 
 }
 
 export default AddDependentUser;
-
-/*
- <DateTimePicker testID="dateTimePicker"
-                                    value={date || undefined}
-                                    mode="date"
-                                    display="default"
-                                    onChange={(event, selectedDate) => {
-                                        handleDayPress(event, selectedDate);
-                                        validateBirthDate(selectedDate);
-                                    }}/>
- */

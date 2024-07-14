@@ -9,7 +9,7 @@ import {addDoctor, getAllUsers, getSpecialties, getUserId} from "../lib/supabase
 import {Button, Icon, Input} from "react-native-elements";
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
-import {DependentUser} from "../lib/types";
+import {DependentUser, Doctor} from "../lib/types";
 import {useTranslation} from "react-i18next";
 import {Button as PaperButton, Dialog, Portal, Text as PaperText} from "react-native-paper";
 import {Picker} from "@react-native-picker/picker";
@@ -23,6 +23,7 @@ type AddDoctorProps = NativeStackScreenProps<RootStackParamList, 'AddDoctor'>
 
 const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}) => {
     const session = route.params.session;
+    const baseDoctor:Doctor = route.params.base_doctor;
     const [email, setEmail] = useState('')
     const [name, setName] = useState('')
     const [specialties, setSpecialties] = useState<Specialty[] | null>(null);
@@ -57,6 +58,13 @@ const AddDoctor: React.FC<AddDoctorProps> = ({navigation, route}) => {
                 setAllUsers(await getAllUsers(await getUserId()))
             }
             fetchData()
+        }
+        if (baseDoctor){
+            setName(baseDoctor.name);
+            setEmail(baseDoctor.email);
+            setSpecialty(baseDoctor.specialty);
+            setAddresses([baseDoctor.addresses[0]]);
+            setPhone(baseDoctor.phone);
         }
     }, [session])
 

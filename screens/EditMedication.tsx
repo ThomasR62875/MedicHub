@@ -215,7 +215,7 @@ const EditMedication: React.FC<EditMedicationProps> = ({navigation, route}: any)
                     inputStyle={{color: '#000', fontSize: 14, marginLeft: 10}}
                     errorMessage={prescriptionErrorMessage}
                 />
-                <RNText style={[styles.label2, {marginLeft: '5%'}]}>
+                <RNText style={[styles.label2, {marginLeft: '4%'}]}>
                     {t('text22')}
                 </RNText>
                 <View style={styles.datePickerContainer}>
@@ -285,7 +285,47 @@ const EditMedication: React.FC<EditMedicationProps> = ({navigation, route}: any)
                         </>
                     )}
                 </View>
-                <View style={{marginBottom: "5%", marginTop: "5%"}}>
+                <RNText style={[styles.label2, {marginLeft: '4%'}]}>
+                    {t('text21')}
+                </RNText>
+                <View style={styles.datePickerContainer}>
+                    {Platform.OS === 'ios' ? (
+                        <>
+                            <DateTimePicker
+                                testID="datePicker"
+                                value={dateUntil}
+                                minimumDate={dateSince}
+                                mode="date"
+                                display="default"
+                                style={{backgroundColor: 'transparent'}}
+                                onChange={onChange2}
+                            />
+                        </>
+                    ) : (
+                        <>
+                            <PaperButton mode="outlined" style={[styles.input, {
+                                padding: 5,
+                                marginHorizontal: '3.5%',
+                                marginBottom: '5%'
+                            }]} textColor='#000' labelStyle={{textAlign: 'left', display: 'flex'}}
+                                         contentStyle={{justifyContent: 'flex-start'}}
+                                         onPress={() => setShowDatePickerUntil(true)}>
+                                {getDateUntil()}
+                            </PaperButton>
+                            {showDatePickerUntil && (
+                                <DateTimePicker
+                                    testID="datePicker"
+                                    value={dateUntil}
+                                    minimumDate={dateSince}
+                                    mode="date"
+                                    display="default"
+                                    onChange={onChange2}
+                                />
+                            )}
+                        </>
+                    )}
+                </View>
+                <View style={{marginBottom: "5%", marginTop: "5%", marginLeft: '4%'}}>
                     <RNText style={styles.label2}>
                         {t('text20')}
                     </RNText>
@@ -299,46 +339,6 @@ const EditMedication: React.FC<EditMedicationProps> = ({navigation, route}: any)
                     </Picker>
                 </View>
                 <View>
-                    <RNText style={[styles.label2, {marginLeft: '5%'}]}>
-                        {t('text21')}
-                    </RNText>
-                    <View style={styles.datePickerContainer}>
-                        {Platform.OS === 'ios' ? (
-                            <>
-                                <DateTimePicker
-                                    testID="datePicker"
-                                    value={dateUntil}
-                                    minimumDate={dateSince}
-                                    mode="date"
-                                    display="default"
-                                    style={{backgroundColor: 'transparent'}}
-                                    onChange={onChange2}
-                                />
-                            </>
-                        ) : (
-                            <>
-                                <PaperButton mode="outlined" style={[styles.input, {
-                                    padding: 5,
-                                    marginHorizontal: '3.5%',
-                                    marginBottom: '5%'
-                                }]} textColor='#000' labelStyle={{textAlign: 'left', display: 'flex'}}
-                                             contentStyle={{justifyContent: 'flex-start'}}
-                                             onPress={() => setShowDatePickerUntil(true)}>
-                                    {getDateUntil()}
-                                </PaperButton>
-                                {showDatePickerUntil && (
-                                    <DateTimePicker
-                                        testID="datePicker"
-                                        value={dateUntil}
-                                        minimumDate={dateSince}
-                                        mode="date"
-                                        display="default"
-                                        onChange={onChange2}
-                                    />
-                                )}
-                            </>
-                        )}
-                    </View>
                     <View style={[cardStyle.infoRow, {marginTop: "5%", justifyContent: 'center'}]}>
                         <RNText style={styles.label2}>
                             {t('text26')}

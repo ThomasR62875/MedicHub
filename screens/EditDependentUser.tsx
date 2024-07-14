@@ -39,24 +39,6 @@ const EditDependentUser: React.FC<EditDependentUserProps> = ({navigation, route}
     };
 
     useEffect(() => {
-        if (
-            first_name.trim() !== '' &&
-            last_name.trim() !== '' &&
-            firstNameErrorMessage === '' &&
-            lastNameErrorMessage === '' &&
-            birthDateErrorMessage === '' &&
-            genderErrorMessage === ''
-        ) {
-            setIsButtonDisabled(false);
-        } else {
-            setIsButtonDisabled(true);
-        }
-    }, [first_name, last_name, dni, date, sexGender]);
-
-    const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(true);
-
-
-    useEffect(() => {
         if (session) getDU()
     }, [session])
 
@@ -280,7 +262,6 @@ const EditDependentUser: React.FC<EditDependentUserProps> = ({navigation, route}
                             alignContent: 'center'
                         }}
                         titleStyle={{ color: '#fff' }}
-                        disabled={isButtonDisabled}
                         onPress={handleUpdateDependentUser}
                     />
                 </View>

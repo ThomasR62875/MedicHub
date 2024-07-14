@@ -78,8 +78,6 @@ async function checkMedications() {
       if(shouldTakeMedication(medication, 60000)){
         try {
           await sendNotification(user_that_takes.first_name, medication.name, medication.prescription, parent_user_id, email);
-
-          // console.log('Notification sent for appointment:', appointment.id);
         } catch (notificationError) {
           console.error('Error sending notification:', notificationError);
         }
@@ -95,8 +93,6 @@ const getMedications = async () : Promise<Medication[] | undefined> => {
   const {data, error} = await supabase.rpc('get_all_medications')
   if (error) {
     console.error('Error getting notification appointments data:', error.message);
-  } else{
-    console.log('Notification medication data inserted successfully');
   }
 
   for (const medication of data)  {
@@ -115,8 +111,6 @@ const getMedications = async () : Promise<Medication[] | undefined> => {
 
   if (error) {
     console.error('Error inserting specialty data:', error.message);
-  } else {
-    // console.log('Specialty data inserted successfully');
   }
   return to_return
 }
@@ -127,8 +121,6 @@ const getUserRelation = async (user_id:string) : Promise<string | undefined> =>{
 
   if (error) {
     console.error('Error getting independent user id:', error.message);
-  } else {
-    // console.log('Independent user id retrieved successfully');
   }
 
   return data;
@@ -140,8 +132,6 @@ const getNotificationEmail = async (user_id:String) : Promise<string | undefined
 
   if (error) {
     console.error('Error getting users email:', error.message);
-  } else {
-    //console.log('User email retrieved successfully', data);
   }
 
   return data;
@@ -152,8 +142,6 @@ export const getUserByMedication = async (medication_id: string) : Promise<Depen
   const { data, error } = await supabase.rpc('get_user_by_medication', { medication_id: medication_id });
   if (error) {
     console.error('Error inserting users data:', error.message);
-  } else {
-    //console.log('Users data inserted successfully');
   }
   return data
 }

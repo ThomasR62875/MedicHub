@@ -124,16 +124,14 @@ const Home: React.FC = ({ navigation, route }: any) => {
                             <Icon name={'pill'} type={'material-community'} size={25} color={'#fff'}/>
                             <Text style={styles.buttonText}>{t('medication')}</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={[styles.buttons, {backgroundColor: '#DEB0BD'}]}
-                                          onPress={() => console.log('Vacunas')}>
+                        <TouchableOpacity style={[styles.buttons, {backgroundColor: '#DEB0BD'}]}>
                             <Icon name={'needle'} type={'material-community'} size={25} color={'#fff'}/>
                             <Text style={styles.buttonText}>{t('vaccines')}</Text>
                             <View style={styles.next_label}>
                                 <Text style={styles.text6}>{t('next')}</Text>
                             </View>
                         </TouchableOpacity>
-                        <TouchableOpacity style={[styles.buttons, {backgroundColor: '#86ABBA'}]}
-                                          onPress={() => console.log('Archivos')}>
+                        <TouchableOpacity style={[styles.buttons, {backgroundColor: '#86ABBA'}]}>
                             <Icon name={'archive'} type={'material-community'} size={25} color={'#fff'}/>
                             <Text style={styles.buttonText}>{t('files')}</Text>
                             <View style={styles.next_label}>
