@@ -1,6 +1,7 @@
 import React from 'react';
 import { TouchableOpacity, Text, StyleSheet, View } from 'react-native';
 import { Icon } from 'react-native-elements';
+import {styles} from "../assets/styles";
 
 interface MyCheckBoxProps {
     value: boolean;
@@ -33,37 +34,11 @@ const MyCheckBox: React.FC<MyCheckBoxProps> = ({ value, disabled = false, onValu
                 type="font-awesome"
                 name="check"
                 color={value ? '#86ABBA' : 'transparent'}
-                iconStyle={styles.icon}
+                iconStyle={styles.iconCheckBox}
             />
                 <Text style={styles.checkboxText} >{text}</Text>
         </TouchableOpacity>
     );
 };
-
-const styles = StyleSheet.create({
-    checkboxContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        padding: 10,
-        marginHorizontal: '3.5%',
-        marginBottom: '5%',
-        backgroundColor: '#ffffff',
-        borderBottomWidth: 4,
-        borderRadius: 15,
-        height: 50,
-        width: '90%',
-    },
-    icon: {
-        fontSize: 14,
-        marginRight: 10,
-        alignSelf: 'flex-start',
-    },
-    checkboxText: {
-    color: '#000',
-    fontSize: 14,
-    marginLeft: 10,
-    textAlign: 'center'
-    },
-});
 
 export default MyCheckBox;

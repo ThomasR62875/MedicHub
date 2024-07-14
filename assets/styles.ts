@@ -489,4 +489,27 @@ export const styles = StyleSheet.create({
         paddingHorizontal: 5,
         fontFamily: 'Roboto-Thin',
     },
+    checkboxContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        padding: 10,
+        marginHorizontal: '3.5%',
+        marginBottom: '5%',
+        backgroundColor: '#ffffff',
+        borderBottomWidth: 4,
+        borderRadius: 15,
+        height: 50,
+        width: '90%',
+    },
+    iconCheckBox: {
+        fontSize: 14,
+        marginRight: 10,
+        alignSelf: 'flex-start',
+    },
+    checkboxText: {
+        color: '#000',
+        fontSize: 14,
+        marginLeft: 10,
+        textAlign: 'center'
+    },
 });
