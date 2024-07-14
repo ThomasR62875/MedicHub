@@ -17,6 +17,7 @@ import {cardStyle} from "../styles/global"
 import {Button as PaperButton} from "react-native-paper";
 import {styles} from "../assets/styles";
 import ScrollableBg from "../components/ScrollableBg";
+import {validateTextLength} from "../lib/ourlibrary";
 
 type AddMedicationProps = NativeStackScreenProps<RootStackParamList, 'AddMedication'>
 
@@ -35,6 +36,8 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
     const [showTimePicker, setShowTimePicker] = useState(false);
     const [showDatePickerUntil, setShowDatePickerUntil] = useState(false);
     const {t} = useTranslation();
+    const nameLength= 20;
+    const prescriptionLength= 70;
     const times = [
         '02:00:00',
         '04:00:00',
@@ -88,20 +91,25 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
     }
 
     const validateName = (value: string) => {
+        let {result,msg}= validateTextLength(value,nameLength);
         if (value.trim() === '') {
-            setNameErrorMessage(t('warn1'));
+            setNameErrorMessage(t('warnMed'));
+        } else if (!result) {
+            setNameErrorMessage(msg);
         } else {
             setNameErrorMessage('');
         }
     };
     const validatePrescription = (value: string) => {
+        let {result,msg}= validateTextLength(value,prescriptionLength);
         if (value.trim() === '') {
             setPrescriptionErrorMessage(t('warn11'));
+        } else if (!result) {
+            setPrescriptionErrorMessage(msg);
         } else {
             setPrescriptionErrorMessage('');
         }
     };
-
     const onSDateChange = (event: any, selectedDate: Date | undefined) => {
         const currentDate = selectedDate || dateSince;
         setShowDatePickerSince(Platform.OS === 'ios');
@@ -161,7 +169,7 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
                     value={name}
                     onChangeText={(text) => {
                         setName(text);
-                        validateName(text)
+                        validateName(text);
                     }}
                     errorStyle={{color: 'red'}}
                     labelStyle={styles.label2}
@@ -175,7 +183,7 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
                     value={prescription}
                     onChangeText={(text) => {
                         setPrescription(text);
-                        validatePrescription(text)
+                        validatePrescription(text);
                     }}
                     errorStyle={{color: 'red'}}
                     labelStyle={styles.label2}
