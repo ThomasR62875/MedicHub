@@ -14,7 +14,7 @@ import DateTimePicker, {DateTimePickerEvent} from "@react-native-community/datet
 import Checkbox from "expo-checkbox";
 import {cardStyle} from "../styles/global";
 import {Picker} from '@react-native-picker/picker';
-import {Dialog, Button as PaperButton, Portal} from "react-native-paper";
+import {Dialog, Button as PaperButton, Portal, Text as PaperText} from "react-native-paper";
 import {styles} from "../assets/styles";
 // @ts-ignore
 import Header from "../assets/header_pink.png";

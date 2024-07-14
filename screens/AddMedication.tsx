@@ -14,7 +14,7 @@ import {Picker} from '@react-native-picker/picker'
 import DateTimePicker, {DateTimePickerEvent} from '@react-native-community/datetimepicker';
 import Checkbox from 'expo-checkbox';
 import {cardStyle} from "../styles/global"
-import {Button as PaperButton, Portal,Dialog} from "react-native-paper";
+import {Button as PaperButton, Portal,Dialog, Text as PaperText} from "react-native-paper";
 import {styles} from "../assets/styles";
 import ScrollableBg from "../components/ScrollableBg";
 import {validateTextLength} from "../lib/ourlibrary";
