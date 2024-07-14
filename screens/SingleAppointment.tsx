@@ -70,8 +70,6 @@ const SingleAppointment: React.FC<SingleAppointmentProps> = ({ navigation, route
         }
     };
 
-    // @ts-ignore
-    // @ts-ignore
     return (
         <View style={styles.tab}>
             <View style={[styles.header, {backgroundColor: 'rgba(203,214,144,0.6)'}]}>

@@ -147,5 +147,7 @@
   "selectUser": "Seleccionar paciente",
   "title": "Título",
   "selectDoctor": "Seleccionar médico",
-  "confirmationemailnotification": "¡Revise la bandeja de entrada del mail ingresado para el usuario para verificar el mail!"
+  "confirmationemailnotification": "¡Revise la bandeja de entrada del mail ingresado para el usuario para verificar el mail!",
+  "date&time": "Fecha y hora",
+  "doctor": "Doctor"
 }
