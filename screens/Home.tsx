@@ -28,6 +28,7 @@ const Home: React.FC = ({ navigation, route }: any) => {
     const [date2, setDate2] = useState<Date | null>(null);
     const [userId, setUserId] = useState('');
     const [isLoading, setIsLoading] = useState(true);
+    const [isLoadingNextApp, setIsLoadingNextApp] = useState(true);
     const { t } = useTranslation();
 
     useEffect(() => {
@@ -80,6 +81,7 @@ const Home: React.FC = ({ navigation, route }: any) => {
                 setTurno2(futureAppointments[1]);
                 setDate2(new Date(futureAppointments[1].date));
             }
+            setIsLoadingNextApp(false);
         }
     }, [appointments]);
 
@@ -112,26 +114,34 @@ const Home: React.FC = ({ navigation, route }: any) => {
                             <Icon name={'stethoscope'} type={'material-community'} size={25} color={'#fff'}/>
                             <Text style={styles.buttonText}>{t('doctors')}</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={[styles.buttons, {backgroundColor: '#DEB0BD'}]}
-                                          onPress={() => console.log('Vacunas')}>
-                            <Icon name={'needle'} type={'material-community'} size={25} color={'#fff'}/>
-                            <Text style={styles.buttonText}>{t('vaccines')}</Text>
-                        </TouchableOpacity>
                         <TouchableOpacity style={[styles.buttons, {backgroundColor: '#ECB761'}]}
                                           onPress={() => navigation.navigate({name: 'Medications', params: {session: session}})}>
                             <Icon name={'pill'} type={'material-community'} size={25} color={'#fff'}/>
                             <Text style={styles.buttonText}>{t('medication')}</Text>
                         </TouchableOpacity>
+                        <TouchableOpacity style={[styles.buttons, {backgroundColor: '#DEB0BD'}]}
+                                          onPress={() => console.log('Vacunas')}>
+                            <Icon name={'needle'} type={'material-community'} size={25} color={'#fff'}/>
+                            <Text style={styles.buttonText}>{t('vaccines')}</Text>
+                            <View style={styles.next_label}>
+                                <Text style={styles.text6}>{t('next')}</Text>
+                            </View>
+                        </TouchableOpacity>
                         <TouchableOpacity style={[styles.buttons, {backgroundColor: '#86ABBA'}]}
                                           onPress={() => console.log('Archivos')}>
                             <Icon name={'archive'} type={'material-community'} size={25} color={'#fff'}/>
                             <Text style={styles.buttonText}>{t('files')}</Text>
+                            <View style={styles.next_label}>
+                                <Text style={styles.text6}>{t('next')}</Text>
+                            </View>
                         </TouchableOpacity>
                     </ScrollView>
                 </View>
                 <Text style={styles.subtitles}>{t('text12')}</Text>
                 <View style={[styles.listCards]}>
-                    {turno1 && date1 ? (
+                    {isLoadingNextApp ? (
+                        <ActivityIndicator size="small" color="#807d7d" style={{marginVertical: '10%'}}/>
+                    ) : (turno1 && date1 ? (
                         <View>
                             <TurnoContainer
                                 turno={turno1}
@@ -151,16 +161,16 @@ const Home: React.FC = ({ navigation, route }: any) => {
                         </View>
                     ) : (
                         <View style={{alignItems: 'center'}}>
-                            <Text style={[styles.text2, {paddingHorizontal: 30}]}>{t('text13')}</Text>
+                            <Text style={[styles.text2, {alignSelf: 'center'}]}>{t('text27')}</Text>
                         </View>
-                    )}
+                    ))}
                 </View>
                 <Text style={styles.subtitles}>{t('text15')}</Text>
 
 
                 <View style={[styles.listCards]}>
                     {isLoading ? (
-                        <ActivityIndicator size="large" color="#2E5829" />
+                        <ActivityIndicator size="small" color="#807d7d" style={{marginVertical: '10%'}}/>
                     ) : (
                         appointmentRecommendations && appointmentRecommendations.length > 0 ? (
                             appointmentRecommendations.map((appointment: RecommendationAppointment, i) => {
@@ -175,7 +185,7 @@ const Home: React.FC = ({ navigation, route }: any) => {
                                 )})
                         ) : (
                             <View style={{alignItems: 'center'}}>
-                                <Text style={[styles.text2, {paddingHorizontal: 30}]}>{t('text13')}</Text>
+                                <Text style={[styles.text2, {alignSelf: 'center'}]}>{t('text13')}</Text>
                             </View>
                         ))}
                 </View>

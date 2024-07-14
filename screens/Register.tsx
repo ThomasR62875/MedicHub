@@ -14,7 +14,7 @@ import ScrollableBg from "../components/ScrollableBg";
 import {User} from '../lib/types';
 import {Button as PaperButton, Dialog, Text as PaperText} from "react-native-paper";
 import {Picker} from "@react-native-picker/picker";
-import DateTimePicker from "@react-native-community/datetimepicker";
+import DateTimePicker, {DateTimePickerEvent} from "@react-native-community/datetimepicker";
 import {getSexGenderName, sexGenderOptions} from "../lib/ourlibrary";
 import {styles} from "../assets/styles";
 
@@ -131,9 +131,11 @@ const Register: React.FC = ({navigation}: any) => {
     }
 
     const hideSexGenderDialog = () => setSexGenderDialog(false);
-    const handleDateChange = (event: any, selectedDate?: Date) => {
-        const currentDate = selectedDate || date;
-        setDate(currentDate);
+    const handleDateChange = (event: DateTimePickerEvent, selectedDate: Date | undefined) => {
+            if (selectedDate) {
+                const localDate = new Date(selectedDate.getTime() - selectedDate.getTimezoneOffset() * 60000);
+                setDate(localDate);
+            }
     };
 
     return (

@@ -71,6 +71,7 @@
   "text11" : "The medicine has been added",
   "warn11" : "You must enter the prescription",
   "text12" : "Next appointments",
+  "doctor": "Doctor",
   "text13" : "No appointments yet",
   "text14" : "Go to Calendar to make your first appointment",
   "text15" : "Recommended appointments",
@@ -79,6 +80,7 @@
   "text17" : "No doctors yet",
   "depus" : "Dependent users",
   "depu" : "Dependent user",
+  "next": "Up next",
   "text18" : "No dependent users yet",
   "text19" : "No appointments ",
   "appo" : " appointment",
@@ -89,7 +91,8 @@
   "warn13" : "If you don't complete the 'How often' we won't be able to notify you when to take it",
   "warn14" : "If you don't complete the 'Until when' we won't be able to notify you when to take it",
   "text23" : "Every: ",
-  "ai": "Chat with AI",
+  "date&time": "Time and date",
+  "ai": "Personalized  questions",
   "text24" : " hours",
   "text25" : "There was no date completed for this medicine",
   "delete" : "Delete",
@@ -147,6 +150,13 @@
   "selectUser": "Select patient",
   "title": "Title",
   "selectDoctor": "Select doctor",
-  "confirmationemailnotification": "Check the inbox of the entered email for the user to verify the email!"
+  "confirmationemailnotification": "Check the inbox of the entered email for the user to verify the email!",
+  "warnNameMed": "You must enter the name of the medication",
+  "warnEnterPrescr": "You must enter the prescription.",
+  "text27": "No appointments in the near future",
+  "selectDate": "Select a date",
+  "selectTime": "Select a time",
+  "addnewmed" : "Add new medication"
+
 }
 

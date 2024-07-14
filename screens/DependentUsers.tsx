@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { getDependentUsers} from '../lib/supabase'
-import {View,  Text, Image, TouchableOpacity} from 'react-native'
+import {View, Text, Image, TouchableOpacity, ActivityIndicator} from 'react-native'
 import { Icon} from "react-native-elements";
 import {useTranslation} from "react-i18next";
 import DependentUserButton from "../components/DependentUsertButton";
@@ -15,11 +15,13 @@ const DependentUsers: React.FC = ({navigation, route} : any) => {
     const [dependent_users,setDependentUsers]= useState<DependentUser[] | undefined>(undefined)
     const {t} = useTranslation();
     const colors = [ 'rgba(139,134,190,0.6)','rgba(222,176,189,0.6)','rgba(236,183,97,0.6)','rgba(203,214,144,0.6)']
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         navigation.addListener('focus', () => {
             async function fetchData() {
                 setDependentUsers(await getDependentUsers(session.id))
+                setIsLoading(false)
             }  
             fetchData()
         });
@@ -42,7 +44,9 @@ return(
                 </TouchableOpacity>
                 <Icon name={'filter-variant'} type={'material-community'} color={'#000000'} size={30} style={{paddingRight: 20, padding: 5}} onPress={() => console.log('Filter')}/>
             </View>
-            <View style={styles.listCards}>
+            {isLoading ? (
+                <ActivityIndicator size="small" color="#807d7d" style={{marginVertical: '10%'}}/>
+            ) : (<View style={styles.listCards}>
                 {dependent_users && dependent_users.length >0 ? (
                     dependent_users.map((d_user: DependentUser, i) => {
                         return (
@@ -60,7 +64,7 @@ return(
                         <Text  style={[styles.text2,{alignSelf: 'center', padding: 30}]}>{t('text18')}</Text>
 
                 )}
-            </View>
+            </View>)}
         </ScrollableBg>
     </View>
 )

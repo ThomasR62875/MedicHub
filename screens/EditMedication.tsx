@@ -23,12 +23,15 @@ import ScrollableBg from "../components/ScrollableBg";
 type EditMedicationProps = NativeStackScreenProps<RootStackParamList, 'EditMedication'>;
 
 const EditMedication: React.FC<EditMedicationProps> = ({navigation, route}: any) => {
-    const [id] = useState(route.params.medication.id)
+    const {session} = route.params;
+    const [id, setId] = useState(route.params.medication.id)
     const [name, setName] = useState(route.params.medication.name)
     const [prescription, setPrescription] = useState(route.params.medication.prescription);
     const [dateSince, setDateSince] = useState<Date>(route.params.medication.sinceWhen ? new Date(route.params.medication.sinceWhen) : new Date());
+
     let aux = new Date(route.params.medication.sinceWhen);  //horripilante pero funciona
     aux.setHours(aux.getHours() - 3)
+
     const [timeSince, setTimeSince] = useState<Date>(route.params.medication.sinceWhen ? aux : new Date());
     const [dateUntil, setDateUntil] = useState<Date>(route.params.medication.untilWhen ? new Date(route.params.medication.untilWhen) : new Date());
     const [howOften, setHowOften] = useState<Date | null>(route.params.medication.howOften);
@@ -52,6 +55,32 @@ const EditMedication: React.FC<EditMedicationProps> = ({navigation, route}: any)
     }));
 
     useEffect(() => {
+        if (session) {
+            setId(route.params.medication.id)
+            setName(route.params.medication.name)
+            setPrescription(route.params.medication.prescription)
+            setDateSince(route.params.medication.sinceWhen ? new Date(route.params.medication.sinceWhen) : new Date())
+
+            let aux = new Date(route.params.medication.sinceWhen);  //horripilante pero funciona
+            aux.setHours(aux.getHours() - 3)
+
+            setTimeSince(route.params.medication.sinceWhen ? aux : new Date())
+            setDateUntil(route.params.medication.untilWhen ? new Date(route.params.medication.untilWhen) : new Date())
+            setHowOften(route.params.medication.howOften);
+            setIsForever(route.params.medication.isForever);
+        }
+    }, [session])
+
+    useEffect(() => {
+        if (session) {
+            setIsButtonDisabled(false);
+        } else {
+            setIsButtonDisabled(true);
+        }
+
+    }, [session]);
+
+    useEffect(() => {
         if (
             name.trim() !== '' &&
             prescription.trim() !== '' &&
@@ -69,16 +98,16 @@ const EditMedication: React.FC<EditMedicationProps> = ({navigation, route}: any)
 
     const handleUpdateMedication = async () => {
         const sinceDate = new Date(dateSince);
+        const localDate = new Date(dateSince.getTime() - dateSince.getTimezoneOffset() * 60000);
+
         sinceDate.setHours(timeSince.getHours())
         sinceDate.setMinutes(timeSince.getMinutes())
-        //osea el horario nunca se toca en dateUntil, pero nos sirve tenerlo bien para mandar las notis
-        dateUntil.setHours(dateUntil.getHours() - 3) //UTC acomodo, esta bien?? o queremos q sea siempre hasta las 23:59 ?? todo
 
         const medication = {
             id: id,
             name: name,
             prescription: prescription,
-            sinceWhen: sinceDate,
+            sinceWhen: localDate,
             untilWhen: dateUntil,
             howOften: howOften,
             isForever: isForever,
@@ -94,14 +123,14 @@ const EditMedication: React.FC<EditMedicationProps> = ({navigation, route}: any)
 
     const validateName = (value: string) => {
         if (value.trim() === '') {
-            setNameErrorMessage('Debe ingresar el nombre del medicamento.');
+            setNameErrorMessage(t('warnNameMed'));
         } else {
             setNameErrorMessage('');
         }
     };
     const validatePrescription = (value: string) => {
         if (value.trim() === '') {
-            setPrescriptionErrorMessage('Debe ingresar la prescripción.');
+            setPrescriptionErrorMessage(t('warnEnterPrescr'));
         } else {
             setPrescriptionErrorMessage('');
         }
@@ -120,21 +149,23 @@ const EditMedication: React.FC<EditMedicationProps> = ({navigation, route}: any)
     };
 
     const getDateSince = () => {
-        return dateSince ? dateSince.toLocaleDateString() : 'Seleccione una fecha';
+        return dateSince ? dateSince.toLocaleDateString() : t('selectDate');
     };
 
     const getTime = () => {
-        return timeSince ? timeSince.toLocaleTimeString() : 'Seleccione una hora';
+        return timeSince ? timeSince.toLocaleTimeString() : t('selectTime');
     };
 
     const onChange2 = (event: DateTimePickerEvent, selectedDate?: Date | undefined): void => {
-        const currentDate = selectedDate || dateUntil;
-        setShowDatePickerUntil(Platform.OS === 'ios');
-        setDateUntil(currentDate);
+        if (selectedDate) {
+            const localDate = new Date(selectedDate.getTime() - selectedDate.getTimezoneOffset() * 60000);
+            setShowDatePickerUntil(Platform.OS === 'ios');
+            setDateUntil(localDate);
+        }
     };
 
     const getDateUntil = () => {
-        return dateUntil ? dateUntil.toLocaleDateString() : 'Seleccione una fecha';
+        return dateUntil ? dateUntil.toLocaleDateString() : t('selectDate');
     };
 
     return (
@@ -211,11 +242,14 @@ const EditMedication: React.FC<EditMedicationProps> = ({navigation, route}: any)
                         </>
                     ) : (
                         <>
-                            <PaperButton mode="outlined" style={[styles.input, {
-                                padding: 5,
-                                marginHorizontal: '3.5%',
-                                marginBottom: '5%'
-                            }]} textColor='#000' labelStyle={{textAlign: 'left', display: 'flex'}}
+                            <PaperButton mode="outlined"
+                                         style={[styles.input, {
+                                             padding: 5,
+                                             marginHorizontal: '3.5%',
+                                             marginBottom: '5%'
+                                         }]}
+                                         textColor='#000'
+                                         labelStyle={{textAlign: 'left', display: 'flex'}}
                                          contentStyle={{justifyContent: 'flex-start'}}
                                          onPress={() => setShowDatePickerSince(true)}>
                                 {getDateSince()}
@@ -260,7 +294,7 @@ const EditMedication: React.FC<EditMedicationProps> = ({navigation, route}: any)
                         selectedValue={howOften}
                         onValueChange={(value) => setHowOften(value)}>
                         {timesList.map((item, index) => (
-                            <Picker.Item label={item.label} value={item.value}/>
+                            <Picker.Item label={item.label} value={item.value} key={index}/>
                         ))}
                     </Picker>
                 </View>
@@ -339,50 +373,7 @@ const EditMedication: React.FC<EditMedicationProps> = ({navigation, route}: any)
                 />
             </ScrollableBg>
         </View>
-        // <View style={styles.container} >
-        //     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-        //         <ScrollView>
-        //         <View style={styles.window}>
-
-
-        //         </View>
-        //         </ScrollView>
-        //     </TouchableWithoutFeedback>
-        // </View>
     )
 }
 
 export default EditMedication
-//
-// const styles = StyleSheet.create({
-//     container: {
-//         backgroundColor: '#e9f4e9',
-//         height: '100%',
-//         alignContent: 'center'
-//     },
-//     window: {
-//         alignItems: 'center',
-//         marginTop: '20%',
-//         marginLeft: '5%',
-//         marginRight: '5%'
-//     },
-//     text: {
-//         fontFamily: 'Roboto-Thin',
-//         fontSize: 17,
-//         marginTop: "1%",
-//         color: "#245e1e"
-//     },
-//     buttons: {
-//         alignItems: "flex-start"
-//     },
-//     datePicker: {
-//         alignSelf: 'center',
-//         marginTop: "5%",
-//     },
-
-//     pickerButton: {
-//         borderRadius: 6,
-//         marginLeft: '5%',
-//         marginRight: '5%',
-//     },
-// })

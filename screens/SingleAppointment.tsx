@@ -25,6 +25,9 @@ const SingleAppointment: React.FC<SingleAppointmentProps> = ({ navigation, route
     const {t} = useTranslation();
     const [doctor, setDoctor] = useState<Doctor | undefined>()
     const [recommendation, setRecommendation] = useState<string>('');
+    const [visibleAI, setVisibleAI] = React.useState(false);
+    const hideDialogAI = () => setVisibleAI(false);
+    const showDialogAI = () => setVisibleAI(true);
 
     useEffect(() => {
         const fetchDoctor = async () => {
@@ -38,9 +41,7 @@ const SingleAppointment: React.FC<SingleAppointmentProps> = ({ navigation, route
     const handleDeleteAppointment = async () => {
         try {
             const session = route.params.session;
-            console.log("Esta es el id del appointments: ", route.params.appointment.id);
             const {message} =  await deleteAppointment(route.params.appointment.id);
-
             Alert.alert(message,'',[{text: 'Ok', onPress: () => navigation.navigate(t('calendar'), {session: session})}])
 
         } catch (error) {
@@ -49,8 +50,9 @@ const SingleAppointment: React.FC<SingleAppointmentProps> = ({ navigation, route
     };
 
     const handlePressRecommendQuestionsForAppointment = async () => {
+        showDialogAI()
+
         const data = await getUserData(route.params.appointment);
-        console.log(data);
         if (data) {
             const prompt = t('questionPromptP1');
             const lastAppointmentText = t('lastAppointmentText', {
@@ -62,16 +64,13 @@ const SingleAppointment: React.FC<SingleAppointmentProps> = ({ navigation, route
                 sex: data.medicalInfo.sex,
                 age: data.medicalInfo.age ?? null
             });
-            const response = await recommendQuestionsForAppointment(prompt, lastAppointmentText, demographicInfo);
+            const response = "habilitar AI antes de entregar"//await recommendQuestionsForAppointment(prompt, lastAppointmentText, demographicInfo); descomentar antes de entregar todo
             setRecommendation(response ?? '');
-            console.log(response);
         } else {
             console.error('Failed to get user data.');
         }
     };
 
-    // @ts-ignore
-    // @ts-ignore
     return (
         <View style={styles.tab}>
             <View style={[styles.header, {backgroundColor: 'rgba(203,214,144,0.6)'}]}>
@@ -117,7 +116,7 @@ const SingleAppointment: React.FC<SingleAppointmentProps> = ({ navigation, route
                         <View style={{alignItems: 'center', width: 'auto'}}>
                             <PaperButton
                                 mode="outlined"
-                                style={{borderRadius: 15, borderColor: '#CBD690FF', marginTop: '10%', width: '70%'}}
+                                style={{borderRadius: 15, borderColor: '#CBD690FF', marginTop: '10%', width: '90%'}}
                                 textColor='#000'
                                 labelStyle={{textAlign: 'left', display: 'flex'}}
                                 onPress={() => handlePressRecommendQuestionsForAppointment()}>
@@ -145,7 +144,6 @@ const SingleAppointment: React.FC<SingleAppointmentProps> = ({ navigation, route
                     </View>
                 </View>
             </ScrollableBg>
-
             <Dialog style={styles.dialog}
                     visible={visible}
                     onDismiss={hideDialog}>
@@ -162,6 +160,19 @@ const SingleAppointment: React.FC<SingleAppointmentProps> = ({ navigation, route
                     <PaperButton textColor="#b6265d"
                                  onPress={handleDeleteAppointment}>
                         {t('delete')}
+                    </PaperButton>
+                </Dialog.Actions>
+            </Dialog>
+            <Dialog style={styles.dialog}
+                    visible={visibleAI}
+                    onDismiss={hideDialogAI}>
+                <Dialog.Content>
+                    <Text> {recommendation} </Text>
+                </Dialog.Content>
+                <Dialog.Actions style={{ justifyContent: 'space-between' }}>
+                    <PaperButton textColor="#2E5829FF"
+                                 onPress={hideDialogAI}>
+                        {t('close')}
                     </PaperButton>
                 </Dialog.Actions>
             </Dialog>
