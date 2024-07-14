@@ -80,6 +80,7 @@
   "text17" : "No doctors yet",
   "depus" : "Dependent users",
   "depu" : "Dependent user",
+  "next": "Up next",
   "text18" : "No dependent users yet",
   "text19" : "No appointments ",
   "appo" : " appointment",
@@ -152,6 +153,7 @@
   "confirmationemailnotification": "Check the inbox of the entered email for the user to verify the email!",
   "warnNameMed": "You must enter the name of the medication",
   "warnEnterPrescr": "You must enter the prescription.",
+  "text27": "No appointments in the near future",
   "selectDate": "Select a date",
   "selectTime": "Select a time",
   "addnewmed" : "Add new medication"

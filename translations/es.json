@@ -150,6 +150,10 @@
   "confirmationemailnotification": "¡Revise la bandeja de entrada del mail ingresado para el usuario para verificar el mail!",
   "warnNameMed": "Debe ingresar el nombre del medicamento",
   "warnEnterPrescr": "Debe ingresar la prescripción.",
+  "next": "Próximamente",
+  "date&time": "Fecha y hora",
+  "text27": "No hay tienes próximos turnos",
+  "doctor": "Doctor",
   "selectDate": "Seleccione una fecha",
   "selectTime": "Seleccione una hora",
   "addnewmed" : "Agregar nuevo medicamento"

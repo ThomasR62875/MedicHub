@@ -91,6 +91,9 @@ export const styles = StyleSheet.create({
     back_arrow: {
         paddingVertical: '15%',
     },
+    back_arrow_p: {
+        paddingTop: '15%',
+    },
     stackTitle: {
         color: 'black',
         fontSize: 24,
@@ -115,6 +118,14 @@ export const styles = StyleSheet.create({
         paddingLeft: 25,
         padding: 15,
         marginTop: 20
+    },
+    next_label: {
+        backgroundColor: 'rgba(128,125,125,0.4)',
+        borderRadius: 10,
+        padding: 2,
+        position: 'absolute',
+        bottom: '15%'
+
     },
     calendarContainer: {
         marginTop: '5%',
@@ -470,5 +481,12 @@ export const styles = StyleSheet.create({
         marginRight: '15%',
         marginTop: '10%',
         marginBottom: '10%'
+    },
+    text6: {
+        fontSize: 12,
+        textAlign: 'center',
+        color: 'rgba(255,255,255,0.6)',
+        paddingHorizontal: 5,
+        fontFamily: 'Roboto-Thin',
     },
 });
