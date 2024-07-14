@@ -41,7 +41,7 @@ const AlertPublicity: React.FC<AlertPublicityProps> = ({navigation, route} ) => 
             <View style={ownStyles.titleContainer}>
                 <Text style={ownStyles.titleText}>{t(msg)}</Text>
             </View>
-            <BigBanner advertisement={advertisement} visible={publicity} onPress={(doc:Doctor)=>navigation.navigate({name:'AddDoctor',params:{base_doctor:doc}})}/>
+            <BigBanner advertisement={advertisement} visible={publicity} onPress={(doc:Doctor)=>navigation.navigate({name:'AddDoctor',params:{session:session,base_doctor:doc}})}/>
             <View style={{alignItems: 'center', marginTop:0}}>
                 <Button
                     title={t('ok')}
