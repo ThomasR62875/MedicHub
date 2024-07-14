@@ -230,7 +230,7 @@ const EditAppointment: React.FC<EditAppointmentProps> = ({navigation, route}: an
                     }}
                     autoCapitalize={'none'}
                 />
-                <PaperText style={[styles.label2, {paddingLeft: 14}]}>{t('date&time')}</PaperText>
+                <PaperText style={[styles.label2, {paddingLeft: 14}]}>{t('dateTime')}</PaperText>
                 <View style={styles.datePickerContainer}>
                     {Platform.OS === 'ios' ? (
                         <>
@@ -301,7 +301,7 @@ const EditAppointment: React.FC<EditAppointmentProps> = ({navigation, route}: an
                         </>
                     )}
                 </View>
-                <PaperText style={[styles.label2, {paddingLeft: 14}]}>{t('doctor')}</PaperText>
+                <PaperText style={[styles.label2, {paddingLeft: 14}]}>{t('doc')}</PaperText>
                 <PaperButton mode="outlined"
                              style={[styles.input, {padding: 5, marginHorizontal: '3.5%', marginBottom: '5%'}]}
                              textColor='#000' labelStyle={{textAlign: 'left', display: 'flex'}}
