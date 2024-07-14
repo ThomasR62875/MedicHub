@@ -27,7 +27,7 @@ const AlertPublicity: React.FC<AlertPublicityProps> = ({navigation, route} ) => 
     };
     
     useEffect(()=>{
-        const unsubscribe = navigation.addListener('focus', () => {
+        navigation.addListener('focus', () => {
             async function fetchData() {
                 if (session) {
                     setAdvertisement( await getAdvertisement('BIG'));
@@ -54,7 +54,7 @@ const AlertPublicity: React.FC<AlertPublicityProps> = ({navigation, route} ) => 
                         width: 150,
                         paddingTop:'5%'
                     }}
-                    titleStyle={{ color: '#eef9ed' }}
+                    titleStyle={{ color: '#fff' }}
                     onPress={handleNavigateBack}
                 />
             </View>
@@ -70,15 +70,14 @@ const ownStyles = StyleSheet.create({
     },
     container: {
         flex: 1,
-        paddingHorizontal: '15%',
-        paddingVertical: '40%',
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     titleContainer: {
         fontSize: 25,
         fontWeight: 'bold',
-        marginTop: 10,
         alignSelf: 'center',
-        marginBottom: 20,
+        marginBottom: '15%',
     },
     titleText: {
         fontSize: 25,
@@ -98,7 +97,7 @@ const ownStyles = StyleSheet.create({
         flex: 1,
     },
     screen: {
-        backgroundColor: "#E9F4E9FF",
+        backgroundColor: "#fff",
         height: "100%",
     },
 });
