@@ -5,13 +5,14 @@ import {RootStackParamList} from "../App";
 import {Button, Icon} from "react-native-elements";
 import {useTranslation} from "react-i18next";
 import {Button as PaperButton, Dialog, Divider} from "react-native-paper";
-import {deleteAppointment, getDoctor, getUserData} from "../lib/supabase";
-import {Doctor} from "../lib/types";
+import {deleteAppointment, getAdvertisement, getDoctor, getUserData} from "../lib/supabase";
+import {Advertisement, Doctor} from "../lib/types";
 import {recommendQuestionsForAppointment} from "../lib/openai";
 import {styles} from "../assets/styles";
 // @ts-ignore
 import Header from "../assets/header_green.png";
 import ScrollableBg from '../components/ScrollableBg';
+import { ScreenBanner } from '../components/ScreenBanner';
 
 type SingleAppointmentProps = NativeStackScreenProps<RootStackParamList, 'SingleAppointment'>
 
@@ -26,6 +27,7 @@ const SingleAppointment: React.FC<SingleAppointmentProps> = ({ navigation, route
     const [doctor, setDoctor] = useState<Doctor | undefined>()
     const [recommendation, setRecommendation] = useState<string>('');
     const [visibleAI, setVisibleAI] = React.useState(false);
+    const [advertisement,setAdvertisement]= useState<Advertisement>();
     const hideDialogAI = () => setVisibleAI(false);
     const showDialogAI = () => setVisibleAI(true);
 
@@ -33,6 +35,7 @@ const SingleAppointment: React.FC<SingleAppointmentProps> = ({ navigation, route
         const fetchDoctor = async () => {
             const doctorData = await getDoctor(route.params.appointment.doctor);
             setDoctor(doctorData);
+            setAdvertisement(await getAdvertisement('SCREEN'));
         };
         fetchDoctor();
     }, [route.params.appointment.doctor])
@@ -51,7 +54,6 @@ const SingleAppointment: React.FC<SingleAppointmentProps> = ({ navigation, route
 
     const handlePressRecommendQuestionsForAppointment = async () => {
         showDialogAI()
-
         const data = await getUserData(route.params.appointment);
         if (data) {
             const prompt = t('questionPromptP1');
@@ -119,7 +121,7 @@ const SingleAppointment: React.FC<SingleAppointmentProps> = ({ navigation, route
                                 style={{borderRadius: 15, borderColor: '#CBD690FF', marginTop: '10%', width: '90%'}}
                                 textColor='#000'
                                 labelStyle={{textAlign: 'left', display: 'flex'}}
-                                onPress={() => handlePressRecommendQuestionsForAppointment()}>
+                                onPress={() => {handlePressRecommendQuestionsForAppointment()}}>
                                 {t('ai')}
                             </PaperButton>
                             <Button
@@ -167,6 +169,7 @@ const SingleAppointment: React.FC<SingleAppointmentProps> = ({ navigation, route
                     visible={visibleAI}
                     onDismiss={hideDialogAI}>
                 <Dialog.Content>
+                    <ScreenBanner advertisement={advertisement} onPress={(doc:Doctor)=>navigation.navigate({name:'AddDoctor',params:{base_doctor:doc}})}/>
                     <Text> {recommendation} </Text>
                 </Dialog.Content>
                 <Dialog.Actions style={{ justifyContent: 'space-between' }}>

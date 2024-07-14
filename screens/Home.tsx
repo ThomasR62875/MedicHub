@@ -1,11 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import {View, Text, Image, ScrollView, TouchableOpacity, ActivityIndicator} from 'react-native';
 import {
-    getAppointments, getDependentUsers,
+    getAppointments,
     getRecommendations,
-    getUserSession
+    getUserSession, getAdvertisement
 } from "../lib/supabase";
-import {Appointment, RecommendationAppointment} from "../lib/types";
+import {Advertisement, Appointment, Doctor, RecommendationAppointment} from "../lib/types";
 import TurnoContainer from "../components/TurnoContainer";
 import RecommendationAppointmentContainer from "../components/RecommendationAppointmentContainer";
 // @ts-ignore
@@ -16,12 +16,14 @@ import ScrollableBg from "../components/ScrollableBg";
 import Squiggle from "../assets/tabAsset.png";
 import {Icon} from "react-native-elements";
 import {formatISO} from "date-fns";
+import { ScreenBanner } from '../components/ScreenBanner';
 
 const Home: React.FC = ({ navigation, route }: any) => {
     const session = route.params.session;
     const [first_name, setFirstName] = useState('');
     const [appointments, setAppointments] = useState<Appointment[] | undefined>(undefined);
     const [appointmentRecommendations, setAppointmentRecommendations] = useState<RecommendationAppointment[] | undefined>(undefined);
+    const [advertisement,setAdvertisement] = useState<Advertisement>();
     const [turno1, setTurno1] = useState<Appointment | null>(null);
     const [turno2, setTurno2] = useState<Appointment | null>(null);
     const [date1, setDate1] = useState<Date | null>(null);
@@ -42,6 +44,7 @@ const Home: React.FC = ({ navigation, route }: any) => {
                         setUserId(user.id);
                         const fetchedAppointments = await getAppointments();
                         setAppointments(fetchedAppointments);
+                        setAdvertisement( await getAdvertisement('SCREEN'));
                     } catch (error) {
                         console.error('Error fetching data:', error);
                     }
@@ -104,6 +107,7 @@ const Home: React.FC = ({ navigation, route }: any) => {
     // @ts-ignore
     return (
         <View style={styles.tab}>
+            <ScreenBanner advertisement={advertisement} onPress={(doc:Doctor)=>navigation.navigate({name:'AddDoctor',params:{base_doctor:doc}})}/>
             <Image source={Squiggle} style={styles.squiggle}/>
             <Text style={[styles.tabTitle]}>
                 {t('home')}

@@ -11,7 +11,8 @@ import {
 import { Icon } from 'react-native-elements';
 import { styles } from '../assets/styles';
 import {useTranslation} from "react-i18next";
-import { BannerProps } from '../lib/types';
+import { BannerProps, Doctor, Advertisement} from '../lib/types';
+import { getClientDoctor } from '../lib/supabase';
 
 export const ScreenBanner: React.FC<BannerProps> = (params:BannerProps)=>{
     const [visible,setVisible]= useState(params.visible);
@@ -21,23 +22,24 @@ export const ScreenBanner: React.FC<BannerProps> = (params:BannerProps)=>{
         params.onPress(doc);
     };
     return(
-        <Modal visible={visible} onDismiss={() => setVisible(false)} animationType='fade'>
-            {params.advertisement && (
+        <Modal visible={visible} onDismiss={() => {setVisible(false)}} animationType='fade'>
                 <View style={screenStyles.modalOverlay}>
                     <View style={screenStyles.closeButton}>
-                        <TouchableOpacity  onPress={()=>setVisible(false)} >
+                        <TouchableOpacity  onPress={()=> {setVisible(false)}} >
                             <Icon name="close" size={40} color="white" type='ionicon' borderRadius={30} style={screenStyles.color}/>
                         </TouchableOpacity>
                     </View>
-                    <View accessibilityRole='image' style={screenStyles.imageView}>
-                        <Image source={{uri: params.advertisement.image_url}} style={screenStyles.imageStyle}/>
-                        <View paddingTop='2%'>
-                            <TouchableOpacity style={[styles.addButton,screenStyles.ownButton,screenStyles.color]} onPress={()=>{handleOnPress(params.advertisement)}}>
-                                <Text style={[styles.buttonText,{fontSize:16}]}>{t('addoctor')}</Text>
-                            </TouchableOpacity>
+                    {params.advertisement &&(
+                        <View accessibilityRole='image' style={screenStyles.imageView}>
+                            <Image source={{uri: params.advertisement.image_url}} style={screenStyles.imageStyle}/>
+                            <View paddingTop='2%'>
+                                <TouchableOpacity style={[styles.addButton,screenStyles.ownButton,screenStyles.color]} onPress={()=>{handleOnPress(params.advertisement)}}>
+                                    <Text style={[styles.buttonText,{fontSize:16}]}>{t('addoctor')}</Text>
+                                </TouchableOpacity>
+                            </View>
                         </View>
-                    </View>
-                </View>)}
+                )}
+                </View>
         </Modal>
     );
 }
