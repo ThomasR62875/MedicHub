@@ -17,6 +17,7 @@ import {styles} from "../assets/styles";
 // @ts-ignore
 import Header from "../assets/header_blue.png";
 import ScrollableBg from "../components/ScrollableBg";
+import {validateTextLength} from "../lib/ourlibrary";
 
 type EditDoctorProps = NativeStackScreenProps<RootStackParamList, 'EditDoctor'>;
 
@@ -35,6 +36,13 @@ const EditDoctor: React.FC<EditDoctorProps> = ({navigation, route}: any) => {
     const [nameErrorMessage, setNameErrorMessage] = useState('')
     const [specialtyDialog, setSpecialtyDialog] = useState(false);
     const [userDialog, setUserDialog] = useState(false);
+    const [phoneErrorMessage, setPhoneErrorMessage] = useState<string>('');
+    const [mailErrorMessage, setMailErrorMessage] = useState<string>('');
+    const [addressErrorMessage, setAddressErrorMessage] = useState<string>('');
+    const nameLength= 30;
+    const phoneLength= 10;
+    const emailLength= 30;
+    const addressLength= 30;
 
     let doc = {
         id: id,
@@ -49,14 +57,18 @@ const EditDoctor: React.FC<EditDoctorProps> = ({navigation, route}: any) => {
     useEffect(() => {
         if (
             name.trim() !== '' &&
-            nameErrorMessage === ''
+            specialty.trim() !== '' &&
+            user_id.trim() !== '' &&
+            nameErrorMessage === '' &&
+            phoneErrorMessage === '' &&
+            mailErrorMessage === '' &&
+            addressErrorMessage === ''
         ) {
             setIsButtonDisabled(false);
         } else {
             setIsButtonDisabled(true);
         }
-
-    }, [name, specialty]);
+    }, [name, specialty, user_id]);
 
     const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(true);
 
@@ -73,11 +85,40 @@ const EditDoctor: React.FC<EditDoctorProps> = ({navigation, route}: any) => {
     }, [session])
 
     const validateName = (value: string) => {
+        let {result,msg}= validateTextLength(value,nameLength);
         if (value.trim() === '') {
-            setNameErrorMessage(t('warn1'));
+            setNameErrorMessage(t('warnDocName'));
+        } else if (!result) {
+            setNameErrorMessage(msg);
         } else {
             setNameErrorMessage('');
         }
+    };
+    const validatePhone = (value: string) => {
+        const containsLetterOrSymbol = /([a-zA-Z!@#$%^&*()_+{}\[\]:;<>,.?\/\\|'"`~-])/.test(value);
+        let {result,msg}= validateTextLength(value,phoneLength);
+        if (containsLetterOrSymbol) {
+            setPhoneErrorMessage(t('warnPhone'));
+        } else if (!result) {
+            setPhoneErrorMessage(msg);
+        } else {
+            setPhoneErrorMessage('');
+        }
+    };
+    const validateEmail = (value: string) => {
+        let {result,msg}= validateTextLength(value,emailLength);
+        if (value.trim() === '' || !value.includes("@") || !(value.includes(".edu") || value.includes(".com") || value.includes(".ar"))) {
+            setMailErrorMessage(t('warn4'));
+        } else if (!result) {
+            setMailErrorMessage(msg);
+        } else {
+            setMailErrorMessage('');
+        }
+    };
+
+    const validateAddressLength = (value: string) => {
+        let {result,msg}= validateTextLength(value,addressLength);
+        setAddressErrorMessage(msg);
     };
 
     useEffect(() => {
@@ -170,7 +211,10 @@ const EditDoctor: React.FC<EditDoctorProps> = ({navigation, route}: any) => {
                 <Input
                     label={t('phone')}
                     leftIcon={{type: 'font-awesome', name: 'phone'}}
-                    onChangeText={(text) => setPhone(text)}
+                    onChangeText={(text) => {
+                        setPhone(text)
+                        validatePhone(text);
+                    }}
                     value={phone}
                     placeholder={t('phone')}
                     autoCapitalize={'none'}
@@ -178,11 +222,16 @@ const EditDoctor: React.FC<EditDoctorProps> = ({navigation, route}: any) => {
                     placeholderTextColor={"#807d7d"}
                     inputContainerStyle={[{paddingLeft: 10}, styles.input]}
                     inputStyle={{color: '#000', fontSize: 14, marginLeft: 10}}
+                    errorStyle={{color: 'red'}}
+                    errorMessage={phoneErrorMessage}
                 />
                 <Input
                     label={t('email')}
                     leftIcon={{type: 'font-awesome', name: 'envelope'}}
-                    onChangeText={(text) => setEmail(text)}
+                    onChangeText={(text) => {
+                        setEmail(text);
+                        validateEmail(text);
+                    }}
                     value={email}
                     placeholder="Mail"
                     autoCapitalize={'none'}
@@ -190,12 +239,17 @@ const EditDoctor: React.FC<EditDoctorProps> = ({navigation, route}: any) => {
                     placeholderTextColor={"#807d7d"}
                     inputContainerStyle={[{paddingLeft: 10}, styles.input]}
                     inputStyle={{color: '#000', fontSize: 14, marginLeft: 10}}
+                    errorStyle={{color: 'red'}}
+                    errorMessage={mailErrorMessage}
                 />
 
                 <Input
                     label={t('address')}
                     leftIcon={{type: 'font-awesome', name: 'map-marker'}}
-                    onChangeText={(text) => setAddresses([text])}
+                    onChangeText={(text) => {
+                        setAddresses([text]);
+                        validateAddressLength(text);
+                    }}
                     value={addresses[0] || ''}
                     placeholder={t('address')}
                     autoCapitalize={'none'}
@@ -203,6 +257,8 @@ const EditDoctor: React.FC<EditDoctorProps> = ({navigation, route}: any) => {
                     placeholderTextColor={"#807d7d"}
                     inputContainerStyle={[{paddingLeft: 10}, styles.input]}
                     inputStyle={{color: '#000', fontSize: 14, marginLeft: 10}}
+                    errorStyle={{color: 'red'}}
+                    errorMessage={addressErrorMessage}
                 />
 
                 <PaperText style={[styles.label2, {paddingLeft: 14}]}>{t("user")}</PaperText>
