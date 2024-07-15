@@ -216,6 +216,7 @@ const EditDependentUser: React.FC<EditDependentUserProps> = ({navigation, route}
                                     testID="datePicker"
                                     value={date || undefined}
                                     mode="date"
+                                    maximumDate={new Date()}
                                     display="default"
                                     style={{backgroundColor: 'transparent'}}
                                     onChange={(event, selectedDate) => {
