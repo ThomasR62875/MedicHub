@@ -13,6 +13,7 @@ import Header from "../assets/header_green.png";
 import ScrollableBg from '../components/ScrollableBg';
 import { ScreenBanner } from '../components/ScreenBanner';
 import { AIView } from '../components/AIView';
+import {recommendQuestionsForAppointment} from "../lib/openai";
 
 type SingleAppointmentProps = NativeStackScreenProps<RootStackParamList, 'SingleAppointment'>
 
@@ -64,7 +65,7 @@ const SingleAppointment: React.FC<SingleAppointmentProps> = ({ navigation, route
                 sex: data.medicalInfo.sex,
                 age: data.medicalInfo.age ?? null
             });
-            const response = "habilitar AI antes de entregar"//await recommendQuestionsForAppointment(prompt, lastAppointmentText, demographicInfo); descomentar antes de entregar todo
+            const response = await recommendQuestionsForAppointment(prompt, lastAppointmentText, demographicInfo);
             setRecommendation(response ?? '');
         } else {
             console.error('Failed to get user data.');
@@ -75,23 +76,24 @@ const SingleAppointment: React.FC<SingleAppointmentProps> = ({ navigation, route
     return (
         <View style={styles.tab}>
             <View style={[styles.header, {backgroundColor: 'rgba(203,214,144,0.6)', alignItems: 'center',paddingBottom: '15%'}]}>
-                <View style={{
-                    flexDirection: 'row',
-                    marginVertical: '20%',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    width: '70%'
-                }}>
-                    <Icon iconStyle={{color: 'white'}} name={'arrow-left'} type={'material-community'} style={styles.back_arrow}
-                          onPress={() => navigation.navigate('HomeTabs')}></Icon>
-                    <Icon iconStyle={{color: 'white', fontSize: 20}} containerStyle={[styles.circleHeader, {backgroundColor: 'rgba(203,214,144,0.6)', alignSelf: 'center'}]} name={'calendar-month-outline'} type={'material-community'}/>
-                    <Icon
-                        name='pencil'
-                        iconStyle={{color: '#fff'}}
-                        type='ionicon'
-                        size={25}
-                        onPress={() => navigation.navigate('EditAppointment', {appointment: route.params.appointment})}
-                    />
+                <View style={{marginTop: '25%', marginBottom: '5%'}}>
+                    <View style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        width: '70%'
+                    }}>
+                        <Icon iconStyle={{color: 'white'}} name={'arrow-left'} type={'material-community'} style={styles.back_arrow}
+                              onPress={() => navigation.navigate('HomeTabs')}></Icon>
+                        <Icon iconStyle={{color: 'white', fontSize: 20}} containerStyle={[styles.circleHeader, {backgroundColor: 'rgba(203,214,144,0.6)', alignSelf: 'center'}]} name={'calendar-month-outline'} type={'material-community'}/>
+                        <Icon
+                            name='pencil'
+                            iconStyle={{color: '#fff'}}
+                            type='ionicon'
+                            size={25}
+                            onPress={() => navigation.navigate('EditAppointment', {appointment: route.params.appointment})}
+                        />
+                    </View>
                 </View>
             </View>
             <ScrollableBg>
