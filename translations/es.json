@@ -163,5 +163,6 @@
   "warnDocName": "Debe ingresar el nombre del médico.",
   "filter": "Filtrar",
   "selectUsers": "Seleccionar usuarios",
+  "all": "Todos",
   "ia_title": "Recomendación de la Inteligencia Artificial"
 }

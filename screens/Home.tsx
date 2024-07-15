@@ -103,11 +103,13 @@ const Home: React.FC = ({ navigation, route }: any) => {
         navigation.navigate('AddAppointment', { session: session, recommendation:  serializeAppointment(recommendationAppointment)})
     };
 
-
+    const handleDismiss = () => {
+        console.log("");
+    }
     // @ts-ignore
     return (
         <View style={styles.tab}>
-            <ScreenBanner advertisement={advertisement} onPress={(doc:Doctor)=>navigation.navigate({name:'AddDoctor',params:{base_doctor:doc}})}/>
+            <ScreenBanner onDismiss={handleDismiss} advertisement={advertisement} onPress={(doc:Doctor | undefined)=>navigation.navigate({name:'AddDoctor',params:{base_doctor:doc}}) }  />
             <Image source={Squiggle} style={styles.squiggle}/>
             <Text style={[styles.tabTitle]}>
                 {t('home')}
