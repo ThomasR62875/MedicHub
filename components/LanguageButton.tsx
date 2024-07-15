@@ -3,6 +3,7 @@ import {StyleSheet, View, Text} from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
 import {useTranslation} from "react-i18next";
 import resources from "../translations/config";
+import {styles} from "../assets/styles";
 
 const data = Object.keys(resources).map(lang => ({
     label: lang.charAt(0).toUpperCase() + lang.slice(1).toLowerCase(),
@@ -41,30 +42,3 @@ const DropdownComponent = () => {
 };
 
 export default DropdownComponent;
-
-const styles = StyleSheet.create({
-    dropdown: {
-        height: 50,
-        width: 100,
-        borderWidth: 2,
-        borderColor: 'transparent',
-        borderRadius: 15,
-        minHeight: 50,
-        minWidth: 100,
-    },
-    textStyle: {
-        fontSize: 16,
-    },
-    dropdownContainer: {
-        backgroundColor: '#fff',
-        borderRadius: 15,
-    },
-    item: {
-        paddingVertical: 10,
-        paddingHorizontal: 16,
-    },
-    separator: {
-        height: 0.5,
-        backgroundColor: '#d3d3d3',
-    },
-});

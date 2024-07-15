@@ -12,12 +12,12 @@ import Squiggle from "../assets/tabAsset.png";
 import ScrollableBg from "../components/ScrollableBg";
 import {Divider} from "react-native-paper";
 import {formatDateV2} from "../lib/ourlibrary";
-import { SmallBanner } from "../components/SmallBanner";
+import {SmallBanner} from "../components/SmallBanner";
 
-const Calender: React.FC = ({ navigation, route } : any) => {
+const Calender: React.FC = ({navigation, route}: any) => {
     const {session} = route.params;
-    const [appointments,setAppointments]= useState<Appointment[] | undefined>(undefined)
-    const [advertisement,setAdvertisement] = useState<Advertisement | undefined>()
+    const [appointments, setAppointments] = useState<Appointment[] | undefined>(undefined)
+    const [advertisement, setAdvertisement] = useState<Advertisement | undefined>()
     const {t} = useTranslation();
     const [isLoading, setIsLoading] = useState(true);
 
@@ -26,8 +26,9 @@ const Calender: React.FC = ({ navigation, route } : any) => {
             async function fetchData() {
                 setAppointments(await getAppointments())
                 setIsLoading(false)
-                setAdvertisement( await getAdvertisement('BIG'));
+                setAdvertisement(await getAdvertisement('BIG'));
             }
+
             fetchData()
         });
 
@@ -44,29 +45,30 @@ const Calender: React.FC = ({ navigation, route } : any) => {
     };
     const currentDate = getCurrentDate(); //es necesario porq no le gusta a AllMarkedDays q currentDate sea una funcion
     const [selectedDate, setSelectedDate] = useState(currentDate);
-    const handleDayPress = ({ dateString }: { dateString: string }) => {
+    const handleDayPress = ({dateString}: { dateString: string }) => {
         setSelectedDate(dateString);
     };
 
     let targetDate = selectedDate;
-    let filteredData : Appointment[] | undefined = undefined; //es un array donde se guardan tods los appointments los cuales su date coinciden con el día seleccionado en el calendario (targeDate)
-    let markedDates : string[] = []; //Es un array donde se guardan tods los dates de appointments, en formato string YYYY-MM-DD porq es lo q usa el calendar
-    if(appointments){
+    let filteredData: Appointment[] | undefined = undefined; //es un array donde se guardan tods los appointments los cuales su date coinciden con el día seleccionado en el calendario (targeDate)
+    let markedDates: string[] = []; //Es un array donde se guardan tods los dates de appointments, en formato string YYYY-MM-DD porq es lo q usa el calendar
+    if (appointments) {
         filteredData = appointments.filter(item => {
-            return item.date.toString().slice(0,10) === targetDate;
+            return item.date.toString().slice(0, 10) === targetDate;
         });
-        markedDates = appointments.map(item => item.date.toString().slice(0,10));
+        markedDates = appointments.map(item => item.date.toString().slice(0, 10));
     }
-    const markedDatesString = markedDates.reduce<{ [key: string]:
-            { marked: boolean, dotColor: string } }>((acc, date) => {
-        acc[date] = { marked: true, dotColor: '#8b86be' };
+    const markedDatesString = markedDates.reduce<{
+        [key: string]:
+            { marked: boolean, dotColor: string }
+    }>((acc, date) => {
+        acc[date] = {marked: true, dotColor: '#8b86be'};
         return acc;
     }, {});
 
-    const AllMarkedDays ={
+    const AllMarkedDays = {
         ...markedDatesString,
-        [currentDate]: {
-        },
+        [currentDate]: {},
         [selectedDate]: {
             selected: true,
             selectedColor: '#cbd690',
@@ -95,11 +97,14 @@ const Calender: React.FC = ({ navigation, route } : any) => {
                 />
             </View>
             <Divider style={styles.divider}/>
-            <ScrollableBg >
-                <View style={{flexDirection:'row', justifyContent: 'space-between'}}>
-                    <Text style={[styles.text, {paddingVertical: 30, paddingHorizontal: 20}]}>{formatDateV2(selectedDate)}</Text>
+            <ScrollableBg>
+                <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                    <Text style={[styles.text, {
+                        paddingVertical: 30,
+                        paddingHorizontal: 20
+                    }]}>{formatDateV2(selectedDate)}</Text>
                     <Button
-                        title={t('add')+t('appo')}
+                        title={t('add') + t('appo')}
                         buttonStyle={{
                             backgroundColor: '#86abba',
                             borderColor: 'white',
@@ -109,27 +114,39 @@ const Calender: React.FC = ({ navigation, route } : any) => {
                             alignSelf: 'center',
                         }}
                         containerStyle={{padding: 20, marginHorizontal: '4%'}}
-                        titleStyle={{ color: '#fff',fontSize: 15, margin: 5, fontWeight: 'bold'}}
+                        titleStyle={{color: '#fff', fontSize: 15, margin: 5, fontWeight: 'bold'}}
                         onPress={() => navigation.navigate('AddAppointment', {session: session})}/>
                 </View>
-                <View style={[styles.listCards,{flexDirection: 'column'}]}>
+                <View style={[styles.listCards, {flexDirection: 'column'}]}>
                     {isLoading ? (
                         <ActivityIndicator size="small" color="#807d7d" style={{marginVertical: '10%'}}/>
                     ) : (filteredData && filteredData.length > 0 ? (
                         filteredData.map((turno: Appointment, index) => {
-                            return(
+                            return (
                                 <TurnoContainer
                                     key={index}
                                     date={turno.date}
                                     turno={turno}
                                     styleExterior={styles.cards}
-                                    onPress={() => {navigation.navigate('SingleAppointment', {session: session, appointment: turno})}}
+                                    onPress={() => {
+                                        navigation.navigate('SingleAppointment', {session: session, appointment: turno})
+                                    }}
                                 />
                             )
-                        })) :  (
-                            <Text style={[styles.text2, {paddingVertical: '5%',  textAlign: 'center', paddingBottom: '15%'}]}>{t('text13')}</Text>
+                        })) : (
+                        <Text style={[styles.text2, {
+                            paddingVertical: '5%',
+                            textAlign: 'center',
+                            paddingBottom: '15%'
+                        }]}>{t('text13')}</Text>
                     ))}
-                    <SmallBanner advertisement={advertisement} onPress={(doc:Doctor | undefined)=>navigation.navigate({name:'AddDoctor',params:{base_doctor:doc}})}/>
+                    <View style={{paddingBottom: '30%'}}>
+                        <SmallBanner advertisement={advertisement}
+                                     onPress={(doc: Doctor | undefined) => navigation.navigate({
+                                         name: 'AddDoctor',
+                                         params: {base_doctor: doc}
+                                     })}/>
+                    </View>
                 </View>
             </ScrollableBg>
         </View>

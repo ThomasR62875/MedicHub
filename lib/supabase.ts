@@ -17,6 +17,7 @@ import getEnvVars from '../environment';
 
 const {REACT_APP_SUPABASE_URL, REACT_APP_ANON_KEY} = getEnvVars();
 
+
 export const supabase = createClient(REACT_APP_SUPABASE_URL, REACT_APP_ANON_KEY, {
     auth: {
         storage: AsyncStorage,
@@ -580,7 +581,6 @@ export const getAdvertisement = async (banner_type: string): Promise<Advertiseme
         }
         return advertisement;
     }
-    console.error(error)
     return undefined;
 }
 
@@ -631,7 +631,7 @@ export const filterDoctorsByUsers = async (users: string[]): Promise<Doctor[] | 
 
 export const filterDoctorsBySpeciality = async (user_id: string, specialities:string[]): Promise<Doctor[] | undefined> => {
     let to_return: Doctor[] = []
-    const {data, error} = await supabase.rpc("filter_doctors_by_users", {user_id: user_id, all_specialties: specialities});
+    const {data, error} = await supabase.rpc("filter_doctors_by_specialties", {user_id: user_id, all_specialties: specialities});
     if (error) {
         console.error('Error getting doctor by speciality data:', error.message);
     }

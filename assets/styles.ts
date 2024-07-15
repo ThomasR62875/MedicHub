@@ -293,8 +293,8 @@ export const styles = StyleSheet.create({
     },
     header: {
         borderRadius: 30,
-        height: '20%',
-        top: 0
+        height: '22%',
+        top: -15,
     },
     titleContainer: {
         fontSize: 25,
@@ -511,5 +511,29 @@ export const styles = StyleSheet.create({
         fontSize: 14,
         marginLeft: 10,
         textAlign: 'center'
+    },
+    dropdown: {
+        height: 50,
+        width: 100,
+        borderWidth: 2,
+        borderColor: 'transparent',
+        borderRadius: 15,
+        minHeight: 50,
+        minWidth: 100,
+    },
+    textStyle: {
+        fontSize: 16,
+    },
+    dropdownContainer: {
+        backgroundColor: '#fff',
+        borderRadius: 15,
+    },
+    item: {
+        paddingVertical: 10,
+        paddingHorizontal: 16,
+    },
+    separator: {
+        height: 0.5,
+        backgroundColor: '#d3d3d3',
     },
 });

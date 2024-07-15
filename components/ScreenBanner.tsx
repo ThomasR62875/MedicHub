@@ -48,7 +48,7 @@ export const ScreenBanner: React.FC<ScreenBannerProps> = (params:ScreenBannerPro
                         <View accessibilityRole='image' style={screenStyles.imageView}>
                             <Image source={{uri: params.advertisement.image_url}} style={screenStyles.imageStyle}/>
                             <View >
-                                <TouchableOpacity style={[styles.addButton,screenStyles.ownButton,screenStyles.color]} onPress={()=>{handleOnPress(params.advertisement)}}>
+                                <TouchableOpacity style={[styles.addButton,screenStyles.ownButton,screenStyles.color]} onPress={()=>{if(params.advertisement) handleOnPress(params.advertisement)}}>
                                     <Text style={[styles.buttonText,{fontSize:16}]}>{t('addoctor')}</Text>
                                 </TouchableOpacity>
                             </View>
@@ -87,7 +87,7 @@ const screenStyles= StyleSheet.create({
     },
 
     ownButton:{
-        height: '23%',
+        height: '25%',
         width: '150%',
         margin: '5%'
     }
