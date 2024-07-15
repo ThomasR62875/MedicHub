@@ -22,6 +22,7 @@ export const ScreenBanner: React.FC<ScreenBannerProps> = (params:ScreenBannerPro
     const {t} = useTranslation();
     const handleOnPress = async (advertisement:Advertisement) => {
         const doc:(Doctor| undefined) = await getClientDoctor(advertisement.client);
+        handleOnDismiss();
         params.onPress(doc);
     };
 
