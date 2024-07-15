@@ -293,8 +293,8 @@ export const styles = StyleSheet.create({
     },
     header: {
         borderRadius: 30,
-        height: '20%',
-        top: 0
+        height: '22%',
+        top: -15,
     },
     titleContainer: {
         fontSize: 25,

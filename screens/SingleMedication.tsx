@@ -1,9 +1,9 @@
 import React, {useEffect} from 'react';
-import {View, Text, Alert} from 'react-native';
+import {View, Text} from 'react-native';
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
 import {Button, Icon} from "react-native-elements";
-import {deleteAppointment, deleteMedication, getUser} from "../lib/supabase";
+import {deleteMedication, getUser} from "../lib/supabase";
 import {useTranslation} from "react-i18next";
 import {Button as PaperButton, Dialog, Divider} from "react-native-paper";
 import {styles} from "../assets/styles";
@@ -22,9 +22,10 @@ const SingleMedication: React.FC<SingleMedicationProps> = ({navigation, route}: 
 
     useEffect(() => {
         async function fetchData() {
-            if(route.params.meds.user_id)
+            if (route.params.meds.user_id)
                 setUser(await getUser(route.params.meds.user_id));
         }
+
         fetchData()
     }, [route.params.meds.user_id]);
 
@@ -54,28 +55,30 @@ const SingleMedication: React.FC<SingleMedicationProps> = ({navigation, route}: 
 
     return (
         <View style={styles.tab}>
-            <View style={[styles.header, {backgroundColor: 'rgba(222,176,189,0.6)'}]}>
-                <View style={{
-                    flexDirection: 'row',
-                    marginHorizontal: '10%',
-                    marginVertical: '20%',
-                    alignItems: 'center',
-                    justifyContent: 'space-between'
-                }}>
-                    <Icon iconStyle={{color: 'white'}} name={'arrow-left'} type={'material-community'}
-                          style={styles.back_arrow}
-                          onPress={() => navigation.navigate('Medications')}></Icon>
-                    <Icon iconStyle={{color: 'white', fontSize: 20}} containerStyle={[styles.circleHeader, {
-                        backgroundColor: 'rgba(222,176,189,0.6)',
-                        alignSelf: 'center'
-                    }]} name={'pill'} type={'material-community'}/>
-                    <Icon
-                        name='pencil'
-                        iconStyle={{color: '#fff'}}
-                        type='ionicon'
-                        size={25}
-                        onPress={() => navigation.navigate('EditMedication', {medication: route.params.meds})}
-                    />
+            <View style={[styles.header, {backgroundColor: 'rgba(222,176,189,0.6)', alignItems: 'center',paddingBottom: '15%'}]}>
+                <View style={{marginTop: '25%', marginBottom: '5%'}}>
+                    <View style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        width: '70%'
+                    }}>
+                        <Icon iconStyle={{color: 'white'}} name={'arrow-left'} type={'material-community'}
+                              style={styles.back_arrow}
+                              onPress={() => navigation.navigate('Medications')}></Icon>
+                        <Icon iconStyle={{color: 'white', fontSize: 20}}
+                              containerStyle={[styles.circleHeader, {
+                            backgroundColor: 'rgba(222,176,189,0.6)',
+                            alignSelf: 'center'
+                        }]} name={'pill'} type={'material-community'}/>
+                        <Icon
+                            name='pencil'
+                            iconStyle={{color: '#fff'}}
+                            type='ionicon'
+                            size={25}
+                            onPress={() => navigation.navigate('EditMedication', {medication: route.params.meds})}
+                        />
+                    </View>
                 </View>
             </View>
             <ScrollableBg>
@@ -102,7 +105,8 @@ const SingleMedication: React.FC<SingleMedicationProps> = ({navigation, route}: 
                                     <Text style={styles.value}>{t('text25')}</Text>
                                 </View>
                             )}
-                            <Text style={styles.value}>{(new Date(route.params.meds.untilWhen)).toLocaleDateString()}</Text>
+                            <Text
+                                style={styles.value}>{(new Date(route.params.meds.untilWhen)).toLocaleDateString()}</Text>
                         </View>
                     )}
                     {route.params.meds.isForever === true && (

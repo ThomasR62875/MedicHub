@@ -149,6 +149,7 @@ const Register: React.FC = ({navigation}: any) => {
                 const localDate = new Date(selectedDate.getTime() - selectedDate.getTimezoneOffset() * 60000);
                 setDate(localDate);
             }
+            setShowDatePickerUntil(false)
     };
 
     const getBirthdate = () => {

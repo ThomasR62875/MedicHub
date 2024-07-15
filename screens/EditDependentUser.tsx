@@ -205,7 +205,7 @@ const EditDependentUser: React.FC<EditDependentUserProps> = ({navigation, route}
                 </PaperButton>
 
 
-                <View style={{marginBottom: "5%", marginTop: "5%"}}>
+                <View style={{marginBottom: "5%", marginTop: "5%", marginLeft: '3%'}}>
                     <RNText style={styles.label2}>
                         {t('birthdate')}
                     </RNText>
