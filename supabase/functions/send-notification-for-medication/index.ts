@@ -7,14 +7,15 @@ import { Novu } from "npm:@novu/node@latest"
 
 
 
-export type Medication = {
+type Medication = {
   id: string;
   name: string;
   prescription: string;
-  untilWhen: Date;
-  howOften: string;
   sinceWhen: Date;
+  untilWhen: Date | null;
+  howOften: Date | null;
   isForever: boolean;
+  user_id: string;
 }
 
 type DependentUser = {
@@ -22,6 +23,8 @@ type DependentUser = {
   last_name: string;
   dni: string;
   id: string;
+  sex: string;
+  birthdate: Date;
 }
 
 const supabase = createClient(
@@ -105,6 +108,7 @@ const getMedications = async () : Promise<Medication[] | undefined> => {
       howOften: medication.howOften,
       sinceWhen: medication.sinceWhen,
       isForever: medication.isForever,
+      user_id: medication.user_id
     }
     to_return.push(new_medication);
   }
@@ -155,7 +159,8 @@ function shouldTakeMedication(medication: Medication, marginOfErrorMs: number): 
   const localTimeArgentina = new Date(now.toLocaleString("en-US", { timeZone: "America/Argentina/Buenos_Aires" }));
   const endDate = new Date(medication.untilWhen + "T00:00:00-03:00");
   const startDate = new Date(medication.sinceWhen);
-  const howOftenMilliseconds = parseTime(medication.howOften);
+  const howOftenString = medication.howOften.toISOString();
+  const howOftenMilliseconds = parseTime(howOftenString);
 
   if (!medication.isForever && localTimeArgentina > endDate) {
     return false;

@@ -9,10 +9,11 @@ import {Novu} from "npm:@novu/node@latest"
 type Appointment = {
   id: string;
   date: Date;
-  description:string;
-  user_name:string;
+  description: string;
+  user_name: string;
   doctor: string;
   user_id: string;
+  observations: string;
 }
 
 type DependentUser = {
@@ -20,16 +21,18 @@ type DependentUser = {
   last_name: string;
   dni: string;
   id: string;
+  sex: string;
+  birthdate: Date;
 }
 
 type Doctor = {
+  id: string;
   name: string;
   specialty: string;
   phone: string;
   email: string;
   addresses: string[];
   user_id: string;
-  id:string;
 }
 
 const supabase = createClient(
@@ -122,7 +125,8 @@ const getNotificationAppointments = async () : Promise<Appointment[] | undefined
       date: appointment.date,
       user_name: user.first_name,
       doctor: doctor && doctor.name ? doctor.name.concat(" (especialidad: ").concat(doctor.specialty).concat(")") : 'Sin datos de doctor',
-      user_id: appointment.user,}
+      user_id: appointment.user,
+      observations: appointment.observations}
     to_return.push(new_appoint);
 
   }
