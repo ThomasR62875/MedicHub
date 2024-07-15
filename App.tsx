@@ -100,10 +100,13 @@ function HomeTabs({route}: Props) {
             tabBarStyle: {
                 backgroundColor: "#ffffff",
                 borderRadius: 30,
-                padding: 10,
+                paddingHorizontal: '5%',
+                paddingTop: '2%',
+                paddingBottom: '6%',
                 position: 'absolute',
                 borderColor: '#d5d4d4',
-                borderWidth: 1
+                borderWidth: 1,
+                height:'10%'
             },
             tabBarActiveTintColor: "#8b86be",
             tabBarInactiveTintColor: "#ababab",

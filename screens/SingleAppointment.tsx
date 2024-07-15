@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, Alert} from 'react-native';
+import {View, Text} from 'react-native';
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../App";
 import {Button, Icon} from "react-native-elements";
@@ -7,7 +7,6 @@ import {useTranslation} from "react-i18next";
 import {Button as PaperButton, Dialog, Divider} from "react-native-paper";
 import {deleteAppointment, getAdvertisement, getDoctor, getUserData} from "../lib/supabase";
 import {Advertisement, Doctor} from "../lib/types";
-import {recommendQuestionsForAppointment} from "../lib/openai";
 import {styles} from "../assets/styles";
 // @ts-ignore
 import Header from "../assets/header_green.png";
@@ -75,8 +74,14 @@ const SingleAppointment: React.FC<SingleAppointmentProps> = ({ navigation, route
 
     return (
         <View style={styles.tab}>
-            <View style={[styles.header, {backgroundColor: 'rgba(203,214,144,0.6)'}]}>
-                <View style={{flexDirection: 'row', marginHorizontal:'10%', marginVertical:'20%', alignItems: 'center', justifyContent: 'space-between'}}>
+            <View style={[styles.header, {backgroundColor: 'rgba(203,214,144,0.6)', alignItems: 'center',paddingBottom: '15%'}]}>
+                <View style={{
+                    flexDirection: 'row',
+                    marginVertical: '20%',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    width: '70%'
+                }}>
                     <Icon iconStyle={{color: 'white'}} name={'arrow-left'} type={'material-community'} style={styles.back_arrow}
                           onPress={() => navigation.navigate('HomeTabs')}></Icon>
                     <Icon iconStyle={{color: 'white', fontSize: 20}} containerStyle={[styles.circleHeader, {backgroundColor: 'rgba(203,214,144,0.6)', alignSelf: 'center'}]} name={'calendar-month-outline'} type={'material-community'}/>
@@ -146,7 +151,7 @@ const SingleAppointment: React.FC<SingleAppointmentProps> = ({ navigation, route
                     </View>
                 </View>
                 <AIView visible={visibleAI} onDismiss={()=>{setVisibleAI(false);setVisibleAds(true)}} recommendation={recommendation}/>
-                <ScreenBanner visible={visibleAds} onDismiss={()=>{setVisibleAds(false)}} advertisement={advertisement} onPress={(doc:Doctor)=>navigation.navigate({name:'AddDoctor',params:{base_doctor:doc}})}/>
+                <ScreenBanner visible={visibleAds} onDismiss={()=>{setVisibleAds(false)}} advertisement={advertisement} onPress={(doc:Doctor | undefined)=>navigation.navigate({name:'AddDoctor',params:{base_doctor:doc}})}/>
             </ScrollableBg>
             <Dialog style={styles.dialog}
                     visible={visible}

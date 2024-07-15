@@ -17,6 +17,7 @@ import getEnvVars from '../environment';
 
 const {REACT_APP_SUPABASE_URL, REACT_APP_ANON_KEY} = getEnvVars();
 
+
 export const supabase = createClient(REACT_APP_SUPABASE_URL, REACT_APP_ANON_KEY, {
     auth: {
         storage: AsyncStorage,

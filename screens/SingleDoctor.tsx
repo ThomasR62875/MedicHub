@@ -5,7 +5,7 @@ import {RootStackParamList} from "../App";
 import {Button, Icon} from "react-native-elements";
 import {useTranslation} from "react-i18next";
 import {Button as PaperButton, Dialog, Divider} from "react-native-paper";
-import {deleteDoctor, getAllUsers, getUser, getUserId} from "../lib/supabase";
+import {deleteDoctor, getUser} from "../lib/supabase";
 import {styles} from "../assets/styles";
 // @ts-ignore
 import Header from "../assets/header_blue.png";
@@ -39,37 +39,32 @@ const SingleDoctor: React.FC<SingleDoctorProps> = ({navigation, route}: any) => 
     };
 
 
-    const getUserName = (id: string) => {
-        async function getUserData() {
-            setUser(await getUser(id))
-        }
-        getUserData()
-    };
-
     return (
         <View style={styles.tab}>
-            <View style={[styles.header, {backgroundColor: 'rgba(134,171,186,0.6)'}]}>
-                <View style={{
-                    flexDirection: 'row',
-                    marginHorizontal: '10%',
-                    marginVertical: '20%',
-                    alignItems: 'center',
-                    justifyContent: 'space-between'
-                }}>
-                    <Icon iconStyle={{color: 'white'}} name={'arrow-left'} type={'material-community'}
-                          style={styles.back_arrow}
-                          onPress={() => navigation.navigate('Doctors')}></Icon>
-                    <Icon iconStyle={{color: 'white', fontSize: 20}} containerStyle={[styles.circleHeader, {
-                        backgroundColor: 'rgba(134,171,186,0.6)',
-                        alignSelf: 'center'
-                    }]} name={'stethoscope'} type={'material-community'}/>
-                    <Icon
-                        name='pencil'
-                        iconStyle={{color: '#fff'}}
-                        type='ionicon'
-                        size={25}
-                        onPress={() => navigation.navigate('EditDoctor', {doc: route.params.doc})}
-                    />
+            <View style={[styles.header, {backgroundColor: 'rgba(134,171,186,0.6)', alignItems: 'center', paddingBottom: '15%'}]}>
+                <View style={{marginTop: '25%', marginBottom: '5%'}}>
+                    <View style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        width: '70%'
+                    }}>
+                            <Icon iconStyle={{color: 'white'}} name={'arrow-left'} type={'material-community'}
+                                  style={{paddingVertical: '15%'}}
+                                  onPress={() => navigation.navigate('Doctors')}></Icon>
+                            <Icon iconStyle={{color: 'white', fontSize: 20}} containerStyle={[styles.circleHeader, {
+                                backgroundColor: 'rgba(134,171,186,0.6)',
+                                alignSelf: 'center'
+                            }]} name={'stethoscope'} type={'material-community'}/>
+                            <Icon
+                                name='pencil'
+                                iconStyle={{color: '#fff'}}
+                                type='ionicon'
+                                size={25}
+                                onPress={() => navigation.navigate('EditDoctor', {doc: route.params.doc})}
+                            />
+
+                    </View>
                 </View>
             </View>
 
