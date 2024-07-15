@@ -162,5 +162,6 @@
   "warnPhone": "Debe ingresar un teléfono válido. Ej: 11 2222 3333.",
   "warnDocName": "Debe ingresar el nombre del médico.",
   "filter": "Filtrar",
-  "selectUsers": "Seleccionar usuarios"
+  "selectUsers": "Seleccionar usuarios",
+  "all": "Todos"
 }
