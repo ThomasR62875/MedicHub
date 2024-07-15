@@ -58,9 +58,13 @@ const Register: React.FC = ({navigation}: any) => {
             birthDateErrorMessage === '' &&
             genderErrorMessage === ''
         ) {
+            setIsButtonDisabled(false);
         } else {
+            setIsButtonDisabled(true);
         }
     }, [firstName, lastName, dni, email, password, confirmed_password, date, sexGender, birthDateErrorMessage]);
+    const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(true);
+
 
     const validateFirstName = (value: string) => {
         if (value.trim() === '') {
@@ -145,11 +149,11 @@ const Register: React.FC = ({navigation}: any) => {
 
     const hideSexGenderDialog = () => setSexGenderDialog(false);
     const handleDateChange = (event: DateTimePickerEvent, selectedDate: Date | undefined) => {
-            if (selectedDate) {
-                const localDate = new Date(selectedDate.getTime() - selectedDate.getTimezoneOffset() * 60000);
-                setDate(localDate);
-            }
-            setShowDatePickerUntil(false)
+        if (selectedDate) {
+            const localDate = new Date(selectedDate.getTime() - selectedDate.getTimezoneOffset() * 60000);
+            setDate(localDate);
+        }
+        setShowDatePickerUntil(false)
     };
 
     const getBirthdate = () => {
@@ -268,6 +272,7 @@ const Register: React.FC = ({navigation}: any) => {
                                     value={date || undefined}
                                     mode="date"
                                     display="default"
+                                    maximumDate={new Date()}
                                     style={{backgroundColor: 'transparent'}}
                                     onChange={(event, selectedDate) => {
                                         handleDateChange(event, selectedDate);
@@ -371,6 +376,7 @@ const Register: React.FC = ({navigation}: any) => {
                             marginBottom: 100
                         }}
                         titleStyle={{color: '#fff'}}
+                        disabled={isButtonDisabled}
                         onPress={() => signUpWithEmail()}
                     />
                 </View>
@@ -399,5 +405,4 @@ const Register: React.FC = ({navigation}: any) => {
 };
 
 export default Register;
-
 
