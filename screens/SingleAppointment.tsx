@@ -13,6 +13,7 @@ import {styles} from "../assets/styles";
 import Header from "../assets/header_green.png";
 import ScrollableBg from '../components/ScrollableBg';
 import { ScreenBanner } from '../components/ScreenBanner';
+import { AIView } from '../components/AIView';
 
 type SingleAppointmentProps = NativeStackScreenProps<RootStackParamList, 'SingleAppointment'>
 
@@ -27,9 +28,8 @@ const SingleAppointment: React.FC<SingleAppointmentProps> = ({ navigation, route
     const [doctor, setDoctor] = useState<Doctor | undefined>()
     const [recommendation, setRecommendation] = useState<string>('');
     const [visibleAI, setVisibleAI] = React.useState(false);
+    const [visibleAds,setVisibleAds] = React.useState(false);
     const [advertisement,setAdvertisement]= useState<Advertisement>();
-    const hideDialogAI = () => setVisibleAI(false);
-    const showDialogAI = () => setVisibleAI(true);
 
     useEffect(() => {
         const fetchDoctor = async () => {
@@ -53,7 +53,6 @@ const SingleAppointment: React.FC<SingleAppointmentProps> = ({ navigation, route
     };
 
     const handlePressRecommendQuestionsForAppointment = async () => {
-        showDialogAI()
         const data = await getUserData(route.params.appointment);
         if (data) {
             const prompt = t('questionPromptP1');
@@ -71,6 +70,7 @@ const SingleAppointment: React.FC<SingleAppointmentProps> = ({ navigation, route
         } else {
             console.error('Failed to get user data.');
         }
+        setVisibleAI(true);
     };
 
     return (
@@ -145,6 +145,8 @@ const SingleAppointment: React.FC<SingleAppointmentProps> = ({ navigation, route
                         </View>
                     </View>
                 </View>
+                <AIView visible={visibleAI} onDismiss={()=>{setVisibleAI(false);setVisibleAds(true)}} recommendation={recommendation}/>
+                <ScreenBanner visible={visibleAds} onDismiss={()=>{setVisibleAds(false)}} advertisement={advertisement} onPress={(doc:Doctor)=>navigation.navigate({name:'AddDoctor',params:{base_doctor:doc}})}/>
             </ScrollableBg>
             <Dialog style={styles.dialog}
                     visible={visible}
@@ -162,20 +164,6 @@ const SingleAppointment: React.FC<SingleAppointmentProps> = ({ navigation, route
                     <PaperButton textColor="#b6265d"
                                  onPress={handleDeleteAppointment}>
                         {t('delete')}
-                    </PaperButton>
-                </Dialog.Actions>
-            </Dialog>
-            <Dialog style={styles.dialog}
-                    visible={visibleAI}
-                    onDismiss={hideDialogAI}>
-                <Dialog.Content>
-                    <ScreenBanner advertisement={advertisement} onPress={(doc:Doctor)=>navigation.navigate({name:'AddDoctor',params:{base_doctor:doc}})}/>
-                    <Text> {recommendation} </Text>
-                </Dialog.Content>
-                <Dialog.Actions style={{ justifyContent: 'space-between' }}>
-                    <PaperButton textColor="#2E5829FF"
-                                 onPress={hideDialogAI}>
-                        {t('close')}
                     </PaperButton>
                 </Dialog.Actions>
             </Dialog>

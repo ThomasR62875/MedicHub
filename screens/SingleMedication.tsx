@@ -90,7 +90,7 @@ const SingleMedication: React.FC<SingleMedicationProps> = ({navigation, route}: 
                     {route.params.meds.sinceWhen && (
                         <View style={styles.detailRow}>
                             <Text style={styles.label}>{t('text22')}:</Text>
-                            <Text style={styles.value}>{since}</Text>
+                            <Text style={styles.value}>{(new Date(since)).toLocaleDateString()}</Text>
                         </View>
                     )}
                     {route.params.meds.untilWhen && route.params.meds.isForever === false && (

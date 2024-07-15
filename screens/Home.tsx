@@ -39,12 +39,12 @@ const Home: React.FC = ({ navigation, route }: any) => {
             navigation.addListener('focus', () => {
                 async function fetchData() {
                     try {
+                        setAdvertisement( await getAdvertisement('SCREEN'));
                         const user = await getUserSession(session.user.id);
                         setFirstName(user.first_name);
                         setUserId(user.id);
                         const fetchedAppointments = await getAppointments();
                         setAppointments(fetchedAppointments);
-                        setAdvertisement( await getAdvertisement('SCREEN'));
                     } catch (error) {
                         console.error('Error fetching data:', error);
                     }
