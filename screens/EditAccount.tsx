@@ -253,6 +253,7 @@ const EditAccount: React.FC<EditAccountProps> = ({navigation, route}: any) => {
                                     testID="datePicker"
                                     value={date || undefined}
                                     mode="date"
+                                    maximumDate={new Date()}
                                     display="default"
                                     style={{backgroundColor: 'transparent'}}
                                     onChange={(event, selectedDate) => {

@@ -229,6 +229,7 @@ const AddDependentUser:React.FC<AddDependentUserProps> = ({navigation, route} : 
                                 <DateTimePicker
                                     testID="datePicker"
                                     value={date || undefined}
+                                    maximumDate={new Date()}
                                     mode="date"
                                     display="default"
                                     style={{backgroundColor: 'transparent'}}
