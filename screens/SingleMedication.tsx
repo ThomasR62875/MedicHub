@@ -56,7 +56,7 @@ const SingleMedication: React.FC<SingleMedicationProps> = ({navigation, route}: 
     return (
         <View style={styles.tab}>
             <View style={[styles.header, {backgroundColor: 'rgba(222,176,189,0.6)', alignItems: 'center',paddingBottom: '15%'}]}>
-                <View style={{marginTop: '25%', marginBottom: '5%'}}>
+                <View style={{marginTop: '25%'}}>
                     <View style={{
                         flexDirection: 'row',
                         alignItems: 'center',

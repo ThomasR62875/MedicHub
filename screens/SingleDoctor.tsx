@@ -42,7 +42,7 @@ const SingleDoctor: React.FC<SingleDoctorProps> = ({navigation, route}: any) => 
     return (
         <View style={styles.tab}>
             <View style={[styles.header, {backgroundColor: 'rgba(134,171,186,0.6)', alignItems: 'center', paddingBottom: '15%'}]}>
-                <View style={{marginTop: '25%', marginBottom: '5%'}}>
+                <View style={{marginTop: '25%'}}>
                     <View style={{
                         flexDirection: 'row',
                         alignItems: 'center',

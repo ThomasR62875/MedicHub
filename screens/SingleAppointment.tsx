@@ -76,7 +76,7 @@ const SingleAppointment: React.FC<SingleAppointmentProps> = ({ navigation, route
     return (
         <View style={styles.tab}>
             <View style={[styles.header, {backgroundColor: 'rgba(203,214,144,0.6)', alignItems: 'center',paddingBottom: '15%'}]}>
-                <View style={{marginTop: '25%', marginBottom: '5%'}}>
+                <View style={{marginTop: '25%'}}>
                     <View style={{
                         flexDirection: 'row',
                         alignItems: 'center',
@@ -123,14 +123,14 @@ const SingleAppointment: React.FC<SingleAppointmentProps> = ({ navigation, route
                     </View>
                     <View style={styles.screen}>
                         <View style={{alignItems: 'center', width: 'auto'}}>
-                            <PaperButton
-                                mode="outlined"
-                                style={{borderRadius: 15, borderColor: '#CBD690FF', marginTop: '10%', width: '90%'}}
-                                textColor='#000'
-                                labelStyle={{textAlign: 'left', display: 'flex'}}
-                                onPress={() => {handlePressRecommendQuestionsForAppointment()}}>
-                                {t('ai')}
-                            </PaperButton>
+                            {/*<PaperButton*/}
+                            {/*    mode="outlined"*/}
+                            {/*    style={{borderRadius: 15, borderColor: '#CBD690FF', marginTop: '10%', width: '90%'}}*/}
+                            {/*    textColor='#000'*/}
+                            {/*    labelStyle={{textAlign: 'left', display: 'flex'}}*/}
+                            {/*    onPress={() => {handlePressRecommendQuestionsForAppointment()}}>*/}
+                            {/*    {t('ai')}*/}
+                            {/*</PaperButton>*/}
                             <Button
                                 title={t('delete')}
                                 buttonStyle={{
@@ -152,8 +152,8 @@ const SingleAppointment: React.FC<SingleAppointmentProps> = ({ navigation, route
                         </View>
                     </View>
                 </View>
-                <AIView visible={visibleAI} onDismiss={()=>{setVisibleAI(false);setVisibleAds(true)}} recommendation={recommendation}/>
-                <ScreenBanner visible={visibleAds} onDismiss={()=>{setVisibleAds(false)}} advertisement={advertisement} onPress={(doc:Doctor | undefined)=>navigation.navigate({name:'AddDoctor',params:{base_doctor:doc}})}/>
+                {/*<AIView visible={visibleAI} onDismiss={()=>{setVisibleAI(false);setVisibleAds(true)}} recommendation={recommendation}/>*/}
+                {/*<ScreenBanner visible={visibleAds} onDismiss={()=>{setVisibleAds(false)}} advertisement={advertisement} onPress={(doc:Doctor | undefined)=>navigation.navigate({name:'AddDoctor',params:{base_doctor:doc}})}/>*/}
             </ScrollableBg>
             <Dialog style={styles.dialog}
                     visible={visible}

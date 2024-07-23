@@ -187,7 +187,7 @@ const SingleDependentUser: React.FC<SingleDependentUserProps> = ({navigation, ro
     return (
         <View style={styles.tab}>
             <View style={[styles.header, {backgroundColor: 'rgba(139,134,190,0.6)', alignItems: 'center',paddingBottom: '15%'}]}>
-                <View style={{marginTop: '25%', marginBottom: '5%'}}>
+                <View style={{marginTop: '25%'}}>
                     <View style={{
                         flexDirection: 'row',
                         alignItems: 'center',
