@@ -93,10 +93,10 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({navigation, route}: any)
         }
     };
 
-    const validateObservations = (value:string) =>{
-        let {result,msg}= validateTextLength(value,observationsLength);
-        setObservationsErrorMessage(msg);
-    }
+    // const validateObservations = (value:string) =>{
+    //     let {result,msg}= validateTextLength(value,observationsLength);
+    //     setObservationsErrorMessage(msg);
+    // }
 
     useEffect(() => {
         if (session) {
@@ -245,7 +245,7 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({navigation, route}: any)
                     inputStyle={{color: '#000', fontSize: 14, marginLeft: 10}}
                     onChangeText={(text) => {
                         setObservations(text);
-                        validateObservations(text);
+                        // validateObservations(text);
                     }}
                     autoCapitalize={'none'}
                     errorStyle={{color: 'red'}}

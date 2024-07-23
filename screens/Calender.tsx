@@ -140,13 +140,13 @@ const Calender: React.FC = ({navigation, route}: any) => {
                             paddingBottom: '15%'
                         }]}>{t('text13')}</Text>
                     ))}
-                    <View style={{paddingBottom: '30%'}}>
-                        <SmallBanner advertisement={advertisement}
-                                     onPress={(doc: Doctor | undefined) => navigation.navigate({
-                                         name: 'AddDoctor',
-                                         params: {base_doctor: doc}
-                                     })}/>
-                    </View>
+                    {/*<View style={{paddingBottom: '30%'}}>*/}
+                    {/*    <SmallBanner advertisement={advertisement}*/}
+                    {/*                 onPress={(doc: Doctor | undefined) => navigation.navigate({*/}
+                    {/*                     name: 'AddDoctor',*/}
+                    {/*                     params: {base_doctor: doc}*/}
+                    {/*                 })}/>*/}
+                    {/*</View>*/}
                 </View>
             </ScrollableBg>
         </View>

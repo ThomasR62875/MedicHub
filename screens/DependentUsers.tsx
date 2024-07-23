@@ -66,7 +66,7 @@ return(
                         <Text  style={[styles.text2,{alignSelf: 'center', padding: 30}]}>{t('text18')}</Text>
 
                 )}
-                <SmallBanner advertisement={advertisement} onPress={(doc:Doctor)=>navigation.navigate({name:'AddDoctor',params:{base_doctor:doc}})}/>
+                {/*<SmallBanner advertisement={advertisement} onPress={(doc:Doctor)=>navigation.navigate({name:'AddDoctor',params:{base_doctor:doc}})}/>*/}
             </View>)}
         </ScrollableBg>
     </View>

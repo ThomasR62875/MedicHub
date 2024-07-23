@@ -258,11 +258,11 @@ const Doctors: React.FC = ({navigation, route}: any) => {
                             <Text style={[styles.text2, {alignSelf: 'center', padding: 30}]}>{t('text17')}</Text>
                         )
                     )}
-                    <SmallBanner advertisement={advertisement}
-                                 onPress={(doc: Doctor | undefined) => navigation.navigate({
-                                     name: 'AddDoctor',
-                                     params: {base_doctor: doc}
-                                 })}/>
+                    {/*<SmallBanner advertisement={advertisement}*/}
+                    {/*             onPress={(doc: Doctor | undefined) => navigation.navigate({*/}
+                    {/*                 name: 'AddDoctor',*/}
+                    {/*                 params: {base_doctor: doc}*/}
+                    {/*             })}/>*/}
                 </View>
             </ScrollableBg>
             <Dialog style={styles.dialog} visible={filterUsersDialog} onDismiss={hideFilterUserDialog}>

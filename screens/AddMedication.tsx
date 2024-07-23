@@ -48,20 +48,26 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
         '04:00:00',
         '06:00:00',
         '08:00:00',
-        '12:00:00'
+        '12:00:00',
+        '48:00:00',
+        '72:00:00',
     ];
-    const timesList = times.map((time) => ({
-        label: time,
-        value: time,
-    }));
+    const timesList = times.map((time) => {
+        const hours = parseInt(time.split(':')[0], 10);
+        const label = `${hours} ${t('hours')}`;
+        return {
+            label: label,
+            value: time
+        }
+    });
 
 
     useEffect(() => {
         if (
             name.trim() !== '' &&
-            prescription.trim() !== '' &&
+            // prescription.trim() !== '' &&
             nameErrorMessage === '' &&
-            prescriptionErrorMessage === '' &&
+            // prescriptionErrorMessage === '' &&
             ((dateUntil < dateSince && isForever) || (dateUntil > dateSince)) &&
             user_id.trim() !== ''
         ) {
@@ -117,16 +123,16 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
             setNameErrorMessage('');
         }
     };
-    const validatePrescription = (value: string) => {
-        let {result,msg}= validateTextLength(value,prescriptionLength);
-        if (value.trim() === '') {
-            setPrescriptionErrorMessage(t('warn11'));
-        } else if (!result) {
-            setPrescriptionErrorMessage(msg);
-        } else {
-            setPrescriptionErrorMessage('');
-        }
-    };
+    // const validatePrescription = (value: string) => {
+    //     let {result,msg}= validateTextLength(value,prescriptionLength);
+    //     if (value.trim() === '') {
+    //         setPrescriptionErrorMessage(t('warn11'));
+    //     } else if (!result) {
+    //         setPrescriptionErrorMessage(msg);
+    //     } else {
+    //         setPrescriptionErrorMessage('');
+    //     }
+    // };
 
     const onSDateChange = (event: any, selectedDate: Date | undefined) => {
         const currentDate = selectedDate || dateSince;
@@ -151,6 +157,7 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
     const onChange2 = (event: DateTimePickerEvent, selectedDate?: Date | undefined): void => {
         if (selectedDate) {
             const localDate = new Date(selectedDate.getTime() - selectedDate.getTimezoneOffset() * 60000);
+            console.log(localDate)
             setShowDatePickerUntil(Platform.OS === 'ios');
             setDateUntil(localDate);
         }
@@ -212,7 +219,7 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
                     value={prescription}
                     onChangeText={(text) => {
                         setPrescription(text);
-                        validatePrescription(text);
+                        // validatePrescription(text);
                     }}
                     errorStyle={{color: 'red'}}
                     labelStyle={styles.label2}
