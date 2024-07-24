@@ -46,6 +46,7 @@ const Calender: React.FC = ({navigation, route}: any) => {
     const currentDate = getCurrentDate(); //es necesario porq no le gusta a AllMarkedDays q currentDate sea una funcion
     const [selectedDate, setSelectedDate] = useState(currentDate);
     const handleDayPress = ({dateString}: { dateString: string }) => {
+        console.log('selectedDate', dateString);
         setSelectedDate(dateString);
     };
 
@@ -54,7 +55,15 @@ const Calender: React.FC = ({navigation, route}: any) => {
     let markedDates: string[] = []; //Es un array donde se guardan tods los dates de appointments, en formato string YYYY-MM-DD porq es lo q usa el calendar
     if (appointments) {
         filteredData = appointments.filter(item => {
-            return item.date.toString().slice(0, 10) === targetDate;
+            // Convertir item.date a fecha local
+            const localItemDate = new Date(item.date);
+            const formattedLocalItemDate = localItemDate.toISOString().split('T')[0]; // Formato YYYY-MM-DD
+
+            // Convertir targetDate a fecha sin zona horaria
+            const utcTargetDate = new Date(targetDate + 'T00:00:00Z');
+            const formattedTargetDate = utcTargetDate.toISOString().split('T')[0]; // Formato YYYY-MM-DD
+
+            return formattedLocalItemDate === formattedTargetDate;
         });
         markedDates = appointments.map(item => item.date.toString().slice(0, 10));
     }

@@ -126,8 +126,14 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({navigation, route}: any)
 
     const handleAddAppointment = async () => {
         const appointmentDate = new Date(date)
-        appointmentDate.setHours(time.getHours())
-        appointmentDate.setMinutes(time.getMinutes())
+
+        console.log("AppointmentDate before",appointmentDate)
+
+        appointmentDate.setUTCHours(time.getUTCHours());
+
+        appointmentDate.setUTCMinutes(time.getUTCMinutes());
+
+        console.log("AppointmentDate after",appointmentDate)
 
         const appointment = {
             date: appointmentDate,
@@ -166,8 +172,12 @@ const AddAppointment: React.FC<AddAppointmentProps> = ({navigation, route}: any)
 
     const onDateChange = (event: any, selectedDate: Date | undefined) => {
         const currentDate = selectedDate || date;
+        console.log("currentDate",currentDate)
+        const offsetInMinutes = (new Date()).getTimezoneOffset();
+        const adjustedDate = new Date(currentDate.getTime() - offsetInMinutes * 60000);
         setShowDatePicker(Platform.OS === 'ios');
-        setDate(currentDate);
+        console.log("adjustedDate",adjustedDate)
+        setDate(adjustedDate);
     };
 
     const onTimeChange = (event: any, selectedTime: Date | undefined) => {

@@ -23,7 +23,7 @@ export function formatDate(dateString: string | number | Date) {
     const {i18n} = useTranslation();
     const currentLanguage = i18n.language
     const date = new Date(dateString);
-    const day = date.getDate();
+    const day = date.getUTCDate();
     if(currentLanguage === 'english'){
         const month = months[date.getMonth()];
         return `${day} of ${month}`;
