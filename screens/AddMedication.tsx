@@ -160,6 +160,7 @@ const AddMedication: React.FC<AddMedicationProps> = ({navigation, route}) => {
             console.log(localDate)
             setShowDatePickerUntil(Platform.OS === 'ios');
             setDateUntil(localDate);
+            console.log(dateUntil)
         }
     };
 

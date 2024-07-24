@@ -50,8 +50,18 @@ const SingleMedication: React.FC<SingleMedicationProps> = ({navigation, route}: 
     let str = t('medicine');
     lowercaseFirstLetter(str);
 
+    const options: Intl.DateTimeFormatOptions  = {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        timeZone: "UTC" // Usar UTC para evitar problemas de zona horaria
+    };
+
     let sinceD = new Date(route.params.meds.sinceWhen)
-    let since = sinceD.toISOString().split('T')[0]
+    let untilD = new Date(route.params.meds.untilWhen)
+
+    let since = sinceD.toLocaleDateString('es-ES', options);
+    let until = untilD.toLocaleDateString('es-ES', options);
 
     return (
         <View style={styles.tab}>
@@ -93,7 +103,7 @@ const SingleMedication: React.FC<SingleMedicationProps> = ({navigation, route}: 
                     {route.params.meds.sinceWhen && (
                         <View style={styles.detailRow}>
                             <Text style={styles.label}>{t('text22')}:</Text>
-                            <Text style={styles.value}>{(new Date(since)).toLocaleDateString()}</Text>
+                            <Text style={styles.value}>{since}</Text>
                         </View>
                     )}
                     {route.params.meds.untilWhen && route.params.meds.isForever === false && (
@@ -106,7 +116,7 @@ const SingleMedication: React.FC<SingleMedicationProps> = ({navigation, route}: 
                                 </View>
                             )}
                             <Text
-                                style={styles.value}>{(new Date(route.params.meds.untilWhen)).toLocaleDateString()}</Text>
+                                style={styles.value}>{until}</Text>
                         </View>
                     )}
                     {route.params.meds.isForever === true && (

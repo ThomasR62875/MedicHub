@@ -88,9 +88,9 @@ const EditMedication: React.FC<EditMedicationProps> = ({navigation, route}: any)
     useEffect(() => {
         if (
             name.trim() !== '' &&
-            prescription.trim() !== '' &&
+            // prescription.trim() !== '' &&
             nameErrorMessage === '' &&
-            prescriptionErrorMessage === '' &&
+            // prescriptionErrorMessage === '' &&
             ((dateUntil < dateSince && isForever) || (dateUntil > dateSince))
         ) {
             setIsButtonDisabled(false);
@@ -145,16 +145,16 @@ const EditMedication: React.FC<EditMedicationProps> = ({navigation, route}: any)
             setNameErrorMessage('');
         }
     };
-    const validatePrescription = (value: string) => {
-        let {result,msg}= validateTextLength(value,prescriptionLength);
-        if (value.trim() === '') {
-            setPrescriptionErrorMessage(t('warn11'));
-        } else if (!result) {
-            setPrescriptionErrorMessage(msg);
-        } else {
-            setPrescriptionErrorMessage('');
-        }
-    };
+    // const validatePrescription = (value: string) => {
+    //     let {result,msg}= validateTextLength(value,prescriptionLength);
+    //     if (value.trim() === '') {
+    //         setPrescriptionErrorMessage(t('warn11'));
+    //     } else if (!result) {
+    //         setPrescriptionErrorMessage(msg);
+    //     } else {
+    //         setPrescriptionErrorMessage('');
+    //     }
+    // };
 
     const onSDateChange = (event: any, selectedDate: Date | undefined) => {
         const currentDate = selectedDate || dateSince;
@@ -225,7 +225,7 @@ const EditMedication: React.FC<EditMedicationProps> = ({navigation, route}: any)
                     value={prescription}
                     onChangeText={(text) => {
                         setPrescription(text);
-                        validatePrescription(text)
+                        // validatePrescription(text)
                     }}
                     errorStyle={{color: 'red'}}
                     labelStyle={styles.label2}
