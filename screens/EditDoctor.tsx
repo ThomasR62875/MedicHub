@@ -1,0 +1,328 @@
+import React, {useState, useEffect} from 'react'
+import {getAllUsers, getSpecialties, getUserId, updateDoctor} from '../lib/supabase'
+import {
+    View,
+    Alert,
+    Image
+} from 'react-native'
+import {Button, Icon, Input, Text} from 'react-native-elements'
+import {NativeStackScreenProps} from "@react-navigation/native-stack";
+import {RootStackParamList} from "../App";
+import {DependentUser} from "../lib/types";
+import {Specialty} from "../lib/types";
+import {useTranslation} from "react-i18next";
+import {Button as PaperButton, Dialog, Portal, Text as PaperText} from "react-native-paper";
+import {Picker} from "@react-native-picker/picker";
+import {styles} from "../assets/styles";
+// @ts-ignore
+import Header from "../assets/header_blue.png";
+import ScrollableBg from "../components/ScrollableBg";
+import {validateTextLength} from "../lib/ourlibrary";
+
+type EditDoctorProps = NativeStackScreenProps<RootStackParamList, 'EditDoctor'>;
+
+const EditDoctor: React.FC<EditDoctorProps> = ({navigation, route}: any) => {
+    const {session} = route.params;
+    const [name, setName] = useState('')
+    const [email, setEmail] = useState('')
+    const [specialties, setSpecialties] = useState<Specialty[] | null>(null);
+    const [specialty, setSpecialty] = useState('')
+    const [phone, setPhone] = useState('')
+    const [addresses, setAddresses] = useState<[string]>([''])
+    const [all_users, setAllUsers] = useState<DependentUser[] | undefined>(undefined)
+    const [user_id, setUserId] = useState('')
+    const [id, setId] = useState('')
+    const {t} = useTranslation();
+    const [nameErrorMessage, setNameErrorMessage] = useState('')
+    const [specialtyDialog, setSpecialtyDialog] = useState(false);
+    const [userDialog, setUserDialog] = useState(false);
+    const [phoneErrorMessage, setPhoneErrorMessage] = useState<string>('');
+    const [mailErrorMessage, setMailErrorMessage] = useState<string>('');
+    const [addressErrorMessage, setAddressErrorMessage] = useState<string>('');
+    const nameLength= 30;
+    const phoneLength= 10;
+    const emailLength= 30;
+    const addressLength= 30;
+
+    const doc = {
+        id: id,
+        name: name,
+        specialty: specialty,
+        phone: phone,
+        email: email,
+        addresses: addresses,
+        user_id: user_id
+    }
+
+    useEffect(() => {
+        if (
+            name.trim() !== '' &&
+            specialty.trim() !== '' &&
+            user_id.trim() !== '' &&
+            nameErrorMessage === '' &&
+            phoneErrorMessage === '' &&
+            mailErrorMessage === '' &&
+            addressErrorMessage === ''
+        ) {
+            setIsButtonDisabled(false);
+        } else {
+            setIsButtonDisabled(true);
+        }
+    }, [name, specialty, user_id]);
+
+    const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(true);
+
+    useEffect(() => {
+        if (session) {
+            async function fetchData() {
+                // @ts-ignore
+                setSpecialties(await getSpecialties())
+                setAllUsers(await getAllUsers(await getUserId()))
+            }
+
+            fetchData()
+        }
+    }, [session])
+
+    const validateName = (value: string) => {
+        let {result,msg}= validateTextLength(value,nameLength);
+        if (value.trim() === '') {
+            setNameErrorMessage(t('warnDocName'));
+        } else if (!result) {
+            setNameErrorMessage(msg);
+        } else {
+            setNameErrorMessage('');
+        }
+    };
+    const validatePhone = (value: string) => {
+        const containsLetterOrSymbol = /([a-zA-Z!@#$%^&*()_+{}\[\]:;<>,.?\/\\|'"`~-])/.test(value);
+        let {result,msg}= validateTextLength(value,phoneLength);
+        if (containsLetterOrSymbol) {
+            setPhoneErrorMessage(t('warnPhone'));
+        } else if (!result) {
+            setPhoneErrorMessage(msg);
+        } else {
+            setPhoneErrorMessage('');
+        }
+    };
+    const validateEmail = (value: string) => {
+        let {result,msg}= validateTextLength(value,emailLength);
+        if (value.trim() === '' || !value.includes("@") || !(value.includes(".edu") || value.includes(".com") || value.includes(".ar"))) {
+            setMailErrorMessage(t('warn4'));
+        } else if (!result) {
+            setMailErrorMessage(msg);
+        } else {
+            setMailErrorMessage('');
+        }
+    };
+
+    const validateAddressLength = (value: string) => {
+        let {result,msg}= validateTextLength(value,addressLength);
+        setAddressErrorMessage(msg);
+    };
+
+    useEffect(() => {
+        if (session) getDoc()
+    }, [session])
+
+    async function getDoc() {
+        setId(route.params.doc.id);
+        setName(route.params.doc.name);
+        setEmail(route.params.doc.email);
+        setSpecialty(route.params.doc.specialty);
+        setPhone(route.params.doc.phone);
+        setAddresses(route.params.doc.addresses);
+        setUserId(route.params.doc.user_id);
+    }
+
+    const handleUpdateDoctor = async () => {
+        const session = route.params.session;
+        doc.id = id;
+        doc.name = name;
+        doc.email = email;
+        doc.specialty = specialty;
+        doc.phone = phone;
+        doc.addresses = addresses;
+        doc.user_id = user_id;
+        const result = await updateDoctor(doc);
+        if (result.success) {
+            navigation.navigate('AlertPublicity', {session, msg: 'editDoc', screen: 'SingleDoctor', doc: doc});
+        } else {
+            Alert.alert('Error', result.message || 'An unknown error occurred');
+        }
+    };
+
+    const hideSpecialtyDialog = () => setSpecialtyDialog(false);
+    const hideUserDialog = () => setUserDialog(false);
+
+
+    const getUserName = (id: string) => {
+        const selectedUser = all_users?.find(user => user.id === id);
+        return selectedUser ? selectedUser.first_name : '';
+    };
+    return (
+        <View style={styles.tab}>
+            <View style={[styles.header, {backgroundColor: 'rgba(134,171,186,0.6)'}]}>
+                <View style={{
+                    flexDirection: 'row',
+                    marginHorizontal: '10%',
+                    marginVertical: '20%',
+                    alignItems: 'flex-start',
+                }}>
+                    <Icon iconStyle={{color: 'white'}} name={'arrow-left'} type={'material-community'}
+                          style={styles.back_arrow}
+                          onPress={() => navigation.navigate('SingleDoctor', {doc: route.params.doc})}></Icon>
+                    <Icon iconStyle={{color: 'white', fontSize: 20}} containerStyle={[styles.circleHeader, {
+                        backgroundColor: 'rgba(134,171,186,0.6)',
+                        alignSelf: 'center',
+                        marginHorizontal: '35%'
+                    }]} name={'stethoscope'} type={'material-community'}/>
+                </View>
+            </View>
+
+            <ScrollableBg style={{padding: '10%'}}>
+                <Input
+                    label={t('name')}
+                    leftIcon={<Icon type="font-awesome" name="user" color={styles.colorIcon.color}
+                                    iconStyle={{fontSize: 20, paddingLeft: 10}}/>}
+                    labelStyle={styles.label2}
+                    placeholderTextColor={"#807d7d"}
+                    inputContainerStyle={[{paddingLeft: 10}, styles.input]}
+                    inputStyle={{color: '#000', fontSize: 14, marginLeft: 10}}
+                    onChangeText={(text) => {
+                        setName(text);
+                        validateName(text);
+                    }}
+                    value={name}
+                    placeholder={t('name')}
+                    autoCapitalize={'none'}
+                    errorStyle={{color: 'red'}}
+                    errorMessage={nameErrorMessage}
+                />
+
+                <PaperText style={[styles.label2, {paddingLeft: 14}]}>{t('specialty')}</PaperText>
+                <PaperButton mode="outlined"
+                             style={[styles.input, {padding: 5, marginHorizontal: '3.5%', marginBottom: '5%'}]}
+                             textColor='#000' labelStyle={{textAlign: 'left', display: 'flex'}}
+                             contentStyle={{justifyContent: 'flex-start'}} onPress={() => setSpecialtyDialog(true)}>
+                    {t(specialty)}
+                </PaperButton>
+
+                <Input
+                    label={t('phone')}
+                    leftIcon={{type: 'font-awesome', name: 'phone'}}
+                    onChangeText={(text) => {
+                        setPhone(text)
+                        validatePhone(text);
+                    }}
+                    value={phone}
+                    placeholder={t('phone')}
+                    autoCapitalize={'none'}
+                    labelStyle={styles.label2}
+                    placeholderTextColor={"#807d7d"}
+                    inputContainerStyle={[{paddingLeft: 10}, styles.input]}
+                    inputStyle={{color: '#000', fontSize: 14, marginLeft: 10}}
+                    errorStyle={{color: 'red'}}
+                    errorMessage={phoneErrorMessage}
+                />
+                <Input
+                    label={t('email')}
+                    leftIcon={{type: 'font-awesome', name: 'envelope'}}
+                    onChangeText={(text) => {
+                        setEmail(text);
+                        validateEmail(text);
+                    }}
+                    value={email}
+                    placeholder="Mail"
+                    autoCapitalize={'none'}
+                    labelStyle={styles.label2}
+                    placeholderTextColor={"#807d7d"}
+                    inputContainerStyle={[{paddingLeft: 10}, styles.input]}
+                    inputStyle={{color: '#000', fontSize: 14, marginLeft: 10}}
+                    errorStyle={{color: 'red'}}
+                    errorMessage={mailErrorMessage}
+                />
+
+                <Input
+                    label={t('address')}
+                    leftIcon={{type: 'font-awesome', name: 'map-marker'}}
+                    onChangeText={(text) => {
+                        setAddresses([text]);
+                        validateAddressLength(text);
+                    }}
+                    value={addresses[0] || ''}
+                    placeholder={t('address')}
+                    autoCapitalize={'none'}
+                    labelStyle={styles.label2}
+                    placeholderTextColor={"#807d7d"}
+                    inputContainerStyle={[{paddingLeft: 10}, styles.input]}
+                    inputStyle={{color: '#000', fontSize: 14, marginLeft: 10}}
+                    errorStyle={{color: 'red'}}
+                    errorMessage={addressErrorMessage}
+                />
+
+                <PaperText style={[styles.label2, {paddingLeft: 14}]}>{t("user")}</PaperText>
+                <PaperButton mode="outlined"
+                             style={[styles.input, {padding: 5, marginHorizontal: '3.5%', marginBottom: '5%'}]}
+                             textColor='#000' labelStyle={{textAlign: 'left', display: 'flex'}}
+                             contentStyle={{justifyContent: 'flex-start'}} onPress={() => setUserDialog(true)}>
+                    {getUserName(user_id)}
+                </PaperButton>
+                <Button
+                    title={t('savec')}
+                    buttonStyle={{
+                        backgroundColor: '#86abba',
+                        borderWidth: 2,
+                        borderColor: 'white',
+                        borderRadius: 30,
+                        minHeight: 50
+                    }}
+                    containerStyle={{
+                        width: 200,
+                        marginHorizontal: 50,
+                        marginVertical: 10,
+                        marginTop: 40,
+                        alignContent: 'center'
+                    }}
+                    titleStyle={{color: '#fff'}}
+                    disabled={isButtonDisabled}
+                    onPress={handleUpdateDoctor}
+                />
+                <View style={{paddingBottom: 45}}/>
+            </ScrollableBg>
+            <Portal>
+                <Dialog style={styles.dialog} visible={userDialog} onDismiss={hideUserDialog}>
+                    <Text style={styles.dialogTitle}>{t('selectUser')}</Text>
+                    <Picker
+                        mode='dropdown'
+                        selectedValue={user_id}
+                        onValueChange={(value: string) => setUserId(value)}
+                        enabled={true}
+                        itemStyle={styles.pickerStyle}
+                    >
+                        {all_users?.map((item) => (
+                            <Picker.Item key={item.id} label={item.first_name} value={item.id}/>
+                        ))}
+                    </Picker>
+                </Dialog>
+                <Dialog style={styles.dialog} visible={specialtyDialog} onDismiss={hideSpecialtyDialog}>
+                    <Text style={styles.dialogTitle}>{t("selSpec")}</Text>
+                    <Picker
+                        mode='dropdown'
+                        selectedValue={specialty}
+                        onValueChange={(value: string) => setSpecialty(value)}
+                        placeholder='Usuario'
+                        enabled={true}
+                        itemStyle={styles.pickerStyle}
+                    >
+                        {specialties?.map((item) => (
+                            <Picker.Item key={item.name} label={t(item.name)} value={item.name}/>
+                        ))}
+                    </Picker>
+                </Dialog>
+            </Portal>
+        </View>
+    );
+};
+
+export default EditDoctor

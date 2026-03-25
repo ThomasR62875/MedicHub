@@ -1,0 +1,190 @@
+import React, {useEffect} from 'react';
+import {View, Text} from 'react-native';
+import {NativeStackScreenProps} from "@react-navigation/native-stack";
+import {RootStackParamList} from "../App";
+import {Button, Icon} from "react-native-elements";
+import {deleteMedication, getUser} from "../lib/supabase";
+import {useTranslation} from "react-i18next";
+import {Button as PaperButton, Dialog, Divider} from "react-native-paper";
+import {styles} from "../assets/styles";
+// @ts-ignore
+import ScrollableBg from "../components/ScrollableBg";
+import {DependentUser} from "../lib/types";
+
+type SingleMedicationProps = NativeStackScreenProps<RootStackParamList, 'SingleMedication'>
+
+
+const SingleMedication: React.FC<SingleMedicationProps> = ({navigation, route}: any) => {
+    const [visible, setVisible] = React.useState(false);
+    const hideDialog = () => setVisible(false);
+    const showDialog = () => setVisible(true);
+    const [user, setUser] = React.useState<DependentUser | undefined>(undefined);
+
+    useEffect(() => {
+        async function fetchData() {
+            if (route.params.meds.user_id)
+                setUser(await getUser(route.params.meds.user_id));
+        }
+
+        fetchData()
+    }, [route.params.meds.user_id]);
+
+    const handleDeleteMedication = async () => {
+        try {
+            const session = route.params.session;
+            const medication = route.params.meds;
+            await deleteMedication(medication);
+            navigation.navigate('Medications', {session: session})
+        } catch (error) {
+            console.error('Error deleting medication:', error);
+        }
+    };
+
+    const {t} = useTranslation();
+
+    function lowercaseFirstLetter(str: string) {
+        if (!str) return str; // Handle empty strings or null
+        return str.charAt(0).toLowerCase() + str.slice(1);
+    }
+
+    let str = t('medicine');
+    lowercaseFirstLetter(str);
+
+    const options: Intl.DateTimeFormatOptions  = {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        timeZone: "UTC" // Usar UTC para evitar problemas de zona horaria
+    };
+
+    let sinceD = new Date(route.params.meds.sinceWhen)
+    let untilD = new Date(route.params.meds.untilWhen)
+
+    let since = sinceD.toLocaleDateString('es-ES', options);
+    let until = untilD.toLocaleDateString('es-ES', options);
+
+    return (
+        <View style={styles.tab}>
+            <View style={[styles.header, {backgroundColor: 'rgba(222,176,189,0.6)', alignItems: 'center',paddingBottom: '15%'}]}>
+                <View style={{marginTop: '25%'}}>
+                    <View style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        width: '70%'
+                    }}>
+                        <Icon iconStyle={{color: 'white'}} name={'arrow-left'} type={'material-community'}
+                              style={styles.back_arrow}
+                              onPress={() => navigation.navigate('Medications')}></Icon>
+                        <Icon iconStyle={{color: 'white', fontSize: 20}}
+                              containerStyle={[styles.circleHeader, {
+                            backgroundColor: 'rgba(222,176,189,0.6)',
+                            alignSelf: 'center'
+                        }]} name={'pill'} type={'material-community'}/>
+                        <Icon
+                            name='pencil'
+                            iconStyle={{color: '#fff'}}
+                            type='ionicon'
+                            size={25}
+                            onPress={() => navigation.navigate('EditMedication', {medication: route.params.meds})}
+                        />
+                    </View>
+                </View>
+            </View>
+            <ScrollableBg>
+                <Text style={styles.titleText}>{route.params.meds.name}</Text>
+                <Divider style={styles.divider}></Divider>
+                <View style={{padding: '10%'}}>
+
+                    <View style={styles.detailRow}>
+                        <Text style={styles.label}>{t('prescription')}:</Text>
+                        <Text style={styles.value}>{route.params.meds.prescription}</Text>
+                    </View>
+                    {route.params.meds.sinceWhen && (
+                        <View style={styles.detailRow}>
+                            <Text style={styles.label}>{t('text22')}:</Text>
+                            <Text style={styles.value}>{since}</Text>
+                        </View>
+                    )}
+                    {route.params.meds.untilWhen && route.params.meds.isForever === false && (
+                        <View style={styles.detailRow}>
+                            <Text style={styles.label}>{t('text21')}:</Text>
+                            {route.params.meds.isForever === true && (
+                                <View style={[styles.detailRow]}>
+                                    <Text style={styles.label}>{t('text21').slice(2, -2)}:</Text>
+                                    <Text style={styles.value}>{t('text25')}</Text>
+                                </View>
+                            )}
+                            <Text
+                                style={styles.value}>{until}</Text>
+                        </View>
+                    )}
+                    {route.params.meds.isForever === true && (
+                        <View style={[styles.detailRow]}>
+                            <Text style={styles.label}>{t('text21')}:</Text>
+                            <Text style={styles.value}>{t('text25')}</Text>
+                        </View>
+                    )}
+                    {route.params.meds.howOften && (
+                        <View style={styles.detailRow}>
+                            <Text style={styles.label}>{t('text23')}</Text>
+                            <Text
+                                style={styles.value}>{parseInt(route.params.meds.howOften.toString().split(':')[0], 10)}{t('text24')} </Text>
+                        </View>
+                    )}
+                    <View style={styles.detailRow}>
+                        <Text style={styles.label}>{t('user')}:</Text>
+                        <Text style={styles.value}>{user?.first_name ? user.first_name : '-'}</Text>
+                    </View>
+                    <View style={styles.screen}>
+                        <View style={{alignItems: 'center', width: 'auto'}}>
+                            <Button
+                                title={t('delete')}
+                                buttonStyle={{
+                                    backgroundColor: '#deb0bd',
+                                    borderWidth: 2,
+                                    borderColor: 'white',
+                                    borderRadius: 30,
+                                    minHeight: 50,
+                                    minWidth: 150,
+                                }}
+                                containerStyle={{
+                                    width: 150,
+                                    marginHorizontal: 50,
+                                    marginVertical: 10,
+                                    marginTop: 40,
+                                    marginBottom: 100
+                                }}
+                                titleStyle={{color: '#fff'}}
+                                onPress={() => showDialog()}
+                            />
+                        </View>
+                    </View>
+                </View>
+            </ScrollableBg>
+
+            <Dialog style={styles.dialog}
+                    visible={visible}
+                    onDismiss={hideDialog}>
+                <Dialog.Content>
+                    <Text style={[{textAlign: 'center'}, {fontSize: 18}]}>
+                        {t('RUsureM')}
+                    </Text>
+                </Dialog.Content>
+                <Dialog.Actions style={{justifyContent: 'space-between'}}>
+                    <PaperButton textColor="#2E5829FF"
+                                 onPress={hideDialog}>
+                        {t('cancel')}
+                    </PaperButton>
+                    <PaperButton textColor="#b6265d"
+                                 onPress={handleDeleteMedication}>
+                        {t('delete')}
+                    </PaperButton>
+                </Dialog.Actions>
+            </Dialog>
+        </View>
+
+    );
+};
+
+export default SingleMedication;

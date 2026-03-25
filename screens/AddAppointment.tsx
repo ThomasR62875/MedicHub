@@ -1,0 +1,407 @@
+import React, {useEffect, useState} from 'react';
+import {
+    addAppointment,
+    getAllDoctorsByUser,
+    getAllUsers, getDoctors,
+    getDoctorsBySpecialtyAndUser, getDoctorsByUser,
+    getUserId
+} from '../lib/supabase';
+import {
+    Alert,
+    View,
+    Text,
+    Platform
+} from 'react-native';
+import {Button, Icon, Input} from "react-native-elements";
+import {NativeStackScreenProps} from "@react-navigation/native-stack";
+import {RootStackParamList} from "../App";
+import {DependentUser, RecommendationAppointment} from "../lib/types";
+import {Doctor} from "../lib/types";
+import DateTimePicker from '@react-native-community/datetimepicker';
+import {Picker} from "@react-native-picker/picker";
+import {useTranslation} from "react-i18next";
+import {Text as PaperText, HelperText, Button as PaperButton, Dialog, Portal} from "react-native-paper";
+import {LogBox} from 'react-native';
+import {styles} from "../assets/styles";
+import ScrollableBg from "../components/ScrollableBg";
+import { validateTextLength } from '../lib/ourlibrary';
+
+LogBox.ignoreLogs(['`timeZoneOffsetInMinutes` is deprecated and will be removed in a future release. Use `timeZoneName` instead.']);
+console.warn = () => {
+};
+
+type AddAppointmentProps = NativeStackScreenProps<RootStackParamList, 'AddAppointment'>;
+
+const AddAppointment: React.FC<AddAppointmentProps> = ({navigation, route}: any) => {
+    const {session, recommendation}: { session?: any, recommendation?: RecommendationAppointment } = route.params ?? {};
+    const [description, setDescription] = useState('');
+    const [observations, setObservations] = useState('');
+    const [doctor, setDoctor] = useState('Médico');
+    const [user_id, setUserId] = useState('');
+    const [session_user_id, setSessionUserId] = useState('');
+    const [all_users, setAllUsers] = useState<DependentUser[] | undefined>([]);
+    const [doctors, setDoctors] = useState<Doctor[] | undefined>([]);
+    const [date, setDate] = useState(new Date());
+    const [time, setTime] = useState(new Date());
+    const [doctorDialog, setDoctorDialog] = useState(false);
+    const [userDialog, setUserDialog] = useState(false);
+    const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(true);
+    const [showDatePicker, setShowDatePicker] = useState(false);
+    const [showTimePicker, setShowTimePicker] = useState(false);
+    const [descriptionErrorMessage, setDescriptionErrorMessage] = useState('');
+    const [observationsErrorMessage, setObservationsErrorMessage] = useState('');
+    const descriptionLength= 30;
+    const observationsLength= 100;
+    const {t} = useTranslation();
+
+    useEffect(() => {
+        if (session_user_id) {
+            async function getInfo() {
+                if (recommendation) {
+                    recommendation.date = new Date(recommendation.date);
+                    setUserId(recommendation.user_id);
+                    setDoctors(await getDoctorsBySpecialtyAndUser(recommendation.user_id, recommendation.specialty));
+                    setDate(recommendation.date);
+                    setTime(recommendation.date);
+                    setDoctor(recommendation.doctor);
+                    setDescription(t('addRecommendationAppointmentDescription') + t(recommendation.specialty))
+                } else {
+                    setDoctors(await getAllDoctorsByUser(session_user_id));
+                }
+                setAllUsers(await getAllUsers(session_user_id));
+            }
+
+            getInfo();
+        }
+    }, [session_user_id]);
+
+    useEffect(() => {
+        if (user_id) {
+            async function getDoctorsInfo() {
+                setDoctors(await getDoctorsByUser(user_id));
+            }
+            getDoctorsInfo();
+        }
+    }, [user_id]);
+
+    const validateDescription = (value: string) => {
+        if (value.trim() === '') {
+            setDescriptionErrorMessage(t('text7'));
+        } else {
+            let {result,msg}= validateTextLength(value,descriptionLength);
+            setDescriptionErrorMessage(msg);
+        }
+    };
+
+    // const validateObservations = (value:string) =>{
+    //     let {result,msg}= validateTextLength(value,observationsLength);
+    //     setObservationsErrorMessage(msg);
+    // }
+
+    useEffect(() => {
+        if (session) {
+            async function fetchUserId() {
+                setSessionUserId(await getUserId());
+            }
+
+            fetchUserId();
+        }
+    }, [session]);
+
+    useEffect(() => {
+        const today = new Date();
+        if (
+            doctor.trim() !== '' &&
+            user_id.trim() !== '' &&
+            descriptionErrorMessage == '' &&
+            observationsErrorMessage == '' &&
+            (date > today)
+        ) {
+            setIsButtonDisabled(false);
+        } else {
+            setIsButtonDisabled(true);
+        }
+    }, [doctor, user_id, description,observations]);
+
+
+    const handleAddAppointment = async () => {
+        const appointmentDate = new Date(date)
+
+        console.log("AppointmentDate before",appointmentDate)
+
+        appointmentDate.setUTCHours(time.getUTCHours());
+
+        appointmentDate.setUTCMinutes(time.getUTCMinutes());
+
+        console.log("AppointmentDate after",appointmentDate)
+
+        const appointment = {
+            date: appointmentDate,
+            description,
+            user_name: '',
+            doctor,
+            user_id,
+            id: '',
+            observations: observations
+        };
+        const result = await addAppointment(appointment);
+        if (result.success) {
+            navigation.navigate('AlertPublicity', {
+                session,
+                msg: 'text8',
+                screen: t('calendar'),
+                appointment: null,
+                du: null,
+                doc: null,
+                meds: null
+            });
+        } else {
+            Alert.alert('Error', result.message || 'An unknown error occurred');
+        }
+    };
+
+    const doctorsList = doctors?.map((doctor) => ({
+        label: doctor.name,
+        value: doctor.id,
+    }));
+
+    const userList = all_users?.map((user) => ({
+        label: user.first_name,
+        value: user.id,
+    }));
+
+    const onDateChange = (event: any, selectedDate: Date | undefined) => {
+        const currentDate = selectedDate || date;
+        console.log("currentDate",currentDate)
+        const offsetInMinutes = (new Date()).getTimezoneOffset();
+        const adjustedDate = new Date(currentDate.getTime() - offsetInMinutes * 60000);
+        setShowDatePicker(Platform.OS === 'ios');
+        console.log("adjustedDate",adjustedDate)
+        setDate(adjustedDate);
+    };
+
+    const onTimeChange = (event: any, selectedTime: Date | undefined) => {
+        const currentTime = selectedTime || time;
+        setShowTimePicker(Platform.OS === 'ios');
+        setTime(currentTime);
+    };
+
+    const hideDoctorDialog = () => setDoctorDialog(false);
+    const hideUserDialog = () => setUserDialog(false);
+
+    const getDoctorName = (id: string) => {
+        const selectedDoctor = doctors?.find(doc => doc.id === id);
+        return selectedDoctor ? selectedDoctor.name : t('select_doc');
+    };
+
+    const getUserName = (id: string) => {
+        const selectedUser = all_users?.find(user => user.id === id);
+        return selectedUser ? selectedUser.first_name : t('select_user');
+    };
+
+    const getDate = () => {
+        return date ? date.toLocaleDateString() : t('selectDate');
+    };
+
+    const getTime = () => {
+        return time ? time.toLocaleTimeString() : t('selectATime');
+    };
+
+    return (
+        <View style={styles.tab}>
+            <View style={[styles.header, {backgroundColor: 'rgba(203,214,144,0.6)'}]}>
+                <View style={{
+                    flexDirection: 'row',
+                    marginHorizontal: '10%',
+                    marginVertical: '20%',
+                    alignItems: 'flex-start',
+                }}>
+                    <Icon iconStyle={{color: 'white'}} name={'arrow-left'} type={'material-community'}
+                          style={styles.back_arrow}
+                          onPress={() => navigation.navigate(t('calendar'), {session: session})}></Icon>
+                    <Icon iconStyle={{color: 'white', fontSize: 20}} containerStyle={[styles.circleHeader, {
+                        backgroundColor: 'rgba(203,214,144,0.6)',
+                        alignSelf: 'center',
+                        marginHorizontal: '35%'
+                    }]} name={'calendar-month-outline'} type={'material-community'}/>
+
+                </View>
+            </View>
+
+            <ScrollableBg style={{padding: '10%'}}>
+                <Input
+                    label={t('title')}
+                    placeholder={t('title')}
+                    value={description}
+                    autoCapitalize={'none'}
+                    onChangeText={(text) => {
+                        setDescription(text);
+                        validateDescription(text);
+                    }}
+                    labelStyle={styles.label2}
+                    placeholderTextColor={"#807d7d"}
+                    inputContainerStyle={[{paddingLeft: 10}, styles.input]}
+                    inputStyle={{color: '#000', fontSize: 14, marginLeft: 10}}
+                    errorStyle={{color: 'red'}}
+                    errorMessage={descriptionErrorMessage}
+                />
+                <Input
+                    label={t('observations')}
+                    placeholder={t('observations')}
+                    value={observations}
+                    labelStyle={styles.label2}
+                    placeholderTextColor={"#807d7d"}
+                    inputContainerStyle={[{paddingLeft: 10}, styles.input]}
+                    inputStyle={{color: '#000', fontSize: 14, marginLeft: 10}}
+                    onChangeText={(text) => {
+                        setObservations(text);
+                        // validateObservations(text);
+                    }}
+                    autoCapitalize={'none'}
+                    errorStyle={{color: 'red'}}
+                    errorMessage={observationsErrorMessage}
+                />
+                <PaperText style={[styles.label2, {paddingLeft: 14}]}>{t('dateTime')}</PaperText>
+                <View style={styles.datePickerContainer}>
+                    {Platform.OS === 'ios' ? (
+                        <>
+                            <DateTimePicker
+                                testID="datePicker"
+                                value={date}
+                                minimumDate={new Date()}
+                                mode="date"
+                                display="default"
+                                style={{backgroundColor: 'transparent'}}
+                                onChange={onDateChange}
+                            />
+                            <DateTimePicker
+                                testID="timePicker"
+                                value={time}
+                                mode="time"
+                                display="default"
+                                textColor='#cbe4c9'
+                                onChange={onTimeChange}
+                                timeZoneOffsetInMinutes={0}
+                            />
+                        </>
+                    ) : (
+                        <>
+                            <PaperButton mode="outlined"
+                                         style={[styles.input, {
+                                             padding: 5,
+                                             marginHorizontal: '3.5%',
+                                             marginBottom: '5%'
+                                         }]}
+                                         textColor='#000'
+                                         labelStyle={{textAlign: 'left', display: 'flex'}}
+                                         contentStyle={{justifyContent: 'flex-start'}}
+                                         onPress={() => setShowDatePicker(true)}>
+                                {getDate()}
+                            </PaperButton>
+                            <PaperButton mode="outlined"
+                                         style={[styles.input, {
+                                             padding: 5,
+                                             marginHorizontal: '3.5%',
+                                             marginBottom: '5%'
+                                         }]}
+                                         textColor='#000'
+                                         labelStyle={{textAlign: 'left', display: 'flex'}}
+                                         contentStyle={{justifyContent: 'flex-start'}}
+                                         onPress={() => setShowTimePicker(true)}>
+                                {getTime()}
+                            </PaperButton>
+                            {showDatePicker && (
+                                <DateTimePicker
+                                    testID="datePicker"
+                                    value={date}
+                                    minimumDate={new Date()}
+                                    mode="date"
+                                    display="default"
+                                    onChange={onDateChange}
+                                />
+                            )}
+                            {showTimePicker && (
+                                <DateTimePicker
+                                    testID="timePicker"
+                                    value={time}
+                                    mode="time"
+                                    display="default"
+                                    onChange={onTimeChange}
+                                />
+                            )}
+                        </>
+                    )}
+                </View>
+                <PaperText style={[styles.label2, {paddingLeft: 14}]}>{t('doc')}</PaperText>
+                <PaperButton mode="outlined"
+                             style={[styles.input, {padding: 5, marginHorizontal: '3.5%', marginBottom: '5%'}]}
+                             textColor={doctor==='Médico' ? '#A9A9A9' : '#000'} labelStyle={{fontWeight: 'normal', fontSize: 14, fontFamily: 'Roboto-Thin'}}
+                             contentStyle={{justifyContent: 'flex-start'}} onPress={() => setDoctorDialog(true)}>
+                    {getDoctorName(doctor)}
+                </PaperButton>
+                <PaperText style={[styles.label2, {paddingLeft: 14}]}>{t('user')}</PaperText>
+                <PaperButton mode="outlined"
+                             style={[styles.input, {padding: 5, marginHorizontal: '3.5%', marginBottom: '5%'}]}
+                             textColor={user_id ? '#000' : '#A9A9A9'} labelStyle={{fontWeight: 'normal', fontSize: 14, fontFamily: 'Roboto-Thin'}}
+                             contentStyle={{justifyContent: 'flex-start'}} onPress={() => setUserDialog(true)}>
+                    {getUserName(user_id)}
+                </PaperButton>
+                <View style={{alignItems: 'center'}}>
+                    <Button
+                        title={t('adappointment')}
+                        buttonStyle={{
+                            backgroundColor: '#cbd690',
+                            borderWidth: 2,
+                            borderColor: 'white',
+                            borderRadius: 30,
+                            minHeight: 50
+                        }}
+                        containerStyle={{
+                            width: 200,
+                            marginHorizontal: 50,
+                            marginVertical: 10,
+                            marginTop: 40,
+                            alignContent: 'center'
+                        }}
+                        titleStyle={{color: '#fff'}}
+                        disabled={isButtonDisabled}
+                        onPress={handleAddAppointment}
+                    />
+                </View>
+            </ScrollableBg>
+            <Portal>
+                <Dialog style={styles.dialog} visible={doctorDialog} onDismiss={hideDoctorDialog}>
+                    <Text style={styles.dialogTitle}>{t('selectDoctor')}</Text>
+                    <Picker
+                        mode='dropdown'
+                        selectedValue={doctor}
+                        onValueChange={(value: string) => setDoctor(value)}
+                        enabled={true}
+                        itemStyle={styles.pickerStyle}
+                    >
+                        {doctorsList?.map((item) => (
+                            <Picker.Item key={item.value} label={item.label} value={item.value}/>
+                        ))}
+                    </Picker>
+                </Dialog>
+                <Dialog style={styles.dialog} visible={userDialog} onDismiss={hideUserDialog}>
+                    <Text style={styles.dialogTitle}>{t('selectUser')}</Text>
+                    <Picker
+                        mode='dropdown'
+                        selectedValue={user_id}
+                        onValueChange={(value: string) => setUserId(value)}
+                        placeholder='Usuario'
+                        enabled={true}
+                        itemStyle={styles.pickerStyle}
+                    >
+                        {userList?.map((item) => (
+                            <Picker.Item key={item.value} label={item.label} value={item.value}/>
+                        ))}
+                    </Picker>
+                </Dialog>
+            </Portal>
+        </View>
+    );
+}
+
+export default AddAppointment;
