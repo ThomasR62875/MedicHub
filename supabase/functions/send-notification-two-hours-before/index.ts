@@ -40,7 +40,7 @@ const supabase = createClient(
     Deno.env.get("SUPABASE_ANON_KEY")!,
 )
 
-const novu = new Novu('8174d59d606b3e4c69ac095e52bf9ae1');
+const novu = new Novu(Deno.env.get("NOVU_API_KEY")!);
 
 Deno.serve(async (req) => {
   const { name } = await req.json()
